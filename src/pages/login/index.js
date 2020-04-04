@@ -124,7 +124,8 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     signInButtonText: {
-        color: Colors.primaryTextColor
+        color: Colors.primaryTextColor,
+        fontFamily: Colors.fontFamily
     },
     other: {
         marginVertical: 30,
@@ -132,7 +133,8 @@ const styles = StyleSheet.create({
     },
     facebookButtonText: {
         color: "#235DE3",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontFamily: Colors.fontFamily
     },
     facebookButton: {
         height: 50,
@@ -159,5 +161,6 @@ const styles = StyleSheet.create({
     },
     signUpButtonText: {
         color: Colors.buttonPrimaryColor,
+        fontFamily: Colors.fontFamily
     },
 });
