@@ -7,5 +7,6 @@ export const Colors = {
     secondaryColor: "#F5F5F5",
     inputPrimaryColor: "#54C6CF",
     buttonPrimaryColor: "#26B3C1",
-    fontFamily: Platform.OS === "android" ? "Prompt-Regular" : "Prompt"
+    fontFamily: Platform.OS === "android" ? "Prompt-Light" : "Prompt",
+    defaultIconColor: "#BDBDBD"
 };
