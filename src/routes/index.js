@@ -4,6 +4,7 @@ import HomePage from '../pages/home';
 import SplashPage from '../pages/splash';
 import LoginPage from '../pages/login';
 import CreateAccountPage from '../pages/createAccount';
+import TookPhotoPage from '../pages/tookphoto';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator({
@@ -15,10 +16,12 @@ const ApplicationStackNavigator = createStackNavigator({
 const AuthenticationStackNavigator = createStackNavigator(
     {
         CreateAccount: { screen: CreateAccountPage },
+        TookPhoto: { screen: TookPhotoPage },
         Login: { screen: LoginPage },
         Splash: { screen: SplashPage }
     },
     {
+        mode: "modal",
         initialRouteName: 'Splash'
     }
 );

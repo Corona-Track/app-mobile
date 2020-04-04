@@ -5,9 +5,9 @@ import { Avatar, Header } from 'react-native-elements';
 import { Button } from 'react-native-paper';
 import { Colors } from '../../themes/variables';
 import ProgressTracking from '../../components/progresstracking';
-import { RightComponent } from '../../components/customheader';
+import { LeftComponent, RightComponent } from '../../components/customheader';
 
-export default class CreateAccountPage extends Component {
+export default class TookPhotoPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
@@ -21,19 +21,24 @@ export default class CreateAccountPage extends Component {
             <SafeAreaView style={styles.container}>
                 <Header
                     backgroundColor={Colors.secondaryColor}
+                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
                     rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
                 />
                 <View style={{ flex: 0.8, justifyContent: "center" }}>
                     <View style={styles.textContainer}>
-                        <Text style={[styles.simpleText]}>Para iniciar seu cadastro,</Text>
-                        <Text style={[styles.simpleText]}>é necessário ter uma</Text>
-                        <Text style={[styles.simpleText, styles.boldText]}>foto de perfil</Text>
+                        <Text style={[styles.simpleText]}><Text style={styles.boldText}>Ótimo!</Text> Caso queira, você</Text>
+                        <Text style={[styles.simpleText]}>pode escolher outra foto ou</Text>
+                        <Text style={[styles.simpleText]}>alterar depois em seu perfil.</Text>
                         <View style={styles.avatarContainer}>
                             <Avatar
                                 size={200}
                                 rounded
+                                showEditButton
                                 overlayContainerStyle={styles.avatarContainerIcon}
-                                icon={{ name: 'camera-outline', type: 'material-community', color: Colors.defaultIconColor, size: 50 }} />
+                                source={{
+                                    uri:
+                                        'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+                                }} />
                         </View>
                     </View>
                 </View>
@@ -45,16 +50,14 @@ export default class CreateAccountPage extends Component {
                             mode="contained"
                             color={Colors.buttonPrimaryColor}
                             labelStyle={styles.continueButtonText}
-                            onPress={this.onContinueButtonPress}
                         >CONTINUAR</Button>
                     </View>
                     <ProgressTracking amount={7} position={1} />
                 </View>
-            </SafeAreaView>
-        )
+            </SafeAreaView >)
     };
-    onContinueButtonPress = () => {
-        this.props.navigation.navigate("TookPhoto");
+    onLeftButtonPress = () => {
+        this.props.navigation.pop();
     };
     onRightButtonPress = () => {
         this.props.navigation.pop();
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        paddingHorizontal: 20
+        marginHorizontal: 20
     },
     logo: {
         height: 150,
@@ -92,7 +95,7 @@ const styles = StyleSheet.create({
     },
 
     avatarContainer: {
-        marginVertical: 40
+        marginVertical: 30
     },
 
     buttonContainer: {
