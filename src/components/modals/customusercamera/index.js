@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { Modal, View, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Modal, Alert, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 import Icon from "react-native-vector-icons/MaterialIcons";
+
+import IconMaterialCommunity from "react-native-vector-icons/MaterialCommunityIcons";
 import { RNCamera } from "react-native-camera";
 
 
 export const CustomUserCamera = ({ isVisible, onChangePhoto, onCloseCamera }) => {
     const [camera, setCamera] = useState();
+    const [cameraType, setCameraType] = useState("front");
 
     const onTakePicture = async () => {
         try {
@@ -18,9 +21,16 @@ export const CustomUserCamera = ({ isVisible, onChangePhoto, onCloseCamera }) =>
                 base64: true
             });
             onChangePhoto(base64);
-        } catch (error) {
-            Alert.alert("Erro", "Houve um erro ao tirar a foto.");
+        } catch (error) { Alert.alert("Aviso!", "Houve um erro ao tirar a foto, feche o aplicativo e tente novamente."); }
+    };
+
+    const onTurnCamera = () => {
+        if (cameraType === "back") {
+            setCameraType("front");
+            return;
         }
+        setCameraType("back");
+        return;
     };
 
     return (
@@ -31,6 +41,7 @@ export const CustomUserCamera = ({ isVisible, onChangePhoto, onCloseCamera }) =>
                 type={RNCamera.Constants.Type.back}
                 autoFocus={RNCamera.Constants.AutoFocus.on}
                 flashMode={RNCamera.Constants.FlashMode.off}
+                type={cameraType}
                 androidCameraPermissionOptions={{
                     title: "Permissão para usar a câmera",
                     message: "Precisamos da sua permissão para usar a câmera.",
@@ -51,6 +62,13 @@ export const CustomUserCamera = ({ isVisible, onChangePhoto, onCloseCamera }) =>
                     color={"#fff"}
                     onPress={onCloseCamera}
                     style={styles.buttonCloseCamera}
+                />
+                <IconMaterialCommunity
+                    name="camera-party-mode"
+                    size={32}
+                    color={"#fff"}
+                    onPress={onTurnCamera}
+                    style={styles.buttonOnTurnCamera}
                 />
             </RNCamera>
         </Modal>
@@ -100,5 +118,11 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 35,
         right: 30
+    },
+    buttonOnTurnCamera: {
+        flex: 0,
+        position: "absolute",
+        top: 35,
+        left: 30
     }
 });
