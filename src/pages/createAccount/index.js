@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
+import PropTypes from 'prop-types';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import { Avatar, Header } from 'react-native-elements';
 import { Button } from 'react-native-paper';
 import { Colors } from '../../themes/variables';
 import ProgressTracking from '../../components/progresstracking';
 import { RightComponent } from '../../components/customheader';
+import { CustomUserCamera } from '../../components/modals/customusercamera';
 
 export default class CreateAccountPage extends Component {
     static navigationOptions = {
@@ -13,10 +15,13 @@ export default class CreateAccountPage extends Component {
         gestureEnabled: false,
     };
     state = {
+        isCameraVisible: false,
+        photo: ""
     };
     componentDidMount() {
     };
     render = () => {
+        let { isCameraVisible } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <Header
@@ -28,13 +33,13 @@ export default class CreateAccountPage extends Component {
                         <Text style={[styles.simpleText]}>Para iniciar seu cadastro,</Text>
                         <Text style={[styles.simpleText]}>é necessário ter uma</Text>
                         <Text style={[styles.simpleText, styles.boldText]}>foto de perfil</Text>
-                        <View style={styles.avatarContainer}>
+                        <TouchableOpacity onPress={this.openCamera} style={styles.avatarContainer}>
                             <Avatar
                                 size={200}
                                 rounded
                                 overlayContainerStyle={styles.avatarContainerIcon}
                                 icon={{ name: 'camera-outline', type: 'material-community', color: Colors.defaultIconColor, size: 50 }} />
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={{ flex: 0.2, width: "100%" }}>
@@ -45,16 +50,38 @@ export default class CreateAccountPage extends Component {
                             mode="contained"
                             color={Colors.buttonPrimaryColor}
                             labelStyle={styles.continueButtonText}
-                            onPress={this.onContinueButtonPress}
+                            onPress={this.openCamera}
                         >CONTINUAR</Button>
                     </View>
                     <ProgressTracking amount={7} position={1} />
                 </View>
+                <CustomUserCamera
+                    onChangePhoto={this.onChangePhoto}
+                    isVisible={isCameraVisible}
+                    onCloseCamera={this.onCloseCamera} />
             </SafeAreaView>
         )
     };
-    onContinueButtonPress = () => {
-        this.props.navigation.navigate("TookPhoto");
+    openCamera = () => {
+        this.setState({
+            isCameraVisible: true,
+            photo: null
+        });
+    };
+    onCloseCamera = () => {
+        this.setState({
+            isCameraVisible: false
+        });
+    };
+    onPhotoTook = (photo) => {
+        this.props.navigation.navigate("TookPhoto", { photo: photo });
+    };
+    onChangePhoto = newPhoto => {
+        this.setState({
+            photo: newPhoto,
+            isCameraVisible: false
+        });
+        this.onPhotoTook(newPhoto);
     };
     onRightButtonPress = () => {
         this.props.navigation.pop();

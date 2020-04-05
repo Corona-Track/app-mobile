@@ -22,7 +22,7 @@ const AuthenticationStackNavigator = createStackNavigator(
     },
     {
         mode: "modal",
-        initialRouteName: 'Splash'
+        initialRouteName: 'CreateAccount'
     }
 );
 

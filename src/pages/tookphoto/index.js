@@ -1,22 +1,34 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import { Avatar, Header } from 'react-native-elements';
 import { Button } from 'react-native-paper';
 import { Colors } from '../../themes/variables';
 import ProgressTracking from '../../components/progresstracking';
 import { LeftComponent, RightComponent } from '../../components/customheader';
+import PropTypes from 'prop-types';
+import { CustomUserCamera } from '../../components/modals/customusercamera';
 
 export default class TookPhotoPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
     };
+    static propTypes = {
+        photo: PropTypes.any,
+    }
     state = {
+        photo: "",
+        isCameraVisible: false
     };
     componentDidMount() {
+        let { navigation } = this.props;
+        this.setState({
+            photo: navigation.getParam('photo', "")
+        });
     };
     render = () => {
+        let { photo, isCameraVisible } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <Header
@@ -29,17 +41,14 @@ export default class TookPhotoPage extends Component {
                         <Text style={[styles.simpleText]}><Text style={styles.boldText}>Ótimo!</Text> Caso queira, você</Text>
                         <Text style={[styles.simpleText]}>pode escolher outra foto ou</Text>
                         <Text style={[styles.simpleText]}>alterar depois em seu perfil.</Text>
-                        <View style={styles.avatarContainer}>
-                            <Avatar
+                        <TouchableOpacity onPress={this.openCamera} style={styles.avatarContainer}>
+                            {photo ? (<Avatar
                                 size={200}
                                 rounded
                                 showEditButton
                                 overlayContainerStyle={styles.avatarContainerIcon}
-                                source={{
-                                    uri:
-                                        'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-                                }} />
-                        </View>
+                                source={{ uri: 'data:image/png;base64,' + photo }} />) : (<></>)}
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={{ flex: 0.2, width: "100%" }}>
@@ -54,7 +63,28 @@ export default class TookPhotoPage extends Component {
                     </View>
                     <ProgressTracking amount={7} position={1} />
                 </View>
+                <CustomUserCamera
+                    onChangePhoto={this.onChangePhoto}
+                    isVisible={isCameraVisible}
+                    onCloseCamera={this.onCloseCamera} />
             </SafeAreaView >)
+    };
+    openCamera = () => {
+        this.setState({
+            isCameraVisible: true,
+            photo: null
+        });
+    };
+    onCloseCamera = () => {
+        this.setState({
+            isCameraVisible: false
+        });
+    };
+    onChangePhoto = newPhoto => {
+        this.setState({
+            photo: newPhoto,
+            isCameraVisible: false
+        });
     };
     onLeftButtonPress = () => {
         this.props.navigation.pop();

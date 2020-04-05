@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { Colors } from '../../themes/variables';
-import { StyleSheet, Text, Animated, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View } from "react-native";
 import PropTypes from 'prop-types';
-
-const items = [0, 1, 2, 3, 4, 5, 6, 7];
 
 export default class ProgressTracking extends Component {
     static propTypes = {
