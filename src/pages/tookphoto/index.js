@@ -8,6 +8,7 @@ import ProgressTracking from '../../components/progresstracking';
 import { LeftComponent, RightComponent } from '../../components/customheader';
 import PropTypes from 'prop-types';
 import { CustomUserCamera } from '../../components/modals/customusercamera';
+import { Icon } from 'react-native-elements'
 
 export default class TookPhotoPage extends Component {
     static navigationOptions = {
@@ -36,22 +37,36 @@ export default class TookPhotoPage extends Component {
                     leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
                     rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
                 />
-                <View style={{ flex: 0.8, justifyContent: "center" }}>
+                <View style={{ flex: 0.75, justifyContent: "center" }}>
                     <View style={styles.textContainer}>
                         <Text style={[styles.simpleText]}><Text style={styles.boldText}>Ótimo!</Text> Caso queira, você</Text>
                         <Text style={[styles.simpleText]}>pode escolher outra foto ou</Text>
                         <Text style={[styles.simpleText]}>alterar depois em seu perfil.</Text>
                         <TouchableOpacity onPress={this.openCamera} style={styles.avatarContainer}>
-                            {photo ? (<Avatar
+                            {photo ? (<><Avatar
                                 size={200}
                                 rounded
-                                showEditButton
                                 overlayContainerStyle={styles.avatarContainerIcon}
-                                source={{ uri: 'data:image/png;base64,' + photo }} />) : (<></>)}
+                                source={{ uri: 'data:image/png;base64,' + photo }} />
+                                <Icon
+                                    reverse
+                                    containerStyle={styles.photoIcon}
+                                    type="material"
+                                    name='camera-alt'
+                                    color='#f50'
+                                    size={20}
+                                    iconStyle={{ fontSize: 25 }} />
+                            </>) : (
+                                    <Avatar
+                                        size={200}
+                                        rounded
+                                        overlayContainerStyle={styles.avatarContainerIcon}
+                                        icon={{ name: 'camera-outline', type: 'material-community', color: Colors.defaultIconColor, size: 50 }} />
+                                )}
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ flex: 0.2, width: "100%" }}>
+                <View style={{ flex: 0.25, width: "100%" }}>
                     <View style={styles.buttonContainer}>
                         <Button
                             style={styles.continueButtonContainer}
@@ -59,7 +74,17 @@ export default class TookPhotoPage extends Component {
                             mode="contained"
                             color={Colors.buttonPrimaryColor}
                             labelStyle={styles.continueButtonText}
+                            onPress={this.openCamera}
                         >CONTINUAR</Button>
+                    </View>
+                    <View style={styles.skipContainer}>
+                        <Button
+                            mode="text"
+                            color={Colors.defaultIconColor}
+                            labelStyle={styles.skipButtonText}
+                            uppercase={false}>
+                            {/* Pular */}
+                        </Button>
                     </View>
                     <ProgressTracking amount={7} position={1} />
                 </View>
@@ -91,6 +116,9 @@ export default class TookPhotoPage extends Component {
     };
     onRightButtonPress = () => {
         this.props.navigation.pop();
+    };
+    skipScreen = () => {
+        // this.props.navigation.navigate("")
     };
 }
 
@@ -125,7 +153,8 @@ const styles = StyleSheet.create({
     },
 
     avatarContainer: {
-        marginVertical: 30
+        marginTop: 40,
+        marginBottom: 20,
     },
 
     buttonContainer: {
@@ -146,4 +175,24 @@ const styles = StyleSheet.create({
         fontFamily: Colors.fontFamily
     },
 
+    skipButtonContainer: {
+        width: "100%",
+        borderRadius: 50,
+    },
+    skipButton: {
+        height: 50,
+        width: "100%",
+        textAlign: "center"
+    },
+    skipButtonText: {
+        fontFamily: Colors.fontFamily
+    },
+    skipContainer: {
+        marginTop: 5,
+    },
+    photoIcon: {
+        position: "absolute",
+        right: 0,
+        bottom: 0
+    }
 });

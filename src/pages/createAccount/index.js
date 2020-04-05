@@ -28,7 +28,7 @@ export default class CreateAccountPage extends Component {
                     backgroundColor={Colors.secondaryColor}
                     rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
                 />
-                <View style={{ flex: 0.8, justifyContent: "center" }}>
+                <View style={{ flex: 0.75, justifyContent: "center" }}>
                     <View style={styles.textContainer}>
                         <Text style={[styles.simpleText]}>Para iniciar seu cadastro,</Text>
                         <Text style={[styles.simpleText]}>é necessário ter uma</Text>
@@ -42,7 +42,7 @@ export default class CreateAccountPage extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ flex: 0.2, width: "100%" }}>
+                <View style={{ flex: 0.25, width: "100%" }}>
                     <View style={styles.buttonContainer}>
                         <Button
                             style={styles.continueButtonContainer}
@@ -53,6 +53,13 @@ export default class CreateAccountPage extends Component {
                             onPress={this.openCamera}
                         >CONTINUAR</Button>
                     </View>
+                    <TouchableOpacity onPress={this.skipScreen} style={styles.skipContainer}>
+                        <Button
+                            mode="text"
+                            color={Colors.defaultIconColor}
+                            labelStyle={styles.skipButtonText}
+                            uppercase={false}>Pular</Button>
+                    </TouchableOpacity>
                     <ProgressTracking amount={7} position={1} />
                 </View>
                 <CustomUserCamera
@@ -85,6 +92,9 @@ export default class CreateAccountPage extends Component {
     };
     onRightButtonPress = () => {
         this.props.navigation.pop();
+    };
+    skipScreen= () => {
+        // this.props.navigation.navigate("")
     };
 }
 
@@ -119,7 +129,8 @@ const styles = StyleSheet.create({
     },
 
     avatarContainer: {
-        marginVertical: 40
+        marginTop: 40,
+        marginBottom: 20
     },
 
     buttonContainer: {
@@ -139,5 +150,21 @@ const styles = StyleSheet.create({
         color: Colors.primaryTextColor,
         fontFamily: Colors.fontFamily
     },
+
+    skipButtonContainer: {
+        width: "100%",
+        borderRadius: 50,
+    },
+    skipButton: {
+        height: 50,
+        width: "100%",
+        textAlign: "center"
+    },
+    skipButtonText: {
+        fontFamily: Colors.fontFamily
+    },
+    skipContainer: {
+        marginTop: 5,
+    }
 
 });
