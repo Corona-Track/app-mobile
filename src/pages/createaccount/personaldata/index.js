@@ -25,7 +25,7 @@ export default class PersonalDataPage extends Component {
             cpf: "",
             birthday: null,
             genre: "",
-
+            pregnancy: ""
         },
         showBirthday: false,
         showGenre: false,
@@ -33,7 +33,13 @@ export default class PersonalDataPage extends Component {
             { key: "", title: "Outro" },
             { key: "M", title: "Masculino" },
             { key: "F", title: "Feminino" },
-        ]
+        ],
+        showPregnancy: false,
+        pregnancyList: [
+            { key: "1", title: "Sim" },
+            { key: "0", title: "Não" },
+        ],
+
     };
     componentDidMount() {
         let { navigation } = this.props;
@@ -42,7 +48,7 @@ export default class PersonalDataPage extends Component {
         this.setState({ entity });
     };
     render = () => {
-        let { entity, showBirthday, showGenre, genreList } = this.state;
+        let { entity, showBirthday, showGenre, genreList, showPregnancy, pregnancyList } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <Header
@@ -77,6 +83,15 @@ export default class PersonalDataPage extends Component {
                         onPress={() => this.openGenreSelect()}
                         options={genreList}
                         onSelectOption={this.onHandleGenre} />
+                    <Text>{JSON.stringify(entity.pregnancy)}</Text>
+                    <CustomDropDown
+                        label="Gestante"
+                        isVisible={showPregnancy}
+                        onCloseMenu={() => this.closePregnancySelect()}
+                        value={entity.pregnancy}
+                        onPress={() => this.openPregnancySelect()}
+                        options={pregnancyList}
+                        onSelectOption={this.onHandlePregnancy} />
                     <View style={{ marginTop: 100 }} />
                     <ContinueButton onPress={this.onContinueButtonClick} />
                     <ProgressTracking amount={7} position={2} />
@@ -122,15 +137,30 @@ export default class PersonalDataPage extends Component {
     closeGenreSelect = () => {
         this.setState({ showGenre: false });
     };
-
     onHandleGenre = genre => {
         let { entity } = this.state;
         entity.genre = genre;
+        entity.pregnancy = "";
         this.setState({
             entity: entity,
             showGenre: false
         });
-    }
+    };
+
+    openPregnancySelect = () => {
+        this.setState({ showPregnancy: true });
+    };
+    closePregnancySelect = () => {
+        this.setState({ showPregnancy: false });
+    };
+    onHandlePregnancy = pregnancy => {
+        let { entity } = this.state;
+        entity.pregnancy = pregnancy;
+        this.setState({
+            entity: entity,
+            showPregnancy: false
+        });
+    };
 
 };
 

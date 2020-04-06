@@ -43,7 +43,7 @@ export const CustomDropDown = ({
                     ))}
                 </Menu>
             </View>
-        </Provider>
+        </Provider >
     );
 }
 
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     input: {
         height: 50,
         marginTop: 15,
-        minWidth: "100%"
+        minWidth: "100%",
     },
     option: {
         fontFamily: Colors.fontFamily
