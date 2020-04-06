@@ -8,7 +8,7 @@ import { LeftComponent, CenterComponent, RightComponent } from '../../../compone
 import PropTypes from 'prop-types';
 import { ContinueButton } from '../../../components/custombutton';
 import { SimpleTextInput, PasswordTextInput, CPFTextInput, SimpleDateTextInput } from '../../../components/customtextinput';
-
+import { CustomDropDown } from '../../../components/customdropdown';
 
 export default class PersonalDataPage extends Component {
     static navigationOptions = {
@@ -23,9 +23,17 @@ export default class PersonalDataPage extends Component {
             photo: "",
             name: "",
             cpf: "",
-            birthday: null
+            birthday: null,
+            genre: "",
+
         },
-        showBirthday: false
+        showBirthday: false,
+        showGenre: false,
+        genreList: [
+            { key: "", title: "Outro" },
+            { key: "M", title: "Masculino" },
+            { key: "F", title: "Feminino" },
+        ]
     };
     componentDidMount() {
         let { navigation } = this.props;
@@ -34,7 +42,7 @@ export default class PersonalDataPage extends Component {
         this.setState({ entity });
     };
     render = () => {
-        let { entity, showBirthday } = this.state;
+        let { entity, showBirthday, showGenre, genreList } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <Header
@@ -61,8 +69,15 @@ export default class PersonalDataPage extends Component {
                         showDatePicker={showBirthday}
                         onChangeDate={this.onHandleDate}
                     />
-
-
+                    <CustomDropDown
+                        label="Sexo"
+                        isVisible={showGenre}
+                        onCloseMenu={() => this.closeGenreSelect()}
+                        value={entity.genre}
+                        onPress={() => this.openGenreSelect()}
+                        options={genreList}
+                        onSelectOption={this.onHandleGenre} />
+                    <View style={{ marginTop: 100 }} />
                     <ContinueButton onPress={this.onContinueButtonClick} />
                     <ProgressTracking amount={7} position={2} />
                 </ScrollView>
@@ -99,6 +114,23 @@ export default class PersonalDataPage extends Component {
             showBirthday: false
         });
     };
+
+
+    openGenreSelect = () => {
+        this.setState({ showGenre: true });
+    };
+    closeGenreSelect = () => {
+        this.setState({ showGenre: false });
+    };
+
+    onHandleGenre = genre => {
+        let { entity } = this.state;
+        entity.genre = genre;
+        this.setState({
+            entity: entity,
+            showGenre: false
+        });
+    }
 
 };
 

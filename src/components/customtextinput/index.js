@@ -5,7 +5,6 @@ import { TextInput } from 'react-native-paper';
 import { TextInputMask } from 'react-native-masked-text';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import {Picker} from '@react-native-community/picker';
 
 export const SimpleTextInput = ({ label, value, onChangeText }) => (
     <TextInput
