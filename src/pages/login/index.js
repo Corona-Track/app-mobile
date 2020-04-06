@@ -7,15 +7,14 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
+  Platform,
 } from 'react-native';
 
 import {TextInput, Button} from 'react-native-paper';
 import {SwitchActions} from 'react-navigation';
 
-import {LoginButton, AccessToken} from 'react-native-fbsdk';
-
 // Auth
-import {SignIn} from '../../firebase/Auth';
+import {SignIn, signInFacebook} from '../../firebase/Auth';
 
 // Variables
 import {Colors} from '../../themes/variables';
@@ -47,7 +46,28 @@ export default class LoginPage extends Component {
     let {entity} = this.state;
     return !(entity.email && entity.password);
   };
-  onFacebookButtonPress = () => {};
+
+  onFacebookButtonPress = async () => {
+    /**
+     * Esse cara tem que verificar se todos os dados foram preenchido para depois deixar ele passar pra hora direto,
+     * Como Não temos a arquitetura toda definida para que eu possa consultar deixei passando direto e ja cadastrando no firebase
+     **/
+    await signInFacebook()
+      .then(() => {
+        this.setState({
+          error: '',
+        });
+        this.props.navigation.dispatch(
+          SwitchActions.jumpTo({routeName: 'Application'}),
+        );
+      })
+      .catch(error => {
+        this.setState({
+          error: error.message,
+        });
+      });
+  };
+
   onSignInButtonPress = () => {
     const {email, password} = this.state.entity;
 
@@ -130,20 +150,7 @@ export default class LoginPage extends Component {
           ENTRAR
         </Button>
         <Text style={styles.other}>─────────── OU ───────────</Text>
-        <LoginButton
-          onLoginFinished={(error, result) => {
-            if (error) {
-              console.log('login has error: ' + result.error);
-            } else if (result.isCancelled) {
-              console.log('login is cancelled.');
-            } else {
-              AccessToken.getCurrentAccessToken().then(data => {
-                console.log(data.accessToken.toString());
-              });
-            }
-          }}
-          onLogoutFinished={() => console.log('logout.')}
-        />
+
         <Button
           icon="facebook"
           style={styles.facebookButtonContainer}

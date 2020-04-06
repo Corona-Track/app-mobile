@@ -134,6 +134,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+
     }
     splits {
         abi {
@@ -207,6 +209,7 @@ dependencies {
     }
 
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
