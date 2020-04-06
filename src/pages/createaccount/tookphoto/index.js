@@ -1,44 +1,68 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { View, SafeAreaView, StyleSheet, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import { Avatar, Header } from 'react-native-elements';
 import { Button } from 'react-native-paper';
-import { Colors } from '../../themes/variables';
-import ProgressTracking from '../../components/progresstracking';
-import { RightComponent } from '../../components/customheader';
-import { CustomUserCamera } from '../../components/modals/customusercamera';
+import { Colors } from '../../../themes/variables';
+import ProgressTracking from '../../../components/progresstracking';
+import { LeftComponent, RightComponent } from '../../../components/customheader';
+import PropTypes from 'prop-types';
+import { CustomUserCamera } from '../../../components/modals/customusercamera';
+import { Icon } from 'react-native-elements'
 
-export default class CreateAccountPage extends Component {
+export default class TookPhotoPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
     };
+    static propTypes = {
+        photo: PropTypes.any,
+    }
     state = {
-        isCameraVisible: false,
-        photo: ""
+        photo: "",
+        isCameraVisible: false
     };
     componentDidMount() {
+        let { navigation } = this.props;
+        this.setState({
+            photo: navigation.getParam('photo', "")
+        });
     };
     render = () => {
-        let { isCameraVisible } = this.state;
+        let { photo, isCameraVisible } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <Header
                     backgroundColor={Colors.secondaryColor}
+                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
                     rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
                 />
                 <View style={{ flex: 0.75, justifyContent: "center" }}>
                     <View style={styles.textContainer}>
-                        <Text style={[styles.simpleText]}>Para iniciar seu cadastro,</Text>
-                        <Text style={[styles.simpleText]}>é necessário ter uma</Text>
-                        <Text style={[styles.simpleText, styles.boldText]}>foto de perfil</Text>
+                        <Text style={[styles.simpleText]}><Text style={styles.boldText}>Ótimo!</Text> Caso queira, você</Text>
+                        <Text style={[styles.simpleText]}>pode escolher outra foto ou</Text>
+                        <Text style={[styles.simpleText]}>alterar depois em seu perfil.</Text>
                         <TouchableOpacity onPress={this.openCamera} style={styles.avatarContainer}>
-                            <Avatar
+                            {photo ? (<><Avatar
                                 size={200}
                                 rounded
                                 overlayContainerStyle={styles.avatarContainerIcon}
-                                icon={{ name: 'camera-outline', type: 'material-community', color: Colors.defaultIconColor, size: 50 }} />
+                                source={{ uri: photo }} />
+                                <Icon
+                                    reverse
+                                    containerStyle={styles.photoIcon}
+                                    type="material"
+                                    name='camera-alt'
+                                    color='#f50'
+                                    size={20}
+                                    iconStyle={{ fontSize: 25 }} />
+                            </>) : (
+                                    <Avatar
+                                        size={200}
+                                        rounded
+                                        overlayContainerStyle={styles.avatarContainerIcon}
+                                        icon={{ name: 'camera-outline', type: 'material-community', color: Colors.defaultIconColor, size: 50 }} />
+                                )}
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -50,29 +74,28 @@ export default class CreateAccountPage extends Component {
                             mode="contained"
                             color={Colors.buttonPrimaryColor}
                             labelStyle={styles.continueButtonText}
-                            onPress={this.openCamera}
-                        >CONTINUAR</Button>
+                            onPress={this.onContinueButtonClick}>CONTINUAR</Button>
                     </View>
-                    <TouchableOpacity onPress={this.skipScreen} style={styles.skipContainer}>
+                    <View style={styles.skipContainer}>
                         <Button
                             mode="text"
                             color={Colors.defaultIconColor}
                             labelStyle={styles.skipButtonText}
-                            uppercase={false}>Pular</Button>
-                    </TouchableOpacity>
+                            uppercase={false}>
+                            {/* Pular */}
+                        </Button>
+                    </View>
                     <ProgressTracking amount={7} position={1} />
                 </View>
                 <CustomUserCamera
                     onChangePhoto={this.onChangePhoto}
                     isVisible={isCameraVisible}
                     onCloseCamera={this.onCloseCamera} />
-            </SafeAreaView>
-        )
+            </SafeAreaView >)
     };
     openCamera = () => {
         this.setState({
             isCameraVisible: true,
-            photo: null
         });
     };
     onCloseCamera = () => {
@@ -80,21 +103,23 @@ export default class CreateAccountPage extends Component {
             isCameraVisible: false
         });
     };
-    onPhotoTook = (photo) => {
-        this.props.navigation.navigate("TookPhoto", { photo: photo });
-    };
     onChangePhoto = newPhoto => {
         this.setState({
             photo: newPhoto,
             isCameraVisible: false
         });
-        this.onPhotoTook(newPhoto);
+    };
+    onLeftButtonPress = () => {
+        this.props.navigation.pop();
     };
     onRightButtonPress = () => {
         this.props.navigation.pop();
     };
-    skipScreen= () => {
-        // this.props.navigation.navigate("")
+    skipScreen = () => {
+    };
+    onContinueButtonClick = () => {
+        let { photo } = this.state;
+        this.props.navigation.navigate("PersonalData", { photo: photo });
     };
 }
 
@@ -106,7 +131,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        paddingHorizontal: 20
+        marginHorizontal: 20
     },
     logo: {
         height: 150,
@@ -130,7 +155,7 @@ const styles = StyleSheet.create({
 
     avatarContainer: {
         marginTop: 40,
-        marginBottom: 20
+        marginBottom: 20,
     },
 
     buttonContainer: {
@@ -165,6 +190,10 @@ const styles = StyleSheet.create({
     },
     skipContainer: {
         marginTop: 5,
+    },
+    photoIcon: {
+        position: "absolute",
+        right: 0,
+        bottom: 0
     }
-
 });

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Alert, View, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Modal, Alert, TouchableOpacity, StyleSheet } from "react-native";
 
 import Icon from "react-native-vector-icons/MaterialIcons";
 
@@ -20,8 +20,8 @@ export const CustomUserCamera = ({ isVisible, onChangePhoto, onCloseCamera }) =>
                 skipProcessing: true,
                 base64: true
             });
-            onChangePhoto(base64);
-        } catch (error) { Alert.alert("Aviso!", "Houve um erro ao tirar a foto, feche o aplicativo e tente novamente."); }
+            onChangePhoto('data:image/png;base64,' + base64);
+        } catch { Alert.alert("Aviso!", "Houve um erro ao tirar a foto, feche o aplicativo e tente novamente."); }
     };
 
     const onTurnCamera = () => {
@@ -49,27 +49,30 @@ export const CustomUserCamera = ({ isVisible, onChangePhoto, onCloseCamera }) =>
                     buttonNegative: "Cancelar"
                 }}
                 captureAudio={false}>
-                <Icon
-                    name="photo-camera"
-                    size={40}
-                    color={"#fff"}
+                <TouchableOpacity
                     onPress={onTakePicture}
-                    style={styles.buttonTakePicture}
-                />
-                <Icon
-                    name="close"
-                    size={32}
-                    color={"#fff"}
+                    style={styles.buttonTakePicture}>
+                    <Icon
+                        name="photo-camera"
+                        size={40}
+                        color={"#fff"} />
+                </TouchableOpacity>
+                <TouchableOpacity
                     onPress={onCloseCamera}
-                    style={styles.buttonCloseCamera}
-                />
-                <IconMaterialCommunity
-                    name="camera-party-mode"
-                    size={32}
-                    color={"#fff"}
+                    style={styles.buttonCloseCamera}>
+                    <Icon
+                        name="close"
+                        size={32}
+                        color={"#fff"} />
+                </TouchableOpacity>
+                <TouchableOpacity
                     onPress={onTurnCamera}
-                    style={styles.buttonOnTurnCamera}
-                />
+                    style={styles.buttonOnTurnCamera}>
+                    <IconMaterialCommunity
+                        name="camera-party-mode"
+                        size={32}
+                        color={"#fff"} />
+                </TouchableOpacity>
             </RNCamera>
         </Modal>
     );

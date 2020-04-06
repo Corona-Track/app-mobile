@@ -91,7 +91,7 @@ export default class LoginPage extends Component {
         this.props.navigation.dispatch(SwitchActions.jumpTo({ routeName: 'Application' }));
     };
     onSignUpButtonPress = () => {
-        this.props.navigation.navigate("CreateAccount");
+        this.props.navigation.navigate("TakePhoto");
     };
 }
 
