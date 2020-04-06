@@ -13,7 +13,7 @@ import {TextInput, Button} from 'react-native-paper';
 import {SwitchActions} from 'react-navigation';
 
 // Auth
-import {SignIn, isLogged} from '../../firebase/Auth';
+import {SignIn} from '../../firebase/Auth';
 
 export default class LoginPage extends Component {
   static navigationOptions = {
@@ -66,17 +66,10 @@ export default class LoginPage extends Component {
         });
       });
   };
+
   onSignUpButtonPress = () => {
     this.props.navigation.navigate('CreateAccount');
   };
-
-  componentDidMount() {
-    if (isLogged) {
-      this.props.navigation.dispatch(
-        SwitchActions.jumpTo({routeName: 'Application'}),
-      );
-    }
-  }
 
   render = () => {
     let {entity} = this.state;

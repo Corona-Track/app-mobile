@@ -1,22 +1,33 @@
 import firebase from './Config';
 
 export const getUser = () => {
-  if (isLogged) {
-    return firebase.auth().currentUser;
-  }
-  return new Error('Nenhum usuario encontrado');
-};
-export const isLogged = () => {
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      return true;
-    }
-    return false;
+  return new Promise((resolve, reject) => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        return resolve(user);
+      }
+      return reject(new Error('Nenhum usuario encontrado'));
+    });
   });
 };
 
 export const authPersist = () => {
   firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+};
+
+export const signOut = () => {
+  return new Promise((resolve, reject) => {
+    firebase
+      .auth()
+      .signOut()
+      .then(res => {
+        console.log(res);
+        resolve();
+      })
+      .catch(error => {
+        reject(new Error(error));
+      });
+  });
 };
 
 export const SignIn = (email, password) => {
