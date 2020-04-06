@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { NavigationActions, StackActions } from 'react-navigation';
-import { Avatar, Header } from 'react-native-elements';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
+import { Header } from 'react-native-elements';
 import { Button } from 'react-native-paper';
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
 import PropTypes from 'prop-types';
+import { ContinueButton } from '../../../components/custombutton';
+import { SimpleTextInput, PasswordTextInput, CPFTextInput, SimpleDateTextInput } from '../../../components/customtextinput';
+
 
 export default class PersonalDataPage extends Component {
     static navigationOptions = {
@@ -17,44 +19,53 @@ export default class PersonalDataPage extends Component {
         photo: PropTypes.any,
     }
     state = {
-        photo: ""
+        entity: {
+            photo: "",
+            name: "",
+            cpf: "",
+            birthday: null
+        },
+        showBirthday: false
     };
     componentDidMount() {
         let { navigation } = this.props;
-        this.setState({
-            photo: navigation.getParam('photo', "")
-        });
+        let { entity } = this.state;
+        entity.photo = navigation.getParam('photo', "");
+        this.setState({ entity });
     };
     render = () => {
-        let { photo } = this.state;
+        let { entity, showBirthday } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <Header
                     backgroundColor={Colors.secondaryColor}
                     leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={photo} />}
+                    centerComponent={<CenterComponent photo={entity.photo} />}
                     rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
                 />
-                <View style={{ flex: 0.75, justifyContent: "center" }}>
-                    <View style={styles.textContainer}>
-                        <Text style={[styles.simpleText]}><Text style={styles.boldText}>Ótimo!</Text> Caso queira, você</Text>
-                        <Text style={[styles.simpleText]}>pode escolher outra foto ou</Text>
-                        <Text style={[styles.simpleText]}>alterar depois em seu perfil.</Text>
-                    </View>
-                </View>
-                <View style={{ flex: 0.25, width: "100%" }}>
-                    <View style={styles.buttonContainer}>
-                        <Button
-                            style={styles.continueButtonContainer}
-                            contentStyle={styles.continueButton}
-                            mode="contained"
-                            color={Colors.buttonPrimaryColor}
-                            labelStyle={styles.continueButtonText}
-                            onPress={this.openCamera}
-                        >CONTINUAR</Button>
-                    </View>
-                    <ProgressTracking amount={7} position={1} />
-                </View>
+                <ScrollView style={{ width: "100%" }}>
+                    <IntroText />
+                    <SimpleTextInput
+                        label="Nome Completo"
+                        value={entity.name}
+                        onChangeText={this.onHandleName} />
+                    <CPFTextInput
+                        label="CPF"
+                        value={entity.cpf}
+                        onChangeText={this.onHandleCPF} />
+
+                    <SimpleDateTextInput
+                        label="Data de Nascimento"
+                        value={entity.birthday}
+                        onPress={this.onPressBirthdayPicker}
+                        showDatePicker={showBirthday}
+                        onChangeDate={this.onHandleDate}
+                    />
+
+
+                    <ContinueButton onPress={this.onContinueButtonClick} />
+                    <ProgressTracking amount={7} position={2} />
+                </ScrollView>
             </SafeAreaView >)
     };
     onLeftButtonPress = () => {
@@ -63,8 +74,41 @@ export default class PersonalDataPage extends Component {
     onRightButtonPress = () => {
         this.props.navigation.pop();
     };
-}
+    onContinueButtonClick = () => {
 
+    };
+
+    onHandleName = name => {
+        let { entity } = this.state;
+        entity.name = name;
+        this.setState({ entity });
+    };
+    onHandleCPF = cpf => {
+        let { entity } = this.state;
+        entity.cpf = cpf;
+        this.setState({ entity });
+    };
+    onPressBirthdayPicker = () => {
+        this.setState({ showBirthday: true });
+    };
+    onHandleDate = (event, date) => {
+        let { entity } = this.state;
+        entity.birthday = date ?? entity.birthday;;
+        this.setState({
+            entity: entity,
+            showBirthday: false
+        });
+    };
+
+};
+
+const IntroText = () => (
+    <View style={styles.textContainer}>
+        <Text style={[styles.simpleText]}>Agora precisamos saber</Text>
+        <Text style={[styles.simpleText]}>um pouco mais sobre você</Text>
+        <Text style={[styles.simpleText]}>e <Text style={styles.boldText}>seus dados pessoais.</Text></Text>
+    </View>
+);
 
 const styles = StyleSheet.create({
     container: {
@@ -87,6 +131,8 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         alignItems: "center",
+        justifyContent: "center",
+        marginTop: 20
     },
     simpleText: {
         fontFamily: Colors.fontFamily,
@@ -103,6 +149,7 @@ const styles = StyleSheet.create({
 
     buttonContainer: {
         width: "100%",
+        marginVertical: 30
     },
 
     continueButtonContainer: {
