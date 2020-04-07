@@ -22,3 +22,9 @@ export const cellphoneValidator = cellphone => {
     const expression = /^(\([0-9]{2}\) [9][0-9]{4}-[0-9]{4})|(\(1[2-9]\) [5-9][0-9]{3}-[0-9]{4})|(\([2-9][1-9]\) [5-9][0-9]{3}-[0-9]{4})/;
     return expression.test(String(cellphone).toLowerCase());
 };
+
+export const getFirstName = name => {
+    if (!name)
+        return null;
+    return name.replace(/ .*/, '');
+};

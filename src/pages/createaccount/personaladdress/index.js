@@ -12,7 +12,7 @@ import { NavigationEvents } from 'react-navigation';
 import Geolocation from 'react-native-geolocation-service';
 import { getAddressDataByZipCode } from '../../../services/zipcodeservice';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { cepValidator } from '../../../services/formvalidatorservice';
+import { cepValidator, getFirstName } from '../../../services/formvalidatorservice';
 
 export default class PersonalAddressPage extends Component {
     static navigationOptions = {
@@ -63,7 +63,7 @@ export default class PersonalAddressPage extends Component {
                     rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
                 />
                 <ScrollView style={{ width: "100%" }}>
-                    <IntroText />
+                    <IntroText userName={entity.name} />
                     <GPSButton onGPSButtonPress={this.onGPSButtonPress} />
                     <CEPTextInput
                         label="CEP"
@@ -210,13 +210,13 @@ export default class PersonalAddressPage extends Component {
     };
 };
 
-const IntroText = () => (
-    <View style={styles.textContainer}>
-        <Text style={[styles.simpleText, styles.boldText]}>Muito bem, Maria!</Text>
+const IntroText = ({ userName }) => {
+    return (<View style={styles.textContainer}>
+        <Text style={[styles.simpleText, styles.boldText]}>Muito bem, {getFirstName(userName)}!</Text>
         <Text style={[styles.simpleText]}>Agora nos diga, por favor,</Text>
         <Text style={[styles.simpleText]}>onde você mora.</Text>
-    </View>
-);
+    </View>);
+};
 
 const GPSButton = ({ onGPSButtonPress }) => (
     <Button
