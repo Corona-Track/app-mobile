@@ -46,7 +46,7 @@ export default class PersonalDataPage extends Component {
             return;
         let { navigation } = props;
         let { entity } = this.state;
-        previousPhoto = navigation.getParam('photo', null);
+        let previousPhoto = navigation.getParam('photo', null);
         if (!previousPhoto)
             return;
         entity.photo = previousPhoto;

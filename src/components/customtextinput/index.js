@@ -96,6 +96,6 @@ const styles = StyleSheet.create({
     input: {
         height: 50,
         width: "100%",
-        marginTop: 15
+        marginTop: 15,
     }
 });

@@ -42,7 +42,7 @@ export default class PersonalAddressPage extends Component {
         this.setState({ entity: converted });
     };
     render = () => {
-        let { entity, showBirthday, showGenre, genreList, showPregnancy, pregnancyList } = this.state;
+        let { entity } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
@@ -54,6 +54,7 @@ export default class PersonalAddressPage extends Component {
                 />
                 <ScrollView style={{ width: "100%" }}>
                     <IntroText />
+                    <GPSButton onGPSButtonPress={() => { }} />
                     <SimpleTextInput
                         label="CEP"
                         value={entity.cep}
@@ -124,6 +125,17 @@ const IntroText = () => (
     </View>
 );
 
+const GPSButton = ({ onGPSButtonPress }) => (
+    <Button
+        icon="crosshairs-gps"
+        style={styles.GPSButtonContainer}
+        contentStyle={styles.GPSButton}
+        mode="outlined"
+        color={Colors.buttonPrimaryColor}
+        labelStyle={styles.GPSButtonText}
+        onPress={onGPSButtonPress} > MINHA LOCALIZAÇÃO</Button >
+);
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -134,15 +146,6 @@ const styles = StyleSheet.create({
         height: "100%",
         marginHorizontal: 20,
         paddingBottom: 15
-    },
-    logo: {
-        height: 150,
-        width: 210,
-    },
-    avatarContainerIcon: {
-        backgroundColor: Colors.secondaryColor,
-        borderColor: Colors.defaultIconColor,
-        borderWidth: 3
     },
     textContainer: {
         alignItems: "center",
@@ -156,17 +159,6 @@ const styles = StyleSheet.create({
     boldText: {
         fontWeight: "bold"
     },
-
-    avatarContainer: {
-        marginTop: 40,
-        marginBottom: 20,
-    },
-
-    buttonContainer: {
-        width: "100%",
-        marginVertical: 30
-    },
-
     continueButtonContainer: {
         width: "100%",
         borderRadius: 50,
@@ -180,25 +172,20 @@ const styles = StyleSheet.create({
         color: Colors.primaryTextColor,
         fontFamily: Colors.fontFamily
     },
-
-    skipButtonContainer: {
+    GPSButtonContainer: {
         width: "100%",
+        marginTop: 20,
         borderRadius: 50,
+        borderColor: Colors.buttonPrimaryColor,
+        borderWidth: 1
     },
-    skipButton: {
+    GPSButton: {
         height: 50,
         width: "100%",
-        textAlign: "center"
+        textAlign: "center",
     },
-    skipButtonText: {
+    GPSButtonText: {
+        color: Colors.buttonPrimaryColor,
         fontFamily: Colors.fontFamily
     },
-    skipContainer: {
-        marginTop: 5,
-    },
-    photoIcon: {
-        position: "absolute",
-        right: 0,
-        bottom: 0
-    }
 });
