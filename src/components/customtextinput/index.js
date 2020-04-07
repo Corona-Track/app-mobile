@@ -70,7 +70,27 @@ export const SimpleDateTextInput = ({ label, value, onPress, showDatePicker, onC
         </>);
 };
 
-
+export const PhoneTextInput = ({ label, value, onChangeText }) => (
+    <TextInput
+        label={label}
+        style={styles.input}
+        value={value}
+        theme={{ colors: { primary: Colors.inputPrimaryColor, placeholder: Colors.placeholderTextColor } }}
+        maxLength={40}
+        mode="outlined"
+        onChangeText={onChangeText}
+        render={props =>
+            <TextInputMask
+                {...props}
+                type={'cel-phone'}
+                options={{
+                    maskType: 'BRL',
+                    withDDD: true,
+                    dddMask: '(99) '
+                }}
+            />
+        } />
+);
 
 const styles = StyleSheet.create({
     input: {

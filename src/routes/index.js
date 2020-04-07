@@ -6,6 +6,7 @@ import LoginPage from '../pages/login';
 import TookPhotoPage from '../pages/createaccount/tookphoto';
 import TakePhotoPage from '../pages/createaccount/takephoto';
 import PersonalDataPage from '../pages/createaccount/personaldata';
+import PersonalAddressPage from '../pages/createaccount/personaladdress';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator({
@@ -19,9 +20,9 @@ const AuthenticationStackNavigator = createStackNavigator(
         TakePhoto: { screen: TakePhotoPage },
         TookPhoto: { screen: TookPhotoPage },
         PersonalData: { screen: PersonalDataPage },
-
+        PersonalAddress: { screen: PersonalAddressPage },
         Login: { screen: LoginPage },
-        Splash: { screen: SplashPage }
+        Splash: { screen: SplashPage },
     },
     {
         mode: "modal",

@@ -7,10 +7,9 @@ import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
 import PropTypes from 'prop-types';
 import { ContinueButton } from '../../../components/custombutton';
-import { SimpleTextInput, PasswordTextInput, CPFTextInput, SimpleDateTextInput, PhoneTextInput } from '../../../components/customtextinput';
-import { CustomDropDown } from '../../../components/customdropdown';
+import { SimpleTextInput } from '../../../components/customtextinput';
 
-export default class PersonalDataPage extends Component {
+export default class PersonalAddressPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
@@ -20,27 +19,12 @@ export default class PersonalDataPage extends Component {
     }
     state = {
         entity: {
-            photo: "",
-            name: "",
-            cpf: "",
-            birthday: null,
-            genre: "",
-            pregnancy: "",
-            cellphone: "",
-            email: ""
+            cep: "",
+            street: "",
+            neighborhood: "",
+            city: "",
+            uf: "",
         },
-        showBirthday: false,
-        showGenre: false,
-        genreList: [
-            { key: "N", text: "Não informar" },
-            { key: "M", text: "Masculino" },
-            { key: "F", text: "Feminino" },
-        ],
-        showPregnancy: false,
-        pregnancyList: [
-            { key: "1", text: "Sim" },
-            { key: "0", text: "Não" },
-        ],
     };
     componentDidMount() {
         let { navigation } = this.props;
@@ -61,46 +45,27 @@ export default class PersonalDataPage extends Component {
                 <ScrollView style={{ width: "100%" }}>
                     <IntroText />
                     <SimpleTextInput
-                        label="Nome Completo"
-                        value={entity.name}
-                        onChangeText={this.onHandleName} />
-                    <CPFTextInput
-                        label="CPF"
-                        value={entity.cpf}
-                        onChangeText={this.onHandleCPF} />
-                    <SimpleDateTextInput
-                        label="Data de Nascimento"
-                        value={entity.birthday}
-                        onPress={this.onPressBirthdayPicker}
-                        showDatePicker={showBirthday}
-                        onChangeDate={this.onHandleDate} />
-                    <CustomDropDown
-                        list={genreList}
-                        title="Sexo"
-                        onChangeSelected={this.onHandleGenre}
-                        getLabel={item => item.text}
-                        value={entity.genre} />
-                    {entity.genre && entity.genre.key === "F" ?
-                        (<CustomDropDown
-                            list={pregnancyList}
-                            title="Gestante"
-                            onChangeSelected={this.onHandlePregnancy}
-                            getLabel={item => item.text}
-                            value={entity.pregnancy} />) : (<></>)}
-                    <PhoneTextInput
-                        label="Celular"
-                        value={entity.cellphone}
-                        onChangeText={this.onHandleCellphone} />
-                    <SimpleTextInput
-                        label="E-mail"
-                        value={entity.email}
-                        onChangeText={this.onHandleEmail} />
-                    <PasswordTextInput
-                        label="Senha"
-                        value={entity.password}
-                        onChangeText={this.onHandlePassword} />
+                        label="CEP"
+                        value={entity.cep}
+                        onChangeText={this.onHandleCEP} />
+                        <SimpleTextInput
+                        label="Av, Rua"
+                        value={entity.street}
+                        onChangeText={this.onHandleStreet} />
+                        <SimpleTextInput
+                        label="Bairro"
+                        value={entity.neighborhood}
+                        onChangeText={this.onHandleNeighborhood} />
+                        <SimpleTextInput
+                        label="Cidade"
+                        value={entity.city}
+                        onChangeText={this.onHandleCity} />
+                        <SimpleTextInput
+                        label="UF"
+                        value={entity.uf}
+                        onChangeText={this.onHandleUF} />
                     <ContinueButton onPress={this.onContinueButtonClick} />
-                    <ProgressTracking amount={7} position={2} />
+                    <ProgressTracking amount={7} position={3} />
                 </ScrollView>
             </SafeAreaView >)
     };
@@ -114,61 +79,38 @@ export default class PersonalDataPage extends Component {
 
     };
 
-    onHandleName = name => {
+    onHandleCEP = cep => {
         let { entity } = this.state;
-        entity.name = name;
+        entity.cep = cep;
         this.setState({ entity });
     };
-    onHandleCPF = cpf => {
+    onHandleStreet = street => {
         let { entity } = this.state;
-        entity.cpf = cpf;
+        entity.street = street;
         this.setState({ entity });
     };
-    onPressBirthdayPicker = () => {
-        this.setState({ showBirthday: true });
-    };
-    onHandleDate = (event, date) => {
+    onHandleNeighborhood = neighborhood => {
         let { entity } = this.state;
-        entity.birthday = date ?? entity.birthday;;
-        this.setState({
-            entity: entity,
-            showBirthday: false
-        });
-    };
-
-    onHandleGenre = genre => {
-        let { entity } = this.state;
-        entity.genre = genre;
-        entity.pregnancy = null;
+        entity.neighborhood = neighborhood;
         this.setState({ entity });
     };
-    onHandlePregnancy = pregnancy => {
+    onHandleCity = city => {
         let { entity } = this.state;
-        entity.pregnancy = pregnancy;
-        this.setState({ entity: entity });
-    };
-    onHandleCellphone = cellphone => {
-        let { entity } = this.state;
-        entity.cellphone = cellphone;
+        entity.city = city;
         this.setState({ entity });
     };
-    onHandleEmail = email => {
+    onHandleUF = uf => {
         let { entity } = this.state;
-        entity.email = email;
+        entity.uf = uf;
         this.setState({ entity });
     };
-    onHandlePassword = password => {
-        let { entity } = this.state;
-        entity.password = password;
-        this.setState({ entity });
-    }
 };
 
 const IntroText = () => (
     <View style={styles.textContainer}>
-        <Text style={[styles.simpleText]}>Agora precisamos saber</Text>
-        <Text style={[styles.simpleText]}>um pouco mais sobre você</Text>
-        <Text style={[styles.simpleText]}>e <Text style={styles.boldText}>seus dados pessoais.</Text></Text>
+        <Text style={[styles.simpleText,styles.boldText]}>Muito bem, Maria!</Text>
+        <Text style={[styles.simpleText]}>Agora nos diga, por favor,</Text>
+        <Text style={[styles.simpleText]}>onde você mora.</Text>        
     </View>
 );
 
