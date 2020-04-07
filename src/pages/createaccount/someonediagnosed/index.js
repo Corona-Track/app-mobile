@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { ConfirmButton, DenyButton, DoubtButton } from '../../../components/custombutton';
 import { NavigationEvents } from 'react-navigation';
 import { ImageIcon } from '../../../components/customimageicon';
-export default class AlreadyHadCoronavirusPage extends Component {
+export default class SomeoneDiagnosedPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
@@ -19,7 +19,7 @@ export default class AlreadyHadCoronavirusPage extends Component {
     }
     state = {
         entity: {
-            alreadyHadCoronavirus: "",
+            someoneDiagnosed: "",
         },
     };
     initialize(props) {
@@ -50,7 +50,7 @@ export default class AlreadyHadCoronavirusPage extends Component {
                 <View style={{ flex: 0.60, justifyContent: "center" }}>
                     <IntroText />
                     <View style={styles.avatarContainer}>
-                        <ImageIcon source={require('../../../assets/images/virus.png')} />
+                        <ImageIcon source={require('../../../assets/images/exchange.png')} />
                     </View>
                 </View>
                 <View style={{ flex: 0.40, width: "100%" }}>
@@ -70,16 +70,16 @@ export default class AlreadyHadCoronavirusPage extends Component {
     };
     onAnswerButtonPress = answer => {
         let { entity } = this.state;
-        entity.alreadyHadCoronavirus = answer;
-        this.setState({ entity });
-        this.props.navigation.navigate("SomeoneDiagnosed", { entity: entity });
+        entity.someoneDiagnosed = answer;
+        this.props.navigation.navigate("SomeoneSuspicious", { entity: entity });
     };
 };
 
 const IntroText = () => (
     <View style={styles.textContainer}>
-        <Text style={[styles.simpleText]}><Text style={styles.boldText}>Você já teve Coronavírus</Text></Text>
-        <Text style={[styles.simpleText]}>confirmado por teste?</Text>
+        <Text style={[styles.simpleText]}>Você teve contato com <Text style={styles.boldText}>alguém</Text></Text>
+        <Text style={[styles.simpleText]}><Text style={styles.boldText}>diagnosticado</Text> com Coronavírus</Text>
+        <Text style={[styles.simpleText]}>nos últimos 14 dias?</Text>
     </View>
 );
 

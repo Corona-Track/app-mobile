@@ -8,6 +8,8 @@ import TakePhotoPage from '../pages/createaccount/takephoto';
 import PersonalDataPage from '../pages/createaccount/personaldata';
 import PersonalAddressPage from '../pages/createaccount/personaladdress';
 import AlreadyHadCoronavirusPage from '../pages/createaccount/alreadyhadcoronavirus';
+import SomeoneDiagnosedPage from '../pages/createaccount/someonediagnosed';
+import SomeoneSuspiciousPage from '../pages/createaccount/someonesuspicious';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator({
@@ -23,6 +25,8 @@ const AuthenticationStackNavigator = createStackNavigator(
         PersonalData: { screen: PersonalDataPage },
         PersonalAddress: { screen: PersonalAddressPage },
         AlreadyHadCoronavirus: { screen: AlreadyHadCoronavirusPage },
+        SomeoneDiagnosed: { screen: SomeoneDiagnosedPage },
+        SomeoneSuspicious: { screen: SomeoneSuspiciousPage },
         Login: { screen: LoginPage },
         Splash: { screen: SplashPage },
     },
