@@ -7,6 +7,7 @@ import TookPhotoPage from '../pages/createaccount/tookphoto';
 import TakePhotoPage from '../pages/createaccount/takephoto';
 import PersonalDataPage from '../pages/createaccount/personaldata';
 import PersonalAddressPage from '../pages/createaccount/personaladdress';
+import AlreadyHadCoronavirusPage from '../pages/createaccount/alreadyhadcoronavirus';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator({
@@ -21,6 +22,7 @@ const AuthenticationStackNavigator = createStackNavigator(
         TookPhoto: { screen: TookPhotoPage },
         PersonalData: { screen: PersonalDataPage },
         PersonalAddress: { screen: PersonalAddressPage },
+        AlreadyHadCoronavirus: { screen: AlreadyHadCoronavirusPage },
         Login: { screen: LoginPage },
         Splash: { screen: SplashPage },
     },

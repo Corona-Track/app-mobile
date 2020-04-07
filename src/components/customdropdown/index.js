@@ -1,7 +1,6 @@
-import * as React from 'react'
-import { Alert, Text, View, TouchableOpacity, StyleSheet } from 'react-native'
-import { CustomPicker } from 'react-native-custom-picker'
-import { TextInput } from 'react-native-paper';
+import * as React from 'react';
+import { Alert, Text, View, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import { CustomPicker } from 'react-native-custom-picker';
 import { Colors } from '../../themes/variables';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import PropTypes from 'prop-types';
@@ -53,15 +52,14 @@ export class CustomDropDown extends React.Component {
     renderField(settings, title) {
         const { selectedItem, getLabel } = settings;
         return (
-            <View>
-                <TextInput
-                    value={selectedItem ? getLabel(selectedItem) : null}
-                    label={title}
-                    editable={false}
-                    style={styles.input}
-                    theme={{ colors: { primary: Colors.inputPrimaryColor, placeholder: Colors.placeholderTextColor } }}
-                    maxLength={40}
-                    mode="outlined" />
+            <View style={styles.inputContainer}>
+                <Text style={styles.inputLabel}>{title}</Text>
+                <View style={styles.input}>
+                    {selectedItem ?
+                        <Text style={styles.inputDropDownText}>{getLabel(selectedItem)}</Text> :
+                        <Text style={[styles.inputDropDownText, { color: Colors.placeholderTextColor }]}>{title}</Text>
+                    }
+                </View>
                 <Icon
                     style={styles.iconMore}
                     name={"expand-more"}
@@ -126,8 +124,26 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 50,
-        marginTop: 15,
-        minWidth: "100%",
+        width: "100%",
+        fontFamily: Colors.fontFamily,
+        color: "#000"
+    },
+    inputContainer: {
+        fontFamily: Colors.fontFamily,
+        borderColor: Colors.placeholderTextColor,
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingLeft: 11,
+        marginTop: 15
+    },
+    inputLabel: {
+        position: "absolute",
+        left: 8,
+        top: -8,
+        paddingHorizontal: 2,
+        fontSize: 12,
+        backgroundColor: Colors.secondaryColor,
+        fontFamily: Colors.fontFamily
     },
     option: {
         fontFamily: Colors.fontFamily
@@ -135,12 +151,17 @@ const styles = StyleSheet.create({
     iconMore: {
         flex: 0,
         position: "absolute",
-        bottom: 10,
+        bottom: 9,
         right: 15
     },
     optionText: {
         alignSelf: "flex-start",
         fontSize: 15,
         fontFamily: Colors.fontFamily
-    }
+    },
+    inputDropDownText: {
+        width: "100%",
+        marginTop: 15,
+        fontFamily: Colors.fontFamily,
+    },
 })

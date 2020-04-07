@@ -1,49 +1,49 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, TextInput, View, Text } from 'react-native';
 import { Colors } from '../../themes/variables';
-import { TextInput } from 'react-native-paper';
 import { TextInputMask } from 'react-native-masked-text';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 
 export const SimpleTextInput = ({ label, value, onChangeText }) => (
-    <TextInput
-        label={label}
-        style={styles.input}
-        value={value}
-        theme={{ colors: { primary: Colors.inputPrimaryColor, placeholder: Colors.placeholderTextColor } }}
-        maxLength={40}
-        mode="outlined"
-        onChangeText={onChangeText} />
+    <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>{label}</Text>
+        <TextInput
+            placeholderTextColor={Colors.placeholderTextColor}
+            placeholder={label}
+            style={styles.input}
+            value={value}
+            maxLength={40}
+            onChangeText={onChangeText} />
+    </View>
 );
 
 export const PasswordTextInput = ({ label, value, onChangeText }) => (
-    <TextInput
-        label={label}
-        style={styles.input}
-        value={value}
-        theme={{ colors: { primary: Colors.inputPrimaryColor, placeholder: Colors.placeholderTextColor } }}
-        maxLength={40}
-        secureTextEntry={true}
-        mode="outlined"
-        onChangeText={onChangeText} />
+    <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>{label}</Text>
+        <TextInput
+            placeholderTextColor={Colors.placeholderTextColor}
+            secureTextEntry={true}
+            placeholder={label}
+            style={styles.input}
+            value={value}
+            maxLength={40}
+            onChangeText={onChangeText} />
+    </View>
 );
 
 export const CPFTextInput = ({ label, value, onChangeText }) => (
-    <TextInput
-        label={label}
-        style={styles.input}
-        value={value}
-        theme={{ colors: { primary: Colors.inputPrimaryColor, placeholder: Colors.placeholderTextColor } }}
-        maxLength={40}
-        mode="outlined"
-        onChangeText={onChangeText}
-        render={props =>
-            <TextInputMask
-                {...props}
-                type={'cpf'}
-            />
-        } />
+    <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>{label}</Text>
+        <TextInputMask
+            placeholderTextColor={Colors.placeholderTextColor}
+            type={'cpf'}
+            placeholder={label}
+            style={styles.input}
+            value={value}
+            maxLength={40}
+            onChangeText={onChangeText} />
+    </View>
 );
 
 export const SimpleDateTextInput = ({ label, value, onPress, showDatePicker, onChangeDate }) => {
@@ -51,14 +51,15 @@ export const SimpleDateTextInput = ({ label, value, onPress, showDatePicker, onC
     return (
         <>
             <TouchableOpacity onPress={onPress}>
-                <TextInput
-                    label={label}
-                    editable={false}
-                    style={styles.input}
-                    value={convertedValue}
-                    theme={{ colors: { primary: Colors.inputPrimaryColor, placeholder: Colors.placeholderTextColor } }}
-                    maxLength={40}
-                    mode="outlined" />
+                <View style={styles.inputDropDownContainer}>
+                    <Text style={styles.inputLabel}>{label}</Text>
+                    <View style={styles.input}>
+                        {convertedValue ?
+                            <Text style={styles.inputDropDownText}>{convertedValue}</Text> :
+                            <Text style={[styles.inputDropDownText, { color: Colors.placeholderTextColor }]}>{label}</Text>
+                        }
+                    </View>
+                </View>
             </TouchableOpacity>
             {showDatePicker &&
                 <DateTimePicker
@@ -71,31 +72,58 @@ export const SimpleDateTextInput = ({ label, value, onPress, showDatePicker, onC
 };
 
 export const PhoneTextInput = ({ label, value, onChangeText }) => (
-    <TextInput
-        label={label}
-        style={styles.input}
-        value={value}
-        theme={{ colors: { primary: Colors.inputPrimaryColor, placeholder: Colors.placeholderTextColor } }}
-        maxLength={40}
-        mode="outlined"
-        onChangeText={onChangeText}
-        render={props =>
-            <TextInputMask
-                {...props}
-                type={'cel-phone'}
-                options={{
-                    maskType: 'BRL',
-                    withDDD: true,
-                    dddMask: '(99) '
-                }}
-            />
-        } />
+    <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>{label}</Text>
+        <TextInputMask
+            placeholderTextColor={Colors.placeholderTextColor}
+            type={'cel-phone'}
+            options={{
+                maskType: 'BRL',
+                withDDD: true,
+                dddMask: '(99) '
+            }}
+            placeholder={label}
+            style={styles.input}
+            value={value}
+            maxLength={40}
+            onChangeText={onChangeText} />
+    </View>
 );
 
 const styles = StyleSheet.create({
     input: {
         height: 50,
         width: "100%",
+        fontFamily: Colors.fontFamily,
+    },
+    inputContainer: {
+        fontFamily: Colors.fontFamily,
+        borderColor: Colors.placeholderTextColor,
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingLeft: 6,
+        marginTop: 15
+    },
+    inputLabel: {
+        position: "absolute",
+        left: 8,
+        top: -8,
+        paddingHorizontal: 2,
+        fontSize: 12,
+        backgroundColor: Colors.secondaryColor,
+        fontFamily: Colors.fontFamily
+    },
+    inputDropDownText: {
+        width: "100%",
         marginTop: 15,
-    }
+        fontFamily: Colors.fontFamily,
+    },
+    inputDropDownContainer: {
+        fontFamily: Colors.fontFamily,
+        borderColor: Colors.placeholderTextColor,
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingLeft: 11,
+        marginTop: 15
+    },
 });

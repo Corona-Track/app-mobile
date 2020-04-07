@@ -6,11 +6,11 @@ import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
 import PropTypes from 'prop-types';
-import { ContinueButton } from '../../../components/custombutton';
+import { ConfirmButton, DenyButton } from '../../../components/custombutton';
 import { SimpleTextInput } from '../../../components/customtextinput';
 import { NavigationEvents } from 'react-navigation';
 
-export default class PersonalAddressPage extends Component {
+export default class AlreadyHadCoronavirusPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
@@ -20,11 +20,7 @@ export default class PersonalAddressPage extends Component {
     }
     state = {
         entity: {
-            cep: "",
-            street: "",
-            neighborhood: "",
-            city: "",
-            uf: "",
+            alreadyHadCoronavirus: "",
         },
     };
     initialize(props) {
@@ -49,34 +45,15 @@ export default class PersonalAddressPage extends Component {
                 <Header
                     backgroundColor={Colors.secondaryColor}
                     leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+                    centerComponent={<CenterComponent photo={entity.photo} userName={user.name} />}
                     rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
                 />
                 <ScrollView style={{ width: "100%" }}>
                     <IntroText />
-                    <GPSButton onGPSButtonPress={() => { }} />
-                    <SimpleTextInput
-                        label="CEP"
-                        value={entity.cep}
-                        onChangeText={this.onHandleCEP} />
-                    <SimpleTextInput
-                        label="Av, Rua"
-                        value={entity.street}
-                        onChangeText={this.onHandleStreet} />
-                    <SimpleTextInput
-                        label="Bairro"
-                        value={entity.neighborhood}
-                        onChangeText={this.onHandleNeighborhood} />
-                    <SimpleTextInput
-                        label="Cidade"
-                        value={entity.city}
-                        onChangeText={this.onHandleCity} />
-                    <SimpleTextInput
-                        label="UF"
-                        value={entity.uf}
-                        onChangeText={this.onHandleUF} />
-                    <ContinueButton onPress={this.onContinueButtonClick} />
-                    <ProgressTracking amount={7} position={3} />
+
+                    <ConfirmButton onPress={() => { }} />
+                    <DenyButton onPress={() => { }} />
+                    <ProgressTracking amount={7} position={4} />
                 </ScrollView>
             </SafeAreaView >)
     };
@@ -87,9 +64,9 @@ export default class PersonalAddressPage extends Component {
         this.props.navigation.pop();
     };
     onContinueButtonClick = () => {
-        let { entity } = this.state;
-        this.props.navigation.navigate("AlreadyHadCoronavirusPage", { entity: entity });
+
     };
+
     onHandleCEP = cep => {
         let { entity } = this.state;
         entity.cep = cep;
@@ -133,7 +110,7 @@ const GPSButton = ({ onGPSButtonPress }) => (
         mode="outlined"
         color={Colors.buttonPrimaryColor}
         labelStyle={styles.GPSButtonText}
-        onPress={onGPSButtonPress}>MINHA LOCALIZAÇÃO</Button >
+        onPress={onGPSButtonPress} > MINHA LOCALIZAÇÃO</Button >
 );
 
 const styles = StyleSheet.create({
