@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView, PermissionsAndroid, Alert, Platform } from 'react-native';
 import { Header } from 'react-native-elements';
 import { Button } from 'react-native-paper';
 import { Colors } from '../../../themes/variables';
@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { ContinueButton } from '../../../components/custombutton';
 import { SimpleTextInput } from '../../../components/customtextinput';
 import { NavigationEvents } from 'react-navigation';
+import Geolocation from 'react-native-geolocation-service';
 
 export default class PersonalAddressPage extends Component {
     static navigationOptions = {
@@ -25,6 +26,9 @@ export default class PersonalAddressPage extends Component {
             neighborhood: "",
             city: "",
             uf: "",
+            hasPermissionLocation: false,
+            latitude: "",
+            longitude: ""
         },
     };
     initialize(props) {
@@ -54,7 +58,7 @@ export default class PersonalAddressPage extends Component {
                 />
                 <ScrollView style={{ width: "100%" }}>
                     <IntroText />
-                    <GPSButton onGPSButtonPress={() => { }} />
+                    <GPSButton onGPSButtonPress={this.onGPSButtonPress} />
                     <SimpleTextInput
                         label="CEP"
                         value={entity.cep}
@@ -114,6 +118,46 @@ export default class PersonalAddressPage extends Component {
         let { entity } = this.state;
         entity.uf = uf;
         this.setState({ entity });
+    };
+    onGPSButtonPress = async () => {
+        if (Platform.OS === "ios") {
+            this.getLocation();
+            return;
+        }
+        try {
+            const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
+                'title': 'Acesso de localização',
+                'message': 'Para buscar sua localização precisamos de sua permissão.'
+            });
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                this.getLocation();
+                return;
+            }
+            this.onGPSErrorMessage();
+        } catch { this.onGPSErrorMessage(); }
+    };
+    onGPSErrorMessage = () => {
+        this.setState({ hasPermissionLocation: false });
+        Alert.alert(
+            'Aviso!',
+            "Falha ao acessar a sua localização, tente novamente mais tarde!",
+            [{ text: 'OK' }],
+            { cancelable: false }
+        );
+    };
+    getLocation = () => {
+        this.setState({ hasPermissionLocation: true });
+        Geolocation.getCurrentPosition(
+            position => {
+                let { entity } = this.state;
+                entity.latitude = position.coords.latitude;
+                entity.longitude = position.coords.longitude;
+                this.setState({ entity });
+            },
+            error => {
+                this.onGPSErrorMessage();
+            }
+        );
     };
 };
 
