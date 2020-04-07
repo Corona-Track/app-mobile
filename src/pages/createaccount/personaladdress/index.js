@@ -8,6 +8,7 @@ import { LeftComponent, CenterComponent, RightComponent } from '../../../compone
 import PropTypes from 'prop-types';
 import { ContinueButton } from '../../../components/custombutton';
 import { SimpleTextInput } from '../../../components/customtextinput';
+import { NavigationEvents } from 'react-navigation';
 
 export default class PersonalAddressPage extends Component {
     static navigationOptions = {
@@ -26,16 +27,25 @@ export default class PersonalAddressPage extends Component {
             uf: "",
         },
     };
-    componentDidMount() {
-        let { navigation } = this.props;
+    initialize(props) {
+        if (!props)
+            return;
+        let { navigation } = props;
         let { entity } = this.state;
-        entity.photo = navigation.getParam('photo', "");
-        this.setState({ entity });
+        previousEntity = navigation.getParam('entity', null);
+        if (!previousEntity)
+            return;
+        let converted = {
+            ...entity,
+            ...previousEntity
+        };
+        this.setState({ entity: converted });
     };
     render = () => {
         let { entity, showBirthday, showGenre, genreList, showPregnancy, pregnancyList } = this.state;
         return (
             <SafeAreaView style={styles.container}>
+                <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
                 <Header
                     backgroundColor={Colors.secondaryColor}
                     leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
@@ -48,19 +58,19 @@ export default class PersonalAddressPage extends Component {
                         label="CEP"
                         value={entity.cep}
                         onChangeText={this.onHandleCEP} />
-                        <SimpleTextInput
+                    <SimpleTextInput
                         label="Av, Rua"
                         value={entity.street}
                         onChangeText={this.onHandleStreet} />
-                        <SimpleTextInput
+                    <SimpleTextInput
                         label="Bairro"
                         value={entity.neighborhood}
                         onChangeText={this.onHandleNeighborhood} />
-                        <SimpleTextInput
+                    <SimpleTextInput
                         label="Cidade"
                         value={entity.city}
                         onChangeText={this.onHandleCity} />
-                        <SimpleTextInput
+                    <SimpleTextInput
                         label="UF"
                         value={entity.uf}
                         onChangeText={this.onHandleUF} />
@@ -108,9 +118,9 @@ export default class PersonalAddressPage extends Component {
 
 const IntroText = () => (
     <View style={styles.textContainer}>
-        <Text style={[styles.simpleText,styles.boldText]}>Muito bem, Maria!</Text>
+        <Text style={[styles.simpleText, styles.boldText]}>Muito bem, Maria!</Text>
         <Text style={[styles.simpleText]}>Agora nos diga, por favor,</Text>
-        <Text style={[styles.simpleText]}>onde você mora.</Text>        
+        <Text style={[styles.simpleText]}>onde você mora.</Text>
     </View>
 );
 
@@ -122,7 +132,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20
+        marginHorizontal: 20,
+        paddingBottom: 15
     },
     logo: {
         height: 150,

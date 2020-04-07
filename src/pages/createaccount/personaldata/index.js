@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { ContinueButton } from '../../../components/custombutton';
 import { SimpleTextInput, PasswordTextInput, CPFTextInput, SimpleDateTextInput, PhoneTextInput } from '../../../components/customtextinput';
 import { CustomDropDown } from '../../../components/customdropdown';
+import { NavigationEvents } from 'react-navigation';
 
 export default class PersonalDataPage extends Component {
     static navigationOptions = {
@@ -29,8 +30,6 @@ export default class PersonalDataPage extends Component {
             cellphone: "",
             email: ""
         },
-        showBirthday: false,
-        showGenre: false,
         genreList: [
             { key: "N", text: "Não informar" },
             { key: "M", text: "Masculino" },
@@ -42,16 +41,22 @@ export default class PersonalDataPage extends Component {
             { key: "0", text: "Não" },
         ],
     };
-    componentDidMount() {
-        let { navigation } = this.props;
+    initialize(props) {
+        if (!props)
+            return;
+        let { navigation } = props;
         let { entity } = this.state;
-        entity.photo = navigation.getParam('photo', "");
+        previousPhoto = navigation.getParam('photo', null);
+        if (!previousPhoto)
+            return;
+        entity.photo = previousPhoto;
         this.setState({ entity });
     };
     render = () => {
-        let { entity, showBirthday, showGenre, genreList, showPregnancy, pregnancyList } = this.state;
+        let { entity, showBirthday, genreList, pregnancyList } = this.state;
         return (
             <SafeAreaView style={styles.container}>
+                <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
                 <Header
                     backgroundColor={Colors.secondaryColor}
                     leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
@@ -111,9 +116,9 @@ export default class PersonalDataPage extends Component {
         this.props.navigation.pop();
     };
     onContinueButtonClick = () => {
-
+        let { entity } = this.state;
+        this.props.navigation.navigate("PersonalAddress", { entity: entity });
     };
-
     onHandleName = name => {
         let { entity } = this.state;
         entity.name = name;
@@ -135,7 +140,6 @@ export default class PersonalDataPage extends Component {
             showBirthday: false
         });
     };
-
     onHandleGenre = genre => {
         let { entity } = this.state;
         entity.genre = genre;
@@ -180,7 +184,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20
+        marginHorizontal: 20,
+        paddingBottom: 15
     },
     logo: {
         height: 150,
