@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
-import { Header } from 'react-native-elements';
+import { Avatar, Header } from 'react-native-elements';
 import { Button } from 'react-native-paper';
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
 import PropTypes from 'prop-types';
-import { ConfirmButton, DenyButton } from '../../../components/custombutton';
+import { ConfirmButton, DenyButton, DoubtButton } from '../../../components/custombutton';
 import { SimpleTextInput } from '../../../components/customtextinput';
 import { NavigationEvents } from 'react-navigation';
-
+import { ImageIcon } from '../../../components/customimageicon';
 export default class AlreadyHadCoronavirusPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
     };
     static propTypes = {
-        photo: PropTypes.any,
+        entity: PropTypes.object,
     }
     state = {
         entity: {
@@ -45,17 +45,23 @@ export default class AlreadyHadCoronavirusPage extends Component {
                 <Header
                     backgroundColor={Colors.secondaryColor}
                     leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} userName={user.name} />}
+                    centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
                     rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
                 />
-                <ScrollView style={{ width: "100%" }}>
+                <View style={{ flex: 0.60, justifyContent: "center" }}>
                     <IntroText />
-
-                    <ConfirmButton onPress={() => { }} />
-                    <DenyButton onPress={() => { }} />
+                    <View style={styles.avatarContainer}>
+                        <ImageIcon source={require('../../../assets/images/virus.png')} />
+                    </View>
+                </View>
+                <View style={{ flex: 0.40, width: "100%" }}>
+                    <DenyButton onPress={() => { this.onAnswerButtonPress("deny") }} />
+                    <ConfirmButton onPress={() => { this.onAnswerButtonPress("confirm") }} />
+                    <DoubtButton onPress={() => { this.onAnswerButtonPress("doubt") }} label="Não tenho certeza" />
                     <ProgressTracking amount={7} position={4} />
-                </ScrollView>
-            </SafeAreaView >)
+                </View>
+            </SafeAreaView >
+        )
     };
     onLeftButtonPress = () => {
         this.props.navigation.pop();
@@ -63,10 +69,12 @@ export default class AlreadyHadCoronavirusPage extends Component {
     onRightButtonPress = () => {
         this.props.navigation.pop();
     };
-    onContinueButtonClick = () => {
-
+    onAnswerButtonPress = answer => {
+        let { entity } = this.state;
+        entity.alreadyHadCoronavirus = answer;
+        this.setState({ entity });
+        this.props.navigation.navigate("SomeoneDiagnosed", { entity: entity });
     };
-
     onHandleCEP = cep => {
         let { entity } = this.state;
         entity.cep = cep;
@@ -96,9 +104,8 @@ export default class AlreadyHadCoronavirusPage extends Component {
 
 const IntroText = () => (
     <View style={styles.textContainer}>
-        <Text style={[styles.simpleText, styles.boldText]}>Muito bem, Maria!</Text>
-        <Text style={[styles.simpleText]}>Agora nos diga, por favor,</Text>
-        <Text style={[styles.simpleText]}>onde você mora.</Text>
+        <Text style={[styles.simpleText, styles.boldText]}>Você já teve Coronavírus</Text>
+        <Text style={[styles.simpleText]}>confirmado por teste?</Text>
     </View>
 );
 
@@ -164,5 +171,14 @@ const styles = StyleSheet.create({
     GPSButtonText: {
         color: Colors.buttonPrimaryColor,
         fontFamily: Colors.fontFamily
+    },
+    avatarContainerIcon: {
+        backgroundColor: Colors.questionCenterIconColor,
+
+    },
+    avatarContainer: {
+        marginTop: 40,
+        marginBottom: 20,
+        alignItems: "center",
     },
 });

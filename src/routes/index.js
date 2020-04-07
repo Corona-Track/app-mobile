@@ -27,7 +27,6 @@ const AuthenticationStackNavigator = createStackNavigator(
         Splash: { screen: SplashPage },
     },
     {
-        mode: "modal",
         initialRouteName: 'TakePhoto'
     }
 );

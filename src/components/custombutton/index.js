@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Colors } from '../../themes/variables';
 import { Button } from 'react-native-paper';
 
@@ -16,7 +16,7 @@ export const ContinueButton = ({ onPress }) => (
 );
 
 export const ConfirmButton = ({ onPress }) => (
-    <View style={styles.buttonContainer}>
+    <View style={styles.questionButtonContainer}>
         <Button
             style={styles.confirmButtonContainer}
             contentStyle={styles.confirmButton}
@@ -28,15 +28,25 @@ export const ConfirmButton = ({ onPress }) => (
 );
 
 export const DenyButton = ({ onPress }) => (
-    <View style={styles.buttonContainer}>
+    <View style={styles.questionButtonContainer}>
         <Button
             style={styles.denyButtonContainer}
             contentStyle={styles.denyButton}
             mode="outlined"
             color={Colors.buttonPrimaryColor}
             labelStyle={styles.denyButtonText}
-            onPress={onPress}>SIM</Button >
+            onPress={onPress}>NÃO</Button >
     </View>
+);
+
+export const DoubtButton = ({ onPress, label }) => (
+    <TouchableOpacity onPress={onPress} style={styles.skipContainer}>
+        <Button
+            mode="text"
+            color={Colors.defaultIconColor}
+            labelStyle={styles.skipButtonText}
+            uppercase={false}>{label}</Button>
+    </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({
@@ -58,6 +68,9 @@ const styles = StyleSheet.create({
         fontFamily: Colors.fontFamily
     },
 
+    questionButtonContainer: {
+        width: "100%",
+    },
     confirmButtonContainer: {
         width: "100%",
         marginTop: 20,
@@ -91,4 +104,21 @@ const styles = StyleSheet.create({
         color: Colors.navigatorIconColor,
         fontFamily: Colors.fontFamily
     },
+
+    skipButtonContainer: {
+        width: "100%",
+        borderRadius: 50,
+    },
+    skipButton: {
+        height: 50,
+        width: "100%",
+        textAlign: "center"
+    },
+    skipButtonText: {
+        fontFamily: Colors.fontFamily
+    },
+    skipContainer: {
+        marginTop: 5,
+        marginBottom: 10
+    }
 });

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, SafeAreaView, StyleSheet, Text, ScrollView, TouchableOpacity } from 'react-native';
-import { NavigationActions, StackActions } from 'react-navigation';
 import { Avatar, Header } from 'react-native-elements';
 import { Button } from 'react-native-paper';
 import { Colors } from '../../../themes/variables';

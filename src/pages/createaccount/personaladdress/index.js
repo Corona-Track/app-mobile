@@ -20,7 +20,7 @@ export default class PersonalAddressPage extends Component {
         gestureEnabled: false,
     };
     static propTypes = {
-        photo: PropTypes.any,
+        entity: PropTypes.object,
     }
     state = {
         entity: {
@@ -103,7 +103,7 @@ export default class PersonalAddressPage extends Component {
     };
     onContinueButtonClick = () => {
         let { entity } = this.state;
-        this.props.navigation.navigate("AlreadyHadCoronavirusPage", { entity: entity });
+        this.props.navigation.navigate("AlreadyHadCoronavirus", { entity: entity });
     };
     onHandleCEP = cep => {
         let { entity } = this.state;
