@@ -10,6 +10,7 @@ import PersonalAddressPage from '../pages/createaccount/personaladdress';
 import AlreadyHadCoronavirusPage from '../pages/createaccount/alreadyhadcoronavirus';
 import SomeoneDiagnosedPage from '../pages/createaccount/someonediagnosed';
 import SomeoneSuspiciousPage from '../pages/createaccount/someonesuspicious';
+import ComorbiditiesPage from '../pages/createaccount/comorbidities';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator({
@@ -27,11 +28,12 @@ const AuthenticationStackNavigator = createStackNavigator(
         AlreadyHadCoronavirus: { screen: AlreadyHadCoronavirusPage },
         SomeoneDiagnosed: { screen: SomeoneDiagnosedPage },
         SomeoneSuspicious: { screen: SomeoneSuspiciousPage },
+        Comorbidities: { screen: ComorbiditiesPage },
         Login: { screen: LoginPage },
         Splash: { screen: SplashPage },
     },
     {
-        initialRouteName: 'TakePhoto'
+        initialRouteName: 'Comorbidities'
     }
 );
 

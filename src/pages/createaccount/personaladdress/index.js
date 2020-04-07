@@ -41,7 +41,7 @@ export default class PersonalAddressPage extends Component {
             return;
         let { navigation } = props;
         let { entity } = this.state;
-        previousEntity = navigation.getParam('entity', null);
+        let previousEntity = navigation.getParam('entity', null);
         if (!previousEntity)
             return;
         let converted = {

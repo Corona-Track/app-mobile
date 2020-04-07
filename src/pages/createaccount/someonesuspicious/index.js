@@ -27,7 +27,7 @@ export default class SomeoneSuspiciousPage extends Component {
             return;
         let { navigation } = props;
         let { entity } = this.state;
-        previousEntity = navigation.getParam('entity', null);
+        let previousEntity = navigation.getParam('entity', null);
         if (!previousEntity)
             return;
         let converted = {
@@ -71,7 +71,7 @@ export default class SomeoneSuspiciousPage extends Component {
     onAnswerButtonPress = answer => {
         let { entity } = this.state;
         entity.someoneSuspicious = answer;
-        this.props.navigation.navigate("SomeoneDiagnosed", { entity: entity });
+        this.props.navigation.navigate("Comorbidities", { entity: entity });
     };
 };
 
