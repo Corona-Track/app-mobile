@@ -18,6 +18,20 @@ export const SimpleTextInput = ({ label, value, onChangeText }) => (
     </View>
 );
 
+export const SimpleNumericTextInput = ({ label, value, onChangeText }) => (
+    <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>{label}</Text>
+        <TextInput
+            placeholderTextColor={Colors.placeholderTextColor}
+            placeholder={label}
+            keyboardType='numeric'
+            style={styles.input}
+            value={value}
+            maxLength={40}
+            onChangeText={onChangeText} />
+    </View>
+);
+
 export const PasswordTextInput = ({ label, value, onChangeText }) => (
     <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>{label}</Text>
@@ -38,6 +52,20 @@ export const CPFTextInput = ({ label, value, onChangeText }) => (
         <TextInputMask
             placeholderTextColor={Colors.placeholderTextColor}
             type={'cpf'}
+            placeholder={label}
+            style={styles.input}
+            value={value}
+            maxLength={40}
+            onChangeText={onChangeText} />
+    </View>
+);
+
+export const CEPTextInput = ({ label, value, onChangeText }) => (
+    <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>{label}</Text>
+        <TextInputMask
+            placeholderTextColor={Colors.placeholderTextColor}
+            type={'zip-code'}
             placeholder={label}
             style={styles.input}
             value={value}

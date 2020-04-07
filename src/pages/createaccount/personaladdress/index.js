@@ -7,9 +7,12 @@ import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
 import PropTypes from 'prop-types';
 import { ContinueButton } from '../../../components/custombutton';
-import { SimpleTextInput } from '../../../components/customtextinput';
+import { SimpleTextInput, CEPTextInput, SimpleNumericTextInput } from '../../../components/customtextinput';
 import { NavigationEvents } from 'react-navigation';
 import Geolocation from 'react-native-geolocation-service';
+import { getAddressDataByZipCode } from '../../../services/zipcodeservice';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { cepValidator } from '../../../services/formvalidatorservice';
 
 export default class PersonalAddressPage extends Component {
     static navigationOptions = {
@@ -26,10 +29,12 @@ export default class PersonalAddressPage extends Component {
             neighborhood: "",
             city: "",
             uf: "",
+            number: "",
             hasPermissionLocation: false,
             latitude: "",
             longitude: ""
         },
+        showLoading: false
     };
     initialize(props) {
         if (!props)
@@ -46,10 +51,11 @@ export default class PersonalAddressPage extends Component {
         this.setState({ entity: converted });
     };
     render = () => {
-        let { entity } = this.state;
+        let { entity, showLoading } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
+                <Spinner visible={showLoading} />
                 <Header
                     backgroundColor={Colors.secondaryColor}
                     leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
@@ -59,14 +65,10 @@ export default class PersonalAddressPage extends Component {
                 <ScrollView style={{ width: "100%" }}>
                     <IntroText />
                     <GPSButton onGPSButtonPress={this.onGPSButtonPress} />
-                    <SimpleTextInput
+                    <CEPTextInput
                         label="CEP"
                         value={entity.cep}
                         onChangeText={this.onHandleCEP} />
-                    <SimpleTextInput
-                        label="Av, Rua"
-                        value={entity.street}
-                        onChangeText={this.onHandleStreet} />
                     <SimpleTextInput
                         label="Bairro"
                         value={entity.neighborhood}
@@ -79,6 +81,15 @@ export default class PersonalAddressPage extends Component {
                         label="UF"
                         value={entity.uf}
                         onChangeText={this.onHandleUF} />
+                    <SimpleTextInput
+                        label="Av, Rua"
+                        value={entity.street}
+                        onChangeText={this.onHandleStreet} />
+                    <SimpleNumericTextInput
+                        label="Número"
+                        value={entity.number}
+                        onChangeText={this.onHandleNumber}
+                    />
                     <ContinueButton onPress={this.onContinueButtonClick} />
                     <ProgressTracking amount={7} position={3} />
                 </ScrollView>
@@ -98,10 +109,17 @@ export default class PersonalAddressPage extends Component {
         let { entity } = this.state;
         entity.cep = cep;
         this.setState({ entity });
+        if (cepValidator(cep))
+            this.getAddressDataFromZipCode(cep);
     };
     onHandleStreet = street => {
         let { entity } = this.state;
         entity.street = street;
+        this.setState({ entity });
+    };
+    onHandleNumber = number => {
+        let { entity } = this.state;
+        entity.number = number;
         this.setState({ entity });
     };
     onHandleNeighborhood = neighborhood => {
@@ -158,6 +176,37 @@ export default class PersonalAddressPage extends Component {
                 this.onGPSErrorMessage();
             }
         );
+    };
+    getAddressDataFromZipCode = (cep) => {
+        this.showLoading();
+        getAddressDataByZipCode(cep)
+            .then(this.onGetAddressDataSuccess)
+            .catch(this.onGetAddressDataFailure)
+            .finally(this.hideLoading);
+    };
+    onGetAddressDataSuccess = (response) => {
+        let { data } = response;
+        let { entity } = this.state;
+        entity.street = data.logradouro;
+        entity.neighborhood = data.bairro;
+        entity.city = data.localidade;
+        entity.uf = data.uf;
+        this.setState({ entity });
+    };
+    onGetAddressDataFailure = () => {
+        Alert.alert(
+            'Aviso!',
+            "Falha buscar dados do endereço, tente novamente mais tarde!",
+            [{ text: 'OK' }],
+            { cancelable: false }
+        );
+    };
+    //Loading
+    showLoading = () => {
+        this.setState({ showLoading: true });
+    };
+    hideLoading = () => {
+        this.setState({ showLoading: false });
     };
 };
 
