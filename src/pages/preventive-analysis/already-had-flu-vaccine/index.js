@@ -18,7 +18,7 @@ export default class AlreadyHadFluVaccinePage extends Component {
     }
     state = {
         entity: {
-            checked: "",
+            hadFluVaccine: null,
         },
     };
     initialize(props) {
@@ -43,22 +43,22 @@ export default class AlreadyHadFluVaccinePage extends Component {
 
                     <RadioButton.Group
                         onValueChange={value => this.setState({ value })}
-                        value={this.state.value}
+                        value={this.state.entity.hadFluVaccine}
                     >
                         <View style={{ width: "100%", flex: 1, flexDirection: 'row' }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text>SIM</Text>
                                 <RadioButton
-                                    value="yes"
+                                    value={true}
                                     color={Colors.navigatorIconColor}
                                 />
+                                <Text style={{color:Colors.notMainText}}>SIM</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text>Ainda NÃO</Text>
                                 <RadioButton 
-                                    value="no"
+                                    value={false}
                                     color={Colors.navigatorIconColor}
                                 />
+                                <Text style={{color:Colors.notMainText}}>Ainda NÃO</Text>
                             </View>
                         </View>
                     </RadioButton.Group>
@@ -72,7 +72,7 @@ export default class AlreadyHadFluVaccinePage extends Component {
                             labelStyle={styles.skipButtonText}
                             uppercase={false}>Responder Depois</Button>
                     </TouchableOpacity>
-                    <ProgressTracking amount={11} position={2} />
+                    <ProgressTracking amount={11} position={1} />
                 </View>
             </SafeAreaView >)
     };

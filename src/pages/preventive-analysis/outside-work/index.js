@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { ContinueButton } from '../../../components/custombutton';
 import { NavigationEvents } from 'react-navigation';
 
-export default class ProtectionUsagePage extends Component {
+export default class OutsideWorkPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
@@ -18,7 +18,7 @@ export default class ProtectionUsagePage extends Component {
     }
     state = {
         entity: {
-            protectionAnswer: "",
+            outsideWorkAnswer: ""
         },
     };
     initialize(props) {
@@ -42,28 +42,28 @@ export default class ProtectionUsagePage extends Component {
                     <IntroText />
                     <RadioButton.Group
                         onValueChange={value => this.setState({ value })}
-                        value={this.state.entity.protectionAnswer}
+                        value={this.state.entity.outsideWorkAnswer}
                     >
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{color:Colors.notMainText}}>Uso sempre proteção de rosto (garrafa pet ou similares)</Text>
                             <RadioButton
-                                value="facial_protection"
+                                value="closed_environment"
                                 color={Colors.navigatorIconColor}
                             />
+                            <Text style={{color:Colors.notMainText}}>Em ambiente fechado com mais pessoas, como clínica, escritório, loja ou motorista de aplicativo</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{color:Colors.notMainText}}>Uso sempre máscara (cirúrgica ou caseira)</Text>
                             <RadioButton 
-                                value="cirurgical_mask"
+                                value="sheds"
                                 color={Colors.navigatorIconColor}
                             />
+                            <Text style={{color:Colors.notMainText}}>Em galpões com pé direito duplo com poucas pessoas</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{color:Colors.notMainText}}>Não costumo usar nenhum tipo de proteção ao sair de casa</Text>
                             <RadioButton 
-                                value="no_protection"
+                                value="open_air"
                                 color={Colors.navigatorIconColor}
                             />
+                            <Text style={{color:Colors.notMainText}}>Ao ar livre</Text>
                         </View>
                     </RadioButton.Group>
                 </View>
@@ -76,7 +76,7 @@ export default class ProtectionUsagePage extends Component {
                             labelStyle={styles.skipButtonText}
                             uppercase={false}>Responder Depois</Button>
                     </TouchableOpacity>
-                    <ProgressTracking amount={11} position={4} />
+                    <ProgressTracking amount={11} position={7} />
                 </View>
             </SafeAreaView >)
     };
@@ -88,14 +88,15 @@ export default class ProtectionUsagePage extends Component {
     };
     onContinueButtonClick = () => {
         let { entity } = this.state;
-        this.props.navigation.navigate("TouchingPrecaution", { entity: entity });
+        this.props.navigation.navigate("RelativesLeavingHome", { entity: entity });
     };
 };
 
 const IntroText = () => (
     <View style={styles.textContainer}>
-        <Text style={[styles.simpleText]}>Sobre o <Text style={styles.boldText}>uso de proteção.</Text></Text>
-        <Text style={[styles.simpleText]}>Quando saio de casa:</Text>
+        <Text style={[styles.simpleText]}>Ao sair de casa, e <Text style={styles.boldText}>encosto em</Text></Text>
+        <Text style={[styles.simpleText]}><Text style={styles.boldText}>algo provavelmente infectado,</Text></Text>
+        <Text style={[styles.simpleText]}>como maçaneta, corrimão, etc:</Text>
     </View>
 );
 
