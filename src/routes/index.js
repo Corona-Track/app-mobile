@@ -7,6 +7,7 @@ import TookPhotoPage from '../pages/createaccount/tookphoto';
 import TakePhotoPage from '../pages/createaccount/takephoto';
 import PersonalDataPage from '../pages/createaccount/personaldata';
 import PersonalAddressPage from '../pages/createaccount/personaladdress';
+import AlreadyHadFluVaccinePage from '../pages/preventive-analysis/already-had-flu-vaccine';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator({
@@ -23,10 +24,11 @@ const AuthenticationStackNavigator = createStackNavigator(
         PersonalAddress: { screen: PersonalAddressPage },
         Login: { screen: LoginPage },
         Splash: { screen: SplashPage },
+        AlreadyHadFluVaccine: { screen: AlreadyHadFluVaccinePage }
     },
     {
         mode: "modal",
-        initialRouteName: 'TakePhoto'
+        initialRouteName: 'AlreadyHadFluVaccine'
     }
 );
 
