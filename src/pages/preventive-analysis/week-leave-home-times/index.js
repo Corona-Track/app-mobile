@@ -109,7 +109,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
     };
     onContinueButtonClick = () => {
         let { entity } = this.state;
-        this.props.navigation.navigate("PersonalAddress", { entity: entity });
+        this.props.navigation.navigate("SocialDistance", { entity: entity });
     };
 };
 

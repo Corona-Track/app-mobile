@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { ContinueButton } from '../../../components/custombutton';
 import { NavigationEvents } from 'react-navigation';
 
-export default class SocialDistancePage extends Component {
+export default class ProtectionUsagePage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
@@ -18,8 +18,7 @@ export default class SocialDistancePage extends Component {
     }
     state = {
         entity: {
-            keepDistance: false,
-            reasonToNotKeepDistance: ""
+            protectionAnswer: "",
         },
     };
     initialize(props) {
@@ -43,50 +42,28 @@ export default class SocialDistancePage extends Component {
                     <IntroText />
                     <RadioButton.Group
                         onValueChange={value => this.setState({ value })}
-                        value={this.state.entity.keepDistance}
+                        value={this.state.entity.protectionAnswer}
                     >
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{color:Colors.notMainText}}>Mantenho sempre 2 metros de distância de outras pessoas</Text>
+                            <Text style={{color:Colors.notMainText}}>Uso sempre proteção de rosto (garrafa pet ou similares)</Text>
                             <RadioButton
-                                value={true}
+                                value="facial_protection"
                                 color={Colors.navigatorIconColor}
                             />
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{color:Colors.notMainText}}>Nem sempre mantenho distância porque:</Text>
+                            <Text style={{color:Colors.notMainText}}>Uso sempre máscara (cirúrgica ou caseira)</Text>
                             <RadioButton 
-                                value={false}
+                                value="cirurgical_mask"
                                 color={Colors.navigatorIconColor}
                             />
                         </View>
-                    </RadioButton.Group>
-                </View>
-                <View>
-                    <RadioButton.Group
-                        disabled={this.state.entity.keepDistance}
-                        onValueChange={value => this.setState({ value })}
-                        value={this.state.entity.noDistancePurpose}
-                    >
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value="forgot"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Esqueço</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Text style={{color:Colors.notMainText}}>Não costumo usar nenhum tipo de proteção ao sair de casa</Text>
                             <RadioButton 
-                                value="work"
+                                value="no_protection"
                                 color={Colors.navigatorIconColor}
                             />
-                            <Text style={{color:Colors.notMainText}}>Por causa do meu trabalho</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton 
-                                value="publicTransport"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Por causa do transporte público (trens e ônibus)</Text>
                         </View>
                     </RadioButton.Group>
                 </View>
@@ -111,14 +88,14 @@ export default class SocialDistancePage extends Component {
     };
     onContinueButtonClick = () => {
         let { entity } = this.state;
-        this.props.navigation.navigate("ProtectionUsage", { entity: entity });
+        this.props.navigation.navigate("PersonalAddress", { entity: entity });
     };
 };
 
 const IntroText = () => (
     <View style={styles.textContainer}>
-        <Text style={[styles.simpleText]}>Sobre o <Text style={styles.boldText}>distanciamento</Text></Text>
-        <Text style={[styles.simpleText]}><Text style={styles.boldText}>social. </Text>Ao sair de casa:</Text>
+        <Text style={[styles.simpleText]}>Sobre o <Text style={styles.boldText}>uso de proteção.</Text></Text>
+        <Text style={[styles.simpleText]}>Quando saio de casa:</Text>
     </View>
 );
 
