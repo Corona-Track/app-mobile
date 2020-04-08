@@ -10,5 +10,6 @@ export const Colors = {
     fontFamily: Platform.OS === "android" ? "Prompt-Light" : "Prompt",
     defaultIconColor: "#BDBDBD",
     navigatorIconColor: "#EA5B2D",
-    questionCenterIconColor: "#E9F7F9"
+    questionCenterIconColor: "#E9F7F9",
+    searchBackgroundColor: "#e5e5e5"
 };

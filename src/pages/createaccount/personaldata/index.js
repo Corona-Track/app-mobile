@@ -105,7 +105,9 @@ export default class PersonalDataPage extends Component {
                         label="Senha"
                         value={entity.password}
                         onChangeText={this.onHandlePassword} />
-                    <ContinueRequiredButton disabled={this.disableButton()} onPress={this.onContinueButtonClick} />
+                    <ContinueRequiredButton
+                        disabled={this.disableButton()}
+                        onPress={this.onContinueButtonClick} />
                     <ProgressTracking amount={7} position={2} />
                 </ScrollView>
             </SafeAreaView >)
@@ -174,9 +176,9 @@ export default class PersonalDataPage extends Component {
             this.isGenreValid() &&
             this.isPregnancyValid() &&
             this.isCellphoneValid() &&
-            this.isEmailValid());
+            this.isEmailValid() &&
+            this.isPasswordValid());
     };
-
     isNameValid = () => {
         let { name } = this.state.entity;
         return name ?? false;
@@ -197,7 +199,7 @@ export default class PersonalDataPage extends Component {
         let { genre, pregnancy } = this.state.entity;
         if (!genre)
             return true;
-        if (genre === "F")
+        if (genre.key === "F")
             return pregnancy ?? false;
         return true;
     };
@@ -209,6 +211,10 @@ export default class PersonalDataPage extends Component {
         let { email } = this.state.entity;
         return emailValidator(email);
     };
+    isPasswordValid = () => {
+        let { password } = this.state.entity;
+        return password ?? false;
+    }
 };
 
 const IntroText = () => (

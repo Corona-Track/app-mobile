@@ -6,7 +6,7 @@ import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
 import PropTypes from 'prop-types';
-import { ContinueButton } from '../../../components/custombutton';
+import { ContinueRequiredButton } from '../../../components/custombutton';
 import { SimpleTextInput, CEPTextInput, SimpleNumericTextInput } from '../../../components/customtextinput';
 import { NavigationEvents } from 'react-navigation';
 import Geolocation from 'react-native-geolocation-service';
@@ -90,7 +90,7 @@ export default class PersonalAddressPage extends Component {
                         value={entity.number}
                         onChangeText={this.onHandleNumber}
                     />
-                    <ContinueButton onPress={this.onContinueButtonClick} />
+                    <ContinueRequiredButton disabled={this.disableButton()} onPress={this.onContinueButtonClick} />
                     <ProgressTracking amount={7} position={3} />
                 </ScrollView>
             </SafeAreaView >)
@@ -207,6 +207,49 @@ export default class PersonalAddressPage extends Component {
     };
     hideLoading = () => {
         this.setState({ showLoading: false });
+    };
+    disableButton = () => {
+        return !(this.isCepValid() &&
+            this.isStreetValid() &&
+            this.isNeighborhoodValid() &&
+            this.isCityValid() &&
+            this.isUfValid() &&
+            this.isNumberValid()
+            // this.isLatitudeValid() &&
+            // this.isLongitudeValid()
+            );
+    };
+    isCepValid = () => {
+        let { cep } = this.state.entity;
+        return cepValidator(cep);
+    };
+    isStreetValid = () => {
+        let { street } = this.state.entity;
+        return street ?? false;
+    };
+    isNeighborhoodValid = () => {
+        let { neighborhood } = this.state.entity;
+        return neighborhood ?? false;
+    };
+    isCityValid = () => {
+        let { city } = this.state.entity;
+        return city ?? false;
+    };
+    isUfValid = () => {
+        let { uf } = this.state.entity;
+        return uf ?? false;
+    };
+    isNumberValid = () => {
+        let { number } = this.state.entity;
+        return number ?? false;
+    };
+    isLatitudeValid = () => {
+        let { latitude } = this.state.entity;
+        return latitude ?? false;
+    };
+    isLongitudeValid = () => {
+        let { longitude } = this.state.entity;
+        return longitude ?? false;
     };
 };
 
