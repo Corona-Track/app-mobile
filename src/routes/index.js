@@ -11,6 +11,11 @@ import AlreadyHadFluVaccinePage from '../pages/preventive-analysis/already-had-f
 import WeekLeaveHomeTimesPage from '../pages/preventive-analysis/week-leave-home-times';
 import SocialDistancePage from '../pages/preventive-analysis/social-distance';
 import ProtectionUsagePage from '../pages/preventive-analysis/protection-usage';
+import TouchingPrecautionPage from '../pages/preventive-analysis/touching-precaution';
+import HomePrecautionsPage from '../pages/preventive-analysis/home-precautions';
+import OutsideWorkPage from '../pages/preventive-analysis/outside-work';
+import RelativesLeavingHomePage from '../pages/preventive-analysis/relatives-leaving-home';
+import RelativesHomePrecautionsPage from '../pages/preventive-analysis/relatives-home-precautions';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator({
@@ -30,7 +35,12 @@ const AuthenticationStackNavigator = createStackNavigator(
         AlreadyHadFluVaccine: { screen: AlreadyHadFluVaccinePage },
         WeekLeaveHomeTimes: { screen: WeekLeaveHomeTimesPage },
         SocialDistance: { screen: SocialDistancePage },
-        ProtectionUsage: { screen: ProtectionUsagePage }
+        ProtectionUsage: { screen: ProtectionUsagePage },
+        TouchingPrecaution: { screen: TouchingPrecautionPage },
+        HomePrecautions: { screen: HomePrecautionsPage },
+        OutsideWork: { screen: OutsideWorkPage },
+        RelativesLeavingHome: { screen: RelativesLeavingHomePage },
+        RelativesHomePrecautions: { screen: RelativesHomePrecautionsPage }
     },
     {
         mode: "modal",

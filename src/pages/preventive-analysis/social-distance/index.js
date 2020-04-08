@@ -99,7 +99,7 @@ export default class SocialDistancePage extends Component {
                             labelStyle={styles.skipButtonText}
                             uppercase={false}>Responder Depois</Button>
                     </TouchableOpacity>
-                    <ProgressTracking amount={11} position={3} />
+                    <ProgressTracking amount={10} position={3} />
                 </View>
             </SafeAreaView >)
     };

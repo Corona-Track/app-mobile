@@ -76,7 +76,7 @@ export default class OutsideWorkPage extends Component {
                             labelStyle={styles.skipButtonText}
                             uppercase={false}>Responder Depois</Button>
                     </TouchableOpacity>
-                    <ProgressTracking amount={11} position={7} />
+                    <ProgressTracking amount={10} position={7} />
                 </View>
             </SafeAreaView >)
     };

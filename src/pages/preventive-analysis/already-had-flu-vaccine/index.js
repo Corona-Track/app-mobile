@@ -72,7 +72,7 @@ export default class AlreadyHadFluVaccinePage extends Component {
                             labelStyle={styles.skipButtonText}
                             uppercase={false}>Responder Depois</Button>
                     </TouchableOpacity>
-                    <ProgressTracking amount={11} position={1} />
+                    <ProgressTracking amount={10} position={1} />
                 </View>
             </SafeAreaView >)
     };

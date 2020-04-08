@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { ContinueButton } from '../../../components/custombutton';
 import { NavigationEvents } from 'react-navigation';
 
-export default class HomePrecautionPage extends Component {
+export default class HomePrecautionsPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
@@ -44,94 +44,16 @@ export default class HomePrecautionPage extends Component {
                     <IntroText />
                     
                     <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Quantas pessoas saem de casa?</Text>
-
-                        <RadioButton.Group
-                            onValueChange={value => this.setState({ value })}
-                            value={this.state.entity.showerAnswer}
-                        >
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton
-                                    value="always"
-                                    color={Colors.navigatorIconColor}
-                                />
-                                <Text style={{color:Colors.notMainText}}>Sempre</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton 
-                                    value="sometimes"
-                                    color={Colors.navigatorIconColor}
-                                />
-                                <Text style={{color:Colors.notMainText}}>As Vezes</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton 
-                                    value="never"
-                                    color={Colors.navigatorIconColor}
-                                />
-                                <Text style={{color:Colors.notMainText}}>Nunca</Text>
-                            </View>
-                        </RadioButton.Group>
+                        <Text style={{color:Colors.notMainText}}>Tomo banho ou lavo as mãos e braços assim que entro em casa</Text>
+                        <ShowerRadioBox />
                     </View>
                     <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Quantas pessoas saem de casa?</Text>
-
-                        <RadioButton.Group
-                            onValueChange={value => this.setState({ value })}
-                            value={this.state.entity.changeClothesAnswer}
-                        >
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton
-                                    value="always"
-                                    color={Colors.navigatorIconColor}
-                                />
-                                <Text style={{color:Colors.notMainText}}>Sempre</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton 
-                                    value="sometimes"
-                                    color={Colors.navigatorIconColor}
-                                />
-                                <Text style={{color:Colors.notMainText}}>As Vezes</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton 
-                                    value="never"
-                                    color={Colors.navigatorIconColor}
-                                />
-                                <Text style={{color:Colors.notMainText}}>Nunca</Text>
-                            </View>
-                        </RadioButton.Group>
+                        <Text style={{color:Colors.notMainText}}>Troco a roupa e guardo-as em local separado</Text>
+                        <ChangeClothesRadioBox />
                     </View>
                     <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Quantas pessoas saem de casa?</Text>
-
-                        <RadioButton.Group
-                            onValueChange={value => this.setState({ value })}
-                            value={this.state.entity.containerCleanupAnswer}
-                        >
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton
-                                    value="always"
-                                    color={Colors.navigatorIconColor}
-                                />
-                                <Text style={{color:Colors.notMainText}}>Sempre</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton 
-                                    value="sometimes"
-                                    color={Colors.navigatorIconColor}
-                                />
-                                <Text style={{color:Colors.notMainText}}>As Vezes</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton 
-                                    value="never"
-                                    color={Colors.navigatorIconColor}
-                                />
-                                <Text style={{color:Colors.notMainText}}>Nunca</Text>
-                            </View>
-                        </RadioButton.Group>
+                        <Text style={{color:Colors.notMainText}}>Quando trago vasilhames, limpo-os com água sanitária ou similar</Text>
+                        <ContainerCleanupRadioBox />
                     </View>
                 </View>
                 <View>
@@ -143,7 +65,7 @@ export default class HomePrecautionPage extends Component {
                             labelStyle={styles.skipButtonText}
                             uppercase={false}>Responder Depois</Button>
                     </TouchableOpacity>
-                    <ProgressTracking amount={11} position={6} />
+                    <ProgressTracking amount={10} position={6} />
                 </View>
             </SafeAreaView >)
     };
@@ -155,7 +77,7 @@ export default class HomePrecautionPage extends Component {
     };
     onContinueButtonClick = () => {
         let { entity } = this.state;
-        this.props.navigation.navigate("HomePrecautions", { entity: entity });
+        this.props.navigation.navigate("OutsideWork", { entity: entity });
     };
 };
 
@@ -165,6 +87,59 @@ const IntroText = () => (
         <Text style={[styles.simpleText]}>para proteger outros moradores</Text>
     </View>
 );
+
+const ShowerRadioBox = () => {
+    <RadioButton.Group
+        onValueChange={value => this.setState({ value })}
+        value={this.state.entity.showerAnswer}
+    >
+        <FrequencyOptionsBox />
+    </RadioButton.Group>
+}
+
+const ChangeClothesRadioBox = () => {
+    <RadioButton.Group
+        onValueChange={value => this.setState({ value })}
+        value={this.state.entity.changeClothesAnswer}
+    >
+        <FrequencyOptionsBox />
+    </RadioButton.Group>
+}
+
+const ContainerCleanupRadioBox = () => {
+    <RadioButton.Group
+        onValueChange={value => this.setState({ value })}
+        value={this.state.entity.containerCleanupAnswer}
+    >
+        <FrequencyOptionsBox />
+    </RadioButton.Group>
+}
+
+const FrequencyOptionsBox = () => {
+    <View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <RadioButton
+                value="always"
+                color={Colors.navigatorIconColor}
+            />
+                <Text style={{color:Colors.notMainText}}>Sempre</Text>
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <RadioButton 
+                value="sometimes"
+                color={Colors.navigatorIconColor}
+            />
+            <Text style={{color:Colors.notMainText}}>As Vezes</Text>
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <RadioButton 
+                value="never"
+                color={Colors.navigatorIconColor}
+            />
+            <Text style={{color:Colors.notMainText}}>Nunca</Text>
+        </View>
+    </View>
+}
 
 const styles = StyleSheet.create({
     container: {

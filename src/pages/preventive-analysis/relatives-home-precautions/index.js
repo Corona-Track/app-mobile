@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { ContinueButton } from '../../../components/custombutton';
 import { NavigationEvents } from 'react-navigation';
 
-export default class RelativesLeavingHomePage extends Component {
+export default class RelativesHomePrecautionsPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
@@ -18,9 +18,9 @@ export default class RelativesLeavingHomePage extends Component {
     }
     state = {
         entity: {
-            relativesLeavingHome: null,
-            howManyRelatives: "",
-            relativesLeavingTimes: "",
+            relativesShowerAnswer: "",
+            relativesChangeClothesAnswer: "",
+            relativesContainerCleanupAnswer: ""
         },
     };
     initialize(props) {
@@ -42,38 +42,18 @@ export default class RelativesLeavingHomePage extends Component {
                 />
                 <View style={{ width: "100%" }}>
                     <IntroText />
-
-                    <View>
-                        <RadioButton.Group
-                            onValueChange={value => this.setState({ value })}
-                            value={this.state.entity.relativesLeavingHome}
-                        >
-                            <View style={{ width: "100%", flex: 1, flexDirection: 'row' }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <RadioButton
-                                        value={true}
-                                        color={Colors.navigatorIconColor}
-                                    />
-                                    <Text style={{color:Colors.notMainText}}>SIM</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <RadioButton 
-                                        value={false}
-                                        color={Colors.navigatorIconColor}
-                                    />
-                                    <Text style={{color:Colors.notMainText}}>NÃO</Text>
-                                </View>
-                            </View>
-                        </RadioButton.Group>
-                    </View>
-
+                    
                     <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Quantas pessoas saem de casa?</Text>
-                        <HowManyPeopleLeaveBox />
+                        <Text style={{color:Colors.notMainText}}>Tomam banho ou lavam mãos e braços assim que entram em casa?</Text>
+                        <ShowerRadioBox />
                     </View>
                     <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Quantas vezes saem de casa por semana?</Text>
-                        <HowManyTimesPeopleLeaveBox />
+                        <Text style={{color:Colors.notMainText}}>Trocam a roupa e guardam-nas em local separado</Text>
+                        <ChangeClothesRadioBox />
+                    </View>
+                    <View style={{alignItems: "center"}}>
+                        <Text style={{color:Colors.notMainText}}>Quando trazem vasilhames, limpam com água sanitária ou similar</Text>
+                        <ContainerCleanupRadioBox />
                     </View>
                 </View>
                 <View>
@@ -85,7 +65,7 @@ export default class RelativesLeavingHomePage extends Component {
                             labelStyle={styles.skipButtonText}
                             uppercase={false}>Responder Depois</Button>
                     </TouchableOpacity>
-                    <ProgressTracking amount={10} position={8} />
+                    <ProgressTracking amount={11} position={9} />
                 </View>
             </SafeAreaView >)
     };
@@ -97,60 +77,66 @@ export default class RelativesLeavingHomePage extends Component {
     };
     onContinueButtonClick = () => {
         let { entity } = this.state;
-        this.props.navigation.navigate("RelativesHomePrecautions", { entity: entity });
+        this.props.navigation.navigate("", { entity: entity });
     };
 };
 
 const IntroText = () => (
     <View style={styles.textContainer}>
-        <Text style={[styles.simpleText]}>Você mora com pessoas que</Text>
-        <Text style={[styles.simpleText]}><Text style={styles.boldText}>saem de casa</Text> durante</Text>
-        <Text style={[styles.simpleText]}>a pandemia?</Text>
+        <Text style={[styles.simpleText]}>Sobre <Text style={styles.boldText}>os cuidados</Text> que os demais</Text>
+        <Text style={[styles.simpleText]}>moradores têm ao <Text style={styles.boldText}>entrar em casa:</Text></Text>
     </View>
 );
 
-const HowManyPeopleLeaveBox = () => {
+const ShowerRadioBox = () => {
     <RadioButton.Group
-        disabled={!this.state.entity.relativesLeavingHome}
         onValueChange={value => this.setState({ value })}
-        value={this.state.entity.howManyRelatives}
+        value={this.state.entity.relativesShowerAnswer}
     >
-        <QuantityPeopleOptions />
+        <FrequencyOptionsBox />
     </RadioButton.Group>
 }
 
-const HowManyTimesPeopleLeaveBox = () => {
-	<RadioButton.Group
-		disabled={!this.state.entity.relativesLeavingHome}
-		onValueChange={value => this.setState({ value })}
-		value={this.state.entity.relativesLeavingTimes}
-	>
-		<QuantityPeopleOptions />
-	</RadioButton.Group>
+const ChangeClothesRadioBox = () => {
+    <RadioButton.Group
+        onValueChange={value => this.setState({ value })}
+        value={this.state.entity.relativesChangeClothesAnswer}
+    >
+        <FrequencyOptionsBox />
+    </RadioButton.Group>
 }
 
-const QuantityPeopleOptions = () => {
+const ContainerCleanupRadioBox = () => {
+    <RadioButton.Group
+        onValueChange={value => this.setState({ value })}
+        value={this.state.entity.relativesContainerCleanupAnswer}
+    >
+        <FrequencyOptionsBox />
+    </RadioButton.Group>
+}
+
+const FrequencyOptionsBox = () => {
     <View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <RadioButton
-                value="one"
+                value="always"
                 color={Colors.navigatorIconColor}
             />
-                <Text style={{color:Colors.notMainText}}>Uma</Text>
+                <Text style={{color:Colors.notMainText}}>Sempre</Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <RadioButton 
-                value="two"
+                value="sometimes"
                 color={Colors.navigatorIconColor}
             />
-                <Text style={{color:Colors.notMainText}}>Duas</Text>
+            <Text style={{color:Colors.notMainText}}>As Vezes</Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <RadioButton 
-                value="three_or_more"
+                value="never"
                 color={Colors.navigatorIconColor}
             />
-                <Text style={{color:Colors.notMainText}}>Três ou mais</Text>
+            <Text style={{color:Colors.notMainText}}>Nunca</Text>
         </View>
     </View>
 }

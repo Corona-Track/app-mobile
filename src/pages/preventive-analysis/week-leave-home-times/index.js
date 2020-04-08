@@ -92,7 +92,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
                             labelStyle={styles.skipButtonText}
                             uppercase={false}>Responder Depois</Button>
                     </TouchableOpacity>
-                    <ProgressTracking amount={11} position={2} />
+                    <ProgressTracking amount={10} position={2} />
                 </View>
             </SafeAreaView >)
     };

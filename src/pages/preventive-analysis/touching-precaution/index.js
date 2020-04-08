@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { ContinueButton } from '../../../components/custombutton';
 import { NavigationEvents } from 'react-navigation';
 
-export default class TouchPrecautionPage extends Component {
+export default class TouchingPrecautionPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
@@ -83,7 +83,7 @@ export default class TouchPrecautionPage extends Component {
                             labelStyle={styles.skipButtonText}
                             uppercase={false}>Responder Depois</Button>
                     </TouchableOpacity>
-                    <ProgressTracking amount={11} position={5} />
+                    <ProgressTracking amount={10} position={5} />
                 </View>
             </SafeAreaView >)
     };
