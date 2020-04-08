@@ -67,7 +67,7 @@ export default class TouchingPrecautionPage extends Component {
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton 
-                                value="infect_clean_when_can"
+                                value="infected_clean_when_can"
                                 color={Colors.navigatorIconColor}
                             />
                             <Text style={{color:Colors.notMainText}}>Contamino as mãos e limpo quando posso</Text>

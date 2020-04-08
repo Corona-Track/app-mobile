@@ -63,9 +63,9 @@ export default class SocialDistancePage extends Component {
                 </View>
                 <View>
                     <RadioButton.Group
-                        disabled={this.state.entity.keepDistance}
+                        disabled={!this.state.entity.keepDistance}
                         onValueChange={value => this.setState({ value })}
-                        value={this.state.entity.noDistancePurpose}
+                        value={this.state.entity.reasonToNotKeepDistance}
                     >
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <RadioButton
