@@ -4,7 +4,7 @@ import { Colors } from '../../themes/variables';
 import { CheckBox } from 'react-native-elements';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-export const CheckboxItem = ({ identifier, isChecked, onClickCheck, getTextFromIdentifier }) => {
+export const CheckboxItem = ({ identifier, isChecked, onClickCheck, title }) => {
     let checked = isChecked(identifier);
     return (<View style={styles.checkboxContainer}>
         <View style={styles.firstColumn}>
@@ -14,7 +14,7 @@ export const CheckboxItem = ({ identifier, isChecked, onClickCheck, getTextFromI
                 checked={checked}
                 onPress={() => { onClickCheck(identifier) }} />
         </View>
-        <View><Text style={styles.checkboxText}>{getTextFromIdentifier(identifier)}</Text></View>
+        <View><Text style={styles.checkboxText}>{title}</Text></View>
     </View>)
 };
 
@@ -22,7 +22,7 @@ export const CheckboxItemWithPlus = ({
     identifier,
     isChecked,
     onClickCheck,
-    getTextFromIdentifier,
+    title,
     onPressPlus }) => {
     let checked = isChecked(identifier);
     return (<View style={styles.checkboxWithPlusContainer}>
@@ -34,7 +34,7 @@ export const CheckboxItemWithPlus = ({
                 onPress={() => { onClickCheck(identifier) }} />
         </View>
         <View style={styles.secondColumn}>
-            <Text style={styles.checkboxText}>{getTextFromIdentifier(identifier)}</Text>
+            <Text style={styles.checkboxText}>{title}</Text>
             <PlusIcon onPressPlus={onPressPlus} />
         </View>
     </View>)

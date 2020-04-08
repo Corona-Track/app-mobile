@@ -74,64 +74,64 @@ export default class ComorbiditiesPage extends Component {
                     <View style={styles.checkboxItemContainer}>
                         <CheckboxItem
                             identifier={"ndo"}
+                            title="Nenhuma das opções"
                             isChecked={this.isChecked}
-                            onClickCheck={this.onClickNoneOfOptions}
-                            getTextFromIdentifier={this.getTextFromIdentifier} />
+                            onClickCheck={this.onClickNoneOfOptions} />
                         <CheckboxItem
                             identifier={"avc"}
+                            title="AVC prévio"
                             isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck}
-                            getTextFromIdentifier={this.getTextFromIdentifier} />
+                            onClickCheck={this.onClickCheck} />
                         <CheckboxItem
                             identifier={"infarto"}
+                            title="Infarto prévio"
                             isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck}
-                            getTextFromIdentifier={this.getTextFromIdentifier} />
+                            onClickCheck={this.onClickCheck} />
                         <CheckboxItem
                             identifier={"fumante"}
+                            title="Fumante"
                             isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck}
-                            getTextFromIdentifier={this.getTextFromIdentifier} />
+                            onClickCheck={this.onClickCheck} />
                         <CheckboxItem
                             identifier={"insuficienciarenal"}
+                            title="Insuficiência renal"
                             isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck}
-                            getTextFromIdentifier={this.getTextFromIdentifier} />
+                            onClickCheck={this.onClickCheck} />
                         <CheckboxItem
                             identifier={"obesidade"}
+                            title="Obesidade"
                             isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck}
-                            getTextFromIdentifier={this.getTextFromIdentifier} />
+                            onClickCheck={this.onClickCheck} />
                         <CheckboxItem
                             identifier={"colesterol"}
+                            title="Colesterol alto"
                             isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck}
-                            getTextFromIdentifier={this.getTextFromIdentifier} />
+                            onClickCheck={this.onClickCheck} />
                         <CheckboxItem
                             identifier={"diabetes"}
+                            title="Diabetes"
                             isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck}
-                            getTextFromIdentifier={this.getTextFromIdentifier} />
+                            onClickCheck={this.onClickCheck} />
                         <CheckboxItem
                             identifier={"asma"}
+                            title="Asma"
                             isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck}
-                            getTextFromIdentifier={this.getTextFromIdentifier} />
+                            onClickCheck={this.onClickCheck} />
                         <CheckboxItem
                             identifier={"cancer"}
+                            title="Câncer"
                             isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck}
-                            getTextFromIdentifier={this.getTextFromIdentifier} />
+                            onClickCheck={this.onClickCheck} />
                         <CheckboxItem
                             identifier={"renalcronica"}
+                            title="Doença renal crônica"
                             isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck}
-                            getTextFromIdentifier={this.getTextFromIdentifier} />
+                            onClickCheck={this.onClickCheck} />
                         <CheckboxItem
                             identifier={"hipertensao"}
+                            title="Hipertensão"
                             isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck}
-                            getTextFromIdentifier={this.getTextFromIdentifier} />
+                            onClickCheck={this.onClickCheck} />
                         {this.renderOtherAccordion()}
                     </View>
                     <ProgressTracking amount={7} position={5} />
@@ -144,16 +144,6 @@ export default class ComorbiditiesPage extends Component {
     };
     onRightButtonPress = () => {
         this.props.navigation.pop();
-    };
-    getTextFromIdentifier = (identifier) => {
-        let { comorbiditiesList } = this.state;
-        let currentComorbidity = comorbiditiesList.filter(comorbidity => {
-            return comorbidity.identifier === identifier
-        });
-        if (!currentComorbidity)
-            return "-";
-        currentComorbidity = currentComorbidity[0];
-        return currentComorbidity.text;
     };
     isChecked = (identifier) => {
         let { entity } = this.state;
@@ -187,11 +177,11 @@ export default class ComorbiditiesPage extends Component {
         return (<>
             <CheckboxItemWithPlus
                 identifier={"others"}
+                title="Outros"
                 isChecked={this.isChecked}
                 onClickCheck={this.onClickCheck}
-                getTextFromIdentifier={this.getTextFromIdentifier}
                 onPressPlus={this.expandOtherCheckbox} />
-            {expandedOthersCheckbox ? <View style={styles.searchBox} /> : (<></>)}
+            {expandedOthersCheckbox ? (<SearchOthers />) : (<></>)}
         </>);
     };
     expandOtherCheckbox = () => {
@@ -206,6 +196,13 @@ const IntroText = () => (
         <Text style={[styles.simpleText]}>das <Text style={styles.boldText}>condições</Text> abaixo?</Text>
     </View>
 );
+
+const SearchOthers = () => {
+    return (
+        <View style={styles.searchBox}>
+            
+        </View>)
+};
 
 const styles = StyleSheet.create({
     container: {
