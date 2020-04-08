@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
-import { Button } from 'react-native-paper';
+import PropTypes from 'prop-types';
+import { NavigationEvents } from 'react-navigation';
+
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
-import PropTypes from 'prop-types';
-import { ContinueButton } from '../../../components/custombutton';
+import { ContinueRequiredButton } from '../../../components/custombutton';
 import { SimpleTextInput, PasswordTextInput, CPFTextInput, SimpleDateTextInput, PhoneTextInput } from '../../../components/customtextinput';
 import { CustomDropDown } from '../../../components/customdropdown';
-import { NavigationEvents } from 'react-navigation';
+import { emailValidator, cpfValidor, cepValidator, phoneValidator, cellphoneValidator } from '../../../services/formvalidatorservice';
 
 export default class PersonalDataPage extends Component {
     static navigationOptions = {
@@ -104,7 +105,7 @@ export default class PersonalDataPage extends Component {
                         label="Senha"
                         value={entity.password}
                         onChangeText={this.onHandlePassword} />
-                    <ContinueButton onPress={this.onContinueButtonClick} />
+                    <ContinueRequiredButton disabled={this.disableButton()} onPress={this.onContinueButtonClick} />
                     <ProgressTracking amount={7} position={2} />
                 </ScrollView>
             </SafeAreaView >)
@@ -165,7 +166,49 @@ export default class PersonalDataPage extends Component {
         let { entity } = this.state;
         entity.password = password;
         this.setState({ entity });
-    }
+    };
+    disableButton = () => {
+        return !(this.isNameValid() &&
+            this.isCpfValid() &&
+            this.isBirthdayValid() &&
+            this.isGenreValid() &&
+            this.isPregnancyValid() &&
+            this.isCellphoneValid() &&
+            this.isEmailValid());
+    };
+
+    isNameValid = () => {
+        let { name } = this.state.entity;
+        return name ?? false;
+    };
+    isCpfValid = () => {
+        let { cpf } = this.state.entity;
+        return cpfValidor(cpf);
+    };
+    isBirthdayValid = () => {
+        let { birthday } = this.state.entity;
+        return birthday ?? false;
+    };
+    isGenreValid = () => {
+        let { genre } = this.state.entity;
+        return genre ?? false;
+    };
+    isPregnancyValid = () => {
+        let { genre, pregnancy } = this.state.entity;
+        if (!genre)
+            return true;
+        if (genre === "F")
+            return pregnancy ?? false;
+        return true;
+    };
+    isCellphoneValid = () => {
+        let { cellphone } = this.state.entity;
+        return cellphoneValidator(cellphone) || phoneValidator(cellphone);
+    };
+    isEmailValid = () => {
+        let { email } = this.state.entity;
+        return emailValidator(email);
+    };
 };
 
 const IntroText = () => (

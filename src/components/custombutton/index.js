@@ -15,6 +15,19 @@ export const ContinueButton = ({ onPress }) => (
     </View>
 );
 
+export const ContinueRequiredButton = ({ disabled, onPress }) => (
+    <View style={styles.buttonContainer}>
+        <Button
+            disabled={disabled}
+            style={styles.continueButtonContainer}
+            contentStyle={styles.continueButton}
+            mode="contained"
+            color={Colors.buttonPrimaryColor}
+            labelStyle={styles.continueButtonText}
+            onPress={onPress}>CONTINUAR</Button>
+    </View>
+);
+
 export const ConfirmButton = ({ onPress }) => (
     <View style={styles.questionButtonContainer}>
         <Button
