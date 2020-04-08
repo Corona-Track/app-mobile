@@ -38,22 +38,19 @@ export class CustomDropDown extends React.Component {
     renderHeader(title) {
         return (
             <View style={styles.headerContainer}>
-                <Text style={styles.headerText}>{title}</Text>
+                <Text style={styles.headerText}><Text style={{fontWeight: "bold"}}>{title}</Text></Text>
             </View>
         )
     }
 
     renderFooter(action) {
-        return (
-            <View style={{ height: 30 }} />
-        )
+        return (<></>)
     }
 
     renderField(settings, title) {
         const { selectedItem, getLabel } = settings;
         return (
             <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>{title}</Text>
                 <View style={styles.input}>
                     {selectedItem ?
                         <Text style={styles.inputDropDownText}>{getLabel(selectedItem)}</Text> :
@@ -100,14 +97,12 @@ const styles = StyleSheet.create({
     headerText: {
         fontFamily: Colors.fontFamily,
         color: Colors.secondaryColor,
-        fontSize: 17
+        fontSize: 19,
     },
     optionContainer: {
-        paddingVertical: 5,
+        paddingVertical: 10,
         marginHorizontal: 10,
         paddingHorizontal: 10,
-        borderBottomColor: Colors.placeholderTextColor,
-        borderBottomWidth: 0.5
     },
     optionInnerContainer: {
         flex: 1,

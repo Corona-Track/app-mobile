@@ -41,5 +41,4 @@ const styles = StyleSheet.create({
     firstColumn: {
         width: 40
     },
-
 });

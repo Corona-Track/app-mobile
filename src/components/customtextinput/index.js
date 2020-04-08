@@ -7,7 +7,6 @@ import moment from 'moment';
 
 export const SimpleTextInput = ({ label, value, onChangeText }) => (
     <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>{label}</Text>
         <TextInput
             placeholderTextColor={Colors.placeholderTextColor}
             placeholder={label}
@@ -20,7 +19,6 @@ export const SimpleTextInput = ({ label, value, onChangeText }) => (
 
 export const SimpleNumericTextInput = ({ label, value, onChangeText }) => (
     <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>{label}</Text>
         <TextInput
             placeholderTextColor={Colors.placeholderTextColor}
             placeholder={label}
@@ -34,7 +32,6 @@ export const SimpleNumericTextInput = ({ label, value, onChangeText }) => (
 
 export const PasswordTextInput = ({ label, value, onChangeText }) => (
     <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>{label}</Text>
         <TextInput
             placeholderTextColor={Colors.placeholderTextColor}
             secureTextEntry={true}
@@ -48,7 +45,6 @@ export const PasswordTextInput = ({ label, value, onChangeText }) => (
 
 export const CPFTextInput = ({ label, value, onChangeText }) => (
     <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>{label}</Text>
         <TextInputMask
             placeholderTextColor={Colors.placeholderTextColor}
             type={'cpf'}
@@ -62,7 +58,6 @@ export const CPFTextInput = ({ label, value, onChangeText }) => (
 
 export const CEPTextInput = ({ label, value, onChangeText }) => (
     <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>{label}</Text>
         <TextInputMask
             placeholderTextColor={Colors.placeholderTextColor}
             type={'zip-code'}
@@ -80,7 +75,6 @@ export const SimpleDateTextInput = ({ label, value, onPress, showDatePicker, onC
         <>
             <TouchableOpacity onPress={onPress}>
                 <View style={styles.inputDropDownContainer}>
-                    <Text style={styles.inputLabel}>{label}</Text>
                     <View style={styles.input}>
                         {convertedValue ?
                             <Text style={styles.inputDropDownText}>{convertedValue}</Text> :
@@ -101,7 +95,6 @@ export const SimpleDateTextInput = ({ label, value, onPress, showDatePicker, onC
 
 export const PhoneTextInput = ({ label, value, onChangeText }) => (
     <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>{label}</Text>
         <TextInputMask
             placeholderTextColor={Colors.placeholderTextColor}
             type={'cel-phone'}

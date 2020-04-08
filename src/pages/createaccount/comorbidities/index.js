@@ -7,7 +7,7 @@ import { LeftComponent, CenterComponent, RightComponent } from '../../../compone
 import PropTypes from 'prop-types';
 import { NavigationEvents } from 'react-navigation';
 import { CheckboxItem } from '../../../components/customcheckboxitem';
-
+import CustomAccordion from '../../../components/customaccordion';
 export default class ComorbiditiesPage extends Component {
     static navigationOptions = {
         headerShown: false,
@@ -129,6 +129,12 @@ export default class ComorbiditiesPage extends Component {
                             isChecked={this.isChecked}
                             onClickCheck={this.onClickCheck}
                             getTextFromIdentifier={this.getTextFromIdentifier} />
+
+                        <CustomAccordion
+                            title={"123"}
+                            data={"123231"}
+                        />
+
                     </View>
                     <ProgressTracking amount={7} position={5} />
                 </ScrollView>
