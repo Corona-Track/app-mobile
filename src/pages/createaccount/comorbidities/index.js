@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text, ScrollView, Dimensions } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import { NavigationEvents } from 'react-navigation';
-import { Header, CheckBox } from 'react-native-elements';
+import { Header } from 'react-native-elements';
 
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
 import { CheckboxItem, CheckboxItemWithPlus } from '../../../components/customcheckboxitem';
-
-const windowWidth = Dimensions.get('window').width;
+//CONTINUE
+import { ContinueRequiredButton } from '../../../components/custombutton';
+import { CustomSearch } from '../../../components/customsearch';
 
 export default class ComorbiditiesPage extends Component {
     static navigationOptions = {
@@ -22,6 +23,7 @@ export default class ComorbiditiesPage extends Component {
     state = {
         entity: {
             comorbiditiesSelected: [],
+            externalComorbiditiesSelected: [],
         },
         comorbiditiesList: [
             { identifier: "ndo", text: "Nenhuma das opções" },
@@ -38,7 +40,14 @@ export default class ComorbiditiesPage extends Component {
             { identifier: "hipertensao", text: "Hipertensão" },
             { identifier: "others", text: "Outros" },
         ],
-        expandedOthersCheckbox: false
+        externalComorbiditiesList: [
+            { identifier: "artrite", text: "Artrite" },
+            { identifier: "palpitacao", text: "Palpitação" },
+            { identifier: "cirrose", text: "Cirrose" },
+            { identifier: "bronquite", text: "Bronquite" },
+        ],
+        expandedOthersCheckbox: true,
+        search: ""
     };
     initialize(props) {
         if (!props)
@@ -67,8 +76,7 @@ export default class ComorbiditiesPage extends Component {
                     rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
                 />
                 <ScrollView
-                    ref={ref => { this.scrollView = ref }}
-                    onContentSizeChange={() => this.scrollView.scrollToEnd({ animated: true })}
+                    nestedScrollEnabled={true}
                     style={{ width: "100%" }}>
                     <IntroText />
                     <View style={styles.checkboxItemContainer}>
@@ -134,6 +142,7 @@ export default class ComorbiditiesPage extends Component {
                             onClickCheck={this.onClickCheck} />
                         {this.renderOtherAccordion()}
                     </View>
+                    <ContinueRequiredButton disabled={() => { return false }} onPress={() => { }} />
                     <ProgressTracking amount={7} position={5} />
                 </ScrollView>
             </SafeAreaView >
@@ -173,7 +182,7 @@ export default class ComorbiditiesPage extends Component {
         this.setState({ entity });
     };
     renderOtherAccordion = () => {
-        let { expandedOthersCheckbox } = this.state;
+        let { expandedOthersCheckbox, externalComorbiditiesList, entity, search } = this.state;
         return (<>
             <CheckboxItemWithPlus
                 identifier={"others"}
@@ -181,13 +190,26 @@ export default class ComorbiditiesPage extends Component {
                 isChecked={this.isChecked}
                 onClickCheck={this.onClickCheck}
                 onPressPlus={this.expandOtherCheckbox} />
-            {expandedOthersCheckbox ? (<SearchOthers />) : (<></>)}
+            {expandedOthersCheckbox ? (
+                <>
+                    <CustomSearch
+                        listToSearch={externalComorbiditiesList}
+                        selected={entity.externalComorbiditiesSelected}
+                        placeholder="Buscar"
+                        value={search}
+                        onChangeText={this.onHandleSearch} />
+                </>
+                // <SearchOthers value={search} onChangeText={this.onHandleSearch} />
+            ) : (<></>)}
         </>);
     };
     expandOtherCheckbox = () => {
         let { expandedOthersCheckbox } = this.state;
         this.setState({ expandedOthersCheckbox: !expandedOthersCheckbox });
-    }
+    };
+    onHandleSearch = value => {
+        this.setState({ search: value });
+    };
 };
 
 const IntroText = () => (
@@ -197,12 +219,6 @@ const IntroText = () => (
     </View>
 );
 
-const SearchOthers = () => {
-    return (
-        <View style={styles.searchBox}>
-            
-        </View>)
-};
 
 const styles = StyleSheet.create({
     container: {
@@ -232,5 +248,6 @@ const styles = StyleSheet.create({
     searchBox: {
         backgroundColor: Colors.searchBackgroundColor,
         height: 200,
+        paddingHorizontal: 20
     }
 });

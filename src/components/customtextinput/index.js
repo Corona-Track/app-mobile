@@ -4,6 +4,7 @@ import { Colors } from '../../themes/variables';
 import { TextInputMask } from 'react-native-masked-text';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 export const SimpleTextInput = ({ label, value, onChangeText }) => (
     <View style={styles.inputContainer}>
