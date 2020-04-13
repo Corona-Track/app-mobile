@@ -14,6 +14,7 @@ import ComorbiditiesPage from '../pages/createaccount/comorbidities';
 import MedicinesPage from '../pages/createaccount/medicines';
 import FinishUncontaminatedPage from '../pages/createaccount/finishuncontaminated';
 import AlreadyHadCoronavirusTestPage from '../pages/createaccount/alreadyhadcoronavirustest';
+import TestResultPage from '../pages/createaccount/testresult';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator({
@@ -30,6 +31,7 @@ const AuthenticationStackNavigator = createStackNavigator(
         PersonalAddress: { screen: PersonalAddressPage },
         AlreadyHadCoronavirus: { screen: AlreadyHadCoronavirusPage },
         AlreadyHadCoronavirusTest: { screen: AlreadyHadCoronavirusTestPage },
+        TestResult: { screen: TestResultPage },
         SomeoneDiagnosed: { screen: SomeoneDiagnosedPage },
         SomeoneSuspicious: { screen: SomeoneSuspiciousPage },
         Comorbidities: { screen: ComorbiditiesPage },

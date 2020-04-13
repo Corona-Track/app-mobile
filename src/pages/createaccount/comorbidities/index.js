@@ -82,8 +82,8 @@ export default class ComorbiditiesPage extends Component {
                     <View style={styles.buttonContainer}>
                         <ContinueRequiredButton disabled={this.disableButton()} onPress={this.onContinueButtonClick} />
                     </View>
-                    <ProgressTracking amount={7} position={5} />
                 </ScrollView>
+                <ProgressTracking amount={7} position={5} />
             </SafeAreaView >
         )
     };

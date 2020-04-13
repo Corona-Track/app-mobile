@@ -56,13 +56,15 @@ export default class PersonalAddressPage extends Component {
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
                 <Spinner visible={showLoading} />
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
-                <ScrollView style={{ width: "100%" }}>
+                <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                    <Header
+                        backgroundColor={Colors.secondaryColor}
+                        leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                        centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+                        rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
+                    />
+                </View>
+                <ScrollView style={{ width: "100%", paddingHorizontal: 20, }}>
                     <IntroText userName={entity.name} />
                     {/* <GPSButton onGPSButtonPress={this.onGPSButtonPress} /> */}
                     <CEPTextInput
@@ -91,8 +93,8 @@ export default class PersonalAddressPage extends Component {
                         onChangeText={this.onHandleNumber}
                     />
                     <ContinueRequiredButton disabled={this.disableButton()} onPress={this.onContinueButtonClick} />
-                    <ProgressTracking amount={7} position={3} />
                 </ScrollView>
+                <ProgressTracking amount={7} position={3} />
             </SafeAreaView >)
     };
     onLeftButtonPress = () => {
@@ -280,7 +282,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20,
         paddingBottom: 15
     },
     textContainer: {

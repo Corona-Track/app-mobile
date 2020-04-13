@@ -32,11 +32,13 @@ export default class TookPhotoPage extends Component {
         let { photo, isCameraVisible } = this.state;
         return (
             <SafeAreaView style={styles.container}>
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
+                <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                    <Header
+                        backgroundColor={Colors.secondaryColor}
+                        leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                        rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
+                    />
+                </View>
                 <View style={{ flex: 0.75, justifyContent: "center" }}>
                     <View style={styles.textContainer}>
                         <Text style={[styles.simpleText]}><Text style={styles.boldText}>Ótimo!</Text> Caso queira, você</Text>
@@ -66,7 +68,7 @@ export default class TookPhotoPage extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ flex: 0.25, width: "100%" }}>
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20 }}>
                     <View style={styles.buttonContainer}>
                         <Button
                             style={styles.continueButtonContainer}
@@ -85,12 +87,12 @@ export default class TookPhotoPage extends Component {
                             {/* Pular */}
                         </Button>
                     </View>
-                    <ProgressTracking amount={7} position={1} />
                 </View>
                 <CustomUserCamera
                     onChangePhoto={this.onChangePhoto}
                     isVisible={isCameraVisible}
                     onCloseCamera={this.onCloseCamera} />
+                <ProgressTracking amount={7} position={1} />
             </SafeAreaView >)
     };
     openCamera = () => {
@@ -131,7 +133,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20
     },
     logo: {
         height: 150,

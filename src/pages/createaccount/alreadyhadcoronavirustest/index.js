@@ -19,7 +19,7 @@ export default class AlreadyHadCoronavirusTestPage extends Component {
     }
     state = {
         entity: {
-            alreadyHadCoronavirus: "",
+            alreadyHadCoronavirusTest: "",
         },
     };
     initialize(props) {
@@ -41,23 +41,25 @@ export default class AlreadyHadCoronavirusTestPage extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
+                <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                    <Header
+                        backgroundColor={Colors.secondaryColor}
+                        leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                        centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+                        rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
+                    />
+                </View>
                 <View style={{ flex: 0.60, justifyContent: "center" }}>
                     <IntroText />
                     <View style={styles.avatarContainer}>
                         <ImageIcon source={require('../../../assets/images/virus.png')} />
                     </View>
                 </View>
-                <View style={{ flex: 0.40, width: "100%" }}>
+                <View style={{ flex: 0.40, width: "100%", paddingHorizontal: 20 }}>
                     <DenyButton onPress={() => { this.onAnswerButtonPress("deny") }} />
                     <ConfirmButton onPress={() => { this.onAnswerButtonPress("confirm") }} />
-                    <ProgressTracking amount={7} position={4} />
                 </View>
+                <ProgressTracking amount={7} position={4} />
             </SafeAreaView >
         )
     };
@@ -69,9 +71,9 @@ export default class AlreadyHadCoronavirusTestPage extends Component {
     };
     onAnswerButtonPress = answer => {
         let { entity } = this.state;
-        entity.alreadyHadCoronavirus = answer;
+        entity.alreadyHadCoronavirusTest = answer;
         this.setState({ entity });
-        this.props.navigation.navigate("SomeoneDiagnosed", { entity: entity });
+        this.props.navigation.navigate("TestResult", { entity: entity });
     };
 };
 
@@ -90,7 +92,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20,
         paddingBottom: 15
     },
     textContainer: {

@@ -21,15 +21,17 @@ export default class TakePhotoPage extends Component {
         let { isCameraVisible } = this.state;
         return (
             <SafeAreaView style={styles.container}>
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
+                <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                    <Header
+                        backgroundColor={Colors.secondaryColor}
+                        rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
+                    />
+                </View>
                 <View style={{ flex: 0.75, justifyContent: "center" }}>
                     <View style={styles.textContainer}>
                         <Text style={[styles.simpleText]}>Para iniciar seu cadastro,</Text>
                         <Text style={[styles.simpleText]}>é necessário ter uma</Text>
-                        <Text style={[styles.simpleText, styles.boldText]}>foto de perfil</Text>
+                        <Text style={[styles.simpleText]}><Text style={styles.boldText}>foto de perfil</Text></Text>
                         <TouchableOpacity onPress={this.openCamera} style={styles.avatarContainer}>
                             <Avatar
                                 size={200}
@@ -39,7 +41,7 @@ export default class TakePhotoPage extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ flex: 0.25, width: "100%" }}>
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20 }}>
                     <View style={styles.buttonContainer}>
                         <Button
                             style={styles.continueButtonContainer}
@@ -57,12 +59,12 @@ export default class TakePhotoPage extends Component {
                             labelStyle={styles.skipButtonText}
                             uppercase={false}>Pular</Button>
                     </TouchableOpacity>
-                    <ProgressTracking amount={7} position={1} />
                 </View>
                 <CustomUserCamera
                     onChangePhoto={this.onChangePhoto}
                     isVisible={isCameraVisible}
                     onCloseCamera={this.onCloseCamera} />
+                <ProgressTracking amount={7} position={1} />
             </SafeAreaView>
         )
     };
@@ -103,7 +105,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        paddingHorizontal: 20
     },
     logo: {
         height: 150,

@@ -61,6 +61,33 @@ export const CheckboxItemWithExpand = ({
     </View>)
 };
 
+export const RadioButtonYesOrNoItem = ({ value, onPressCheckbox }) => {
+    return (<View style={styles.checkboxContainer}>
+        <CheckBox
+            containerStyle={styles.radioButtonContainer}
+            textStyle={styles.radioButtonText}
+            center
+            title='SIM'
+            checkedIcon='dot-circle-o'
+            uncheckedIcon='circle-o'
+            checkedColor={Colors.navigatorIconColor}
+            checked={value && value === "yes"}
+            onPress={() => onPressCheckbox("yes")}
+        />
+        <CheckBox
+            containerStyle={styles.radioButtonContainer}
+            textStyle={styles.radioButtonText}
+            center
+            title='NÃO'
+            checkedIcon='dot-circle-o'
+            uncheckedIcon='circle-o'
+            checkedColor={Colors.navigatorIconColor}
+            checked={value && value === "no"}
+            onPress={() => onPressCheckbox("no")}
+        />
+    </View>)
+};
+
 const ExpandIcon = ({ onPress, isExpanded }) => {
     return (<TouchableOpacity onPress={onPress}>
         <Icon
@@ -78,7 +105,6 @@ const PlusIcon = ({ onPressPlus }) => {
             color={Colors.navigatorIconColor} />
     </TouchableOpacity>);
 };
-
 
 const styles = StyleSheet.create({
     checkboxContainer: {
@@ -105,7 +131,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between"
     },
-
     checkboxWithPlusContainer: {
         flex: 1,
         flexDirection: "row",
@@ -114,4 +139,13 @@ const styles = StyleSheet.create({
         fontFamily: Colors.fontFamily,
         paddingHorizontal: 20
     },
+    radioButtonContainer: {
+        backgroundColor: "transparent",
+        borderWidth: 0
+    },
+    radioButtonText: {
+        fontWeight: "normal",
+        fontFamily: Colors.fontFamily,
+        fontSize: 16
+    }
 });

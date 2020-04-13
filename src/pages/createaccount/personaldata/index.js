@@ -58,13 +58,15 @@ export default class PersonalDataPage extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
-                <ScrollView style={{ width: "100%" }}>
+                <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                    <Header
+                        backgroundColor={Colors.secondaryColor}
+                        leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                        centerComponent={<CenterComponent photo={entity.photo} />}
+                        rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
+                    />
+                </View>
+                <ScrollView style={{ width: "100%", paddingHorizontal: 20, }}>
                     <IntroText />
                     <SimpleTextInput
                         label="Nome Completo"
@@ -108,8 +110,8 @@ export default class PersonalDataPage extends Component {
                     <ContinueRequiredButton
                         disabled={this.disableButton()}
                         onPress={this.onContinueButtonClick} />
-                    <ProgressTracking amount={7} position={2} />
                 </ScrollView>
+                <ProgressTracking amount={7} position={2} />
             </SafeAreaView >)
     };
     onLeftButtonPress = () => {
@@ -233,7 +235,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20,
         paddingBottom: 15
     },
     logo: {

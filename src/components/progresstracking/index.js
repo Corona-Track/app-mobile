@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from "react-native";
 import PropTypes from 'prop-types';
+import { Colors } from '../../themes/variables';
 
 export default class ProgressTracking extends Component {
     static propTypes = {
@@ -26,9 +27,14 @@ export default class ProgressTracking extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 0,
+        position: "absolute",
+        bottom: 10,
+        left: 0,
+        width: "100%",
         alignItems: "center",
-        justifyContent: "center",
+        paddingTop: 10,
+        backgroundColor: Colors.secondaryColor
     },
     background: {
         flexDirection: "row",

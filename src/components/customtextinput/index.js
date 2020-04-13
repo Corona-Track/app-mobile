@@ -70,7 +70,7 @@ export const CEPTextInput = ({ label, value, onChangeText }) => (
     </View>
 );
 
-export const SimpleDateTextInput = ({ label, value, onPress, showDatePicker, onChangeDate }) => {
+export const SimpleDateTextInput = ({ label, value, onPress, showDatePicker, onChangeDate, minimumDate, maximumDate }) => {
     let convertedValue = value ? moment(value).format("DD/MM/YYYY") : "";
     return (
         <>
@@ -89,6 +89,34 @@ export const SimpleDateTextInput = ({ label, value, onPress, showDatePicker, onC
                     value={value ?? new Date()}
                     mode="date"
                     is24Hour={true}
+                    minimumDate={minimumDate ?? new Date(1900, 1, 1)}
+                    maximumDate={maximumDate ?? moment(moment().format("DD/MM/YYYY"), 'DD/MM/YYYY').toDate()}
+                    display="default"
+                    onChange={onChangeDate} />}
+        </>);
+};
+
+export const SimpleCenterDateTextInput = ({ label, value, onPress, showDatePicker, onChangeDate, minimumDate, maximumDate }) => {
+    let convertedValue = value ? moment(value).format("DD/MM/YYYY") : "";
+    return (
+        <>
+            <TouchableOpacity onPress={onPress}>
+                <View style={styles.inputCenterDropDownContainer}>
+                    <View style={[styles.input, { textAlign: "center" }]}>
+                        {convertedValue ?
+                            <Text style={[styles.inputDropDownText, { textAlign: "center" }]}>{convertedValue}</Text> :
+                            <Text style={[styles.inputDropDownText, { color: Colors.placeholderTextColor, textAlign: "center" }]}>{label}</Text>
+                        }
+                    </View>
+                </View>
+            </TouchableOpacity>
+            {showDatePicker &&
+                <DateTimePicker
+                    value={value ?? new Date()}
+                    mode="date"
+                    is24Hour={true}
+                    minimumDate={minimumDate ?? new Date(1900, 1, 1)}
+                    maximumDate={maximumDate ?? moment(moment().format("DD/MM/YYYY"), 'DD/MM/YYYY').toDate()}
                     display="default"
                     onChange={onChangeDate} />}
         </>);
@@ -146,6 +174,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         paddingLeft: 11,
+        marginTop: 15
+    },
+    inputCenterDropDownContainer: {
+        fontFamily: Colors.fontFamily,
+        borderColor: Colors.placeholderTextColor,
+        borderWidth: 1,
+        borderRadius: 5,
         marginTop: 15
     },
 });

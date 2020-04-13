@@ -74,8 +74,8 @@ export default class MedicinesPage extends Component {
                     <View style={styles.buttonContainer}>
                         <ContinueRequiredButton disabled={this.disableButton()} onPress={() => { }} />
                     </View>
-                    <ProgressTracking amount={7} position={6} />
                 </ScrollView>
+                <ProgressTracking amount={7} position={6} />
             </SafeAreaView >
         )
     };
