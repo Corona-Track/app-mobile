@@ -13,6 +13,7 @@ import SomeoneSuspiciousPage from '../pages/createaccount/someonesuspicious';
 import ComorbiditiesPage from '../pages/createaccount/comorbidities';
 import MedicinesPage from '../pages/createaccount/medicines';
 import FinishUncontaminatedPage from '../pages/createaccount/finishuncontaminated';
+import AlreadyHadCoronavirusTestPage from '../pages/createaccount/alreadyhadcoronavirustest';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator({
@@ -28,6 +29,7 @@ const AuthenticationStackNavigator = createStackNavigator(
         PersonalData: { screen: PersonalDataPage },
         PersonalAddress: { screen: PersonalAddressPage },
         AlreadyHadCoronavirus: { screen: AlreadyHadCoronavirusPage },
+        AlreadyHadCoronavirusTest: { screen: AlreadyHadCoronavirusTestPage },
         SomeoneDiagnosed: { screen: SomeoneDiagnosedPage },
         SomeoneSuspicious: { screen: SomeoneSuspiciousPage },
         Comorbidities: { screen: ComorbiditiesPage },

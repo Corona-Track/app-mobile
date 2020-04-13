@@ -217,7 +217,7 @@ export default class PersonalAddressPage extends Component {
             this.isNumberValid()
             // this.isLatitudeValid() &&
             // this.isLongitudeValid()
-            );
+        );
     };
     isCepValid = () => {
         let { cep } = this.state.entity;
@@ -255,7 +255,7 @@ export default class PersonalAddressPage extends Component {
 
 const IntroText = ({ userName }) => {
     return (<View style={styles.textContainer}>
-        <Text style={[styles.simpleText, styles.boldText]}>Muito bem, {getFirstName(userName)}!</Text>
+        <Text style={[styles.simpleText]}><Text style={styles.boldText}>Muito bem, {getFirstName(userName)}!</Text></Text>
         <Text style={[styles.simpleText]}>Agora nos diga, por favor,</Text>
         <Text style={[styles.simpleText]}>onde você mora.</Text>
     </View>);

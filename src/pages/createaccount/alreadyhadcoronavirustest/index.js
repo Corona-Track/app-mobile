@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { ConfirmButton, DenyButton, DoubtButton } from '../../../components/custombutton';
 import { NavigationEvents } from 'react-navigation';
 import { ImageIcon } from '../../../components/customimageicon';
-export default class AlreadyHadCoronavirusPage extends Component {
+export default class AlreadyHadCoronavirusTestPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
@@ -56,7 +56,6 @@ export default class AlreadyHadCoronavirusPage extends Component {
                 <View style={{ flex: 0.40, width: "100%" }}>
                     <DenyButton onPress={() => { this.onAnswerButtonPress("deny") }} />
                     <ConfirmButton onPress={() => { this.onAnswerButtonPress("confirm") }} />
-                    <DoubtButton onPress={() => { this.onAnswerButtonPress("doubt") }} label="Não tenho certeza" />
                     <ProgressTracking amount={7} position={4} />
                 </View>
             </SafeAreaView >
@@ -72,17 +71,14 @@ export default class AlreadyHadCoronavirusPage extends Component {
         let { entity } = this.state;
         entity.alreadyHadCoronavirus = answer;
         this.setState({ entity });
-        let nextPage = "SomeoneDiagnosed";
-        if (answer === "confirm")
-            nextPage = "AlreadyHadCoronavirusTest";
-        this.props.navigation.navigate(nextPage, { entity: entity });
+        this.props.navigation.navigate("SomeoneDiagnosed", { entity: entity });
     };
 };
 
 const IntroText = () => (
     <View style={styles.textContainer}>
-        <Text style={[styles.simpleText]}><Text style={styles.boldText}>Você já teve Coronavírus</Text></Text>
-        <Text style={[styles.simpleText]}>confirmado por teste?</Text>
+        <Text style={[styles.simpleText]}>Você realizou o</Text>
+        <Text style={[styles.simpleText]}><Text style={styles.boldText}>teste para Coronavírus?</Text></Text>
     </View>
 );
 
