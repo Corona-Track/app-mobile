@@ -4,7 +4,7 @@ import { Colors } from '../../themes/variables';
 import { CheckBox } from 'react-native-elements';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-export const CheckboxItem = ({ identifier, isChecked, onClickCheck, title }) => {
+export const CheckboxItem = ({ identifier, isChecked, onClickCheck }) => {
     let checked = isChecked(identifier);
     return (<View key={identifier} style={styles.checkboxContainer}>
         <View style={styles.firstColumn}>
@@ -14,7 +14,7 @@ export const CheckboxItem = ({ identifier, isChecked, onClickCheck, title }) => 
                 checked={checked}
                 onPress={() => { onClickCheck(identifier) }} />
         </View>
-        <View><Text style={styles.checkboxText}>{title}</Text></View>
+        <View><Text style={styles.checkboxText}>{identifier}</Text></View>
     </View>)
 };
 
@@ -22,7 +22,6 @@ export const CheckboxItemWithPlus = ({
     identifier,
     isChecked,
     onClickCheck,
-    title,
     onPressPlus }) => {
     let checked = isChecked(identifier);
     return (<View style={styles.checkboxWithPlusContainer}>
@@ -34,10 +33,41 @@ export const CheckboxItemWithPlus = ({
                 onPress={() => { onClickCheck(identifier) }} />
         </View>
         <View style={styles.secondColumn}>
-            <Text style={styles.checkboxText}>{title}</Text>
+            <Text style={styles.checkboxText}>{identifier}</Text>
             <PlusIcon onPressPlus={onPressPlus} />
         </View>
     </View>)
+};
+
+export const CheckboxItemWithExpand = ({
+    identifier,
+    isChecked,
+    onClickCheck,
+    onPressExpand,
+    isExpanded }) => {
+    let checked = isChecked(identifier);
+    return (<View style={styles.checkboxWithPlusContainer}>
+        <View style={styles.firstColumn}>
+            <CheckBox
+                checkedColor={Colors.navigatorIconColor}
+                containerStyle={styles.checkbox}
+                checked={checked}
+                onPress={() => { onClickCheck(identifier) }} />
+        </View>
+        <View style={styles.secondColumn}>
+            <Text style={styles.checkboxText}>{identifier}</Text>
+            <ExpandIcon onPress={() => { onPressExpand(identifier) }} isExpanded={isExpanded} />
+        </View>
+    </View>)
+};
+
+const ExpandIcon = ({ onPress, isExpanded }) => {
+    return (<TouchableOpacity onPress={onPress}>
+        <Icon
+            name={isExpanded ? "chevron-up" : "chevron-down"}
+            size={30}
+            color={Colors.navigatorIconColor} />
+    </TouchableOpacity>);
 };
 
 const PlusIcon = ({ onPressPlus }) => {
