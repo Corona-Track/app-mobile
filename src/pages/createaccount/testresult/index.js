@@ -58,7 +58,7 @@ export default class TestResultPage extends Component {
                             value={entity.testResult}
                             onPressCheckbox={this.onPressCheckbox} />
                     </View>
-                    {entity.testResult && entity.testResult === "yes" ? (
+                    {entity.testResult ? (
                         <View style={{ backgroundColor: Colors.searchBackgroundColor, width: "100%", paddingHorizontal: 25, paddingVertical: 35 }}>
                             <Text style={{ width: "100%", textAlign: "center", fontFamily: Colors.fontFamily, color: "#828282", fontSize: 16 }}><Text style={styles.boldText}>Quando realizou o teste?</Text></Text>
                             <SimpleCenterDateTextInput
@@ -71,9 +71,8 @@ export default class TestResultPage extends Component {
                 </View>
                 <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 25 }}>
                     <ContinueRequiredButton
-                        onPress={() => { this.onAnswerButtonPress("deny") }}
-                        disabled={false} />
-
+                        onPress={() => { this.onContinuePress() }}
+                        disabled={this.disableButton()} />
                 </View>
                 <ProgressTracking amount={7} position={4} />
             </SafeAreaView >
@@ -85,8 +84,9 @@ export default class TestResultPage extends Component {
     onRightButtonPress = () => {
         this.props.navigation.pop();
     };
-    onAnswerButtonPress = answer => {
-        this.props.navigation.navigate("SomeoneDiagnosed", { entity: entity });
+    onContinuePress = () => {
+        let { entity } = this.state;
+        this.props.navigation.navigate("Comorbidities", { entity: entity });
     };
     onPressCheckbox = value => {
         let { entity } = this.state;
@@ -104,6 +104,10 @@ export default class TestResultPage extends Component {
             entity: entity,
             showTestDate: false
         });
+    };
+    disableButton = () => {
+        let { entity } = this.state;
+        return !((entity.testResult === true && entity.testDate) || entity.testResult === false);
     };
 };
 

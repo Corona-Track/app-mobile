@@ -20,6 +20,7 @@ export default class AlreadyHadCoronavirusPage extends Component {
     state = {
         entity: {
             alreadyHadCoronavirus: "",
+            contaminated: false
         },
     };
     initialize(props) {
@@ -73,10 +74,13 @@ export default class AlreadyHadCoronavirusPage extends Component {
     onAnswerButtonPress = answer => {
         let { entity } = this.state;
         entity.alreadyHadCoronavirus = answer;
-        this.setState({ entity });
+        entity.contaminated = false;
         let nextPage = "SomeoneDiagnosed";
-        if (answer === "confirm")
+        if (answer === "confirm") {
             nextPage = "AlreadyHadCoronavirusTest";
+            entity.contaminated = true;
+        }
+        this.setState({ entity });
         this.props.navigation.navigate(nextPage, { entity: entity });
     };
 };

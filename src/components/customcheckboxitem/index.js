@@ -71,8 +71,8 @@ export const RadioButtonYesOrNoItem = ({ value, onPressCheckbox }) => {
             checkedIcon='dot-circle-o'
             uncheckedIcon='circle-o'
             checkedColor={Colors.navigatorIconColor}
-            checked={value && value === "yes"}
-            onPress={() => onPressCheckbox("yes")}
+            checked={value === true}
+            onPress={() => onPressCheckbox(true)}
         />
         <CheckBox
             containerStyle={styles.radioButtonContainer}
@@ -82,8 +82,8 @@ export const RadioButtonYesOrNoItem = ({ value, onPressCheckbox }) => {
             checkedIcon='dot-circle-o'
             uncheckedIcon='circle-o'
             checkedColor={Colors.navigatorIconColor}
-            checked={value && value === "no"}
-            onPress={() => onPressCheckbox("no")}
+            checked={value === false}
+            onPress={() => onPressCheckbox(false)}
         />
     </View>)
 };
