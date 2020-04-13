@@ -23,31 +23,11 @@ export default class ComorbiditiesPage extends Component {
     state = {
         entity: {
             comorbiditiesSelected: [],
-            externalComorbiditiesSelected: [],
         },
         comorbiditiesList: [
             { identifier: "ndo", text: "Nenhuma das opções" },
             { identifier: "avc", text: "AVC prévio" },
-            { identifier: "infarto", text: "Infarto prévio" },
-            { identifier: "fumante", text: "Fumante" },
-            { identifier: "insuficienciarenal", text: "Insuficiência renal" },
-            { identifier: "obesidade", text: "Obesidade" },
-            { identifier: "colesterol", text: "Colesterol alto" },
-            { identifier: "diabetes", text: "Diabetes" },
-            { identifier: "asma", text: "Asma" },
-            { identifier: "cancer", text: "Câncer" },
-            { identifier: "renalcronica", text: "Doença renal crônica" },
-            { identifier: "hipertensao", text: "Hipertensão" },
-            { identifier: "others", text: "Outros" },
         ],
-        externalComorbiditiesList: [
-            { identifier: "artrite", text: "Artrite" },
-            { identifier: "palpitacao", text: "Palpitação" },
-            { identifier: "cirrose", text: "Cirrose" },
-            { identifier: "bronquite", text: "Bronquite" },
-        ],
-        expandedOthersCheckbox: true,
-        search: ""
     };
     initialize(props) {
         if (!props)
@@ -64,7 +44,7 @@ export default class ComorbiditiesPage extends Component {
         this.setState({ entity: converted });
     };
     render = () => {
-        let { entity } = this.state;
+        let { entity, comorbiditiesList } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
@@ -80,69 +60,19 @@ export default class ComorbiditiesPage extends Component {
                     style={{ width: "100%" }}>
                     <IntroText />
                     <View style={styles.checkboxItemContainer}>
-                        <CheckboxItem
-                            identifier={"ndo"}
-                            title="Nenhuma das opções"
-                            isChecked={this.isChecked}
-                            onClickCheck={this.onClickNoneOfOptions} />
-                        <CheckboxItem
-                            identifier={"avc"}
-                            title="AVC prévio"
-                            isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck} />
-                        <CheckboxItem
-                            identifier={"infarto"}
-                            title="Infarto prévio"
-                            isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck} />
-                        <CheckboxItem
-                            identifier={"fumante"}
-                            title="Fumante"
-                            isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck} />
-                        <CheckboxItem
-                            identifier={"insuficienciarenal"}
-                            title="Insuficiência renal"
-                            isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck} />
-                        <CheckboxItem
-                            identifier={"obesidade"}
-                            title="Obesidade"
-                            isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck} />
-                        <CheckboxItem
-                            identifier={"colesterol"}
-                            title="Colesterol alto"
-                            isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck} />
-                        <CheckboxItem
-                            identifier={"diabetes"}
-                            title="Diabetes"
-                            isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck} />
-                        <CheckboxItem
-                            identifier={"asma"}
-                            title="Asma"
-                            isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck} />
-                        <CheckboxItem
-                            identifier={"cancer"}
-                            title="Câncer"
-                            isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck} />
-                        <CheckboxItem
-                            identifier={"renalcronica"}
-                            title="Doença renal crônica"
-                            isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck} />
-                        <CheckboxItem
-                            identifier={"hipertensao"}
-                            title="Hipertensão"
-                            isChecked={this.isChecked}
-                            onClickCheck={this.onClickCheck} />
-                        {this.renderOtherAccordion()}
+                        {comorbiditiesList.map(comorbidity => {
+                            return (
+                                <CheckboxItem
+                                    identifier={comorbidity.identifier}
+                                    title={comorbidity.text}
+                                    isChecked={this.isChecked}
+                                    onClickCheck={comorbidity.identifier === "ndo" ? this.onClickNoneOfOptions : this.onClickCheck} />
+                            );
+                        })}
                     </View>
-                    <ContinueRequiredButton disabled={() => { return false }} onPress={() => { }} />
+                    <View style={styles.buttonContainer}>
+                        <ContinueRequiredButton disabled={this.disableButton()} onPress={() => { }} />
+                    </View>
                     <ProgressTracking amount={7} position={5} />
                 </ScrollView>
             </SafeAreaView >
@@ -181,34 +111,9 @@ export default class ComorbiditiesPage extends Component {
         entity.comorbiditiesSelected.push(identifier);
         this.setState({ entity });
     };
-    renderOtherAccordion = () => {
-        let { expandedOthersCheckbox, externalComorbiditiesList, entity, search } = this.state;
-        return (<>
-            <CheckboxItemWithPlus
-                identifier={"others"}
-                title="Outros"
-                isChecked={this.isChecked}
-                onClickCheck={this.onClickCheck}
-                onPressPlus={this.expandOtherCheckbox} />
-            {expandedOthersCheckbox ? (
-                <>
-                    <CustomSearch
-                        listToSearch={externalComorbiditiesList}
-                        selected={entity.externalComorbiditiesSelected}
-                        placeholder="Buscar"
-                        value={search}
-                        onChangeText={this.onHandleSearch} />
-                </>
-                // <SearchOthers value={search} onChangeText={this.onHandleSearch} />
-            ) : (<></>)}
-        </>);
-    };
-    expandOtherCheckbox = () => {
-        let { expandedOthersCheckbox } = this.state;
-        this.setState({ expandedOthersCheckbox: !expandedOthersCheckbox });
-    };
-    onHandleSearch = value => {
-        this.setState({ search: value });
+    disableButton = () => {
+        let { entity } = this.state;
+        return !(entity && entity.comorbiditiesSelected && entity.comorbiditiesSelected.length > 0);
     };
 };
 
@@ -245,9 +150,7 @@ const styles = StyleSheet.create({
     checkboxItemContainer: {
         marginVertical: 20
     },
-    searchBox: {
-        backgroundColor: Colors.searchBackgroundColor,
-        height: 200,
-        paddingHorizontal: 20
+    buttonContainer: {
+        marginHorizontal: 20
     }
 });

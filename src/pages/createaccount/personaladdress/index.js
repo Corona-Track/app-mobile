@@ -64,7 +64,7 @@ export default class PersonalAddressPage extends Component {
                 />
                 <ScrollView style={{ width: "100%" }}>
                     <IntroText userName={entity.name} />
-                    <GPSButton onGPSButtonPress={this.onGPSButtonPress} />
+                    {/* <GPSButton onGPSButtonPress={this.onGPSButtonPress} /> */}
                     <CEPTextInput
                         label="CEP"
                         value={entity.cep}

@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export const CheckboxItem = ({ identifier, isChecked, onClickCheck, title }) => {
     let checked = isChecked(identifier);
-    return (<View style={styles.checkboxContainer}>
+    return (<View key={identifier} style={styles.checkboxContainer}>
         <View style={styles.firstColumn}>
             <CheckBox
                 checkedColor={Colors.navigatorIconColor}

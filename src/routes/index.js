@@ -33,7 +33,7 @@ const AuthenticationStackNavigator = createStackNavigator(
         Splash: { screen: SplashPage },
     },
     {
-        initialRouteName: 'Login'
+        initialRouteName: 'SomeoneSuspicious'
     }
 );
 
