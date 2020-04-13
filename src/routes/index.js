@@ -12,6 +12,7 @@ import SomeoneDiagnosedPage from '../pages/createaccount/someonediagnosed';
 import SomeoneSuspiciousPage from '../pages/createaccount/someonesuspicious';
 import ComorbiditiesPage from '../pages/createaccount/comorbidities';
 import MedicinesPage from '../pages/createaccount/medicines';
+import FinishUncontaminatedPage from '../pages/createaccount/finishuncontaminated';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator({
@@ -30,12 +31,15 @@ const AuthenticationStackNavigator = createStackNavigator(
         SomeoneDiagnosed: { screen: SomeoneDiagnosedPage },
         SomeoneSuspicious: { screen: SomeoneSuspiciousPage },
         Comorbidities: { screen: ComorbiditiesPage },
-        Medicines: { screen: MedicinesPage },
+        // Medicines: { screen: MedicinesPage },
+        FinishUncontaminated: { screen: FinishUncontaminatedPage },
+
+
         Login: { screen: LoginPage },
         Splash: { screen: SplashPage },
     },
     {
-        initialRouteName: 'SomeoneSuspicious'
+        initialRouteName: 'Login'
     }
 );
 
