@@ -88,6 +88,21 @@ export const RadioButtonYesOrNoItem = ({ value, onPressCheckbox, yesTitle, noTit
     </View>)
 };
 
+export const RadioButtonItem = ({ identifier, isChecked, onClickCheck }) => {
+    let checked = isChecked(identifier);
+    return (<View key={identifier} style={styles.radioButtonBox}>
+        <CheckBox
+            containerStyle={styles.radioButtonContainer}
+            textStyle={styles.radioButtonText}
+            title={identifier}
+            checkedIcon='dot-circle-o'
+            uncheckedIcon='circle-o'
+            checkedColor={Colors.navigatorIconColor}
+            checked={checked}
+            onPress={() => onClickCheck(identifier)} />
+    </View>)
+};
+
 const ExpandIcon = ({ onPress, isExpanded }) => {
     return (<TouchableOpacity onPress={onPress}>
         <Icon
@@ -147,5 +162,12 @@ const styles = StyleSheet.create({
         fontWeight: "normal",
         fontFamily: Colors.fontFamily,
         fontSize: 16
-    }
+    },
+    radioButtonBox: {
+        flex: 1,
+        flexDirection: "row",
+        width: "100%",
+        marginVertical: 10,
+        fontFamily: Colors.fontFamily,
+    },
 });

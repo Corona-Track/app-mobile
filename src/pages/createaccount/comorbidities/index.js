@@ -132,7 +132,10 @@ export default class ComorbiditiesPage extends Component {
     };
     onContinueButtonClick = () => {
         let { entity } = this.state;
-        this.props.navigation.navigate("FinishUncontaminated", { entity: entity });
+        let nextPage = "FinishUncontaminated";
+        if (entity.contaminated)
+            nextPage = "FinishContaminated";
+        this.props.navigation.navigate(nextPage, { entity: entity });
     };
 };
 

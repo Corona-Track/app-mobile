@@ -23,11 +23,19 @@ export default class AlreadyHadFluVaccinePage extends Component {
             hadFluVaccine: null,
         },
     };
-    initialize(props) {
+     initialize(props) {
         if (!props)
             return;
+        let { navigation } = props;
         let { entity } = this.state;
-        this.setState({ entity });
+        let previousEntity = navigation.getParam('entity', null);
+        if (!previousEntity)
+            return;
+        let converted = {
+            ...entity,
+            ...previousEntity
+        };
+        this.setState({ entity: converted });
     };
     render = () => {
         let { entity } = this.state;
@@ -35,7 +43,7 @@ export default class AlreadyHadFluVaccinePage extends Component {
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
                 <View style={{ flex: 0.75, width: "100%" }}>
-                    <View style={{ width: "100%", paddingHorizontal: 25 }}>
+                    <View style={{ width: "100%", paddingHorizontal: 20 }}>
                         <Header
                             backgroundColor={Colors.secondaryColor}
                             leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
@@ -52,10 +60,12 @@ export default class AlreadyHadFluVaccinePage extends Component {
                 </View>
                 <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
                     <ContinueRequiredButton
-                        onPress={() => { this.onContinuePress() }}
-                        disabled={false} />
+                        onPress={() => { this.onContinueButtonClick() }}
+                        disabled={this.disableButton()} />
+                    {!entity.contaminated ?
+                        (<DoubtButton onPress={() => { this.onAnswerButtonPress("doubt") }} label="Responder depois" />)
+                        : (<></>)}
                 </View>
-                <DoubtButton onPress={() => { this.onAnswerButtonPress("doubt") }} label="Responder depois" />
                 <ProgressTracking amount={10} position={2} />
             </SafeAreaView >)
     };
@@ -73,6 +83,10 @@ export default class AlreadyHadFluVaccinePage extends Component {
         let { entity } = this.state;
         entity.hadFluVaccine = value;
         this.setState({ entity });
+    };
+    disableButton = () => {
+        let { entity } = this.state;
+        return !(entity.hadFluVaccine !== null);
     };
 };
 
@@ -109,37 +123,7 @@ const styles = StyleSheet.create({
         width: "100%",
         marginVertical: 30
     },
-    continueButtonContainer: {
-        width: "100%",
-        borderRadius: 50,
-    },
-    continueButton: {
-        height: 50,
-        width: "100%",
-        textAlign: "center"
-    },
-    continueButtonText: {
-        color: Colors.primaryTextColor,
-        fontFamily: Colors.fontFamily
-    },
-    skipButtonContainer: {
-        width: "100%",
-        borderRadius: 50,
-    },
-    skipButton: {
-        height: 50,
-        width: "100%",
-        textAlign: "center"
-    },
-    skipButtonText: {
-        fontFamily: Colors.fontFamily
-    },
     skipContainer: {
         marginTop: 5,
     },
-    photoIcon: {
-        position: "absolute",
-        right: 0,
-        bottom: 0
-    }
 });

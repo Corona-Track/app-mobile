@@ -65,7 +65,7 @@ const AuthenticationStackNavigator = createStackNavigator(
         RelativesHomePrecautions: { screen: RelativesHomePrecautionsPage }
     },
     {
-        initialRouteName: 'Splash'
+        initialRouteName: 'AlreadyHadFluVaccine'
     }
 );
 

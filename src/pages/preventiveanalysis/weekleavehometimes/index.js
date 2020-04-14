@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { Header, Slider } from 'react-native-elements';
+import { NavigationEvents } from 'react-navigation';
+import PropTypes from 'prop-types';
+
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
-import PropTypes from 'prop-types';
-import { ContinueButton } from '../../../components/custombutton';
-import { NavigationEvents } from 'react-navigation';
+import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
+import { RadioButtonItem } from '../../../components/customcheckboxitem';
 
 export default class WeekLeaveHomeTimesPage extends Component {
     static navigationOptions = {
@@ -21,79 +23,66 @@ export default class WeekLeaveHomeTimesPage extends Component {
             daysAWeek: 0,
             reasonToLeaveHome: ""
         },
+        reasonsList: [
+            { identifier: "Trabalhar" },
+            { identifier: "Comprar remédios ou alimentos" },
+            { identifier: "Outros motivos" },
+        ],
     };
     initialize(props) {
         if (!props)
             return;
+        let { navigation } = props;
         let { entity } = this.state;
-        this.setState({ entity });
+        let previousEntity = navigation.getParam('entity', null);
+        if (!previousEntity)
+            return;
+        let converted = {
+            ...entity,
+            ...previousEntity
+        };
+        this.setState({ entity: converted });
     };
     render = () => {
-        let { entity } = this.state;
+        let { entity, reasonsList } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
-                <View style={{ width: "100%" }}>
+                <View style={{ flex: 0.75, width: "100%" }}>
+                    <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                        <Header
+                            backgroundColor={Colors.secondaryColor}
+                            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+                            rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
+                    </View>
                     <IntroText />
-                    <View style={{ flex: 1, alignItems: 'stretch', justifyContent: 'center' }}>
-                        <Text style={[styles.simpleText]}>Número de dias da semana: {this.state.entity.daysAWeek}</Text>
-                        <Slider
-                            value={entity.daysAWeek}
-                            minimumTrackTintColor="#EA5B2D"
-                            thumbTintColor="#f56f45"
-                            onValueChange={this.onHandleDaysAWeek}
-                        />
+                    <CustomSlider
+                        value={entity.daysAWeek}
+                        onValueChange={this.onChangeSlider} />
+                    <SecondaryText />
+                    <View style={styles.radioButtonItemContainer}>
+                        {reasonsList.map(reason => {
+                            return (
+                                <View style={{ marginTop: 10 }}>
+                                    <RadioButtonItem
+                                        identifier={reason.identifier}
+                                        isChecked={this.isChecked}
+                                        onClickCheck={this.onClickCheck} />
+                                </View>
+                            );
+                        })}
                     </View>
                 </View>
-                <View style={styles.textContainer}>
-                    <Text style={[styles.simpleText]}>Principal motivo</Text>
-                    <Text style={[styles.simpleText]}>para sair de casa</Text>
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
+                    <ContinueRequiredButton
+                        onPress={() => { this.onContinueButtonClick() }}
+                        disabled={this.disableButton()} />
+                    {!entity.contaminated ?
+                        (<DoubtButton onPress={() => { this.onAnswerButtonPress("doubt") }} label="Responder depois" />)
+                        : (<></>)}
                 </View>
-                <View>
-                    <RadioButton.Group
-                        onValueChange={value => this.setState({ value })}
-                        value={this.state.entity.reasonToLeaveHome}
-                    >
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value="work"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Trabalhar</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton 
-                                value="food"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Comprar remédios ou alimentos</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton 
-                                value="other"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Outros motivos</Text>
-                        </View>
-                    </RadioButton.Group>
-                </View>
-                <View>
-                    <ContinueButton onPress={this.onContinueButtonClick} />
-                    <TouchableOpacity onPress={this.skipScreen} style={styles.skipContainer}>
-                        <Button
-                            mode="text"
-                            color={Colors.defaultIconColor}
-                            labelStyle={styles.skipButtonText}
-                            uppercase={false}>Responder Depois</Button>
-                    </TouchableOpacity>
-                    <ProgressTracking amount={10} position={2} />
-                </View>
+                <ProgressTracking amount={10} position={2} />
             </SafeAreaView >)
     };
     onHandleDaysAWeek = daysAWeek => {
@@ -111,6 +100,23 @@ export default class WeekLeaveHomeTimesPage extends Component {
         let { entity } = this.state;
         this.props.navigation.navigate("SocialDistance", { entity: entity });
     };
+    disableButton = () => {
+        return false;
+    };
+    onChangeSlider = value => {
+        let { entity } = this.state;
+        entity.daysAWeek = value;
+        this.setState({ entity });
+    };
+    isChecked = identifier => {
+        let { entity } = this.state;
+        return entity.reasonToLeaveHome && entity.reasonToLeaveHome === identifier;
+    };
+    onClickCheck = identifier => {
+        let { entity } = this.state;
+        entity.reasonToLeaveHome = identifier;
+        this.setState({ entity });
+    };
 };
 
 const IntroText = () => (
@@ -120,6 +126,37 @@ const IntroText = () => (
     </View>
 );
 
+const SecondaryText = () => (
+    <View style={[styles.textContainer, { paddingTop: 20 }]}>
+        <Text style={[styles.simpleText]}>Principal motivo</Text>
+        <Text style={[styles.simpleText]}>para sair de casa:</Text>
+    </View>
+);
+
+const CustomSlider = ({ value, onValueChange }) => {
+    return (<View style={{ paddingHorizontal: 20, height: 50, flexDirection: "column" }}>
+        <Slider
+            value={value}
+            onValueChange={onValueChange}
+            step={1}
+            minimumValue={1}
+            maximumValue={7}
+            minimumTrackTintColor={Colors.navigatorIconColor}
+            maximumTrackTintColor={Colors.searchIconColor}
+            animationType="spring"
+            thumbTintColor={Colors.secondaryColor}
+            thumbStyle={styles.customThumbStyle}
+        />
+        <View style={styles.detailsLineContainer}>
+            <Text style={[styles.sliderSimpleText, { flex: 0, position: "absolute", left: 3 }]}> 1</Text>
+            <View style={styles.underlineThumb}>
+                <Text style={styles.centerValue}>{value}</Text>
+            </View>
+            <Text style={[styles.sliderSimpleText, { flex: 0, position: "absolute", right: 7 }]}> 7</Text>
+        </View>
+    </View>);
+};
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -128,7 +165,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20,
         paddingBottom: 15
     },
     textContainer: {
@@ -179,5 +215,37 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 0,
         bottom: 0
-    }
+    },
+    sliderSimpleText: {
+        fontFamily: Colors.fontFamily,
+        fontSize: 18,
+        color: Colors.placeholderTextColor
+    },
+    customThumbStyle: {
+        borderWidth: 6,
+        borderColor: Colors.navigatorIconColor,
+        width: 25,
+        height: 25,
+        borderRadius: 12
+    },
+    underlineThumb: {
+        width: 35,
+        height: 25,
+        backgroundColor: Colors.navigatorIconColor,
+        borderRadius: 5
+    },
+    detailsLineContainer: {
+        flexDirection: "row",
+        justifyContent: "center",
+        width: "100%"
+    },
+    centerValue: {
+        fontFamily: Colors.fontFamily,
+        fontSize: 18,
+        color: Colors.primaryTextColor,
+        textAlign: "center",
+    },
+    radioButtonItemContainer: {
+        marginVertical: 10,
+    },
 });
