@@ -41,7 +41,7 @@ export default class TakePhotoPage extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20 }}>
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end", paddingVertical: 20 }}>
                     <View style={styles.buttonContainer}>
                         <Button
                             style={styles.continueButtonContainer}

@@ -61,13 +61,13 @@ export const CheckboxItemWithExpand = ({
     </View>)
 };
 
-export const RadioButtonYesOrNoItem = ({ value, onPressCheckbox }) => {
+export const RadioButtonYesOrNoItem = ({ value, onPressCheckbox, yesTitle, noTitle }) => {
     return (<View style={styles.checkboxContainer}>
         <CheckBox
             containerStyle={styles.radioButtonContainer}
             textStyle={styles.radioButtonText}
             center
-            title='SIM'
+            title={yesTitle ?? 'SIM'}
             checkedIcon='dot-circle-o'
             uncheckedIcon='circle-o'
             checkedColor={Colors.navigatorIconColor}
@@ -78,7 +78,7 @@ export const RadioButtonYesOrNoItem = ({ value, onPressCheckbox }) => {
             containerStyle={styles.radioButtonContainer}
             textStyle={styles.radioButtonText}
             center
-            title='NÃO'
+            title={noTitle ?? 'NÃO'}
             checkedIcon='dot-circle-o'
             uncheckedIcon='circle-o'
             checkedColor={Colors.navigatorIconColor}

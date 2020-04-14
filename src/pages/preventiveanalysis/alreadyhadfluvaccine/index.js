@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { Header } from 'react-native-elements';
+import { NavigationEvents } from 'react-navigation';
+import PropTypes from 'prop-types';
+
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
-import PropTypes from 'prop-types';
-import { ContinueButton } from '../../../components/custombutton';
-import { NavigationEvents } from 'react-navigation';
+import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
+import { RadioButtonYesOrNoItem } from '../../../components/customcheckboxitem';
 
 export default class AlreadyHadFluVaccinePage extends Component {
     static navigationOptions = {
@@ -32,48 +34,29 @@ export default class AlreadyHadFluVaccinePage extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
-                <View style={{ width: "100%" }}>
+                <View style={{ flex: 0.75, width: "100%" }}>
+                    <View style={{ width: "100%", paddingHorizontal: 25 }}>
+                        <Header
+                            backgroundColor={Colors.secondaryColor}
+                            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+                            rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
+                    </View>
                     <IntroText />
-
-                    <RadioButton.Group
-                        onValueChange={value => this.setState({ value })}
-                        value={this.state.entity.hadFluVaccine}
-                    >
-                        <View style={{ width: "100%", flex: 1, flexDirection: 'row' }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton
-                                    value={true}
-                                    color={Colors.navigatorIconColor}
-                                />
-                                <Text style={{color:Colors.notMainText}}>SIM</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton 
-                                    value={false}
-                                    color={Colors.navigatorIconColor}
-                                />
-                                <Text style={{color:Colors.notMainText}}>Ainda NÃO</Text>
-                            </View>
-                        </View>
-                    </RadioButton.Group>
+                    <View style={{ alignSelf: "center", height: 70 }}>
+                        <RadioButtonYesOrNoItem
+                            noTitle="Ainda NÃO"
+                            value={entity.hadFluVaccine}
+                            onPressCheckbox={this.onPressCheckbox} />
+                    </View>
                 </View>
-                <View>
-                    <ContinueButton onPress={this.onContinueButtonClick} />
-                    <TouchableOpacity onPress={this.skipScreen} style={styles.skipContainer}>
-                        <Button
-                            mode="text"
-                            color={Colors.defaultIconColor}
-                            labelStyle={styles.skipButtonText}
-                            uppercase={false}>Responder Depois</Button>
-                    </TouchableOpacity>
-                    <ProgressTracking amount={10} position={1} />
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
+                    <ContinueRequiredButton
+                        onPress={() => { this.onContinuePress() }}
+                        disabled={false} />
                 </View>
+                <DoubtButton onPress={() => { this.onAnswerButtonPress("doubt") }} label="Responder depois" />
+                <ProgressTracking amount={10} position={2} />
             </SafeAreaView >)
     };
     onLeftButtonPress = () => {
@@ -85,6 +68,11 @@ export default class AlreadyHadFluVaccinePage extends Component {
     onContinueButtonClick = () => {
         let { entity } = this.state;
         this.props.navigation.navigate("WeekLeaveHomeTimes", { entity: entity });
+    };
+    onPressCheckbox = value => {
+        let { entity } = this.state;
+        entity.hadFluVaccine = value;
+        this.setState({ entity });
     };
 };
 
@@ -103,7 +91,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20,
         paddingBottom: 15
     },
     textContainer: {

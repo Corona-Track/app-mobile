@@ -69,7 +69,7 @@ export default class TestResultPage extends Component {
                                 onChangeDate={this.onHandleDate} />
                         </View>) : (<></>)}
                 </View>
-                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 25 }}>
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, paddingVertical: 20, justifyContent: "flex-end" }}>
                     <ContinueRequiredButton
                         onPress={() => { this.onContinuePress() }}
                         disabled={this.disableButton()} />

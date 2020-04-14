@@ -92,7 +92,9 @@ export default class PersonalAddressPage extends Component {
                         value={entity.number}
                         onChangeText={this.onHandleNumber}
                     />
-                    <ContinueRequiredButton disabled={this.disableButton()} onPress={this.onContinueButtonClick} />
+                    <View style={{ paddingVertical: 20 }}>
+                        <ContinueRequiredButton disabled={this.disableButton()} onPress={this.onContinueButtonClick} />
+                    </View>
                 </ScrollView>
                 <ProgressTracking amount={7} position={3} />
             </SafeAreaView >)

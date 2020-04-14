@@ -3,6 +3,7 @@ import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { NavigationEvents } from 'react-navigation';
+import moment from 'moment';
 
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
@@ -11,6 +12,7 @@ import { ContinueRequiredButton } from '../../../components/custombutton';
 import { SimpleTextInput, PasswordTextInput, CPFTextInput, SimpleDateTextInput, PhoneTextInput } from '../../../components/customtextinput';
 import { CustomDropDown } from '../../../components/customdropdown';
 import { emailValidator, cpfValidor, cepValidator, phoneValidator, cellphoneValidator } from '../../../services/formvalidatorservice';
+
 
 export default class PersonalDataPage extends Component {
     static navigationOptions = {
@@ -41,6 +43,8 @@ export default class PersonalDataPage extends Component {
             { key: "1", text: "Sim" },
             { key: "0", text: "Não" },
         ],
+        minimumDateBirthday: new Date(1900, 1, 1),
+        maximumDateBirthday: moment(moment().format("DD/MM/YYYY"), 'DD/MM/YYYY').add(-13, "years").toDate()
     };
     initialize(props) {
         if (!props)
@@ -54,7 +58,7 @@ export default class PersonalDataPage extends Component {
         this.setState({ entity });
     };
     render = () => {
-        let { entity, showBirthday, genreList, pregnancyList } = this.state;
+        let { entity, showBirthday, genreList, pregnancyList, minimumDateBirthday, maximumDateBirthday } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
@@ -77,6 +81,8 @@ export default class PersonalDataPage extends Component {
                         value={entity.cpf}
                         onChangeText={this.onHandleCPF} />
                     <SimpleDateTextInput
+                        minimumDate={minimumDateBirthday}
+                        maximumDate={maximumDateBirthday}
                         label="Data de Nascimento"
                         value={entity.birthday}
                         onPress={this.onPressBirthdayPicker}
@@ -107,9 +113,11 @@ export default class PersonalDataPage extends Component {
                         label="Senha"
                         value={entity.password}
                         onChangeText={this.onHandlePassword} />
-                    <ContinueRequiredButton
-                        disabled={this.disableButton()}
-                        onPress={this.onContinueButtonClick} />
+                    <View style={{ paddingVertical: 20 }}>
+                        <ContinueRequiredButton
+                            disabled={this.disableButton()}
+                            onPress={this.onContinueButtonClick} />
+                    </View>
                 </ScrollView>
                 <ProgressTracking amount={7} position={2} />
             </SafeAreaView >)

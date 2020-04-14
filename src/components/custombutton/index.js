@@ -125,7 +125,6 @@ export const DisclaimerButton = ({ onPress }) => (
 const styles = StyleSheet.create({
     buttonContainer: {
         width: "100%",
-        marginVertical: 30
     },
     continueButtonContainer: {
         width: "100%",
