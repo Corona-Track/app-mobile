@@ -14,7 +14,7 @@ export default class SplashPage extends Component {
             //Verify user session
             const resetAction = StackActions.reset({
                 index: 0,
-                actions: [NavigationActions.navigate({ routeName: 'Login' })]
+                actions: [NavigationActions.navigate({ routeName: 'Disclaimer' })]
             });
             this.props.navigation.dispatch(resetAction);
         }, 2000);

@@ -15,6 +15,11 @@ import MedicinesPage from '../pages/createaccount/medicines';
 import FinishUncontaminatedPage from '../pages/createaccount/finishuncontaminated';
 import AlreadyHadCoronavirusTestPage from '../pages/createaccount/alreadyhadcoronavirustest';
 import TestResultPage from '../pages/createaccount/testresult';
+import FinishContaminatedPage from '../pages/createaccount/finishcontaminated';
+import FirstDisclaimerPage from '../pages/disclaimer/firstdisclaimer';
+import SecondDisclaimerPage from '../pages/disclaimer/seconddisclaimer';
+import ThirdDisclaimerPage from '../pages/disclaimer/thirddisclaimer';
+import DisclaimerPage from '../pages/disclaimer';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator({
@@ -25,6 +30,8 @@ const ApplicationStackNavigator = createStackNavigator({
 //App external routes
 const AuthenticationStackNavigator = createStackNavigator(
     {
+        Disclaimer: { screen: DisclaimerPage },
+
         TakePhoto: { screen: TakePhotoPage },
         TookPhoto: { screen: TookPhotoPage },
         PersonalData: { screen: PersonalDataPage },
@@ -37,13 +44,13 @@ const AuthenticationStackNavigator = createStackNavigator(
         Comorbidities: { screen: ComorbiditiesPage },
         // Medicines: { screen: MedicinesPage },
         FinishUncontaminated: { screen: FinishUncontaminatedPage },
-
+        FinishContaminated: { screen: FinishContaminatedPage },
 
         Login: { screen: LoginPage },
         Splash: { screen: SplashPage },
     },
     {
-        initialRouteName: 'Login'
+        initialRouteName: 'Splash'
     }
 );
 

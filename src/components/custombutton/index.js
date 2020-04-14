@@ -76,6 +76,30 @@ export const UncontaminatedAnswerLaterButton = ({ onPress }) => (
     </View>
 );
 
+export const ContaminatedAnswerLaterButton = ({ onPress }) => (
+    <View style={styles.uncontaminatedButtonContainer}>
+        <Button
+            style={styles.uncontaminatedAnswerButtonContainer}
+            contentStyle={styles.continueButton}
+            mode="outlined"
+            color={Colors.secondaryColor}
+            labelStyle={styles.uncontaminatedAnswerLaterButtonText}
+            onPress={onPress}>RESPONDER DEPOIS</Button>
+    </View>
+);
+
+export const ContaminatedAnswerNowButton = ({ onPress }) => (
+    <View style={styles.uncontaminatedButtonContainer}>
+        <Button
+            style={styles.contaminatedAnswerButtonContainer}
+            contentStyle={styles.continueButton}
+            mode="contained"
+            color={Colors.secondaryColor}
+            labelStyle={styles.contaminatedAnswerNowButtonText}
+            onPress={onPress}>RESPONDER AGORA</Button>
+    </View>
+);
+
 export const DoubtButton = ({ onPress, label }) => (
     <TouchableOpacity onPress={onPress} style={styles.skipContainer}>
         <Button
@@ -84,6 +108,18 @@ export const DoubtButton = ({ onPress, label }) => (
             labelStyle={styles.skipButtonText}
             uppercase={false}>{label}</Button>
     </TouchableOpacity>
+);
+
+export const DisclaimerButton = ({ onPress }) => (
+    <View style={styles.disclaimerButtonContainer}>
+        <Button
+            style={styles.disclaimerButtonContainer}
+            contentStyle={styles.continueButton}
+            mode="outlined"
+            color={Colors.secondaryColor}
+            labelStyle={styles.disclaimerButtonText}
+            onPress={onPress}>CONTINUAR</Button>
+    </View>
 );
 
 const styles = StyleSheet.create({
@@ -163,20 +199,53 @@ const styles = StyleSheet.create({
         width: "100%",
         marginVertical: 10
     },
-
     uncontaminatedAnswerNowButtonText: {
         color: Colors.buttonPrimaryColor,
         fontFamily: Colors.fontFamily
     },
-    uncontaminatedAnswerLaterButtonText: {
-        color: Colors.secondaryColor,
+
+    contaminatedButtonContainer: {
+        width: "100%",
+        marginVertical: 10
+    },
+    contaminatedAnswerNowButtonText: {
+        color: Colors.contaminatedColor,
         fontFamily: Colors.fontFamily
     },
-
-   uncontaminatedAnswerButtonContainer: {
+    contaminatedAnswerButtonContainer: {
         width: "100%",
         borderRadius: 50,
         borderColor: Colors.secondaryColor,
         borderWidth: 1
     },
+
+    uncontaminatedAnswerLaterButtonText: {
+        color: Colors.secondaryColor,
+        fontFamily: Colors.fontFamily
+    },
+
+    uncontaminatedAnswerButtonContainer: {
+        width: "100%",
+        borderRadius: 50,
+        borderColor: Colors.secondaryColor,
+        borderWidth: 1
+    },
+
+    disclaimerButtonContainer: {
+        width: "100%",
+        marginVertical: 10
+    },
+
+    disclaimerButtonText: {
+        color: Colors.secondaryColor,
+        fontFamily: Colors.fontFamily
+    },
+
+    disclaimerButtonContainer: {
+        width: "100%",
+        borderRadius: 50,
+        borderColor: Colors.secondaryColor,
+        borderWidth: 1
+    },
+
 });
