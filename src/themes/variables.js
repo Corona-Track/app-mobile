@@ -11,6 +11,7 @@ export const Colors = {
     defaultIconColor: "#BDBDBD",
     navigatorIconColor: "#EA5B2D",
     questionCenterIconColor: "#E9F7F9",
+    notMainText: "#828282"
     searchBackgroundColor: "#e5e5e5",
     searchIconColor: "#E0E0E0",
     contaminatedColor: "#DE4D4D"

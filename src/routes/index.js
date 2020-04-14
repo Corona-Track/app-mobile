@@ -16,6 +16,15 @@ import FinishUncontaminatedPage from '../pages/createaccount/finishuncontaminate
 import AlreadyHadCoronavirusTestPage from '../pages/createaccount/alreadyhadcoronavirustest';
 import TestResultPage from '../pages/createaccount/testresult';
 import FinishContaminatedPage from '../pages/createaccount/finishcontaminated';
+import AlreadyHadFluVaccinePage from '../pages/preventive-analysis/already-had-flu-vaccine';
+import WeekLeaveHomeTimesPage from '../pages/preventive-analysis/week-leave-home-times';
+import SocialDistancePage from '../pages/preventive-analysis/social-distance';
+import ProtectionUsagePage from '../pages/preventive-analysis/protection-usage';
+import TouchingPrecautionPage from '../pages/preventive-analysis/touching-precaution';
+import HomePrecautionsPage from '../pages/preventive-analysis/home-precautions';
+import OutsideWorkPage from '../pages/preventive-analysis/outside-work';
+import RelativesLeavingHomePage from '../pages/preventive-analysis/relatives-leaving-home';
+import RelativesHomePrecautionsPage from '../pages/preventive-analysis/relatives-home-precautions';
 import FirstDisclaimerPage from '../pages/disclaimer/firstdisclaimer';
 import SecondDisclaimerPage from '../pages/disclaimer/seconddisclaimer';
 import ThirdDisclaimerPage from '../pages/disclaimer/thirddisclaimer';
@@ -48,6 +57,15 @@ const AuthenticationStackNavigator = createStackNavigator(
 
         Login: { screen: LoginPage },
         Splash: { screen: SplashPage },
+        AlreadyHadFluVaccine: { screen: AlreadyHadFluVaccinePage },
+        WeekLeaveHomeTimes: { screen: WeekLeaveHomeTimesPage },
+        SocialDistance: { screen: SocialDistancePage },
+        ProtectionUsage: { screen: ProtectionUsagePage },
+        TouchingPrecaution: { screen: TouchingPrecautionPage },
+        HomePrecautions: { screen: HomePrecautionsPage },
+        OutsideWork: { screen: OutsideWorkPage },
+        RelativesLeavingHome: { screen: RelativesLeavingHomePage },
+        RelativesHomePrecautions: { screen: RelativesHomePrecautionsPage }
     },
     {
         initialRouteName: 'Splash'
