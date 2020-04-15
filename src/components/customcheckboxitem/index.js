@@ -104,6 +104,20 @@ export const RadioButtonItem = ({ identifier, isChecked, onClickCheck }) => {
     </View>)
 };
 
+export const SubCheckboxItem = ({ identifier, isChecked, onClickCheck }) => {
+    let checked = isChecked(identifier);
+    return (<View key={identifier} style={styles.subCheckboxContainer}>
+        <View style={styles.firstColumn}>
+            <CheckBox
+                checkedColor={Colors.navigatorIconColor}
+                containerStyle={styles.checkbox}
+                checked={checked}
+                onPress={() => { onClickCheck(identifier) }} />
+        </View>
+        <View><Text style={styles.checkboxText}>{identifier}</Text></View>
+    </View>)
+};
+
 const ExpandIcon = ({ onPress, isExpanded }) => {
     return (<TouchableOpacity onPress={onPress}>
         <Icon
@@ -158,7 +172,7 @@ const styles = StyleSheet.create({
     radioButtonContainer: {
         backgroundColor: "transparent",
         borderWidth: 0,
-        height: 30
+        height: "100%",
     },
     radioButtonText: {
         fontWeight: "normal",
@@ -170,6 +184,13 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         width: "100%",
         fontFamily: Colors.fontFamily,
-        height: 40,
+        height: "100%",
+    },
+    subCheckboxContainer: {
+        flex: 1,
+        flexDirection: "row",
+        width: "100%",
+        marginVertical: 10,
+        fontFamily: Colors.fontFamily,
     },
 });

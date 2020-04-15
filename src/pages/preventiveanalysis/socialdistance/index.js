@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { Header } from 'react-native-elements';
+import { NavigationEvents } from 'react-navigation';
+import PropTypes from 'prop-types';
+
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
-import PropTypes from 'prop-types';
-import { ContinueButton } from '../../../components/custombutton';
-import { NavigationEvents } from 'react-navigation';
+import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
+import { RadioButtonItem, SubCheckboxItem } from '../../../components/customcheckboxitem';
 
 export default class SocialDistancePage extends Component {
     static navigationOptions = {
@@ -18,90 +20,81 @@ export default class SocialDistancePage extends Component {
     }
     state = {
         entity: {
-            keepDistance: false,
-            reasonToNotKeepDistance: ""
+            keepDistance: null,
+            reasonToNotKeepDistanceSelected: []
         },
+        reasonsList: [
+            { identifier: "Mantenho sempre 2 mestros de distância de outras pessoas" },
+            { identifier: "Nem sempre mantenho distância porque:" },
+        ],
+        reasonsToNotKeepDistanceList: [
+            { identifier: "Esqueço" },
+            { identifier: "Por causa do meu trabalho" },
+            { identifier: "Por causa do transporte público (trens e ônibus)" },
+        ],
     };
     initialize(props) {
         if (!props)
             return;
+        let { navigation } = props;
         let { entity } = this.state;
-        this.setState({ entity });
+        let previousEntity = navigation.getParam('entity', null);
+        if (!previousEntity)
+            return;
+        let converted = {
+            ...entity,
+            ...previousEntity
+        };
+        this.setState({ entity: converted });
     };
     render = () => {
-        let { entity } = this.state;
-        return (
-            <SafeAreaView style={styles.container}>
-                <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
-                <View style={{ width: "100%" }}>
-                    <IntroText />
-                    <RadioButton.Group
-                        onValueChange={value => this.setState({ value })}
-                        value={this.state.entity.keepDistance}
-                    >
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{color:Colors.notMainText}}>Mantenho sempre 2 metros de distância de outras pessoas</Text>
-                            <RadioButton
-                                value={true}
-                                color={Colors.navigatorIconColor}
-                            />
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{color:Colors.notMainText}}>Nem sempre mantenho distância porque:</Text>
-                            <RadioButton 
-                                value={false}
-                                color={Colors.navigatorIconColor}
-                            />
-                        </View>
-                    </RadioButton.Group>
+        let { entity, reasonsList, reasonsToNotKeepDistanceList } = this.state;
+        return (<SafeAreaView style={styles.container}>
+            <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
+            <View style={{ flex: 0.75, width: "100%" }}>
+                <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                    <Header
+                        backgroundColor={Colors.secondaryColor}
+                        leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                        centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+                        rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
                 </View>
-                <View>
-                    <RadioButton.Group
-                        disabled={!this.state.entity.keepDistance}
-                        onValueChange={value => this.setState({ value })}
-                        value={this.state.entity.reasonToNotKeepDistance}
-                    >
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value="forgot"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Esqueço</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton 
-                                value="work"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Por causa do meu trabalho</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton 
-                                value="publicTransport"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Por causa do transporte público (trens e ônibus)</Text>
-                        </View>
-                    </RadioButton.Group>
+                <IntroText />
+                <View style={styles.radioButtonItemContainer}>
+                    {reasonsList.map(reason => {
+                        return (
+                            <View style={{ height: 70, marginHorizontal: 20 }}>
+                                <RadioButtonItem
+                                    identifier={reason.identifier}
+                                    isChecked={this.isCheckedRadio}
+                                    onClickCheck={this.onClickRadio} />
+                            </View>
+                        );
+                    })}
                 </View>
-                <View>
-                    <ContinueButton onPress={this.onContinueButtonClick} />
-                    <TouchableOpacity onPress={this.skipScreen} style={styles.skipContainer}>
-                        <Button
-                            mode="text"
-                            color={Colors.defaultIconColor}
-                            labelStyle={styles.skipButtonText}
-                            uppercase={false}>Responder Depois</Button>
-                    </TouchableOpacity>
-                    <ProgressTracking amount={10} position={3} />
-                </View>
-            </SafeAreaView >)
+                {entity && entity.keepDistance && entity.keepDistance === "Nem sempre mantenho distância porque:" && <View style={styles.radioButtonItemContainer}>
+                    {reasonsToNotKeepDistanceList.map(reason => {
+                        return (
+                            <View style={{ height: 40, marginHorizontal: 60 }}>
+                                <SubCheckboxItem
+                                    identifier={reason.identifier}
+                                    isChecked={this.isChecked}
+                                    onClickCheck={this.onClickCheck} />
+                            </View>
+                        );
+                    })}
+                </View>}
+            </View>
+            <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
+                <ContinueRequiredButton
+                    onPress={() => { this.onContinueButtonClick() }}
+                    disabled={this.disableButton()} />
+                {!entity.contaminated ?
+                    (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
+                    : (<></>)}
+            </View>
+            <ProgressTracking amount={10} position={2} />
+        </SafeAreaView>)
     };
     onLeftButtonPress = () => {
         this.props.navigation.pop();
@@ -112,6 +105,45 @@ export default class SocialDistancePage extends Component {
     onContinueButtonClick = () => {
         let { entity } = this.state;
         this.props.navigation.navigate("ProtectionUsage", { entity: entity });
+    };
+
+    disableButton = () => {
+        let { entity } = this.state;
+        return !(entity.keepDistance);
+    };
+    isCheckedRadio = identifier => {
+        let { entity } = this.state;
+        return entity.keepDistance && entity.keepDistance === identifier;
+    };
+    onClickRadio = identifier => {
+        let { entity } = this.state;
+        entity.keepDistance = identifier;
+        entity.reasonToNotKeepDistanceSelected = [];
+        this.setState({ entity });
+    };
+    onDoubtPress = () => {
+        let { entity } = this.state;
+        entity.reasonToNotKeepDistanceSelected = [];
+        entity.keepDistance = null;
+        this.setState({ entity });
+        this.props.navigation.navigate("ProtectionUsage", { entity: entity });
+    };
+
+    isChecked = (identifier) => {
+        let { entity } = this.state;
+        let currentPosition = entity.reasonToNotKeepDistanceSelected.findIndex(selected => selected === identifier);
+        return currentPosition > -1;
+    };
+    onClickCheck = (identifier) => {
+        let { entity } = this.state;
+        let currentPosition = entity.reasonToNotKeepDistanceSelected.findIndex(selected => selected === identifier);
+        if (currentPosition === -1) {
+            entity.reasonToNotKeepDistanceSelected.push(identifier);
+            this.setState({ entity });
+            return;
+        }
+        entity.reasonToNotKeepDistanceSelected.splice(currentPosition, 1);
+        this.setState({ entity });
     };
 };
 
@@ -130,7 +162,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20,
         paddingBottom: 15
     },
     textContainer: {
@@ -181,5 +212,8 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 0,
         bottom: 0
-    }
+    },
+    radioButtonItemContainer: {
+
+    },
 });
