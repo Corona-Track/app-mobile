@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { Header } from 'react-native-elements';
+import { NavigationEvents } from 'react-navigation';
+import PropTypes from 'prop-types';
+
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
-import PropTypes from 'prop-types';
-import { ContinueButton } from '../../../components/custombutton';
-import { NavigationEvents } from 'react-navigation';
+import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
+import { RadioButtonItem, SubCheckboxItem } from '../../../components/customcheckboxitem';
 
 export default class ProtectionUsagePage extends Component {
     static navigationOptions = {
@@ -18,8 +20,15 @@ export default class ProtectionUsagePage extends Component {
     }
     state = {
         entity: {
-            protectionAnswer: "",
+            protectionAnswer: [],
         },
+        situationsList: [
+            { identifier: "Uso sempre proteção de rosto (garrafa PET ou algo parecido)" },
+            { identifier: "Uso sempre máscara (cirúrgica ou caseira):" },
+        ],
+        negativeSituationsList: [
+            { identifier: "Não constumo usar nenhum tipo de proteção ao sair de casa" },
+        ]
     };
     initialize(props) {
         if (!props)
@@ -28,57 +37,55 @@ export default class ProtectionUsagePage extends Component {
         this.setState({ entity });
     };
     render = () => {
-        let { entity } = this.state;
+        let { entity, situationsList, negativeSituationsList } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
-                <View style={{ width: "100%" }}>
+                <View style={{ flex: 0.75, width: "100%" }}>
+                    <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                        <Header
+                            backgroundColor={Colors.secondaryColor}
+                            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+                            rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
+                    </View>
                     <IntroText />
-                    <RadioButton.Group
-                        onValueChange={value => this.setState({ value })}
-                        value={this.state.entity.protectionAnswer}
-                    >
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{color:Colors.notMainText}}>Uso sempre proteção de rosto (garrafa pet ou similares)</Text>
-                            <RadioButton
-                                value="facial_protection"
-                                color={Colors.navigatorIconColor}
-                            />
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{color:Colors.notMainText}}>Uso sempre máscara (cirúrgica ou caseira)</Text>
-                            <RadioButton 
-                                value="cirurgical_mask"
-                                color={Colors.navigatorIconColor}
-                            />
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={{color:Colors.notMainText}}>Não costumo usar nenhum tipo de proteção ao sair de casa</Text>
-                            <RadioButton 
-                                value="no_protection"
-                                color={Colors.navigatorIconColor}
-                            />
-                        </View>
-                    </RadioButton.Group>
+                    <View style={styles.radioButtonItemContainer}>
+                        {situationsList.map(situation => {
+                            return (
+                                <View style={{ height: 40, marginVertical: 10, marginLeft: 20, marginRight: 60 }}>
+                                    <SubCheckboxItem
+                                        identifier={situation.identifier}
+                                        isChecked={this.isChecked}
+                                        onClickCheck={this.onClickCheck} />
+                                </View>
+                            );
+                        })}
+                    </View>
+                    <View style={styles.radioButtonItemContainer}>
+                        {negativeSituationsList.map(situation => {
+                            return (
+                                <View style={{ height: 70, paddingLeft: 10, paddingRight: 40 }}>
+                                    <RadioButtonItem
+                                        identifier={situation.identifier}
+                                        isChecked={this.isChecked}
+                                        onClickCheck={this.onClickRadio} />
+                                </View>
+                            );
+                        })}
+                    </View>
                 </View>
-                <View>
-                    <ContinueButton onPress={this.onContinueButtonClick} />
-                    <TouchableOpacity onPress={this.skipScreen} style={styles.skipContainer}>
-                        <Button
-                            mode="text"
-                            color={Colors.defaultIconColor}
-                            labelStyle={styles.skipButtonText}
-                            uppercase={false}>Responder Depois</Button>
-                    </TouchableOpacity>
-                    <ProgressTracking amount={10} position={4} />
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
+                    <ContinueRequiredButton
+                        onPress={() => { this.onContinueButtonClick() }}
+                        disabled={this.disableButton()} />
+                    {!entity.contaminated ?
+                        (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
+                        : (<></>)}
                 </View>
-            </SafeAreaView >)
+                <ProgressTracking amount={10} position={5} />
+            </SafeAreaView>
+        )
     };
     onLeftButtonPress = () => {
         this.props.navigation.pop();
@@ -89,6 +96,44 @@ export default class ProtectionUsagePage extends Component {
     onContinueButtonClick = () => {
         let { entity } = this.state;
         this.props.navigation.navigate("TouchingPrecaution", { entity: entity });
+    };
+
+    disableButton = () => {
+        let { entity } = this.state;
+        return !(entity.protectionAnswer && entity.protectionAnswer.length > 0);
+    };
+    onClickRadio = identifier => {
+        let { entity } = this.state;
+        entity.protectionAnswer = [];
+        entity.protectionAnswer.push(identifier);
+        this.setState({ entity });
+    };
+    onDoubtPress = () => {
+        let { entity } = this.state;
+        entity.protectionAnswer = [];
+        this.setState({ entity });
+        this.props.navigation.navigate("TouchingPrecaution", { entity: entity });
+    };
+    isChecked = (identifier) => {
+        let { entity } = this.state;
+        let currentPosition = entity.protectionAnswer.findIndex(selected => selected === identifier);
+        return currentPosition > -1;
+    };
+    onClickCheck = (identifier) => {
+        let { entity } = this.state;
+        let currentPositionRadio = entity.protectionAnswer.findIndex(selected => selected === "Não constumo usar nenhum tipo de proteção ao sair de casa");
+        if (currentPositionRadio > -1) {
+            entity.protectionAnswer.splice(currentPositionRadio, 1);
+        }
+
+        let currentPosition = entity.protectionAnswer.findIndex(selected => selected === identifier);
+        if (currentPosition === -1) {
+            entity.protectionAnswer.push(identifier);
+            this.setState({ entity });
+            return;
+        }
+        entity.protectionAnswer.splice(currentPosition, 1);
+        this.setState({ entity });
     };
 };
 
@@ -107,7 +152,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20,
         paddingBottom: 15
     },
     textContainer: {
@@ -158,5 +202,8 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 0,
         bottom: 0
-    }
+    },
+    radioButtonItemContainer: {
+
+    },
 });

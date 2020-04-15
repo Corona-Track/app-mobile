@@ -63,7 +63,7 @@ export default class SocialDistancePage extends Component {
                 <View style={styles.radioButtonItemContainer}>
                     {reasonsList.map(reason => {
                         return (
-                            <View style={{ height: 70, marginHorizontal: 20 }}>
+                            <View style={{ height: 70, marginLeft: 20, marginRight: 40 }}>
                                 <RadioButtonItem
                                     identifier={reason.identifier}
                                     isChecked={this.isCheckedRadio}

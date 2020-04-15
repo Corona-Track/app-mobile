@@ -152,9 +152,11 @@ const styles = StyleSheet.create({
     checkboxText: {
         fontFamily: Colors.fontFamily,
         fontWeight: "normal",
+        fontSize: 14,
+        color: Colors.placeholderTextColor
     },
     firstColumn: {
-        width: 40
+        width: 44
     },
     secondColumn: {
         width: "88%",
@@ -177,7 +179,8 @@ const styles = StyleSheet.create({
     radioButtonText: {
         fontWeight: "normal",
         fontFamily: Colors.fontFamily,
-        fontSize: 16
+        fontSize: 14,
+        color: Colors.placeholderTextColor
     },
     radioButtonBox: {
         flex: 1,
