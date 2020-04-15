@@ -65,7 +65,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
                     <View style={styles.radioButtonItemContainer}>
                         {reasonsList.map(reason => {
                             return (
-                                <View style={{ marginVertical: 2, height: 40, paddingHorizontal: 18 }}>
+                                <View style={{ marginVertical: 2, height: 40, paddingHorizontal: 20 }}>
                                     <RadioButtonItem
                                         identifier={reason.identifier}
                                         isChecked={this.isChecked}

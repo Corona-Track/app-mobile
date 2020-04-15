@@ -8,7 +8,7 @@ import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
 import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
-import { RadioButtonItem, SubCheckboxItem } from '../../../components/customcheckboxitem';
+import { RadioButtonItem, CheckboxItem } from '../../../components/customcheckboxitem';
 
 export default class ProtectionUsagePage extends Component {
     static navigationOptions = {
@@ -33,8 +33,16 @@ export default class ProtectionUsagePage extends Component {
     initialize(props) {
         if (!props)
             return;
+        let { navigation } = props;
         let { entity } = this.state;
-        this.setState({ entity });
+        let previousEntity = navigation.getParam('entity', null);
+        if (!previousEntity)
+            return;
+        let converted = {
+            ...entity,
+            ...previousEntity
+        };
+        this.setState({ entity: converted });
     };
     render = () => {
         let { entity, situationsList, negativeSituationsList } = this.state;
@@ -53,8 +61,8 @@ export default class ProtectionUsagePage extends Component {
                     <View style={styles.radioButtonItemContainer}>
                         {situationsList.map(situation => {
                             return (
-                                <View style={{ height: 40, marginVertical: 10, marginLeft: 20, marginRight: 60 }}>
-                                    <SubCheckboxItem
+                                <View style={{ height: 40, marginVertical: 10, paddingHorizontal: 20 }}>
+                                    <CheckboxItem
                                         identifier={situation.identifier}
                                         isChecked={this.isChecked}
                                         onClickCheck={this.onClickCheck} />
@@ -65,7 +73,7 @@ export default class ProtectionUsagePage extends Component {
                     <View style={styles.radioButtonItemContainer}>
                         {negativeSituationsList.map(situation => {
                             return (
-                                <View style={{ height: 70, paddingLeft: 10, paddingRight: 40 }}>
+                                <View style={{ height: 70, marginVertical: 10, paddingHorizontal: 10 }}>
                                     <RadioButtonItem
                                         identifier={situation.identifier}
                                         isChecked={this.isChecked}
@@ -204,6 +212,5 @@ const styles = StyleSheet.create({
         bottom: 0
     },
     radioButtonItemContainer: {
-
     },
 });

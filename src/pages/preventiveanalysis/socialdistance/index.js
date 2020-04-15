@@ -63,7 +63,7 @@ export default class SocialDistancePage extends Component {
                 <View style={styles.radioButtonItemContainer}>
                     {reasonsList.map(reason => {
                         return (
-                            <View style={{ height: 70, marginLeft: 20, marginRight: 40 }}>
+                            <View style={{ height: 70, paddingHorizontal: 20 }}>
                                 <RadioButtonItem
                                     identifier={reason.identifier}
                                     isChecked={this.isCheckedRadio}
@@ -75,7 +75,7 @@ export default class SocialDistancePage extends Component {
                 {entity && entity.keepDistance && entity.keepDistance === "Nem sempre mantenho distância porque:" && <View style={styles.radioButtonItemContainer}>
                     {reasonsToNotKeepDistanceList.map(reason => {
                         return (
-                            <View style={{ height: 40, marginHorizontal: 60 }}>
+                            <View style={{ height: 40, marginHorizontal: 50 }}>
                                 <SubCheckboxItem
                                     identifier={reason.identifier}
                                     isChecked={this.isChecked}

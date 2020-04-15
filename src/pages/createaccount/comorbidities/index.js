@@ -72,10 +72,12 @@ export default class ComorbiditiesPage extends Component {
                     <View style={styles.checkboxItemContainer}>
                         {comorbiditiesList.map(comorbidity => {
                             return (
-                                <CheckboxItem
-                                    identifier={comorbidity.identifier}
-                                    isChecked={this.isChecked}
-                                    onClickCheck={comorbidity.identifier === "Nenhuma das opções" ? this.onClickNoneOfOptions : this.onClickCheck} />
+                                <View style={{ height: 40, paddingHorizontal: 20 }}>
+                                    <CheckboxItem
+                                        identifier={comorbidity.identifier}
+                                        isChecked={this.isChecked}
+                                        onClickCheck={comorbidity.identifier === "Nenhuma das opções" ? this.onClickNoneOfOptions : this.onClickCheck} />
+                                </View>
                             );
                         })}
                     </View>

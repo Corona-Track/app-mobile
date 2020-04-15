@@ -141,9 +141,9 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         width: "100%",
+        maxWidth: 275,
         marginVertical: 10,
         fontFamily: Colors.fontFamily,
-        marginHorizontal: 20
     },
     checkbox: {
         padding: 0,
@@ -153,7 +153,8 @@ const styles = StyleSheet.create({
         fontFamily: Colors.fontFamily,
         fontWeight: "normal",
         fontSize: 14,
-        color: Colors.placeholderTextColor
+        color: Colors.placeholderTextColor,
+        maxWidth: 275,
     },
     firstColumn: {
         width: 44
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
     checkboxWithPlusContainer: {
         flex: 1,
         flexDirection: "row",
-        width: "100%",
+        maxWidth: 275,
         marginVertical: 10,
         fontFamily: Colors.fontFamily,
         paddingHorizontal: 20
@@ -185,14 +186,14 @@ const styles = StyleSheet.create({
     radioButtonBox: {
         flex: 1,
         flexDirection: "row",
-        width: "100%",
+        maxWidth: 275,
         fontFamily: Colors.fontFamily,
         height: "100%",
     },
     subCheckboxContainer: {
         flex: 1,
         flexDirection: "row",
-        width: "100%",
+        maxWidth: 200,
         marginVertical: 10,
         fontFamily: Colors.fontFamily,
     },
