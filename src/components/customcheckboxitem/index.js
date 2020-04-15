@@ -99,7 +99,8 @@ export const RadioButtonItem = ({ identifier, isChecked, onClickCheck }) => {
             uncheckedIcon='circle-o'
             checkedColor={Colors.navigatorIconColor}
             checked={checked}
-            onPress={() => onClickCheck(identifier)} />
+            onPress={() =>
+                onClickCheck(identifier)} />
     </View>)
 };
 
@@ -156,7 +157,8 @@ const styles = StyleSheet.create({
     },
     radioButtonContainer: {
         backgroundColor: "transparent",
-        borderWidth: 0
+        borderWidth: 0,
+        height: 30
     },
     radioButtonText: {
         fontWeight: "normal",
@@ -167,7 +169,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         width: "100%",
-        marginVertical: 10,
         fontFamily: Colors.fontFamily,
+        height: 40,
     },
 });

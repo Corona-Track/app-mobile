@@ -64,7 +64,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
                     <View style={styles.radioButtonItemContainer}>
                         {reasonsList.map(reason => {
                             return (
-                                <View style={{ marginTop: 10 }}>
+                                <View style={{ marginVertical: 2, height: 40 }}>
                                     <RadioButtonItem
                                         identifier={reason.identifier}
                                         isChecked={this.isChecked}
@@ -101,7 +101,8 @@ export default class WeekLeaveHomeTimesPage extends Component {
         this.props.navigation.navigate("SocialDistance", { entity: entity });
     };
     disableButton = () => {
-        return false;
+        let { entity } = this.state;
+        return !(entity.reasonToLeaveHome);
     };
     onChangeSlider = value => {
         let { entity } = this.state;
@@ -247,5 +248,6 @@ const styles = StyleSheet.create({
     },
     radioButtonItemContainer: {
         marginVertical: 10,
+        paddingLeft: 5
     },
 });

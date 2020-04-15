@@ -36,8 +36,8 @@ const ApplicationStackNavigator = createStackNavigator({
 //App external routes
 const AuthenticationStackNavigator = createStackNavigator(
     {
+        //Create Account
         Disclaimer: { screen: DisclaimerPage },
-
         TakePhoto: { screen: TakePhotoPage },
         TookPhoto: { screen: TookPhotoPage },
         PersonalData: { screen: PersonalDataPage },
@@ -48,12 +48,14 @@ const AuthenticationStackNavigator = createStackNavigator(
         SomeoneDiagnosed: { screen: SomeoneDiagnosedPage },
         SomeoneSuspicious: { screen: SomeoneSuspiciousPage },
         Comorbidities: { screen: ComorbiditiesPage },
-        // Medicines: { screen: MedicinesPage },
         FinishUncontaminated: { screen: FinishUncontaminatedPage },
         FinishContaminated: { screen: FinishContaminatedPage },
 
         Login: { screen: LoginPage },
         Splash: { screen: SplashPage },
+
+        //Preventive Profile
+        //Medicines: { screen: MedicinesPage },
         AlreadyHadFluVaccine: { screen: AlreadyHadFluVaccinePage },
         WeekLeaveHomeTimes: { screen: WeekLeaveHomeTimesPage },
         SocialDistance: { screen: SocialDistancePage },
@@ -65,7 +67,7 @@ const AuthenticationStackNavigator = createStackNavigator(
         RelativesHomePrecautions: { screen: RelativesHomePrecautionsPage }
     },
     {
-        initialRouteName: 'AlreadyHadFluVaccine'
+        initialRouteName: 'WeekLeaveHomeTimes'
     }
 );
 
