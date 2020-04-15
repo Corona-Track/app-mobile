@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { Header } from 'react-native-elements';
+import { NavigationEvents } from 'react-navigation';
+import PropTypes from 'prop-types';
+
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
-import PropTypes from 'prop-types';
-import { ContinueButton } from '../../../components/custombutton';
-import { NavigationEvents } from 'react-navigation';
+import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
+import { RadioButtonItem } from '../../../components/customcheckboxitem';
 
 export default class OutsideWorkPage extends Component {
     static navigationOptions = {
@@ -18,8 +20,13 @@ export default class OutsideWorkPage extends Component {
     }
     state = {
         entity: {
-            outsideWorkAnswer: ""
+            outsideWorkAnswer: null
         },
+        outsideWorkList: [
+            { identifier: "Em um ambiente fechado com mais pessoas, como clínica, escritório, loja ou motorista de aplicativo" },
+            { identifier: "Em galpões com pé direito duplo com poucas pessoas" },
+            { identifier: "Ao ar livre" }
+        ]
     };
     initialize(props) {
         if (!props)
@@ -36,57 +43,46 @@ export default class OutsideWorkPage extends Component {
         this.setState({ entity: converted });
     };
     render = () => {
-        let { entity } = this.state;
+        let { entity, outsideWorkList } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
-                <View style={{ width: "100%" }}>
+                <View style={{ flex: 0.75, width: "100%" }}>
+                    <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                        <Header
+                            backgroundColor={Colors.secondaryColor}
+                            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+                            rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
+                    </View>
                     <IntroText />
-                    <RadioButton.Group
-                        onValueChange={value => this.setState({ value })}
-                        value={this.state.entity.outsideWorkAnswer}
-                    >
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value="closed_environment"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Em ambiente fechado com mais pessoas, como clínica, escritório, loja ou motorista de aplicativo</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton 
-                                value="sheds"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Em galpões com pé direito duplo com poucas pessoas</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton 
-                                value="open_air"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Ao ar livre</Text>
-                        </View>
-                    </RadioButton.Group>
+                    <View style={styles.radioButtonItemContainer}>
+                        {outsideWorkList.map(work => {
+                            let customHeight = 40;
+                            if (work.identifier === "Em um ambiente fechado com mais pessoas, como clínica, escritório, loja ou motorista de aplicativo")
+                                customHeight = 70;
+                            return (
+                                <View style={{ height: customHeight, marginTop: 15, paddingHorizontal: 10 }}>
+                                    <RadioButtonItem
+                                        identifier={work.identifier}
+                                        isChecked={this.isChecked}
+                                        onClickCheck={this.onClickRadio} />
+                                </View>
+                            );
+                        })}
+                    </View>
                 </View>
-                <View>
-                    <ContinueButton onPress={this.onContinueButtonClick} />
-                    <TouchableOpacity onPress={this.skipScreen} style={styles.skipContainer}>
-                        <Button
-                            mode="text"
-                            color={Colors.defaultIconColor}
-                            labelStyle={styles.skipButtonText}
-                            uppercase={false}>Responder Depois</Button>
-                    </TouchableOpacity>
-                    <ProgressTracking amount={10} position={7} />
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
+                    <ContinueRequiredButton
+                        onPress={() => { this.onContinueButtonClick() }}
+                        disabled={this.disableButton()} />
+                    {!entity.contaminated ?
+                        (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
+                        : (<></>)}
                 </View>
-            </SafeAreaView >)
+                <ProgressTracking amount={10} position={5} />
+            </SafeAreaView>
+        )
     };
     onLeftButtonPress = () => {
         this.props.navigation.pop();
@@ -98,13 +94,32 @@ export default class OutsideWorkPage extends Component {
         let { entity } = this.state;
         this.props.navigation.navigate("RelativesLeavingHome", { entity: entity });
     };
+
+    disableButton = () => {
+        let { entity } = this.state;
+        return !(entity.outsideWorkAnswer);
+    };
+    onClickRadio = identifier => {
+        let { entity } = this.state;
+        entity.outsideWorkAnswer = identifier;
+        this.setState({ entity });
+    };
+    onDoubtPress = () => {
+        let { entity } = this.state;
+        entity.outsideWorkAnswer = null;
+        this.setState({ entity });
+        this.props.navigation.navigate("RelativesLeavingHome", { entity: entity });
+    };
+    isChecked = (identifier) => {
+        let { entity } = this.state;
+        return entity.outsideWorkAnswer === identifier;
+    };
 };
 
 const IntroText = () => (
     <View style={styles.textContainer}>
-        <Text style={[styles.simpleText]}>Ao sair de casa, e <Text style={styles.boldText}>encosto em</Text></Text>
-        <Text style={[styles.simpleText]}><Text style={styles.boldText}>algo provavelmente infectado,</Text></Text>
-        <Text style={[styles.simpleText]}>como maçaneta, corrimão, etc:</Text>
+        <Text style={[styles.simpleText]}><Text style={styles.boldText}>Trabalho fora de casa</Text></Text>
+        <Text style={[styles.simpleText]}>durante a pandemia:</Text>
     </View>
 );
 
@@ -116,7 +131,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20,
         paddingBottom: 15
     },
     textContainer: {
