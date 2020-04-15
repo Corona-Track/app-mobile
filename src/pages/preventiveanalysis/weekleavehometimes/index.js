@@ -20,8 +20,8 @@ export default class WeekLeaveHomeTimesPage extends Component {
     }
     state = {
         entity: {
-            daysAWeek: 0,
-            reasonToLeaveHome: ""
+            daysAWeek: 1,
+            reasonToLeaveHome: null
         },
         reasonsList: [
             { identifier: "Trabalhar" },
@@ -57,6 +57,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
                             rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
                     </View>
                     <IntroText />
+                    <SliderText />
                     <CustomSlider
                         value={entity.daysAWeek}
                         onValueChange={this.onChangeSlider} />
@@ -79,7 +80,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
                         onPress={() => { this.onContinueButtonClick() }}
                         disabled={this.disableButton()} />
                     {!entity.contaminated ?
-                        (<DoubtButton onPress={() => { this.onAnswerButtonPress("doubt") }} label="Responder depois" />)
+                        (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
                         : (<></>)}
                 </View>
                 <ProgressTracking amount={10} position={2} />
@@ -118,6 +119,13 @@ export default class WeekLeaveHomeTimesPage extends Component {
         entity.reasonToLeaveHome = identifier;
         this.setState({ entity });
     };
+    onDoubtPress = () => {
+        let { entity } = this.state;
+        entity.daysAWeek = null;
+        entity.reasonToLeaveHome = null;
+        this.setState({ entity });
+        this.props.navigation.navigate("WeekLeaveHomeTimes", { entity: entity });
+    };
 };
 
 const IntroText = () => (
@@ -134,8 +142,14 @@ const SecondaryText = () => (
     </View>
 );
 
+const SliderText = () => (
+    <View style={[styles.textContainer, { paddingTop: 20 }]}>
+        <Text style={[styles.simpleText, { fontSize: 16, color: Colors.placeholderTextColor }]}>Número de dias da semana:</Text>
+    </View>
+);
+
 const CustomSlider = ({ value, onValueChange }) => {
-    return (<View style={{ paddingHorizontal: 20, height: 50, flexDirection: "column" }}>
+    return (<View style={{ paddingHorizontal: 40, height: 50, flexDirection: "column" }}>
         <Slider
             value={value}
             onValueChange={onValueChange}
@@ -171,7 +185,7 @@ const styles = StyleSheet.create({
     textContainer: {
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 20
+        marginTop: 5
     },
     simpleText: {
         fontFamily: Colors.fontFamily,
@@ -248,6 +262,6 @@ const styles = StyleSheet.create({
     },
     radioButtonItemContainer: {
         marginVertical: 10,
-        paddingLeft: 5
+        paddingLeft: 3
     },
 });

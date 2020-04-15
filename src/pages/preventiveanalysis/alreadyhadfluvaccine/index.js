@@ -23,7 +23,7 @@ export default class AlreadyHadFluVaccinePage extends Component {
             hadFluVaccine: null,
         },
     };
-     initialize(props) {
+    initialize(props) {
         if (!props)
             return;
         let { navigation } = props;
@@ -63,7 +63,7 @@ export default class AlreadyHadFluVaccinePage extends Component {
                         onPress={() => { this.onContinueButtonClick() }}
                         disabled={this.disableButton()} />
                     {!entity.contaminated ?
-                        (<DoubtButton onPress={() => { this.onAnswerButtonPress("doubt") }} label="Responder depois" />)
+                        (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
                         : (<></>)}
                 </View>
                 <ProgressTracking amount={10} position={2} />
@@ -87,6 +87,12 @@ export default class AlreadyHadFluVaccinePage extends Component {
     disableButton = () => {
         let { entity } = this.state;
         return !(entity.hadFluVaccine !== null);
+    };
+    onDoubtPress = () => {
+        let { entity } = this.state;
+        entity.hadFluVaccine = null;
+        this.setState({ entity });
+        this.props.navigation.navigate("WeekLeaveHomeTimes", { entity: entity });
     };
 };
 
