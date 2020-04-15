@@ -16,7 +16,7 @@ export default class SocialDistancePage extends Component {
         gestureEnabled: false,
     };
     static propTypes = {
-        photo: PropTypes.any,
+        entity: PropTypes.object,
     }
     state = {
         entity: {

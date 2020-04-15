@@ -16,7 +16,7 @@ export default class ProtectionUsagePage extends Component {
         gestureEnabled: false,
     };
     static propTypes = {
-        photo: PropTypes.any,
+        entity: PropTypes.object,
     }
     state = {
         entity: {
@@ -173,43 +173,6 @@ const styles = StyleSheet.create({
     },
     boldText: {
         fontWeight: "bold"
-    },
-    buttonContainer: {
-        width: "100%",
-        marginVertical: 30
-    },
-    continueButtonContainer: {
-        width: "100%",
-        borderRadius: 50,
-    },
-    continueButton: {
-        height: 50,
-        width: "100%",
-        textAlign: "center"
-    },
-    continueButtonText: {
-        color: Colors.primaryTextColor,
-        fontFamily: Colors.fontFamily
-    },
-    skipButtonContainer: {
-        width: "100%",
-        borderRadius: 50,
-    },
-    skipButton: {
-        height: 50,
-        width: "100%",
-        textAlign: "center"
-    },
-    skipButtonText: {
-        fontFamily: Colors.fontFamily
-    },
-    skipContainer: {
-        marginTop: 5,
-    },
-    photoIcon: {
-        position: "absolute",
-        right: 0,
-        bottom: 0
     },
     radioButtonItemContainer: {
     },

@@ -136,6 +136,50 @@ const PlusIcon = ({ onPressPlus }) => {
     </TouchableOpacity>);
 };
 
+export const RadioButtonTripleItem = ({ value, onPressCheckbox, firstTitle, secondTitle, thirdTitle }) => {
+    return (<View style={styles.tripleCheckboxContainer}>
+        <View style={{ width: "33.3%" }}>
+            <CheckBox
+                containerStyle={[styles.radioButtonContainer]}
+                textStyle={styles.radioButtonText}
+                center
+                title={firstTitle}
+                checkedIcon='dot-circle-o'
+                uncheckedIcon='circle-o'
+                checkedColor={Colors.navigatorIconColor}
+                checked={value === firstTitle}
+                onPress={() => onPressCheckbox(firstTitle)}
+            />
+        </View>
+        <View style={{ width: "33.3%" }}>
+            <CheckBox
+                containerStyle={styles.radioButtonContainer}
+                textStyle={styles.radioButtonText}
+                center
+                title={secondTitle}
+                checkedIcon='dot-circle-o'
+                uncheckedIcon='circle-o'
+                checkedColor={Colors.navigatorIconColor}
+                checked={value === secondTitle}
+                onPress={() => onPressCheckbox(secondTitle)}
+            />
+        </View>
+        <View style={{ width: "33.3%" }}>
+            <CheckBox
+                containerStyle={styles.radioButtonContainer}
+                textStyle={styles.radioButtonText}
+                center
+                title={thirdTitle}
+                checkedIcon='dot-circle-o'
+                uncheckedIcon='circle-o'
+                checkedColor={Colors.navigatorIconColor}
+                checked={value === thirdTitle}
+                onPress={() => onPressCheckbox(thirdTitle)}
+            />
+        </View>
+    </View>)
+};
+
 const styles = StyleSheet.create({
     checkboxContainer: {
         flex: 1,
@@ -194,6 +238,13 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         maxWidth: 200,
+        marginVertical: 10,
+        fontFamily: Colors.fontFamily,
+    },
+    tripleCheckboxContainer: {
+        flex: 1,
+        flexDirection: "row",
+        width: "100%",
         marginVertical: 10,
         fontFamily: Colors.fontFamily,
     },

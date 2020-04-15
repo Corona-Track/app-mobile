@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { Header } from 'react-native-elements';
+import { NavigationEvents } from 'react-navigation';
+import PropTypes from 'prop-types';
+
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
-import PropTypes from 'prop-types';
-import { ContinueButton } from '../../../components/custombutton';
-import { NavigationEvents } from 'react-navigation';
+import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
+import { RadioButtonTripleItem, CheckboxItem } from '../../../components/customcheckboxitem';
 
 export default class HomePrecautionsPage extends Component {
     static navigationOptions = {
@@ -14,60 +16,84 @@ export default class HomePrecautionsPage extends Component {
         gestureEnabled: false,
     };
     static propTypes = {
-        photo: PropTypes.any,
+        entity: PropTypes.object,
     }
     state = {
         entity: {
-            showerAnswer: "",
-            changeClothesAnswer: "",
-            containerCleanupAnswer: ""
+            showerAnswer: null,
+            changeClothesAnswer: null,
+            containerCleanupAnswer: null
         },
     };
     initialize(props) {
         if (!props)
             return;
+        let { navigation } = props;
         let { entity } = this.state;
-        this.setState({ entity });
+        let previousEntity = navigation.getParam('entity', null);
+        if (!previousEntity)
+            return;
+        let converted = {
+            ...entity,
+            ...previousEntity
+        };
+        this.setState({ entity: converted });
     };
     render = () => {
         let { entity } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
-                <View style={{ width: "100%" }}>
+                <View style={{ flex: 0.75, width: "100%" }}>
+                    <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                        <Header
+                            backgroundColor={Colors.secondaryColor}
+                            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+                            rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
+                    </View>
                     <IntroText />
-                    
-                    <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Tomo banho ou lavo as mãos e braços assim que entro em casa</Text>
-                        <ShowerRadioBox />
-                    </View>
-                    <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Troco a roupa e guardo-as em local separado</Text>
-                        <ChangeClothesRadioBox />
-                    </View>
-                    <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Quando trago vasilhames, limpo-os com água sanitária ou similar</Text>
-                        <ContainerCleanupRadioBox />
+                    <View style={styles.radioButtonItemContainer}>
+                        <ShowerText />
+                        <View style={{ height: 50 }}>
+                            <RadioButtonTripleItem
+                                value={entity.showerAnswer}
+                                onPressCheckbox={this.onChangeShowerAnswer}
+                                firstTitle={"Sempre"}
+                                secondTitle={"Às vezes"}
+                                thirdTitle={"Nunca"} />
+                        </View>
+                        <ChangeClothesText />
+                        <View style={{ height: 50 }}>
+                            <RadioButtonTripleItem
+                                value={entity.changeClothesAnswer}
+                                onPressCheckbox={this.onChangeClothesAnswer}
+                                firstTitle={"Sempre"}
+                                secondTitle={"Às vezes"}
+                                thirdTitle={"Nunca"} />
+                        </View>
+                        <ContainerCleanupText />
+                        <View style={{ height: 50 }}>
+                            <RadioButtonTripleItem
+                                value={entity.containerCleanupAnswer}
+                                onPressCheckbox={this.onChangeCleanupAnswer}
+                                firstTitle={"Sempre"}
+                                secondTitle={"Às vezes"}
+                                thirdTitle={"Nunca"} />
+                        </View>
                     </View>
                 </View>
-                <View>
-                    <ContinueButton onPress={this.onContinueButtonClick} />
-                    <TouchableOpacity onPress={this.skipScreen} style={styles.skipContainer}>
-                        <Button
-                            mode="text"
-                            color={Colors.defaultIconColor}
-                            labelStyle={styles.skipButtonText}
-                            uppercase={false}>Responder Depois</Button>
-                    </TouchableOpacity>
-                    <ProgressTracking amount={10} position={6} />
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
+                    <ContinueRequiredButton
+                        onPress={() => { this.onContinueButtonClick() }}
+                        disabled={this.disableButton()} />
+                    {!entity.contaminated ?
+                        (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
+                        : (<></>)}
                 </View>
-            </SafeAreaView >)
+                <ProgressTracking amount={10} position={5} />
+            </SafeAreaView>
+        )
     };
     onLeftButtonPress = () => {
         this.props.navigation.pop();
@@ -79,6 +105,33 @@ export default class HomePrecautionsPage extends Component {
         let { entity } = this.state;
         this.props.navigation.navigate("OutsideWork", { entity: entity });
     };
+    disableButton = () => {
+        let { entity } = this.state;
+        return !(entity.showerAnswer && entity.changeClothesAnswer && entity.containerCleanupAnswer);
+    };
+    onDoubtPress = () => {
+        let { entity } = this.state;
+        entity.showerAnswer = null;
+        entity.changeClothesAnswer = null;
+        entity.containerCleanupAnswer = null;
+        this.setState({ entity });
+        this.props.navigation.navigate("OutsideWork", { entity: entity });
+    };
+    onChangeShowerAnswer = value => {
+        let { entity } = this.state;
+        entity.showerAnswer = value;
+        this.setState({ entity });
+    };
+    onChangeClothesAnswer = value => {
+        let { entity } = this.state;
+        entity.changeClothesAnswer = value;
+        this.setState({ entity });
+    };
+    onChangeCleanupAnswer = value => {
+        let { entity } = this.state;
+        entity.containerCleanupAnswer = value;
+        this.setState({ entity });
+    };
 };
 
 const IntroText = () => (
@@ -88,58 +141,26 @@ const IntroText = () => (
     </View>
 );
 
-const ShowerRadioBox = () => {
-    <RadioButton.Group
-        onValueChange={value => this.setState({ value })}
-        value={this.state.entity.showerAnswer}
-    >
-        <FrequencyOptionsBox />
-    </RadioButton.Group>
-}
-
-const ChangeClothesRadioBox = () => {
-    <RadioButton.Group
-        onValueChange={value => this.setState({ value })}
-        value={this.state.entity.changeClothesAnswer}
-    >
-        <FrequencyOptionsBox />
-    </RadioButton.Group>
-}
-
-const ContainerCleanupRadioBox = () => {
-    <RadioButton.Group
-        onValueChange={value => this.setState({ value })}
-        value={this.state.entity.containerCleanupAnswer}
-    >
-        <FrequencyOptionsBox />
-    </RadioButton.Group>
-}
-
-const FrequencyOptionsBox = () => {
-    <View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <RadioButton
-                value="always"
-                color={Colors.navigatorIconColor}
-            />
-                <Text style={{color:Colors.notMainText}}>Sempre</Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <RadioButton 
-                value="sometimes"
-                color={Colors.navigatorIconColor}
-            />
-            <Text style={{color:Colors.notMainText}}>As Vezes</Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <RadioButton 
-                value="never"
-                color={Colors.navigatorIconColor}
-            />
-            <Text style={{color:Colors.notMainText}}>Nunca</Text>
-        </View>
+const ShowerText = () => (
+    <View style={[styles.textContainer, { marginTop: 20 }]}>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>Tomo banho ou lavo mãos e</Text>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>branços assim que entro em casa</Text>
     </View>
-}
+);
+
+const ChangeClothesText = () => (
+    <View style={[styles.textContainer, { marginTop: 20 }]}>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>Troco a roupa e guardo-as</Text>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>em local separado</Text>
+    </View>
+);
+
+const ContainerCleanupText = () => (
+    <View style={[styles.textContainer, { marginTop: 20 }]}>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>Quando trago vasilhames, limpo-os</Text>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>com água sanitária ousimilar</Text>
+    </View>
+);
 
 const styles = StyleSheet.create({
     container: {
@@ -149,13 +170,11 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20,
         paddingBottom: 15
     },
     textContainer: {
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 20
     },
     simpleText: {
         fontFamily: Colors.fontFamily,
@@ -164,41 +183,8 @@ const styles = StyleSheet.create({
     boldText: {
         fontWeight: "bold"
     },
-    buttonContainer: {
+    radioButtonItemContainer: {
         width: "100%",
-        marginVertical: 30
-    },
-    continueButtonContainer: {
-        width: "100%",
-        borderRadius: 50,
-    },
-    continueButton: {
-        height: 50,
-        width: "100%",
-        textAlign: "center"
-    },
-    continueButtonText: {
-        color: Colors.primaryTextColor,
-        fontFamily: Colors.fontFamily
-    },
-    skipButtonContainer: {
-        width: "100%",
-        borderRadius: 50,
-    },
-    skipButton: {
-        height: 50,
-        width: "100%",
-        textAlign: "center"
-    },
-    skipButtonText: {
-        fontFamily: Colors.fontFamily
-    },
-    skipContainer: {
-        marginTop: 5,
-    },
-    photoIcon: {
-        position: "absolute",
-        right: 0,
-        bottom: 0
+        height: 75,
     }
 });

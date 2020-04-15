@@ -67,7 +67,7 @@ const AuthenticationStackNavigator = createStackNavigator(
         RelativesHomePrecautions: { screen: RelativesHomePrecautionsPage }
     },
     {
-        initialRouteName: 'Login'
+        initialRouteName: 'HomePrecautions'
     }
 );
 

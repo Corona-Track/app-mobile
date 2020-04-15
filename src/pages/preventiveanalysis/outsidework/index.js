@@ -14,7 +14,7 @@ export default class OutsideWorkPage extends Component {
         gestureEnabled: false,
     };
     static propTypes = {
-        photo: PropTypes.any,
+        entity: PropTypes.object,
     }
     state = {
         entity: {
@@ -24,8 +24,16 @@ export default class OutsideWorkPage extends Component {
     initialize(props) {
         if (!props)
             return;
+        let { navigation } = props;
         let { entity } = this.state;
-        this.setState({ entity });
+        let previousEntity = navigation.getParam('entity', null);
+        if (!previousEntity)
+            return;
+        let converted = {
+            ...entity,
+            ...previousEntity
+        };
+        this.setState({ entity: converted });
     };
     render = () => {
         let { entity } = this.state;

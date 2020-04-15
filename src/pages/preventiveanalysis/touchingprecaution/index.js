@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { Header } from 'react-native-elements';
+import { NavigationEvents } from 'react-navigation';
+import PropTypes from 'prop-types';
+
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
-import PropTypes from 'prop-types';
-import { ContinueButton } from '../../../components/custombutton';
-import { NavigationEvents } from 'react-navigation';
+import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
+import { RadioButtonItem, CheckboxItem } from '../../../components/customcheckboxitem';
 
 export default class TouchingPrecautionPage extends Component {
     static navigationOptions = {
@@ -14,12 +16,18 @@ export default class TouchingPrecautionPage extends Component {
         gestureEnabled: false,
     };
     static propTypes = {
-        photo: PropTypes.any,
+        entity: PropTypes.object,
     }
     state = {
         entity: {
-            touchingPrecaution: ""
+            touchingPrecaution: null
         },
+        contaminationList: [
+            { identifier: "Uso luva ou papel descartável para não contaminar as mãos" },
+            { identifier: "Contamino as mãos e limpo em seguida com álcool gel" },
+            { identifier: "Contamino as mãos e fico inquieto enquanto não as lavo" },
+            { identifier: "Contamino as mãos e limpo quando posso" },
+        ]
     };
     initialize(props) {
         if (!props)
@@ -36,64 +44,43 @@ export default class TouchingPrecautionPage extends Component {
         this.setState({ entity: converted });
     };
     render = () => {
-        let { entity } = this.state;
+        let { entity, contaminationList } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
-                <View style={{ width: "100%" }}>
+                <View style={{ flex: 0.75, width: "100%" }}>
+                    <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                        <Header
+                            backgroundColor={Colors.secondaryColor}
+                            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+                            rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
+                    </View>
                     <IntroText />
-                    <RadioButton.Group
-                        onValueChange={value => this.setState({ value })}
-                        value={this.state.entity.touchingPrecaution}
-                    >
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton
-                                value="gloves_or_paper"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Uso luva ou papel descartável para não contaminar as mãos</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton 
-                                value="infected_alcohol"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Contamino as mãos e limpo em seguida com álcool em gel</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton 
-                                value="infected_restless"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Contamino as mãos e fico inquieto enquanto não as lavo</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <RadioButton 
-                                value="infected_clean_when_can"
-                                color={Colors.navigatorIconColor}
-                            />
-                            <Text style={{color:Colors.notMainText}}>Contamino as mãos e limpo quando posso</Text>
-                        </View>
-                    </RadioButton.Group>
+                    <View style={styles.radioButtonItemContainer}>
+                        {contaminationList.map(situation => {
+                            return (
+                                <View style={{ height: 70 }}>
+                                    <RadioButtonItem
+                                        identifier={situation.identifier}
+                                        isChecked={this.isChecked}
+                                        onClickCheck={this.onClickRadio} />
+                                </View>
+                            );
+                        })}
+                    </View>
                 </View>
-                <View>
-                    <ContinueButton onPress={this.onContinueButtonClick} />
-                    <TouchableOpacity onPress={this.skipScreen} style={styles.skipContainer}>
-                        <Button
-                            mode="text"
-                            color={Colors.defaultIconColor}
-                            labelStyle={styles.skipButtonText}
-                            uppercase={false}>Responder Depois</Button>
-                    </TouchableOpacity>
-                    <ProgressTracking amount={10} position={5} />
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
+                    <ContinueRequiredButton
+                        onPress={() => { this.onContinueButtonClick() }}
+                        disabled={this.disableButton()} />
+                    {!entity.contaminated ?
+                        (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
+                        : (<></>)}
                 </View>
-            </SafeAreaView >)
+                <ProgressTracking amount={10} position={5} />
+            </SafeAreaView>
+        )
     };
     onLeftButtonPress = () => {
         this.props.navigation.pop();
@@ -104,6 +91,26 @@ export default class TouchingPrecautionPage extends Component {
     onContinueButtonClick = () => {
         let { entity } = this.state;
         this.props.navigation.navigate("HomePrecautions", { entity: entity });
+    };
+
+    disableButton = () => {
+        let { entity } = this.state;
+        return !(entity.touchingPrecaution && entity.touchingPrecaution.length > 0);
+    };
+    onClickRadio = identifier => {
+        let { entity } = this.state;
+        entity.touchingPrecaution = identifier;
+        this.setState({ entity });
+    };
+    onDoubtPress = () => {
+        let { entity } = this.state;
+        entity.touchingPrecaution = null;
+        this.setState({ entity });
+        this.props.navigation.navigate("HomePrecautions", { entity: entity });
+    };
+    isChecked = (identifier) => {
+        let { entity } = this.state;
+        return entity.touchingPrecaution === identifier;
     };
 };
 
@@ -123,7 +130,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20,
         paddingBottom: 15
     },
     textContainer: {
@@ -174,5 +180,9 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 0,
         bottom: 0
-    }
+    },
+    radioButtonItemContainer: {
+        marginTop: 10,
+        paddingHorizontal: 20,
+    },
 });
