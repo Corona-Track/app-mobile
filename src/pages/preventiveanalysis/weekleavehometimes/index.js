@@ -83,7 +83,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
                         (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
                         : (<></>)}
                 </View>
-                <ProgressTracking amount={10} position={2} />
+                <ProgressTracking amount={10} position={3} />
             </SafeAreaView >)
     };
     onHandleDaysAWeek = daysAWeek => {

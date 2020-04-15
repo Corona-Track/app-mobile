@@ -93,7 +93,7 @@ export default class SocialDistancePage extends Component {
                     (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
                     : (<></>)}
             </View>
-            <ProgressTracking amount={10} position={2} />
+            <ProgressTracking amount={10} position={4} />
         </SafeAreaView>)
     };
     onLeftButtonPress = () => {
@@ -106,7 +106,6 @@ export default class SocialDistancePage extends Component {
         let { entity } = this.state;
         this.props.navigation.navigate("ProtectionUsage", { entity: entity });
     };
-
     disableButton = () => {
         let { entity } = this.state;
         return !(entity.keepDistance);
@@ -128,7 +127,6 @@ export default class SocialDistancePage extends Component {
         this.setState({ entity });
         this.props.navigation.navigate("ProtectionUsage", { entity: entity });
     };
-
     isChecked = (identifier) => {
         let { entity } = this.state;
         let currentPosition = entity.reasonToNotKeepDistanceSelected.findIndex(selected => selected === identifier);
