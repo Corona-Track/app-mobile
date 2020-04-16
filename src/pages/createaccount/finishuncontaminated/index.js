@@ -3,7 +3,7 @@ import { View, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-na
 import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PropTypes from 'prop-types';
-import { NavigationEvents } from 'react-navigation';
+import { NavigationEvents, StackActions, NavigationActions } from 'react-navigation';
 
 import { Colors } from '../../../themes/variables';
 import { UncontaminatedAnswerNowButton, UncontaminatedAnswerLaterButton } from '../../../components/custombutton';
@@ -67,7 +67,16 @@ export default class FinishUncontaminatedPage extends Component {
             name: entity.name,
             photo: entity.photo
         };
-        this.props.navigation.navigate("Medicines", { entity: entityToPass });
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({
+                routeName: 'Medicines',
+                params: {
+                    entity: entityToPass
+                },
+            })]
+        });
+        this.props.navigation.dispatch(resetAction);
     };
 };
 

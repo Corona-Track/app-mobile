@@ -40,6 +40,9 @@ export default class MedicinesPage extends Component {
         };
         this.setState({ entity: converted });
     };
+    componentDidMount = () => {
+        this.initialize(this.props);
+    };
     render = () => {
         let { entity, medicinesList } = this.state;
         return (
