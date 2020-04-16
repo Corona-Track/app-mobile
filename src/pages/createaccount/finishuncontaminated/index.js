@@ -52,7 +52,7 @@ export default class FinishUncontaminatedPage extends Component {
                     < IntroText userName={entity.name} />
                 </View>
                 <View style={{ flex: 0.25, width: "100%" }}>
-                    <UncontaminatedAnswerNowButton onPress={() => { }} />
+                    <UncontaminatedAnswerNowButton onPress={() => { this.onAnswerNowButtonPress() }} />
                     <UncontaminatedAnswerLaterButton onPress={() => { }} />
                 </View>
             </SafeAreaView >
@@ -61,10 +61,13 @@ export default class FinishUncontaminatedPage extends Component {
     onLeftButtonPress = () => {
         this.props.navigation.pop();
     };
-    onAnswerButtonPress = answer => {
+    onAnswerNowButtonPress = () => {
         let { entity } = this.state;
-        entity.someoneSuspicious = answer;
-        this.props.navigation.navigate("Comorbidities", { entity: entity });
+        let entityToPass = {
+            name: entity.name,
+            photo: entity.photo
+        };
+        this.props.navigation.navigate("Medicines", { entity: entityToPass });
     };
 };
 

@@ -78,7 +78,7 @@ export default class MedicinesPage extends Component {
                         (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
                         : (<></>)}
                 </View>
-                <ProgressTracking amount={7} position={6} />
+                <ProgressTracking amount={10} position={1} />
             </SafeAreaView >
         )
     };
