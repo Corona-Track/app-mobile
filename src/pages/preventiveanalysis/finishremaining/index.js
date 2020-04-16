@@ -41,7 +41,6 @@ export default class FinishRemainingPage extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <CloseButton onPress={() => { }} />
                 <View style={{ flex: 0.8, justifyContent: "center", flexDirection: "column", width: "100%", paddingTop: 60 }}>
                     {entity.photo ? (<View style={styles.avatarContainer}>
                         <Avatar
@@ -79,12 +78,6 @@ const IntroText = ({ userName }) => {
         <Text style={[styles.simpleText]}>ao seu perfil para finalizá-lo.</Text>
 
     </View>)
-};
-
-const CloseButton = ({ onPress }) => {
-    return (<TouchableOpacity style={styles.rightComponent} onPress={onPress} >
-        <Icon name="close" size={32} color={Colors.secondaryColor} />
-    </TouchableOpacity>)
 };
 
 const styles = StyleSheet.create({
