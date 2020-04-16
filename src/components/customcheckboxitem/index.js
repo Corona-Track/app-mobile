@@ -46,7 +46,7 @@ export const CheckboxItemWithExpand = ({
     onPressExpand,
     isExpanded }) => {
     let checked = isChecked(identifier);
-    return (<View style={styles.checkboxWithPlusContainer}>
+    return (<View style={styles.checkboxWithExpandContainer}>
         <View style={styles.firstColumn}>
             <CheckBox
                 checkedColor={Colors.navigatorIconColor}
@@ -55,7 +55,7 @@ export const CheckboxItemWithExpand = ({
                 onPress={() => { onClickCheck(identifier) }} />
         </View>
         <View style={styles.secondColumn}>
-            <Text style={styles.checkboxText}>{identifier}</Text>
+            <Text style={styles.expandCheckboxText}>{identifier}</Text>
             <ExpandIcon onPress={() => { onPressExpand(identifier) }} isExpanded={isExpanded} />
         </View>
     </View>)
@@ -122,7 +122,7 @@ const ExpandIcon = ({ onPress, isExpanded }) => {
     return (<TouchableOpacity onPress={onPress}>
         <Icon
             name={isExpanded ? "chevron-up" : "chevron-down"}
-            size={30}
+            size={26}
             color={Colors.navigatorIconColor} />
     </TouchableOpacity>);
 };
@@ -235,6 +235,14 @@ const styles = StyleSheet.create({
         color: Colors.placeholderTextColor,
         maxWidth: 275,
     },
+    expandCheckboxText: {
+        fontFamily: Colors.fontFamily,
+        fontWeight: "normal",
+        fontSize: 14,
+        color: Colors.placeholderTextColor,
+        maxWidth: 275,
+        justifyContent: "center"
+    },
     firstColumn: {
         width: 44
     },
@@ -248,6 +256,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         maxWidth: 275,
         marginVertical: 10,
+        fontFamily: Colors.fontFamily,
+        paddingHorizontal: 20
+    },
+    checkboxWithExpandContainer: {
+        flex: 1,
+        flexDirection: "row",
         fontFamily: Colors.fontFamily,
         paddingHorizontal: 20
     },

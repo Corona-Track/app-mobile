@@ -1,5 +1,8 @@
 import { createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+
+import DisclaimerPage from '../pages/disclaimer';
+
 import HomePage from '../pages/home';
 import SplashPage from '../pages/splash';
 import LoginPage from '../pages/login';
@@ -11,11 +14,12 @@ import AlreadyHadCoronavirusPage from '../pages/createaccount/alreadyhadcoronavi
 import SomeoneDiagnosedPage from '../pages/createaccount/someonediagnosed';
 import SomeoneSuspiciousPage from '../pages/createaccount/someonesuspicious';
 import ComorbiditiesPage from '../pages/createaccount/comorbidities';
-import MedicinesPage from '../pages/createaccount/medicines';
 import FinishUncontaminatedPage from '../pages/createaccount/finishuncontaminated';
 import AlreadyHadCoronavirusTestPage from '../pages/createaccount/alreadyhadcoronavirustest';
 import TestResultPage from '../pages/createaccount/testresult';
 import FinishContaminatedPage from '../pages/createaccount/finishcontaminated';
+
+import MedicinesPage from '../pages/preventiveanalysis/medicines';
 import AlreadyHadFluVaccinePage from '../pages/preventiveanalysis/alreadyhadfluvaccine';
 import WeekLeaveHomeTimesPage from '../pages/preventiveanalysis/weekleavehometimes';
 import SocialDistancePage from '../pages/preventiveanalysis/socialdistance';
@@ -25,7 +29,6 @@ import HomePrecautionsPage from '../pages/preventiveanalysis/homeprecautions';
 import OutsideWorkPage from '../pages/preventiveanalysis/outsidework';
 import RelativesLeavingHomePage from '../pages/preventiveanalysis/relativesleavinghome';
 import RelativesHomePrecautionsPage from '../pages/preventiveanalysis/relativeshomeprecautions';
-import DisclaimerPage from '../pages/disclaimer';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator({
@@ -55,7 +58,7 @@ const AuthenticationStackNavigator = createStackNavigator(
         Splash: { screen: SplashPage },
 
         //Preventive Profile
-        //Medicines: { screen: MedicinesPage },
+        Medicines: { screen: MedicinesPage },
         AlreadyHadFluVaccine: { screen: AlreadyHadFluVaccinePage },
         WeekLeaveHomeTimes: { screen: WeekLeaveHomeTimesPage },
         SocialDistance: { screen: SocialDistancePage },
@@ -67,7 +70,7 @@ const AuthenticationStackNavigator = createStackNavigator(
         RelativesHomePrecautions: { screen: RelativesHomePrecautionsPage }
     },
     {
-        initialRouteName: 'AlreadyHadFluVaccine'
+        initialRouteName: 'Medicines'
     }
 );
 
