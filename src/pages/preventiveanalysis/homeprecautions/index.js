@@ -8,7 +8,7 @@ import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
 import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
-import { RadioButtonTripleItem, CheckboxItem } from '../../../components/customcheckboxitem';
+import { RadioButtonTripleResizableItem } from '../../../components/customcheckboxitem';
 
 export default class HomePrecautionsPage extends Component {
     static navigationOptions = {
@@ -56,7 +56,7 @@ export default class HomePrecautionsPage extends Component {
                     <View style={styles.radioButtonItemContainer}>
                         <ShowerText />
                         <View style={{ height: 50 }}>
-                            <RadioButtonTripleItem
+                            <RadioButtonTripleResizableItem
                                 value={entity.showerAnswer}
                                 onPressCheckbox={this.onChangeShowerAnswer}
                                 firstTitle={"Sempre"}
@@ -65,7 +65,7 @@ export default class HomePrecautionsPage extends Component {
                         </View>
                         <ChangeClothesText />
                         <View style={{ height: 50 }}>
-                            <RadioButtonTripleItem
+                            <RadioButtonTripleResizableItem
                                 value={entity.changeClothesAnswer}
                                 onPressCheckbox={this.onChangeClothesAnswer}
                                 firstTitle={"Sempre"}
@@ -74,7 +74,7 @@ export default class HomePrecautionsPage extends Component {
                         </View>
                         <ContainerCleanupText />
                         <View style={{ height: 50 }}>
-                            <RadioButtonTripleItem
+                            <RadioButtonTripleResizableItem
                                 value={entity.containerCleanupAnswer}
                                 onPressCheckbox={this.onChangeCleanupAnswer}
                                 firstTitle={"Sempre"}
@@ -91,7 +91,7 @@ export default class HomePrecautionsPage extends Component {
                         (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
                         : (<></>)}
                 </View>
-                <ProgressTracking amount={10} position={5} />
+                <ProgressTracking amount={10} position={7} />
             </SafeAreaView>
         )
     };

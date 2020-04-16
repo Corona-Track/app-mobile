@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { Header } from 'react-native-elements';
+import { NavigationEvents } from 'react-navigation';
+import PropTypes from 'prop-types';
+
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
-import PropTypes from 'prop-types';
-import { ContinueButton } from '../../../components/custombutton';
-import { NavigationEvents } from 'react-navigation';
+import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
+import { RadioButtonTripleResizableItem, RadioButtonYesOrNoItem } from '../../../components/customcheckboxitem';
 
 export default class RelativesLeavingHomePage extends Component {
     static navigationOptions = {
@@ -19,8 +21,8 @@ export default class RelativesLeavingHomePage extends Component {
     state = {
         entity: {
             relativesLeavingHome: null,
-            howManyRelatives: "",
-            relativesLeavingTimes: "",
+            howManyRelatives: null,
+            relativesLeavingTimes: null,
         },
     };
     initialize(props) {
@@ -42,60 +44,52 @@ export default class RelativesLeavingHomePage extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
-                <View style={{ width: "100%" }}>
+                <View style={{ flex: 0.75, width: "100%" }}>
+                    <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                        <Header
+                            backgroundColor={Colors.secondaryColor}
+                            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+                            rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
+                    </View>
                     <IntroText />
-
-                    <View>
-                        <RadioButton.Group
-                            onValueChange={value => this.setState({ value })}
-                            value={this.state.entity.relativesLeavingHome}
-                        >
-                            <View style={{ width: "100%", flex: 1, flexDirection: 'row' }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <RadioButton
-                                        value={true}
-                                        color={Colors.navigatorIconColor}
-                                    />
-                                    <Text style={{color:Colors.notMainText}}>SIM</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <RadioButton 
-                                        value={false}
-                                        color={Colors.navigatorIconColor}
-                                    />
-                                    <Text style={{color:Colors.notMainText}}>NÃO</Text>
-                                </View>
-                            </View>
-                        </RadioButton.Group>
-                    </View>
-
-                    <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Quantas pessoas saem de casa?</Text>
-                        <HowManyPeopleLeaveBox />
-                    </View>
-                    <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Quantas vezes saem de casa por semana?</Text>
-                        <HowManyTimesPeopleLeaveBox />
+                    <View style={styles.radioButtonItemContainer}>
+                        <View style={{ alignSelf: "center", height: 50 }}>
+                            <RadioButtonYesOrNoItem
+                                value={entity.relativesLeavingHome}
+                                onPressCheckbox={this.onChangeRelativesLeavingHome} />
+                        </View>
+                        <PeopleOutsideHome />
+                        <View style={{ height: 50, justifyContent: "center" }}>
+                            <RadioButtonTripleResizableItem
+                                value={entity.howManyRelatives}
+                                onPressCheckbox={this.onChangeHowManyRelatives}
+                                firstTitle={"Uma"}
+                                secondTitle={"Duas"}
+                                thirdTitle={"Três ou mais"} />
+                        </View>
+                        <TimesOutsideHome />
+                        <View style={{ height: 50 }}>
+                            <RadioButtonTripleResizableItem
+                                value={entity.relativesLeavingTimes}
+                                onPressCheckbox={this.onChangeRelativesLeavingTimes}
+                                firstTitle={"Uma"}
+                                secondTitle={"Duas"}
+                                thirdTitle={"Três ou mais"} />
+                        </View>
                     </View>
                 </View>
-                <View>
-                    <ContinueButton onPress={this.onContinueButtonClick} />
-                    <TouchableOpacity onPress={this.skipScreen} style={styles.skipContainer}>
-                        <Button
-                            mode="text"
-                            color={Colors.defaultIconColor}
-                            labelStyle={styles.skipButtonText}
-                            uppercase={false}>Responder Depois</Button>
-                    </TouchableOpacity>
-                    <ProgressTracking amount={10} position={8} />
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
+                    <ContinueRequiredButton
+                        onPress={() => { this.onContinueButtonClick() }}
+                        disabled={this.disableButton()} />
+                    {!entity.contaminated ?
+                        (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
+                        : (<></>)}
                 </View>
-            </SafeAreaView >)
+                <ProgressTracking amount={10} position={9} />
+            </SafeAreaView>
+        )
     };
     onLeftButtonPress = () => {
         this.props.navigation.pop();
@@ -107,7 +101,49 @@ export default class RelativesLeavingHomePage extends Component {
         let { entity } = this.state;
         this.props.navigation.navigate("RelativesHomePrecautions", { entity: entity });
     };
+    disableButton = () => {
+        let { entity } = this.state;
+        return !(entity.relativesLeavingHome && entity.howManyRelatives && entity.relativesLeavingTimes);
+    };
+
+    onChangeRelativesLeavingHome = value => {
+        let { entity } = this.state;
+        entity.relativesLeavingHome = value;
+        this.setState({ entity });
+    };
+    onChangeHowManyRelatives = value => {
+        let { entity } = this.state;
+        entity.howManyRelatives = value;
+        this.setState({ entity });
+    };
+    onChangeRelativesLeavingTimes = value => {
+        let { entity } = this.state;
+        entity.relativesLeavingTimes = value;
+        this.setState({ entity });
+    };
+
+    onDoubtPress = () => {
+        let { entity } = this.state;
+        entity.relativesLeavingHome = null;
+        entity.howManyRelatives = null;
+        entity.relativesLeavingTimes = null;
+        this.setState({ entity });
+        this.props.navigation.navigate("RelativesHomePrecautions", { entity: entity });
+    };
 };
+
+const PeopleOutsideHome = () => (
+    <View style={[styles.textContainer, { marginTop: 20 }]}>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>Quantas pessoas saem de casa?</Text>
+    </View>
+);
+
+const TimesOutsideHome = () => (
+    <View style={[styles.textContainer, { marginTop: 20 }]}>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>Quantas vezes saem</Text>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>de cada por semana?</Text>
+    </View>
+);
 
 const IntroText = () => (
     <View style={styles.textContainer}>
@@ -117,51 +153,6 @@ const IntroText = () => (
     </View>
 );
 
-const HowManyPeopleLeaveBox = () => {
-    <RadioButton.Group
-        disabled={!this.state.entity.relativesLeavingHome}
-        onValueChange={value => this.setState({ value })}
-        value={this.state.entity.howManyRelatives}
-    >
-        <QuantityPeopleOptions />
-    </RadioButton.Group>
-}
-
-const HowManyTimesPeopleLeaveBox = () => {
-	<RadioButton.Group
-		disabled={!this.state.entity.relativesLeavingHome}
-		onValueChange={value => this.setState({ value })}
-		value={this.state.entity.relativesLeavingTimes}
-	>
-		<QuantityPeopleOptions />
-	</RadioButton.Group>
-}
-
-const QuantityPeopleOptions = () => {
-    <View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <RadioButton
-                value="one"
-                color={Colors.navigatorIconColor}
-            />
-                <Text style={{color:Colors.notMainText}}>Uma</Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <RadioButton 
-                value="two"
-                color={Colors.navigatorIconColor}
-            />
-                <Text style={{color:Colors.notMainText}}>Duas</Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <RadioButton 
-                value="three_or_more"
-                color={Colors.navigatorIconColor}
-            />
-                <Text style={{color:Colors.notMainText}}>Três ou mais</Text>
-        </View>
-    </View>
-}
 
 const styles = StyleSheet.create({
     container: {
@@ -171,7 +162,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20,
         paddingBottom: 15
     },
     textContainer: {
@@ -222,5 +212,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 0,
         bottom: 0
+    },
+    radioButtonItemContainer: {
     }
 });

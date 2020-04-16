@@ -180,6 +180,41 @@ export const RadioButtonTripleItem = ({ value, onPressCheckbox, firstTitle, seco
     </View>)
 };
 
+export const RadioButtonTripleResizableItem = ({ value, onPressCheckbox, firstTitle, secondTitle, thirdTitle }) => {
+    return (<View style={styles.tripleCheckboxContainer}>
+        <View style={styles.firstColumn}>
+            <CheckBox
+                checkedColor={Colors.navigatorIconColor}
+                containerStyle={styles.checkbox}
+                checkedIcon='dot-circle-o'
+                uncheckedIcon='circle-o'
+                checked={value === firstTitle}
+                onPress={() => onPressCheckbox(firstTitle)} />
+        </View>
+        <View style={{ justifyContent: "center" }}><Text style={styles.resizebleCheckboxText}>{firstTitle}</Text></View>
+        <View style={styles.firstColumn}>
+            <CheckBox
+                checkedColor={Colors.navigatorIconColor}
+                containerStyle={styles.checkbox}
+                checkedIcon='dot-circle-o'
+                uncheckedIcon='circle-o'
+                checked={value === secondTitle}
+                onPress={() => onPressCheckbox(secondTitle)} />
+        </View>
+        <View style={{ justifyContent: "center" }}><Text style={styles.resizebleCheckboxText}>{secondTitle}</Text></View>
+        <TouchableOpacity style={styles.firstColumn}>
+            <CheckBox
+                checkedColor={Colors.navigatorIconColor}
+                containerStyle={styles.checkbox}
+                checkedIcon='dot-circle-o'
+                uncheckedIcon='circle-o'
+                checked={value === thirdTitle}
+                onPress={() => onPressCheckbox(thirdTitle)} />
+        </TouchableOpacity>
+        <View style={{ justifyContent: "center" }}><Text style={styles.resizebleCheckboxText}>{thirdTitle}</Text></View>
+    </View>)
+};
+
 const styles = StyleSheet.create({
     checkboxContainer: {
         flex: 1,
@@ -247,5 +282,12 @@ const styles = StyleSheet.create({
         width: "100%",
         marginVertical: 10,
         fontFamily: Colors.fontFamily,
+        justifyContent: "center"
+    },
+    resizebleCheckboxText: {
+        fontFamily: Colors.fontFamily,
+        fontWeight: "normal",
+        fontSize: 14,
+        color: Colors.placeholderTextColor,
     },
 });

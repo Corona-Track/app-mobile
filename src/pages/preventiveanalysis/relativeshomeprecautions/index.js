@@ -73,7 +73,7 @@ export default class RelativesHomePrecautionsPage extends Component {
                             labelStyle={styles.skipButtonText}
                             uppercase={false}>Responder Depois</Button>
                     </TouchableOpacity>
-                    <ProgressTracking amount={11} position={9} />
+                    <ProgressTracking amount={10} position={10} />
                 </View>
             </SafeAreaView >)
     };

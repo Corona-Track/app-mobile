@@ -80,7 +80,7 @@ export default class OutsideWorkPage extends Component {
                         (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
                         : (<></>)}
                 </View>
-                <ProgressTracking amount={10} position={5} />
+                <ProgressTracking amount={10} position={8} />
             </SafeAreaView>
         )
     };
