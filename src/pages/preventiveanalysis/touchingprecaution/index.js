@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
 import { NavigationEvents } from 'react-navigation';
 import PropTypes from 'prop-types';
@@ -56,19 +56,21 @@ export default class TouchingPrecautionPage extends Component {
                             centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
                             rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
                     </View>
-                    <IntroText />
-                    <View style={styles.radioButtonItemContainer}>
-                        {contaminationList.map(situation => {
-                            return (
-                                <View style={{ height: 70 }}>
-                                    <RadioButtonItem
-                                        identifier={situation.identifier}
-                                        isChecked={this.isChecked}
-                                        onClickCheck={this.onClickRadio} />
-                                </View>
-                            );
-                        })}
-                    </View>
+                    <ScrollView>
+                        <IntroText />
+                        <View style={styles.radioButtonItemContainer}>
+                            {contaminationList.map(situation => {
+                                return (
+                                    <View style={{ height: 70 }}>
+                                        <RadioButtonItem
+                                            identifier={situation.identifier}
+                                            isChecked={this.isChecked}
+                                            onClickCheck={this.onClickRadio} />
+                                    </View>
+                                );
+                            })}
+                        </View>
+                    </ScrollView>
                 </View>
                 <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
                     <ContinueRequiredButton

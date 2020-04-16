@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
+import { NavigationEvents } from 'react-navigation';
+import PropTypes from 'prop-types';
+
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
-import PropTypes from 'prop-types';
-import { ContinueButton } from '../../../components/custombutton';
-import { NavigationEvents } from 'react-navigation';
+import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
+import { RadioButtonTripleResizableItem, RadioButtonYesOrNoItem } from '../../../components/customcheckboxitem';
 
 export default class RelativesHomePrecautionsPage extends Component {
     static navigationOptions = {
@@ -18,9 +20,9 @@ export default class RelativesHomePrecautionsPage extends Component {
     }
     state = {
         entity: {
-            relativesShowerAnswer: "",
-            relativesChangeClothesAnswer: "",
-            relativesContainerCleanupAnswer: ""
+            relativesShowerAnswer: null,
+            relativesChangeClothesAnswer: null,
+            relativesContainerCleanupAnswer: null
         },
     };
     initialize(props) {
@@ -42,40 +44,57 @@ export default class RelativesHomePrecautionsPage extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <Header
-                    backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={entity.photo} />}
-                    rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-                />
-                <View style={{ width: "100%" }}>
-                    <IntroText />
-                    
-                    <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Tomam banho ou lavam mãos e braços assim que entram em casa?</Text>
-                        <ShowerRadioBox />
+                <View style={{ flex: 0.75, width: "100%" }}>
+                    <View style={{ width: "100%", paddingHorizontal: 20 }}>
+                        <Header
+                            backgroundColor={Colors.secondaryColor}
+                            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+                            rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
                     </View>
-                    <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Trocam a roupa e guardam-nas em local separado</Text>
-                        <ChangeClothesRadioBox />
-                    </View>
-                    <View style={{alignItems: "center"}}>
-                        <Text style={{color:Colors.notMainText}}>Quando trazem vasilhames, limpam com água sanitária ou similar</Text>
-                        <ContainerCleanupRadioBox />
-                    </View>
+                    <ScrollView>
+                        <IntroText />
+                        <View style={styles.radioButtonItemContainer}>
+                            <HomeEnterText />
+                            <View style={{ height: 50, justifyContent: "center" }}>
+                                <RadioButtonTripleResizableItem
+                                    value={entity.relativesShowerAnswer}
+                                    onPressCheckbox={this.onChangeRelativesShowerAnswer}
+                                    firstTitle={"Uma"}
+                                    secondTitle={"Duas"}
+                                    thirdTitle={"Três ou mais"} />
+                            </View>
+                            <ChangeClothesText />
+                            <View style={{ height: 50, justifyContent: "center" }}>
+                                <RadioButtonTripleResizableItem
+                                    value={entity.relativesChangeClothesAnswer}
+                                    onPressCheckbox={this.onChangeRelativesChangeClothesAnswer}
+                                    firstTitle={"Uma"}
+                                    secondTitle={"Duas"}
+                                    thirdTitle={"Três ou mais"} />
+                            </View>
+                            <CleanPotText />
+                            <View style={{ height: 50 }}>
+                                <RadioButtonTripleResizableItem
+                                    value={entity.relativesContainerCleanupAnswer}
+                                    onPressCheckbox={this.onChangeRelativesContainerCleanupAnswer}
+                                    firstTitle={"Uma"}
+                                    secondTitle={"Duas"}
+                                    thirdTitle={"Três ou mais"} />
+                            </View>
+                        </View>
+                    </ScrollView>
                 </View>
-                <View>
-                    <ContinueButton onPress={this.onContinueButtonClick} />
-                    <TouchableOpacity onPress={this.skipScreen} style={styles.skipContainer}>
-                        <Button
-                            mode="text"
-                            color={Colors.defaultIconColor}
-                            labelStyle={styles.skipButtonText}
-                            uppercase={false}>Responder Depois</Button>
-                    </TouchableOpacity>
-                    <ProgressTracking amount={10} position={10} />
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
+                    <ContinueRequiredButton
+                        onPress={() => { this.onContinueButtonClick() }}
+                        disabled={this.disableButton()} />
+                    {!entity.contaminated ?
+                        (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
+                        : (<></>)}
                 </View>
-            </SafeAreaView >)
+                <ProgressTracking amount={10} position={9} />
+            </SafeAreaView>)
     };
     onLeftButtonPress = () => {
         this.props.navigation.pop();
@@ -83,9 +102,37 @@ export default class RelativesHomePrecautionsPage extends Component {
     onRightButtonPress = () => {
         this.props.navigation.pop();
     };
+
+    onDoubtPress = () => {
+        let { entity } = this.state;
+        entity.relativesShowerAnswer = null;
+        entity.relativesChangeClothesAnswer = null;
+        entity.relativesContainerCleanupAnswer = null;
+        this.setState({ entity });
+        this.props.navigation.navigate("", { entity: entity });
+    };
     onContinueButtonClick = () => {
         let { entity } = this.state;
         this.props.navigation.navigate("", { entity: entity });
+    };
+    disableButton = () => {
+        let { entity } = this.state;
+        return !(entity.relativesShowerAnswer && entity.relativesChangeClothesAnswer && entity.relativesContainerCleanupAnswer);
+    };
+    onChangeRelativesShowerAnswer = value => {
+        let { entity } = this.state;
+        entity.relativesShowerAnswer = value;
+        this.setState({ entity });
+    };
+    onChangeRelativesChangeClothesAnswer = value => {
+        let { entity } = this.state;
+        entity.relativesChangeClothesAnswer = value;
+        this.setState({ entity });
+    };
+    onChangeRelativesContainerCleanupAnswer = value => {
+        let { entity } = this.state;
+        entity.relativesContainerCleanupAnswer = value;
+        this.setState({ entity });
     };
 };
 
@@ -96,58 +143,26 @@ const IntroText = () => (
     </View>
 );
 
-const ShowerRadioBox = () => {
-    <RadioButton.Group
-        onValueChange={value => this.setState({ value })}
-        value={this.state.entity.relativesShowerAnswer}
-    >
-        <FrequencyOptionsBox />
-    </RadioButton.Group>
-}
-
-const ChangeClothesRadioBox = () => {
-    <RadioButton.Group
-        onValueChange={value => this.setState({ value })}
-        value={this.state.entity.relativesChangeClothesAnswer}
-    >
-        <FrequencyOptionsBox />
-    </RadioButton.Group>
-}
-
-const ContainerCleanupRadioBox = () => {
-    <RadioButton.Group
-        onValueChange={value => this.setState({ value })}
-        value={this.state.entity.relativesContainerCleanupAnswer}
-    >
-        <FrequencyOptionsBox />
-    </RadioButton.Group>
-}
-
-const FrequencyOptionsBox = () => {
-    <View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <RadioButton
-                value="always"
-                color={Colors.navigatorIconColor}
-            />
-                <Text style={{color:Colors.notMainText}}>Sempre</Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <RadioButton 
-                value="sometimes"
-                color={Colors.navigatorIconColor}
-            />
-            <Text style={{color:Colors.notMainText}}>As Vezes</Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <RadioButton 
-                value="never"
-                color={Colors.navigatorIconColor}
-            />
-            <Text style={{color:Colors.notMainText}}>Nunca</Text>
-        </View>
+const HomeEnterText = () => (
+    <View style={[styles.textContainer, { marginTop: 20 }]}>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>Tomam banho ou lavam mãos e</Text>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>braços assim que entram em casa?</Text>
     </View>
-}
+);
+
+const ChangeClothesText = () => (
+    <View style={[styles.textContainer, { marginTop: 20 }]}>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>Trocam a roupa e guardam-nas</Text>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>em local separado?</Text>
+    </View>
+);
+
+const CleanPotText = () => (
+    <View style={[styles.textContainer, { marginTop: 20 }]}>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>Quando trazem vasilhames, limpam</Text>
+        <Text style={[styles.simpleText, { fontSize: 15, color: Colors.placeholderTextColor }]}>com água sanitária ou similar?</Text>
+    </View>
+);
 
 const styles = StyleSheet.create({
     container: {
@@ -157,17 +172,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: Colors.secondaryColor,
         height: "100%",
-        marginHorizontal: 20,
         paddingBottom: 15
     },
     textContainer: {
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 20
     },
     simpleText: {
         fontFamily: Colors.fontFamily,
-        fontSize: 20
+        fontSize: 18
     },
     boldText: {
         fontWeight: "bold"

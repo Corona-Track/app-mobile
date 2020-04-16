@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
 import { Header, Slider } from 'react-native-elements';
 import { NavigationEvents } from 'react-navigation';
 import PropTypes from 'prop-types';
@@ -56,24 +56,26 @@ export default class WeekLeaveHomeTimesPage extends Component {
                             centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
                             rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
                     </View>
-                    <IntroText />
-                    <SliderText />
-                    <CustomSlider
-                        value={entity.daysAWeek}
-                        onValueChange={this.onChangeSlider} />
-                    <SecondaryText />
-                    <View style={styles.radioButtonItemContainer}>
-                        {reasonsList.map(reason => {
-                            return (
-                                <View style={{ marginVertical: 2, height: 40, paddingHorizontal: 20 }}>
-                                    <RadioButtonItem
-                                        identifier={reason.identifier}
-                                        isChecked={this.isChecked}
-                                        onClickCheck={this.onClickCheck} />
-                                </View>
-                            );
-                        })}
-                    </View>
+                    <ScrollView>
+                        <IntroText />
+                        <SliderText />
+                        <CustomSlider
+                            value={entity.daysAWeek}
+                            onValueChange={this.onChangeSlider} />
+                        <SecondaryText />
+                        <View style={styles.radioButtonItemContainer}>
+                            {reasonsList.map(reason => {
+                                return (
+                                    <View style={{ marginVertical: 2, height: 40, paddingHorizontal: 20 }}>
+                                        <RadioButtonItem
+                                            identifier={reason.identifier}
+                                            isChecked={this.isChecked}
+                                            onClickCheck={this.onClickCheck} />
+                                    </View>
+                                );
+                            })}
+                        </View>
+                    </ScrollView>
                 </View>
                 <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
                     <ContinueRequiredButton
