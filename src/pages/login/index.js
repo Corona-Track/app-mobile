@@ -14,7 +14,7 @@ import {TextInput, Button} from 'react-native-paper';
 import {SwitchActions} from 'react-navigation';
 
 // Auth
-import {SignIn} from '../../firebase/auth';
+import {SignIn} from '../../firebase/Auth';
 
 // Variables
 import {Colors} from '../../themes/variables';

@@ -3,7 +3,7 @@ import {Image, SafeAreaView, StyleSheet, Text} from 'react-native';
 import {NavigationActions, StackActions, SwitchActions} from 'react-navigation';
 import {Colors} from '../../themes/variables';
 
-import {signOut} from '../../firebase/auth';
+import {signOut} from '../../firebase/Auth';
 
 export default class HomePage extends Component {
   static navigationOptions = {
