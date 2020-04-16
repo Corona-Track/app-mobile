@@ -44,14 +44,14 @@ export default class MedicinesPage extends Component {
         this.initialize(this.props);
     };
     render = () => {
-        let { entity, medicinesList } = this.state;
+        let { entity } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
                 <Header
                     containerStyle={{ marginHorizontal: 20 }}
                     backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                    // leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
                     centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
                     rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
                 />
