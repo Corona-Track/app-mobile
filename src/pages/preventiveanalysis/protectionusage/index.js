@@ -121,6 +121,7 @@ export default class ProtectionUsagePage extends Component {
     onDoubtPress = () => {
         let { entity } = this.state;
         entity.protectionAnswer = [];
+        entity.skippedAnswer = true;
         this.setState({ entity });
         this.props.navigation.navigate("TouchingPrecaution", { entity: entity });
     };

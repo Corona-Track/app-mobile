@@ -108,12 +108,16 @@ export default class RelativesHomePrecautionsPage extends Component {
         entity.relativesShowerAnswer = null;
         entity.relativesChangeClothesAnswer = null;
         entity.relativesContainerCleanupAnswer = null;
+        // entity.skippedAnswer = true;
         this.setState({ entity });
-        this.props.navigation.navigate("", { entity: entity });
+        this.props.navigation.navigate("FinishRemaining", { entity: entity });
     };
     onContinueButtonClick = () => {
         let { entity } = this.state;
-        this.props.navigation.navigate("", { entity: entity });
+        let nextRoute = "FinishComplete";
+        if (entity.skippedAnswer)
+            nextRoute = "FinishRemaining";
+        this.props.navigation.navigate(nextRoute, { entity: entity });
     };
     disableButton = () => {
         let { entity } = this.state;

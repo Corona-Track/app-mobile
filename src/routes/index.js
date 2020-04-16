@@ -74,7 +74,7 @@ const AuthenticationStackNavigator = createStackNavigator(
         FinishComplete: { screen: FinishCompletePage }
     },
     {
-        initialRouteName: 'FinishComplete'
+        initialRouteName: 'Disclaimer'
     }
 );
 

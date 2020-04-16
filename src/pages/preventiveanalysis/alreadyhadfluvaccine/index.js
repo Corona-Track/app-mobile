@@ -91,6 +91,7 @@ export default class AlreadyHadFluVaccinePage extends Component {
     onDoubtPress = () => {
         let { entity } = this.state;
         entity.hadFluVaccine = null;
+        entity.skippedAnswer = true;
         this.setState({ entity });
         this.props.navigation.navigate("WeekLeaveHomeTimes", { entity: entity });
     };

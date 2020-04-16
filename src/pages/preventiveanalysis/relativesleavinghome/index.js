@@ -127,6 +127,7 @@ export default class RelativesLeavingHomePage extends Component {
         entity.relativesLeavingHome = null;
         entity.howManyRelatives = null;
         entity.relativesLeavingTimes = null;
+        entity.skippedAnswer = true;
         this.setState({ entity });
         this.props.navigation.navigate("RelativesHomePrecautions", { entity: entity });
     };
