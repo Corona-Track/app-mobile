@@ -11,20 +11,14 @@ export default class SplashPage extends Component {
   };
   state = {};
   componentDidMount() {
-    //Verify user session
-    getUser()
-      .then(() => {
-        this.props.navigation.dispatch(
-          SwitchActions.jumpTo({routeName: 'Application'}),
-        );
-      })
-      .catch(() => {
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [NavigationActions.navigate({routeName: 'Login'})],
-        });
-        this.props.navigation.dispatch(resetAction);
+    setTimeout(() => {
+      //Verify user session
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({routeName: 'Disclaimer'})],
       });
+      this.props.navigation.dispatch(resetAction);
+    }, 2000);
   }
   render = () => {
     return (

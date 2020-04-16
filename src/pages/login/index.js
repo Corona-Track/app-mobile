@@ -14,7 +14,7 @@ import {TextInput, Button} from 'react-native-paper';
 import {SwitchActions} from 'react-navigation';
 
 // Auth
-import {SignIn, signInFacebook} from '../../firebase/Auth';
+// import {SignIn, signInFacebook} from '../../firebase/Auth';
 
 // Variables
 import {Colors} from '../../themes/variables';
@@ -52,48 +52,58 @@ export default class LoginPage extends Component {
      * Esse cara tem que verificar se todos os dados foram preenchido para depois deixar ele passar pra hora direto,
      * Como Não temos a arquitetura toda definida para que eu possa consultar deixei passando direto e ja cadastrando no firebase
      **/
-    await signInFacebook()
-      .then(() => {
-        this.setState({
-          error: '',
-        });
-        this.props.navigation.dispatch(
-          SwitchActions.jumpTo({routeName: 'Application'}),
-        );
-      })
-      .catch(error => {
-        this.setState({
-          error: error.message,
-        });
-      });
+    // await signInFacebook()
+    //   .then(() => {
+    //     this.setState({
+    //       error: '',
+    //     });
+    //     this.props.navigation.dispatch(
+    //       SwitchActions.jumpTo({routeName: 'Application'}),
+    //     );
+    //   })
+    //   .catch(error => {
+    //     this.setState({
+    //       error: error.message,
+    //     });
+    //   });
   };
 
-  onSignInButtonPress = () => {
-    const {email, password} = this.state.entity;
+  // onSignInButtonPress = () => {
+  //   const {email, password} = this.state.entity;
 
-    this.setState({
-      loading: true,
-    });
-    SignIn(email, password)
-      .then(() => {
-        this.setState({
-          loading: false,
-          error: '',
-        });
-        this.props.navigation.dispatch(
-          SwitchActions.jumpTo({routeName: 'Application'}),
-        );
-      })
-      .catch(error => {
-        this.setState({
-          loading: false,
-          error: error.message,
-        });
-      });
+  //   this.setState({
+  //     loading: true,
+  //   });
+  //   SignIn(email, password)
+  //     .then(() => {
+  //       this.setState({
+  //         loading: false,
+  //         error: '',
+  //       });
+  //       this.props.navigation.dispatch(
+  //         SwitchActions.jumpTo({routeName: 'Application'}),
+  //       );
+  //     })
+  //     .catch(error => {
+  //       this.setState({
+  //         loading: false,
+  //         error: error.message,
+  //       });
+  //     });
+  // };
+
+  // onSignUpButtonPress = () => {
+  //   this.props.navigation.navigate('CreateAccount');
+  // };
+
+  onSignInButtonPress = () => {
+    this.props.navigation.dispatch(
+      SwitchActions.jumpTo({routeName: 'Application'}),
+    );
   };
 
   onSignUpButtonPress = () => {
-    this.props.navigation.navigate('CreateAccount');
+    this.props.navigation.navigate('TakePhoto');
   };
 
   render = () => {
