@@ -125,6 +125,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
         let { entity } = this.state;
         entity.daysAWeek = null;
         entity.reasonToLeaveHome = null;
+        entity.skippedAnswer = true;
         this.setState({ entity });
         this.props.navigation.navigate("SocialDistance", { entity: entity });
     };

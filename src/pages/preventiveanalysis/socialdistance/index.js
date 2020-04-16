@@ -51,7 +51,7 @@ export default class SocialDistancePage extends Component {
         let { entity, reasonsList, reasonsToNotKeepDistanceList } = this.state;
         return (<SafeAreaView style={styles.container}>
             <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-            <View style={{ flex: 0.75, width: "100%" }}>
+            <View style={{ flex: 0.8, width: "100%" }}>
                 <View style={{ width: "100%", paddingHorizontal: 20 }}>
                     <Header
                         backgroundColor={Colors.secondaryColor}
@@ -76,7 +76,7 @@ export default class SocialDistancePage extends Component {
                     {entity && entity.keepDistance && entity.keepDistance === "Nem sempre mantenho distância porque:" && <View style={styles.radioButtonItemContainer}>
                         {reasonsToNotKeepDistanceList.map(reason => {
                             return (
-                                <View style={{ height: 40, marginHorizontal: 50 }}>
+                                <View style={{ height: 50, marginHorizontal: 50 }}>
                                     <SubCheckboxItem
                                         identifier={reason.identifier}
                                         isChecked={this.isChecked}
@@ -87,7 +87,7 @@ export default class SocialDistancePage extends Component {
                     </View>}
                 </ScrollView>
             </View>
-            <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
+            <View style={{ flex: 0.2, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
                 <ContinueRequiredButton
                     onPress={() => { this.onContinueButtonClick() }}
                     disabled={this.disableButton()} />
@@ -126,6 +126,7 @@ export default class SocialDistancePage extends Component {
         let { entity } = this.state;
         entity.reasonToNotKeepDistanceSelected = [];
         entity.keepDistance = null;
+        entity.skippedAnswer = true;
         this.setState({ entity });
         this.props.navigation.navigate("ProtectionUsage", { entity: entity });
     };

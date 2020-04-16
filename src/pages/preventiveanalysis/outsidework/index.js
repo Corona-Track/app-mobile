@@ -109,6 +109,7 @@ export default class OutsideWorkPage extends Component {
     onDoubtPress = () => {
         let { entity } = this.state;
         entity.outsideWorkAnswer = null;
+        entity.skippedAnswer = true;
         this.setState({ entity });
         this.props.navigation.navigate("RelativesLeavingHome", { entity: entity });
     };

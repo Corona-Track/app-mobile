@@ -122,6 +122,30 @@ export const DisclaimerButton = ({ onPress }) => (
     </View>
 );
 
+export const FinishRemainingButton = ({ onPress }) => (
+    <View style={styles.finishRemainingButtonContainer}>
+        <Button
+            style={styles.finishRemainingAnswerButtonContainer}
+            contentStyle={styles.continueButton}
+            mode="contained"
+            color={Colors.secondaryColor}
+            labelStyle={styles.finishRemainingButtonText}
+            onPress={onPress}>SAIR</Button>
+    </View>
+);
+
+export const FinishCompleteButton = ({ onPress }) => (
+    <View style={styles.buttonContainer}>
+        <Button
+            style={styles.continueButtonContainer}
+            contentStyle={styles.continueButton}
+            mode="contained"
+            color={Colors.buttonPrimaryColor}
+            labelStyle={styles.continueButtonText}
+            onPress={onPress}>CONCLUIR</Button>
+    </View>
+);
+
 const styles = StyleSheet.create({
     buttonContainer: {
         width: "100%",
@@ -241,6 +265,24 @@ const styles = StyleSheet.create({
     },
 
     disclaimerButtonContainer: {
+        width: "100%",
+        borderRadius: 50,
+        borderColor: Colors.secondaryColor,
+        borderWidth: 1
+    },
+
+
+
+    finishRemainingButtonContainer: {
+        width: "100%",
+        marginVertical: 10
+    },
+    finishRemainingButtonText: {
+        color: Colors.buttonPrimaryColor,
+        fontFamily: Colors.fontFamily
+    },
+
+    finishRemainingAnswerButtonContainer: {
         width: "100%",
         borderRadius: 50,
         borderColor: Colors.secondaryColor,

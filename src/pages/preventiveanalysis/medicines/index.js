@@ -23,6 +23,7 @@ export default class MedicinesPage extends Component {
         entity: {
             medicinesSelected: [],
             frequencyByMedicine: [],
+            skippedAnswer: false
         },
         expandedMedicines: []
     };
@@ -221,6 +222,7 @@ export default class MedicinesPage extends Component {
         let { entity } = this.state;
         entity.medicinesSelected = [];
         entity.frequencyByMedicine = [];
+        entity.skippedAnswer = true;
         this.setState({ entity });
         this.props.navigation.navigate("AlreadyHadFluVaccine", { entity: entity });
     };

@@ -29,6 +29,8 @@ import HomePrecautionsPage from '../pages/preventiveanalysis/homeprecautions';
 import OutsideWorkPage from '../pages/preventiveanalysis/outsidework';
 import RelativesLeavingHomePage from '../pages/preventiveanalysis/relativesleavinghome';
 import RelativesHomePrecautionsPage from '../pages/preventiveanalysis/relativeshomeprecautions';
+import FinishRemainingPage from '../pages/preventiveanalysis/finishremaining';
+import FinishCompletePage from '../pages/preventiveanalysis/finishcomplete';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator(
@@ -71,6 +73,8 @@ const AuthenticationStackNavigator = createStackNavigator(
     OutsideWork: {screen: OutsideWorkPage},
     RelativesLeavingHome: {screen: RelativesLeavingHomePage},
     RelativesHomePrecautions: {screen: RelativesHomePrecautionsPage},
+    FinishRemaining: {screen: FinishRemainingPage},
+    FinishComplete: {screen: FinishCompletePage},
   },
   {
     initialRouteName: 'Disclaimer',
