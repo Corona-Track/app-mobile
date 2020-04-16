@@ -64,7 +64,8 @@ export default class FinishContaminatedPage extends Component {
         let { entity } = this.state;
         let entityToPass = {
             name: entity.name,
-            photo: entity.photo
+            photo: entity.photo,
+            contaminated: entity.contaminated
         };
         const resetAction = StackActions.reset({
             index: 0,

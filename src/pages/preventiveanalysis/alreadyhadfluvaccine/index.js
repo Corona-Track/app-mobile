@@ -58,7 +58,7 @@ export default class AlreadyHadFluVaccinePage extends Component {
                             onPressCheckbox={this.onPressCheckbox} />
                     </View>
                 </View>
-                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end", paddingVertical: 20 }}>
                     <ContinueRequiredButton
                         onPress={() => { this.onContinueButtonClick() }}
                         disabled={this.disableButton()} />
