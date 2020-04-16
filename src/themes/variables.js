@@ -16,3 +16,7 @@ export const Colors = {
     searchIconColor: "#E0E0E0",
     contaminatedColor: "#DE4D4D"
 };
+
+export const Font = {
+    fontFamily: Platform.OS === "android" ? "Prompt-Light" : "Prompt"
+}
