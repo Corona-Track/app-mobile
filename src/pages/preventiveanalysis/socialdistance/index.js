@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
 import { NavigationEvents } from 'react-navigation';
 import PropTypes from 'prop-types';
@@ -59,31 +59,33 @@ export default class SocialDistancePage extends Component {
                         centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
                         rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
                 </View>
-                <IntroText />
-                <View style={styles.radioButtonItemContainer}>
-                    {reasonsList.map(reason => {
-                        return (
-                            <View style={{ height: 70, paddingHorizontal: 20 }}>
-                                <RadioButtonItem
-                                    identifier={reason.identifier}
-                                    isChecked={this.isCheckedRadio}
-                                    onClickCheck={this.onClickRadio} />
-                            </View>
-                        );
-                    })}
-                </View>
-                {entity && entity.keepDistance && entity.keepDistance === "Nem sempre mantenho distância porque:" && <View style={styles.radioButtonItemContainer}>
-                    {reasonsToNotKeepDistanceList.map(reason => {
-                        return (
-                            <View style={{ height: 40, marginHorizontal: 50 }}>
-                                <SubCheckboxItem
-                                    identifier={reason.identifier}
-                                    isChecked={this.isChecked}
-                                    onClickCheck={this.onClickCheck} />
-                            </View>
-                        );
-                    })}
-                </View>}
+                <ScrollView>
+                    <IntroText />
+                    <View style={styles.radioButtonItemContainer}>
+                        {reasonsList.map(reason => {
+                            return (
+                                <View style={{ height: 70, paddingHorizontal: 20 }}>
+                                    <RadioButtonItem
+                                        identifier={reason.identifier}
+                                        isChecked={this.isCheckedRadio}
+                                        onClickCheck={this.onClickRadio} />
+                                </View>
+                            );
+                        })}
+                    </View>
+                    {entity && entity.keepDistance && entity.keepDistance === "Nem sempre mantenho distância porque:" && <View style={styles.radioButtonItemContainer}>
+                        {reasonsToNotKeepDistanceList.map(reason => {
+                            return (
+                                <View style={{ height: 40, marginHorizontal: 50 }}>
+                                    <SubCheckboxItem
+                                        identifier={reason.identifier}
+                                        isChecked={this.isChecked}
+                                        onClickCheck={this.onClickCheck} />
+                                </View>
+                            );
+                        })}
+                    </View>}
+                </ScrollView>
             </View>
             <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
                 <ContinueRequiredButton

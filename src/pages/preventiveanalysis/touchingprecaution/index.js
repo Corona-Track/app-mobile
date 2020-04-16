@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
 import { NavigationEvents } from 'react-navigation';
 import PropTypes from 'prop-types';
@@ -48,7 +48,7 @@ export default class TouchingPrecautionPage extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-                <View style={{ flex: 0.75, width: "100%" }}>
+                <View style={{ flex: 0.8, width: "100%" }}>
                     <View style={{ width: "100%", paddingHorizontal: 20 }}>
                         <Header
                             backgroundColor={Colors.secondaryColor}
@@ -56,21 +56,23 @@ export default class TouchingPrecautionPage extends Component {
                             centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
                             rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
                     </View>
-                    <IntroText />
-                    <View style={styles.radioButtonItemContainer}>
-                        {contaminationList.map(situation => {
-                            return (
-                                <View style={{ height: 70 }}>
-                                    <RadioButtonItem
-                                        identifier={situation.identifier}
-                                        isChecked={this.isChecked}
-                                        onClickCheck={this.onClickRadio} />
-                                </View>
-                            );
-                        })}
-                    </View>
+                    <ScrollView>
+                        <IntroText />
+                        <View style={styles.radioButtonItemContainer}>
+                            {contaminationList.map(situation => {
+                                return (
+                                    <View style={{ height: 70 }}>
+                                        <RadioButtonItem
+                                            identifier={situation.identifier}
+                                            isChecked={this.isChecked}
+                                            onClickCheck={this.onClickRadio} />
+                                    </View>
+                                );
+                            })}
+                        </View>
+                    </ScrollView>
                 </View>
-                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
+                <View style={{ flex: 0.2, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
                     <ContinueRequiredButton
                         onPress={() => { this.onContinueButtonClick() }}
                         disabled={this.disableButton()} />

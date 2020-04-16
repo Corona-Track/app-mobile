@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
 import { NavigationEvents } from 'react-navigation';
 import PropTypes from 'prop-types';
@@ -55,22 +55,24 @@ export default class OutsideWorkPage extends Component {
                             centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
                             rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
                     </View>
-                    <IntroText />
-                    <View style={styles.radioButtonItemContainer}>
-                        {outsideWorkList.map(work => {
-                            let customHeight = 40;
-                            if (work.identifier === "Em um ambiente fechado com mais pessoas, como clínica, escritório, loja ou motorista de aplicativo")
-                                customHeight = 70;
-                            return (
-                                <View style={{ height: customHeight, marginTop: 15, paddingHorizontal: 10 }}>
-                                    <RadioButtonItem
-                                        identifier={work.identifier}
-                                        isChecked={this.isChecked}
-                                        onClickCheck={this.onClickRadio} />
-                                </View>
-                            );
-                        })}
-                    </View>
+                    <ScrollView>
+                        <IntroText />
+                        <View style={styles.radioButtonItemContainer}>
+                            {outsideWorkList.map(work => {
+                                let customHeight = 40;
+                                if (work.identifier === "Em um ambiente fechado com mais pessoas, como clínica, escritório, loja ou motorista de aplicativo")
+                                    customHeight = 70;
+                                return (
+                                    <View style={{ height: customHeight, marginTop: 15, paddingHorizontal: 10 }}>
+                                        <RadioButtonItem
+                                            identifier={work.identifier}
+                                            isChecked={this.isChecked}
+                                            onClickCheck={this.onClickRadio} />
+                                    </View>
+                                );
+                            })}
+                        </View>
+                    </ScrollView>
                 </View>
                 <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
                     <ContinueRequiredButton

@@ -1,37 +1,30 @@
-import React, {Component} from 'react';
-import {Image, SafeAreaView, StyleSheet, ActivityIndicator} from 'react-native';
-import {NavigationActions, StackActions, SwitchActions} from 'react-navigation';
+import React, {useEffect} from 'react';
+import {SafeAreaView, StyleSheet, Image, ActivityIndicator} from 'react-native';
+import auth from '@react-native-firebase/auth';
 import {Colors} from '../../themes/variables';
 
-import {getUser} from '../../firebase/Auth';
+function Splash({navigation}) {
+  useEffect(() => {
+    const unsubscribe = auth().onAuthStateChanged(user => {
+      if (user) {
+        navigation.navigate('Application');
+      } else {
+        navigation.navigate('Disclaimer');
+      }
+    });
+    return unsubscribe; // unsubscribe on unmount
+  }, [navigation]);
 
-export default class SplashPage extends Component {
-  static navigationOptions = {
-    headerShown: false,
-  };
-  state = {};
-  componentDidMount() {
-    setTimeout(() => {
-      //Verify user session
-      const resetAction = StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({routeName: 'Disclaimer'})],
-      });
-      this.props.navigation.dispatch(resetAction);
-    }, 2000);
-  }
-  render = () => {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Image
-          style={styles.logo}
-          resizeMode="contain"
-          source={require('../../assets/images/logo.png')}
-          PlaceholderContent={<ActivityIndicator />}
-        />
-      </SafeAreaView>
-    );
-  };
+  return (
+    <SafeAreaView style={styles.container}>
+      <Image
+        style={styles.logo}
+        resizeMode="contain"
+        source={require('../../assets/images/logo.png')}
+        PlaceholderContent={<ActivityIndicator />}
+      />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -47,3 +40,5 @@ const styles = StyleSheet.create({
     width: 210,
   },
 });
+
+export default Splash;

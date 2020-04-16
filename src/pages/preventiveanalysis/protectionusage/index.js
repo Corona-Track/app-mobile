@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
 import { NavigationEvents } from 'react-navigation';
 import PropTypes from 'prop-types';
@@ -57,31 +57,33 @@ export default class ProtectionUsagePage extends Component {
                             centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
                             rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
                     </View>
-                    <IntroText />
-                    <View style={styles.radioButtonItemContainer}>
-                        {situationsList.map(situation => {
-                            return (
-                                <View style={{ height: 40, marginVertical: 10, paddingHorizontal: 20 }}>
-                                    <CheckboxItem
-                                        identifier={situation.identifier}
-                                        isChecked={this.isChecked}
-                                        onClickCheck={this.onClickCheck} />
-                                </View>
-                            );
-                        })}
-                    </View>
-                    <View style={styles.radioButtonItemContainer}>
-                        {negativeSituationsList.map(situation => {
-                            return (
-                                <View style={{ height: 70, marginVertical: 10, paddingHorizontal: 10 }}>
-                                    <RadioButtonItem
-                                        identifier={situation.identifier}
-                                        isChecked={this.isChecked}
-                                        onClickCheck={this.onClickRadio} />
-                                </View>
-                            );
-                        })}
-                    </View>
+                    <ScrollView>
+                        <IntroText />
+                        <View style={styles.radioButtonItemContainer}>
+                            {situationsList.map(situation => {
+                                return (
+                                    <View style={{ height: 40, marginVertical: 10, paddingHorizontal: 20 }}>
+                                        <CheckboxItem
+                                            identifier={situation.identifier}
+                                            isChecked={this.isChecked}
+                                            onClickCheck={this.onClickCheck} />
+                                    </View>
+                                );
+                            })}
+                        </View>
+                        <View style={styles.radioButtonItemContainer}>
+                            {negativeSituationsList.map(situation => {
+                                return (
+                                    <View style={{ height: 70, marginVertical: 10, paddingHorizontal: 10 }}>
+                                        <RadioButtonItem
+                                            identifier={situation.identifier}
+                                            isChecked={this.isChecked}
+                                            onClickCheck={this.onClickRadio} />
+                                    </View>
+                                );
+                            })}
+                        </View>
+                    </ScrollView>
                 </View>
                 <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
                     <ContinueRequiredButton

@@ -2,36 +2,36 @@
 // import firebase from './Config';
 
 // import {LoginManager, AccessToken} from 'react-native-fbsdk';
+import auth from '@react-native-firebase/auth';
 
-// export const getUser = () => {
-//   return new Promise((resolve, reject) => {
-//     firebase.auth().onAuthStateChanged(user => {
-//       if (user) {
-//         return resolve(user);
-//       }
-//       return reject(new Error('Nenhum usuario encontrado'));
-//     });
-//   });
-// };
+export const getUser = () => {
+  return new Promise((resolve, reject) => {
+    auth().onAuthStateChanged(user => {
+      if (user) {
+        return resolve(user);
+      }
+      return reject(new Error('Nenhum usuario encontrado'));
+    });
+  });
+};
 
 // export const authPersist = () => {
-//   firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+//   auth().setPersistence(auth.Auth.Persistence.LOCAL);
 // };
 
-// export const signOut = () => {
-//   return new Promise((resolve, reject) => {
-//     firebase
-//       .auth()
-//       .signOut()
-//       .then(res => {
-//         console.log(res);
-//         resolve();
-//       })
-//       .catch(error => {
-//         reject(new Error(error));
-//       });
-//   });
-// };
+export const signOut = () => {
+  return new Promise((resolve, reject) => {
+    auth()
+      .signOut()
+      .then(res => {
+        console.log(res);
+        resolve();
+      })
+      .catch(error => {
+        reject(new Error(error));
+      });
+  });
+};
 
 // export const signInFacebook = () => {
 //   return new Promise(async (resolve, reject) => {
@@ -68,36 +68,36 @@
 //       });
 //   });
 // };
-// export const SignIn = (email, password) => {
-//   return new Promise((resolve, reject) => {
-//     firebase
-//       .auth()
-//       .signInWithEmailAndPassword(email, password)
-//       .then(() => {
-//         const {uid} = firebase.auth().currentUser;
 
-//         authPersist();
-//         resolve(uid);
-//       })
-//       .catch(error => {
-//         let errorMessage = '';
-//         switch (error.code) {
-//           case 'auth/invalid-email':
-//             errorMessage = 'Email inválido!';
-//             break;
-//           case 'auth/user-disabled':
-//             errorMessage = 'Seu usuário está desativado!';
-//             break;
-//           case 'auth/user-not-found':
-//             errorMessage = 'Não existe este usuário!';
-//             break;
-//           case 'auth/wrong-password':
-//             errorMessage = 'E-mail e/ou senha errados!';
-//             break;
-//           default:
-//         }
+export const SignIn = (email, password) => {
+  return new Promise((resolve, reject) => {
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('entro nice')
+        const {uid} = auth().currentUser;
+        resolve(uid);
+      })
+      .catch(error => {
+        console.log(error)
+        let errorMessage = '';
+        switch (error.code) {
+          case 'auth/invalid-email':
+            errorMessage = 'Email inválido!';
+            break;
+          case 'auth/user-disabled':
+            errorMessage = 'Seu usuário está desativado!';
+            break;
+          case 'auth/user-not-found':
+            errorMessage = 'Não existe este usuário!';
+            break;
+          case 'auth/wrong-password':
+            errorMessage = 'E-mail e/ou senha errados!';
+            break;
+          default:
+        }
 
-//         reject(new Error(errorMessage));
-//       });
-//   });
-// };
+        reject(new Error(errorMessage));
+      });
+  });
+};

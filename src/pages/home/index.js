@@ -3,12 +3,13 @@ import {Image, SafeAreaView, StyleSheet, Text} from 'react-native';
 import {NavigationActions, StackActions, SwitchActions} from 'react-navigation';
 import {Colors} from '../../themes/variables';
 
-import {signOut} from '../../firebase/Auth';
+import {signOut} from '../../firebase/auth';
 
 export default class HomePage extends Component {
   static navigationOptions = {
     headerShown: false,
   };
+
   state = {};
   setSignOut = () => {
     signOut()
@@ -16,7 +17,7 @@ export default class HomePage extends Component {
         this.props.navigation.navigate('Login');
       })
       .catch(error => {
-        alert(error);
+        console.error(error);
       });
   };
   componentDidMount() {}

@@ -14,7 +14,7 @@ import {TextInput, Button} from 'react-native-paper';
 import {SwitchActions} from 'react-navigation';
 
 // Auth
-// import {SignIn, signInFacebook} from '../../firebase/Auth';
+import {SignIn} from '../../firebase/auth';
 
 // Variables
 import {Colors} from '../../themes/variables';
@@ -26,7 +26,7 @@ export default class LoginPage extends Component {
   state = {
     entity: {
       email: 'teste@teste.com',
-      password: 'teste@teste.com',
+      password: '123456',
     },
     loading: false,
     error: '',
@@ -37,11 +37,13 @@ export default class LoginPage extends Component {
     entity.email = email;
     this.setState({entity});
   };
+
   handleOnPasswordChange = password => {
     let {entity} = this.state;
     entity.password = password;
     this.setState({entity});
   };
+
   isFormDisabled = () => {
     let {entity} = this.state;
     return !(entity.email && entity.password);
@@ -68,39 +70,38 @@ export default class LoginPage extends Component {
     //   });
   };
 
-  // onSignInButtonPress = () => {
-  //   const {email, password} = this.state.entity;
+  onSignInButtonPress = () => {
+    const {email, password} = this.state.entity;
 
-  //   this.setState({
-  //     loading: true,
-  //   });
-  //   SignIn(email, password)
-  //     .then(() => {
-  //       this.setState({
-  //         loading: false,
-  //         error: '',
-  //       });
-  //       this.props.navigation.dispatch(
-  //         SwitchActions.jumpTo({routeName: 'Application'}),
-  //       );
-  //     })
-  //     .catch(error => {
-  //       this.setState({
-  //         loading: false,
-  //         error: error.message,
-  //       });
-  //     });
-  // };
+    this.setState({
+      loading: true,
+    });
+    SignIn(email, password)
+      .then(() => {
+        this.setState({
+          loading: false,
+          error: '',
+        });
+        this.props.navigation.navigate('Application');
+      })
+      .catch(error => {
+        console.log('entro2')
+        this.setState({
+          loading: false,
+          error: error.message,
+        });
+      });
+  };
 
   // onSignUpButtonPress = () => {
   //   this.props.navigation.navigate('CreateAccount');
   // };
 
-  onSignInButtonPress = () => {
-    this.props.navigation.dispatch(
-      SwitchActions.jumpTo({routeName: 'Application'}),
-    );
-  };
+  // onSignInButtonPress = () => {
+  //   this.props.navigation.dispatch(
+  //     SwitchActions.jumpTo({routeName: 'Application'}),
+  //   );
+  // };
 
   onSignUpButtonPress = () => {
     this.props.navigation.navigate('TakePhoto');
@@ -108,6 +109,7 @@ export default class LoginPage extends Component {
 
   render = () => {
     let {entity} = this.state;
+
     return (
       <SafeAreaView style={styles.container}>
         <Image

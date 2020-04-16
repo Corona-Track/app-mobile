@@ -3,7 +3,7 @@ import { View, SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-na
 import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PropTypes from 'prop-types';
-import { NavigationEvents } from 'react-navigation';
+import { NavigationEvents, StackActions, NavigationActions } from 'react-navigation';
 
 import { Colors } from '../../../themes/variables';
 import { UncontaminatedAnswerNowButton, UncontaminatedAnswerLaterButton } from '../../../components/custombutton';
@@ -52,7 +52,7 @@ export default class FinishUncontaminatedPage extends Component {
                     < IntroText userName={entity.name} />
                 </View>
                 <View style={{ flex: 0.25, width: "100%" }}>
-                    <UncontaminatedAnswerNowButton onPress={() => { }} />
+                    <UncontaminatedAnswerNowButton onPress={() => { this.onAnswerNowButtonPress() }} />
                     <UncontaminatedAnswerLaterButton onPress={() => { }} />
                 </View>
             </SafeAreaView >
@@ -61,10 +61,22 @@ export default class FinishUncontaminatedPage extends Component {
     onLeftButtonPress = () => {
         this.props.navigation.pop();
     };
-    onAnswerButtonPress = answer => {
+    onAnswerNowButtonPress = () => {
         let { entity } = this.state;
-        entity.someoneSuspicious = answer;
-        this.props.navigation.navigate("Comorbidities", { entity: entity });
+        let entityToPass = {
+            name: entity.name,
+            photo: entity.photo
+        };
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({
+                routeName: 'Medicines',
+                params: {
+                    entity: entityToPass
+                },
+            })]
+        });
+        this.props.navigation.dispatch(resetAction);
     };
 };
 

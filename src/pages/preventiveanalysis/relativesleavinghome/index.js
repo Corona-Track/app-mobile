@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView } from 'react-native';
 import { Header } from 'react-native-elements';
 import { NavigationEvents } from 'react-navigation';
 import PropTypes from 'prop-types';
@@ -52,32 +52,34 @@ export default class RelativesLeavingHomePage extends Component {
                             centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
                             rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
                     </View>
-                    <IntroText />
-                    <View style={styles.radioButtonItemContainer}>
-                        <View style={{ alignSelf: "center", height: 50 }}>
-                            <RadioButtonYesOrNoItem
-                                value={entity.relativesLeavingHome}
-                                onPressCheckbox={this.onChangeRelativesLeavingHome} />
+                    <ScrollView>
+                        <IntroText />
+                        <View style={styles.radioButtonItemContainer}>
+                            <View style={{ alignSelf: "center", height: 50 }}>
+                                <RadioButtonYesOrNoItem
+                                    value={entity.relativesLeavingHome}
+                                    onPressCheckbox={this.onChangeRelativesLeavingHome} />
+                            </View>
+                            <PeopleOutsideHome />
+                            <View style={{ height: 50, justifyContent: "center" }}>
+                                <RadioButtonTripleResizableItem
+                                    value={entity.howManyRelatives}
+                                    onPressCheckbox={this.onChangeHowManyRelatives}
+                                    firstTitle={"Uma"}
+                                    secondTitle={"Duas"}
+                                    thirdTitle={"Três ou mais"} />
+                            </View>
+                            <TimesOutsideHome />
+                            <View style={{ height: 50 }}>
+                                <RadioButtonTripleResizableItem
+                                    value={entity.relativesLeavingTimes}
+                                    onPressCheckbox={this.onChangeRelativesLeavingTimes}
+                                    firstTitle={"Uma"}
+                                    secondTitle={"Duas"}
+                                    thirdTitle={"Três ou mais"} />
+                            </View>
                         </View>
-                        <PeopleOutsideHome />
-                        <View style={{ height: 50, justifyContent: "center" }}>
-                            <RadioButtonTripleResizableItem
-                                value={entity.howManyRelatives}
-                                onPressCheckbox={this.onChangeHowManyRelatives}
-                                firstTitle={"Uma"}
-                                secondTitle={"Duas"}
-                                thirdTitle={"Três ou mais"} />
-                        </View>
-                        <TimesOutsideHome />
-                        <View style={{ height: 50 }}>
-                            <RadioButtonTripleResizableItem
-                                value={entity.relativesLeavingTimes}
-                                onPressCheckbox={this.onChangeRelativesLeavingTimes}
-                                firstTitle={"Uma"}
-                                secondTitle={"Duas"}
-                                thirdTitle={"Três ou mais"} />
-                        </View>
-                    </View>
+                    </ScrollView>
                 </View>
                 <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
                     <ContinueRequiredButton
@@ -103,9 +105,8 @@ export default class RelativesLeavingHomePage extends Component {
     };
     disableButton = () => {
         let { entity } = this.state;
-        return !(entity.relativesLeavingHome && entity.howManyRelatives && entity.relativesLeavingTimes);
+        return !(entity.relativesLeavingHome !== null && entity.howManyRelatives !== null && entity.relativesLeavingTimes !== null);
     };
-
     onChangeRelativesLeavingHome = value => {
         let { entity } = this.state;
         entity.relativesLeavingHome = value;
@@ -121,7 +122,6 @@ export default class RelativesLeavingHomePage extends Component {
         entity.relativesLeavingTimes = value;
         this.setState({ entity });
     };
-
     onDoubtPress = () => {
         let { entity } = this.state;
         entity.relativesLeavingHome = null;
@@ -167,7 +167,6 @@ const styles = StyleSheet.create({
     textContainer: {
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 20
     },
     simpleText: {
         fontFamily: Colors.fontFamily,
