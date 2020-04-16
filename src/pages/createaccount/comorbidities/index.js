@@ -7,10 +7,9 @@ import { Header } from 'react-native-elements';
 import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
-import { CheckboxItem, CheckboxItemWithPlus } from '../../../components/customcheckboxitem';
+import { CheckboxItem } from '../../../components/customcheckboxitem';
 //CONTINUE
 import { ContinueRequiredButton } from '../../../components/custombutton';
-import { CustomSearch } from '../../../components/customsearch';
 
 export default class ComorbiditiesPage extends Component {
     static navigationOptions = {
@@ -26,17 +25,18 @@ export default class ComorbiditiesPage extends Component {
         },
         comorbiditiesList: [
             { identifier: "Nenhuma das opções" },
-            { identifier: "Pressão alta não controlada" },
-            { identifier: "Diabetes" },
-            { identifier: "Doença cardíaca não controlada" },
-            { identifier: "Doença respiratória não controlada" },
-            { identifier: "Asma não controlada" },
-            { identifier: "Doença renal não controlada" },
-            { identifier: "Asma" },
-            { identifier: "Câncer, HIV ou imunosuprimido" },
-            { identifier: "Transplante" },
-            { identifier: "Doença Genética" },
-            { identifier: "Gestante de alto risco" },
+            { identifier: "Gravidez de alto risco" },
+            { identifier: "Diabetes difícil de tratar" },
+            { identifier: "Doença do coração difícil de tratar" },
+            { identifier: "Doença do coração de nascimento" },
+            { identifier: "Histórico de infarto" },
+            { identifier: "Doença respiratória difícil de tratar" },
+            { identifier: "Doenças do rim avançada" },
+            { identifier: "Doenças que atacam sistema imunológico" },
+            { identifier: "Remédios que atacam sistema imunológico" },
+            { identifier: "Transplante de órgãos" },
+            { identifier: "Doenças genéticas" },
+            { identifier: "Fibrose cística" },
         ],
     };
     initialize(props) {
