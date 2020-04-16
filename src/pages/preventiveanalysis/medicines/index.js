@@ -9,7 +9,7 @@ import ProgressTracking from '../../../components/progresstracking';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
 import { CheckboxItem, CheckboxItemWithExpand } from '../../../components/customcheckboxitem';
 //CONTINUE
-import { ContinueRequiredButton } from '../../../components/custombutton';
+import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
 
 export default class MedicinesPage extends Component {
     static navigationOptions = {
@@ -24,9 +24,6 @@ export default class MedicinesPage extends Component {
             medicinesSelected: [],
             frequencyByMedicine: [],
         },
-        //identifier = medicine
-        //frequency = period
-
         expandedMedicines: []
     };
     initialize(props) {
@@ -55,15 +52,12 @@ export default class MedicinesPage extends Component {
                     centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
                     rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
                 />
-                <View style={{ flex: 0.85, width: "100%" }}>
+                <View style={{ flex: 0.75, width: "100%" }}>
                     <ScrollView
                         nestedScrollEnabled={true}
                         style={{ width: "100%" }}>
-                        <Text>{JSON.stringify(entity.medicinesSelected)}</Text>
-                        <Text>{JSON.stringify(entity.frequencyByMedicine)}</Text>
                         <IntroText />
                         <View style={styles.checkboxItemContainer}>
-
                             <View style={{ paddingHorizontal: 20 }}>
                                 <CheckboxItem
                                     identifier={"Nenhuma das opções"}
@@ -76,10 +70,13 @@ export default class MedicinesPage extends Component {
                         </View>
                     </ScrollView>
                 </View>
-                <View style={{ flex: 0.15, width: "100%", paddingHorizontal: 20, paddingVertical: 20, justifyContent: "flex-end" }}>
+                <View style={{ flex: 0.25, width: "100%", paddingHorizontal: 20, justifyContent: "flex-end" }}>
                     <ContinueRequiredButton
                         onPress={() => { this.onContinueButtonClick() }}
                         disabled={this.disableButton()} />
+                    {!entity.contaminated ?
+                        (<DoubtButton onPress={() => { this.onDoubtPress() }} label="Responder depois" />)
+                        : (<></>)}
                 </View>
                 <ProgressTracking amount={7} position={6} />
             </SafeAreaView >
@@ -139,7 +136,19 @@ export default class MedicinesPage extends Component {
     };
     disableButton = () => {
         let { entity } = this.state;
-        return !(entity && entity.medicinesSelected && entity.medicinesSelected.length > 0);
+        if (!entity.medicinesSelected || entity.medicinesSelected.length === 0)
+            return true;
+        if (entity.medicinesSelected.length === 1 && entity.medicinesSelected[0] === "Nenhuma das opções")
+            return false;
+        let disable = false;
+        entity.medicinesSelected.forEach(medicine => {
+            if (disable)
+                return;
+            let frequencyPosition = entity.frequencyByMedicine.findIndex(selected => selected.identifier === medicine);
+            if (frequencyPosition === -1)
+                disable = true;
+        });
+        return disable;
     };
     renderCheckboxExpand = identifier => {
         if (!identifier)
@@ -200,6 +209,17 @@ export default class MedicinesPage extends Component {
         let { entity } = this.state;
         let frequencyPosition = entity.frequencyByMedicine.findIndex(selected => selected.identifier === identifier && selected.frequency === frequency);
         return frequencyPosition > -1;
+    };
+    onContinueButtonClick = () => {
+        let { entity } = this.state;
+        this.props.navigation.navigate("AlreadyHadFluVaccine", { entity: entity });
+    };
+    onDoubtPress = () => {
+        let { entity } = this.state;
+        entity.medicinesSelected = [];
+        entity.frequencyByMedicine = [];
+        this.setState({ entity });
+        this.props.navigation.navigate("AlreadyHadFluVaccine", { entity: entity });
     };
 };
 
