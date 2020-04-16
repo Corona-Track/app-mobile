@@ -134,6 +134,18 @@ export const FinishRemainingButton = ({ onPress }) => (
     </View>
 );
 
+export const FinishCompleteButton = ({ onPress }) => (
+    <View style={styles.buttonContainer}>
+        <Button
+            style={styles.continueButtonContainer}
+            contentStyle={styles.continueButton}
+            mode="contained"
+            color={Colors.buttonPrimaryColor}
+            labelStyle={styles.continueButtonText}
+            onPress={onPress}>CONCLUIR</Button>
+    </View>
+);
+
 const styles = StyleSheet.create({
     buttonContainer: {
         width: "100%",
@@ -269,7 +281,7 @@ const styles = StyleSheet.create({
         color: Colors.buttonPrimaryColor,
         fontFamily: Colors.fontFamily
     },
-  
+
     finishRemainingAnswerButtonContainer: {
         width: "100%",
         borderRadius: 50,
