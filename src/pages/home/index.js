@@ -9,6 +9,7 @@ export default class HomePage extends Component {
   static navigationOptions = {
     headerShown: false,
   };
+
   state = {};
   setSignOut = () => {
     signOut()
@@ -16,7 +17,7 @@ export default class HomePage extends Component {
         this.props.navigation.navigate('Login');
       })
       .catch(error => {
-        alert(error);
+        console.error(error);
       });
   };
   componentDidMount() {}
