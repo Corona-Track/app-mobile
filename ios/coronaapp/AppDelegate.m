@@ -4,6 +4,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <Firebase.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
@@ -46,6 +47,7 @@ static void InitializeFlipper(UIApplication *application) {
   [self.window makeKeyAndVisible];
 
   [FIRApp configure];
+  [GMSServices provideAPIKey:@"AIzaSyA1ZrFiKAyzWjRaAzHvb3HIAosgBzJQbHQ"];
 
   return YES;
 }

@@ -58,6 +58,11 @@ target 'coronaapp' do
 
   pod 'Firebase/Analytics'
   
+
+  pod 'GoogleMaps'
+  
+  pod 'GooglePlaces'
+
   target 'coronaappTests' do
     inherit! :complete
     # Pods for testing

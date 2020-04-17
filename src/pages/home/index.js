@@ -20,11 +20,16 @@ export default class HomePage extends Component {
         console.error(error);
       });
   };
+
+  setNavigateToMap = () => {
+    this.props.navigation.navigate('Maps');
+  }
   componentDidMount() {}
   render = () => {
     return (
       <SafeAreaView style={styles.container}>
         <Text>Home</Text>
+        <Text onPress={() => this.setNavigateToMap()}>Map</Text>
         <Text onPress={() => this.setSignOut()}>Sair</Text>
       </SafeAreaView>
     );
