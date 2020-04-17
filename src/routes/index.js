@@ -32,6 +32,8 @@ import RelativesHomePrecautionsPage from '../pages/preventiveanalysis/relativesh
 import FinishRemainingPage from '../pages/preventiveanalysis/finishremaining';
 import FinishCompletePage from '../pages/preventiveanalysis/finishcomplete';
 
+import SymptomsPage from '../pages/symptoms/symptons';
+
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator(
   {
@@ -75,6 +77,9 @@ const AuthenticationStackNavigator = createStackNavigator(
     RelativesHomePrecautions: {screen: RelativesHomePrecautionsPage},
     FinishRemaining: {screen: FinishRemainingPage},
     FinishComplete: {screen: FinishCompletePage},
+
+    Symptoms: { screen: SymptomsPage },
+
   },
   {
     initialRouteName: 'Disclaimer',
