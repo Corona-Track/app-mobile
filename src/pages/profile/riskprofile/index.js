@@ -1,21 +1,30 @@
+import React, { useState, useEffect } from 'react'
 
-import React, { useState } from 'react'
+// Components
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
-import { useEffect } from "react";
-import riskProfileTypes from "../../../utils/enums/riskProfileTypes";
-import contagionRiskTypes from "../../../utils/enums/contagionRiskTypes";
-import aggravationRiskTypes from "../../../utils/enums/aggravationRiskTypes";
-import { Colors } from '../../../themes/variables';
 import { Header } from 'react-native-elements';
 import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
 import { Button } from 'react-native-paper';
 import Contagion from './components/Contagion'
 import Aggravation from './components/Aggravation'
 
+// Enums
+import riskProfileTypes from "../../../utils/enums/riskProfileTypes";
+import contagionRiskTypes from "../../../utils/enums/contagionRiskTypes";
+import aggravationRiskTypes from "../../../utils/enums/aggravationRiskTypes";
+
+// style
+import { Colors } from '../../../themes/variables';
+import { getUser } from '../../../firebase/Auth';
+
+
 RiskProfile.navigationOptions = {
     headerShown: false
 }
+
+
 export default function RiskProfile(props) {
+    const { navigation } = props
     const [riskProfile, setRiskProfile] = useState('')
     const [contagionRisk, setContagionRisk] = useState({
         risk: '',
@@ -25,18 +34,37 @@ export default function RiskProfile(props) {
         risk: '',
         text: ''
     })
-    const riskProfileId = 3
+    const [entity, setEntity] = useState({
+        name: '',
+        photo: ''
+    })
+
+    const riskProfileId = 1
 
     useEffect(() => {
+        getUserData()
         getRiskInfo(riskProfileId)
     }, [])
 
     onLeftButtonPress = () => {
-        props.navigation.pop();
+        navigation.pop();
     };
     onRightButtonPress = () => {
-        props.navigation.pop();
+        navigation.pop();
     };
+
+    function getUserData() {
+        getUser().then(doc => {
+            const { name, photo } = doc.data()
+            setEntity({
+                name,
+                photo
+            })
+        })
+            .catch(err => {
+                console.log('Error getting document', err);
+            });
+    }
 
     function getRiskInfo(riskProfileId) {
         switch (riskProfileId) {
@@ -85,14 +113,14 @@ export default function RiskProfile(props) {
         </View>
     }
 
-    function Divider() {
-        return <View style={styles.divider} />
-    }
+
+
 
     return <View style={styles.page}>
         <Header
             containerStyle={styles.header}
             leftComponent={<LeftComponent onPress={onLeftButtonPress} />}
+            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
             rightComponent={<RightComponent onPress={onRightButtonPress} />}
         />
         <ScrollView style={styles.container}
@@ -151,7 +179,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: "center",
 
-    },  
+    },
     scheduleTeleorientationButton: {
         width: '100%',
         marginTop: 35,
@@ -177,8 +205,8 @@ const styles = StyleSheet.create({
         color: Colors.primaryTextColor,
         fontFamily: Colors.fontFamily,
     },
-    buttonsContainer:{
-        width:'100%',
-        paddingHorizontal:35
+    buttonsContainer: {
+        width: '100%',
+        paddingHorizontal: 35
     }
 })
