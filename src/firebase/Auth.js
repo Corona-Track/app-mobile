@@ -74,12 +74,10 @@ export const SignIn = (email, password) => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        console.log('entro nice')
         const {uid} = auth().currentUser;
         resolve(uid);
       })
       .catch(error => {
-        console.log(error)
         let errorMessage = '';
         switch (error.code) {
           case 'auth/invalid-email':
@@ -93,6 +91,38 @@ export const SignIn = (email, password) => {
             break;
           case 'auth/wrong-password':
             errorMessage = 'E-mail e/ou senha errados!';
+            break;
+          default:
+        }
+
+        reject(new Error(errorMessage));
+      });
+  });
+};
+
+export const SignUp = (email, password) => {
+  return new Promise((resolve, reject) => {
+    const currentUser = auth().currentUser;
+    if (currentUser) {
+      const {uid} = auth().currentUser;
+      resolve(uid);
+      return;
+    }
+
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        const {uid} = auth().currentUser;
+        resolve(uid);
+      })
+      .catch(error => {
+        let errorMessage = '';
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            errorMessage = 'Email ja está em uso!';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'Seu email é invalidado!';
             break;
           default:
         }
