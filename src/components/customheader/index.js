@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     },
     centerComponent: {
         flexDirection: "row",
+        alignItems:'center'
     },
     avatarContainerIcon: {
         width: 45,
