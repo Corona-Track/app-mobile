@@ -3,15 +3,21 @@
 
 // import {LoginManager, AccessToken} from 'react-native-fbsdk';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 export const getUser = () => {
   return new Promise((resolve, reject) => {
-    auth().onAuthStateChanged(user => {
-      if (user) {
-        return resolve(user);
-      }
-      return reject(new Error('Nenhum usuario encontrado'));
-    });
+    const { uid } = auth().currentUser;
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .get()
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        reject(new Error(error));
+      });
   });
 };
 
@@ -75,7 +81,7 @@ export const SignIn = (email, password) => {
       .signInWithEmailAndPassword(email, password)
       .then(() => {
         console.log('entro nice')
-        const {uid} = auth().currentUser;
+        const { uid } = auth().currentUser;
         resolve(uid);
       })
       .catch(error => {
