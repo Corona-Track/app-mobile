@@ -10,7 +10,7 @@ export const getUser = () => {
       if (user) {
         return resolve(user);
       }
-      return reject(new Error('Nenhum usuario encontrado'));
+      return reject(new Error('Nenhum usuário encontrado'));
     });
   });
 };
