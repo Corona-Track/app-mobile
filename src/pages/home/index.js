@@ -24,7 +24,7 @@ export default class HomePage extends Component {
   render = () => {
     return (
       <SafeAreaView style={styles.container}>
-        <Text>Home</Text>
+        <Text>Home2</Text>
         <Text onPress={() => this.setSignOut()}>Sair</Text>
       </SafeAreaView>
     );
