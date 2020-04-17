@@ -48,13 +48,15 @@ export default class HomePage extends Component {
       <SafeAreaView style={styles.container}>
         <Spinner visible={showLoading} />
         <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-        <MapButton onPress={this.setSignOut} />
-        <HeartButton />
         <ImageBackground
           source={require('../../assets/images/homebackground.png')}
           resizeMethod="auto"
           style={styles.backgroundImageStyle} />
-        <View style={{marginVertical: 50}}>
+        <View>
+          <MapButton onPress={this.setSignOut} />
+          <HeartButton />
+        </View>
+        <View style={{ marginVertical: 50 }}>
           <UserDetails photo={currentUser.photo} name={"Lourenço José Roberti de Araújo"} aliasName={this.getFirstLetterName("Lourenço José Roberti de Araújo")} />
           {this.renderCard()}
           {/* <UserDetails photo={currentUser.photo} name={currentUser.name} aliasName={this.getFirstLetterName(currentUser.name)} /> */}
@@ -255,10 +257,9 @@ const styles = StyleSheet.create({
   menuItemContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    height: 50,
-    marginVertical: 10,
     borderBottomWidth: 2,
-    borderBottomColor: "#A7A7A7"
+    borderBottomColor: "#A7A7A7",
+    padding: 0
   },
   menuItemFirstColumn: {
     width: "15%",
