@@ -54,17 +54,20 @@ export default class HomePage extends Component {
           source={require('../../assets/images/homebackground.png')}
           resizeMethod="auto"
           style={styles.backgroundImageStyle} />
-
-        <UserDetails photo={currentUser.photo} name={"Lourenço José Roberti de Araújo"} aliasName={this.getFirstLetterName("Lourenço José Roberti de Araújo")} />
-        {this.renderCard()}
-        {/* <UserDetails photo={currentUser.photo} name={currentUser.name} aliasName={this.getFirstLetterName(currentUser.name)} /> */}
-        <ScrollView style={{ height: 300 }}>
-          <View style={{}}>
-            <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" />
-            {this.renderOptionsList()}
-            <VersionDetails />
+        <View>
+          <UserDetails photo={currentUser.photo} name={"Lourenço José Roberti de Araújo"} aliasName={this.getFirstLetterName("Lourenço José Roberti de Araújo")} />
+          {this.renderCard()}
+          {/* <UserDetails photo={currentUser.photo} name={currentUser.name} aliasName={this.getFirstLetterName(currentUser.name)} /> */}
+          <View>
+            <ScrollView style={{ height: 300 }}>
+              <View style={{ height: 300, marginHorizontal: 20 }}>
+                <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" />
+                {this.renderOptionsList()}
+                <VersionDetails />
+              </View>
+            </ScrollView>
           </View>
-        </ScrollView>
+        </View>
       </SafeAreaView>
     );
   };
@@ -94,7 +97,7 @@ export default class HomePage extends Component {
               translateY,
             }]
           }]}>
-            <View style={{ height: 80 }}>
+            <View style={{}}>
               <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>37 anos</Text>
               <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>987.654.321-00</Text>
               <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>01.234.567-89</Text>
@@ -195,12 +198,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.notMainText,
     height: '100%',
-    paddingVertical: 50,
-    paddingHorizontal: 40
+    marginVertical: 50,
+    padding: 40
   },
   backgroundImageStyle: {
     flex: 1,
-    width: 375,
+    width: "100%",
     height: 250,
     position: "absolute",
     marginTop: 30
@@ -223,7 +226,8 @@ const styles = StyleSheet.create({
   },
   userDetailsContainer: {
     width: "100%",
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: 40
   },
   imageStyle: {
     width: 100,
@@ -245,7 +249,7 @@ const styles = StyleSheet.create({
     fontFamily: Colors.fontFamily,
     color: Colors.primaryTextColor,
     fontSize: 18,
-    paddingTop: 10,
+    marginTop: 10,
     maxWidth: "80%"
   },
   boldText: {
@@ -255,7 +259,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     height: 50,
-    paddingVertical: 10,
+    marginVertical: 10,
     borderBottomWidth: 2,
     borderBottomColor: "#A7A7A7"
   },
@@ -275,16 +279,16 @@ const styles = StyleSheet.create({
     fontFamily: Colors.fontFamily,
     color: Colors.primaryTextColor,
     fontSize: 18,
-    paddingVertical: 2,
+    marginVertical: 2,
   },
   userPersonalDataContainer: {
     width: "100%",
     alignItems: "center",
-    paddingVertical: 10
+    marginTop: 20
   },
   versionContainer: {
     width: "100%",
-    paddingTop: 15
+    marginTop: 15
   },
   versionText: {
     fontFamily: Colors.fontFamily,
@@ -294,7 +298,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: Colors.fontFamily,
     fontSize: 15,
-    paddingVertical: 2,
+    marginVertical: 2,
   },
 
   imageContainer: {
@@ -305,17 +309,14 @@ const styles = StyleSheet.create({
 
 
   buttonContainer: {
-    width: "100%",
-    paddingHorizontal: 20
+    marginHorizontal: 20
   },
   innerButtonContainer: {
-    width: "100%",
     borderRadius: 50,
   },
   contentButton: {
     height: 40,
-    width: "100%",
-    textAlign: "center"
+    textAlign: "center",
   },
   buttonText: {
     color: Colors.primaryTextColor,
@@ -327,7 +328,8 @@ const styles = StyleSheet.create({
   cardContent: {
     flex: 1,
     zIndex: 5,
-    height: "100%"
+    height: "100%",
+    flexDirection: "column"
   },
   card: {
     flex: 1,
@@ -340,7 +342,9 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    paddingVertical: 20,
+    marginVertical: 20,
+    height: 350,
+    marginHorizontal: 20
   }
 
 });
