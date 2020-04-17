@@ -17,7 +17,7 @@ import {CheckboxItem} from '../../../components/customcheckboxitem';
 import {ContinueRequiredButton} from '../../../components/custombutton';
 
 import {SignUp} from '../../../firebase/Auth';
-import {CreateUser, UpdatePhoto} from '../../../firebase/User';
+import {SaveUser} from '../../../firebase/User';
 
 import {UserConsumer} from '../../../store/user';
 
@@ -172,9 +172,7 @@ export default class ComorbiditiesPage extends Component {
     await SignUp(user.email, user.password);
 
     const {email, password, ...model} = user;
-
-    console.log('model', model);
-    await CreateUser(model);
+    await SaveUser(model);
 
     this.props.navigation.navigate(nextPage, {entity: entity});
   };

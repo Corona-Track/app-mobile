@@ -2,20 +2,17 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import KEYS from './Constant';
 
-export const CreateUser = model => {
+export const SaveUser = model => {
   return new Promise((resolve, reject) => {
     const {uid} = auth().currentUser;
-    console.log('CreateUser', uid);
     firestore()
       .collection(KEYS.TABLE_USER)
       .doc(uid)
       .set(model)
       .then(res => {
-        console.log('CreateUser', res);
         resolve(res);
       })
       .catch(error => {
-        console.log('CreateUser', error);
         reject(new Error(error));
       });
   });

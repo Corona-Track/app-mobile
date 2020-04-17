@@ -21,6 +21,8 @@ import {
   DoubtButton,
 } from '../../../components/custombutton';
 
+import {UserConsumer} from '../../../store/user';
+
 export default class MedicinesPage extends Component {
   static navigationOptions = {
     headerShown: false,
@@ -37,83 +39,73 @@ export default class MedicinesPage extends Component {
     },
     expandedMedicines: [],
   };
-  initialize(props) {
-    if (!props) {
-      return;
-    }
-    let {navigation} = props;
-    let {entity} = this.state;
-    let previousEntity = navigation.getParam('entity', null);
-    if (!previousEntity) {
-      return;
-    }
-    let converted = {
-      ...entity,
-      ...previousEntity,
-    };
-    this.setState({entity: converted});
-  }
-  componentDidMount = () => {
-    this.initialize(this.props);
-  };
+
   render = () => {
     let {entity} = this.state;
     return (
-      <SafeAreaView style={styles.container}>
-        <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-        <Header
-          containerStyle={{marginHorizontal: 20}}
-          backgroundColor={Colors.secondaryColor}
-          // leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-          centerComponent={
-            <CenterComponent photo={entity.photo} userName={entity.name} />
-          }
-          rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-        />
-        <View style={{flex: 0.75, width: '100%'}}>
-          <ScrollView nestedScrollEnabled={true} style={{width: '100%'}}>
-            <IntroText />
-            <View style={styles.checkboxItemContainer}>
-              <View style={{paddingHorizontal: 20}}>
-                <CheckboxItem
-                  identifier={'Nenhuma das opções'}
-                  isChecked={this.isChecked}
-                  onClickCheck={this.onClickNoneOfOptions}
+      <UserConsumer>
+        {context => (
+          <SafeAreaView style={styles.container}>
+            <Header
+              containerStyle={{marginHorizontal: 20}}
+              backgroundColor={Colors.secondaryColor}
+              // leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+              centerComponent={
+                <CenterComponent
+                  photo={context.user.photo}
+                  userName={context.user.name}
                 />
-              </View>
-              {this.renderCheckboxExpand('Anti-inflamatório')}
-              {this.renderCheckboxExpand('Analgésico')}
-              {this.renderCheckboxExpand('Corticoide')}
-            </View>
-          </ScrollView>
-        </View>
-        <View
-          style={{
-            flex: 0.25,
-            width: '100%',
-            paddingHorizontal: 20,
-            justifyContent: 'flex-end',
-            paddingBottom: 20,
-          }}>
-          <ContinueRequiredButton
-            onPress={() => {
-              this.onContinueButtonClick();
-            }}
-            disabled={this.disableButton()}
-          />
-          {!entity.contaminated ? (
-            <DoubtButton
-              onPress={() => {
-                this.onDoubtPress();
-              }}
-              label="Responder depois"
+              }
+              rightComponent={
+                <RightComponent onPress={this.onRightButtonPress} />
+              }
             />
-          ) : (
-            <></>
-          )}
-        </View>
-        <ProgressTracking amount={10} position={1} />
-      </SafeAreaView>
+            <View style={{flex: 0.75, width: '100%'}}>
+              <ScrollView nestedScrollEnabled={true} style={{width: '100%'}}>
+                <IntroText />
+                <View style={styles.checkboxItemContainer}>
+                  <View style={{paddingHorizontal: 20}}>
+                    <CheckboxItem
+                      identifier={'Nenhuma das opções'}
+                      isChecked={this.isChecked}
+                      onClickCheck={this.onClickNoneOfOptions}
+                    />
+                  </View>
+                  {this.renderCheckboxExpand('Anti-inflamatório')}
+                  {this.renderCheckboxExpand('Analgésico')}
+                  {this.renderCheckboxExpand('Corticoide')}
+                </View>
+              </ScrollView>
+            </View>
+            <View
+              style={{
+                flex: 0.25,
+                width: '100%',
+                paddingHorizontal: 20,
+                justifyContent: 'flex-end',
+                paddingBottom: 20,
+              }}>
+              <ContinueRequiredButton
+                onPress={() => {
+                  this.onContinueButtonClick(context);
+                }}
+                disabled={this.disableButton()}
+              />
+              {!context.user.contaminated ? (
+                <DoubtButton
+                  onPress={() => {
+                    this.onDoubtPress(context);
+                  }}
+                  label="Responder depois"
+                />
+              ) : (
+                <></>
+              )}
+            </View>
+            <ProgressTracking amount={10} position={1} />
+          </SafeAreaView>
+        )}
+      </UserConsumer>
     );
   };
   onLeftButtonPress = () => {
@@ -295,16 +287,18 @@ export default class MedicinesPage extends Component {
     );
     return frequencyPosition > -1;
   };
-  onContinueButtonClick = () => {
+  onContinueButtonClick = context => {
     let {entity} = this.state;
+    context.updateUser({question: entity});
     this.props.navigation.navigate('AlreadyHadFluVaccine', {entity: entity});
   };
-  onDoubtPress = () => {
+  onDoubtPress = context => {
     let {entity} = this.state;
     entity.medicinesSelected = [];
     entity.frequencyByMedicine = [];
     entity.skippedAnswer = true;
     this.setState({entity});
+    context.updateUser({question: entity});
     this.props.navigation.navigate('AlreadyHadFluVaccine', {entity: entity});
   };
 }
