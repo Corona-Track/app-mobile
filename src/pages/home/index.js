@@ -1,15 +1,28 @@
 import React, { Component } from 'react';
-import { Image, SafeAreaView, StyleSheet, Text, ImageBackground, TouchableOpacity, View, ScrollView } from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text, ImageBackground, TouchableOpacity, View, ScrollView, Animated } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import auth from '@react-native-firebase/auth';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Avatar } from 'react-native-elements';
 import { Button } from 'react-native-paper';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
+
 
 import { Colors } from '../../themes/variables';
 import { signOut } from '../../firebase/Auth';
 
+const translateY = new Animated.Value(0);
+const animatedEvent = Animated.event(
+  [
+    {
+      nativeEvent: {
+        translationY: translateY
+      }
+    }
+  ],
+  { useNativeDriver: true },
+);
 export default class HomePage extends Component {
   static navigationOptions = {
     headerShown: false,
@@ -21,12 +34,8 @@ export default class HomePage extends Component {
   };
   setSignOut = () => {
     signOut()
-      .then(() => {
-        this.props.navigation.navigate('Login');
-      })
-      .catch(error => {
-        console.error(error);
-      });
+      .then(() => { this.props.navigation.navigate('Login'); })
+      .catch(error => { console.error(error); });
   };
   initialize = () => {
     let currentUser = auth().currentUser;
@@ -47,18 +56,15 @@ export default class HomePage extends Component {
           style={styles.backgroundImageStyle} />
 
         <UserDetails photo={currentUser.photo} name={"Lourenço José Roberti de Araújo"} aliasName={this.getFirstLetterName("Lourenço José Roberti de Araújo")} />
-
         {this.renderCard()}
-
-
         {/* <UserDetails photo={currentUser.photo} name={currentUser.name} aliasName={this.getFirstLetterName(currentUser.name)} /> */}
-        {/* <ScrollView style={{ height: "100%" }}>
-          <View style={{  }}>
+        <ScrollView style={{ height: 300 }}>
+          <View style={{}}>
             <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" />
             {this.renderOptionsList()}
             <VersionDetails />
           </View>
-        </ScrollView> */}
+        </ScrollView>
       </SafeAreaView>
     );
   };
@@ -81,25 +87,29 @@ export default class HomePage extends Component {
   };
   renderCard = () => {
     return (
-      <View style={{
-        flex: 1,
-        backgroundColor: "#FFF",
-        borderRadius: 4,
-        marginVertical: 10,
-        justifyContent: "center",
-        alignItems: "center"
-      }}>
-        <View style={{ height: 80 }}>
-          <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>37 anos</Text>
-          <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>987.654.321-00</Text>
-          <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>01.234.567-89</Text>
-        </View>
-        <Image style={styles.imageContainer}
-          source={{ uri: "https://canaltech.com.br/conteudo/Pedro/O_que_e_QRcode/qr_code_ud.jpg" }} />
-        <Text numberOfLines={1} style={[styles.cardText, { fontSize: 12 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>VERDE</Text></Text>
-        <ProfileButton />
+      <View style={styles.cardContent}>
+        <PanGestureHandler onGestureEvent={animatedEvent} onHandlerStateChange={this.onHandlerStateChange}>
+          <Animated.View style={[styles.card, {
+            transform: [{
+              translateY,
+            }]
+          }]}>
+            <View style={{ height: 80 }}>
+              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>37 anos</Text>
+              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>987.654.321-00</Text>
+              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>01.234.567-89</Text>
+            </View>
+            <Image style={styles.imageContainer}
+              source={{ uri: "https://canaltech.com.br/conteudo/Pedro/O_que_e_QRcode/qr_code_ud.jpg" }} />
+            <Text numberOfLines={1} style={[styles.cardText, { fontSize: 12 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>VERDE</Text></Text>
+            <ProfileButton />
+          </Animated.View>
+        </PanGestureHandler >
       </View>
     )
+  };
+  onHandlerStateChange = event => {
+
   };
 };
 
@@ -185,7 +195,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.notMainText,
     height: '100%',
-    paddingVertical: 40,
+    paddingVertical: 50,
     paddingHorizontal: 40
   },
   backgroundImageStyle: {
@@ -270,6 +280,7 @@ const styles = StyleSheet.create({
   userPersonalDataContainer: {
     width: "100%",
     alignItems: "center",
+    paddingVertical: 10
   },
   versionContainer: {
     width: "100%",
@@ -311,5 +322,25 @@ const styles = StyleSheet.create({
     fontFamily: Colors.fontFamily,
     fontSize: 11
   },
+
+
+  cardContent: {
+    flex: 1,
+    zIndex: 5,
+    height: "100%"
+  },
+  card: {
+    flex: 1,
+    backgroundColor: "#FFF",
+    borderRadius: 4,
+    marginVertical: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    paddingVertical: 20,
+  }
 
 });
