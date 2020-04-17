@@ -38,7 +38,9 @@ import Maps from "../pages/maps";
 const ApplicationStackNavigator = createStackNavigator(
   {
     Home: {screen: HomePage},
-    Maps: {screen: Maps}
+    Maps: {screen: Maps,navigationOptions:{
+      header:null
+    }}
     //AA: { screen: AAPage },
   },
   {initialRouteName: 'Home'},

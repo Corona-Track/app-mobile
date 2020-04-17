@@ -9,7 +9,6 @@ import cross from "../../assets/images/cross.png"
 import contagionBar from "../../assets/images/contagionBar.png"
 
 const Maps = (props) => {
-  console.log(props)
   const [userLocation,setUserLocation]= useState();
 
   const onGPSErrorMessage = () => {
@@ -24,10 +23,11 @@ const Maps = (props) => {
   const getLocation = () => {
     Geolocation.getCurrentPosition(
         position => {
-          console.log(position)
           setUserLocation({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
+            longitudeDelta: 0.05,
+            latitudeDelta: 0.05
           })
         },
         error => {
@@ -125,14 +125,14 @@ const Maps = (props) => {
       
       {/* MAP */}
       {userLocation && userLocation.latitude && 
-        <MapView 
+        <MapView
           provider={PROVIDER_GOOGLE}
           style={{flex: 1}}
           region={userLocation}
           onMapReady={() => setShowCircle(true)}
           showsUserLocation={true}
           minZoomLevel={1}
-          maxZoomLevel={15}
+          maxZoomLevel={20}
         >
           <Marker
             coordinate={userLocation}
@@ -190,10 +190,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 25
+    paddingHorizontal: 20
   },
   textHeader: {
-    fontSize: 20,
+    width:200,
+    fontSize: 19,
     color: Colors.primaryTextColor,
     textTransform: "uppercase",
     fontWeight: "600"
