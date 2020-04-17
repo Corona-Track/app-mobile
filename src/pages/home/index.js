@@ -54,7 +54,7 @@ export default class HomePage extends Component {
           source={require('../../assets/images/homebackground.png')}
           resizeMethod="auto"
           style={styles.backgroundImageStyle} />
-        <View>
+        <View style={{marginVertical: 50}}>
           <UserDetails photo={currentUser.photo} name={"Lourenço José Roberti de Araújo"} aliasName={this.getFirstLetterName("Lourenço José Roberti de Araújo")} />
           {this.renderCard()}
           {/* <UserDetails photo={currentUser.photo} name={currentUser.name} aliasName={this.getFirstLetterName(currentUser.name)} /> */}
@@ -198,13 +198,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.notMainText,
     height: '100%',
-    marginVertical: 50,
-    padding: 40
   },
   backgroundImageStyle: {
     flex: 1,
     width: "100%",
-    height: 250,
+    height: 300,
     position: "absolute",
     marginTop: 30
   },
@@ -227,7 +225,6 @@ const styles = StyleSheet.create({
   userDetailsContainer: {
     width: "100%",
     alignItems: "center",
-    marginTop: 40
   },
   imageStyle: {
     width: 100,
@@ -343,7 +340,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     marginVertical: 20,
-    height: 350,
+    height: 300,
     marginHorizontal: 20
   }
 
