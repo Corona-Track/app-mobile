@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import auth from '@react-native-firebase/auth';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Avatar } from 'react-native-elements';
+import { Button } from 'react-native-paper';
 
 import { Colors } from '../../themes/variables';
 import { signOut } from '../../firebase/Auth';
@@ -46,18 +47,18 @@ export default class HomePage extends Component {
           style={styles.backgroundImageStyle} />
 
         <UserDetails photo={currentUser.photo} name={"Lourenço José Roberti de Araújo"} aliasName={this.getFirstLetterName("Lourenço José Roberti de Araújo")} />
-        {/* <UserDetails photo={currentUser.photo} name={currentUser.name} aliasName={this.getFirstLetterName(currentUser.name)} /> */}
 
-        <ScrollView style={{ height: "100%" }}>
-          <View style={{ paddingVertical: 20 }}>
+        {this.renderCard()}
+
+
+        {/* <UserDetails photo={currentUser.photo} name={currentUser.name} aliasName={this.getFirstLetterName(currentUser.name)} /> */}
+        {/* <ScrollView style={{ height: "100%" }}>
+          <View style={{  }}>
             <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" />
             {this.renderOptionsList()}
             <VersionDetails />
           </View>
-
-        </ScrollView>
-
-
+        </ScrollView> */}
       </SafeAreaView>
     );
   };
@@ -77,6 +78,28 @@ export default class HomePage extends Component {
         <MenuItem icon="logout" name="SAIR" />
       </View>
     );
+  };
+  renderCard = () => {
+    return (
+      <View style={{
+        flex: 1,
+        backgroundColor: "#FFF",
+        borderRadius: 4,
+        marginVertical: 10,
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+        <View style={{ height: 80 }}>
+          <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>37 anos</Text>
+          <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>987.654.321-00</Text>
+          <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>01.234.567-89</Text>
+        </View>
+        <Image style={styles.imageContainer}
+          source={{ uri: "https://canaltech.com.br/conteudo/Pedro/O_que_e_QRcode/qr_code_ud.jpg" }} />
+        <Text numberOfLines={1} style={[styles.cardText, { fontSize: 12 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>VERDE</Text></Text>
+        <ProfileButton />
+      </View>
+    )
   };
 };
 
@@ -146,11 +169,23 @@ const VersionDetails = () => (
   </View>
 );
 
+const ProfileButton = ({ onPress }) => (
+  <View style={styles.buttonContainer}>
+    <Button
+      style={styles.innerButtonContainer}
+      contentStyle={styles.contentButton}
+      mode="contained"
+      color={"#27AE60"}
+      labelStyle={styles.buttonText}
+      onPress={onPress}>ENTENDA MELHOR O SEU PERFIL</Button>
+  </View>
+);
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.notMainText,
     height: '100%',
-    paddingTop: 40,
+    paddingVertical: 40,
     paddingHorizontal: 40
   },
   backgroundImageStyle: {
@@ -158,7 +193,7 @@ const styles = StyleSheet.create({
     width: 375,
     height: 250,
     position: "absolute",
-    marginTop: 50
+    marginTop: 30
   },
   mapButton: {
     flex: 0,
@@ -200,7 +235,7 @@ const styles = StyleSheet.create({
     fontFamily: Colors.fontFamily,
     color: Colors.primaryTextColor,
     fontSize: 18,
-    paddingVertical: 10,
+    paddingTop: 10,
     maxWidth: "80%"
   },
   boldText: {
@@ -234,7 +269,7 @@ const styles = StyleSheet.create({
   },
   userPersonalDataContainer: {
     width: "100%",
-    alignItems: "center"
+    alignItems: "center",
   },
   versionContainer: {
     width: "100%",
@@ -244,4 +279,37 @@ const styles = StyleSheet.create({
     fontFamily: Colors.fontFamily,
     color: "#FFFFFF",
   },
+  cardText: {
+    textAlign: "center",
+    fontFamily: Colors.fontFamily,
+    fontSize: 15,
+    paddingVertical: 2,
+  },
+
+  imageContainer: {
+    width: 100,
+    height: 100,
+    marginVertical: 10
+  },
+
+
+  buttonContainer: {
+    width: "100%",
+    paddingHorizontal: 20
+  },
+  innerButtonContainer: {
+    width: "100%",
+    borderRadius: 50,
+  },
+  contentButton: {
+    height: 40,
+    width: "100%",
+    textAlign: "center"
+  },
+  buttonText: {
+    color: Colors.primaryTextColor,
+    fontFamily: Colors.fontFamily,
+    fontSize: 11
+  },
+
 });
