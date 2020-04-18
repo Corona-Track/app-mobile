@@ -1,5 +1,5 @@
-import {createSwitchNavigator, createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 // import AuthLoading from '../pages/authLoading';
 
 import SplashPage from '../pages/splash';
@@ -32,7 +32,7 @@ import RelativesHomePrecautionsPage from '../pages/preventiveanalysis/relativesh
 import FinishRemainingPage from '../pages/preventiveanalysis/finishremaining';
 import FinishCompletePage from '../pages/preventiveanalysis/finishcomplete';
 import RiskProfile from '../pages/profile/riskprofile';
-import Orientation from '../pages/orientation/index';
+import OrientationPage from '../pages/orientation/index';
 import ScheduleOrientation from '../pages/orientation/scheduleOrientation';
 
 import SymptomsPage from '../pages/symptoms/symptons';
@@ -42,60 +42,55 @@ import Maps from "../pages/maps";
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator(
   {
-    Home: {screen: HomePage},
-    Maps: {screen: Maps,navigationOptions:{
-      header:null
-    }}
+    Home: { screen: HomePage },
+    Maps: {
+      screen: Maps, navigationOptions: {
+        header: null
+      },
+    },
+    RiskProfile: { screen: RiskProfile },
+    Orientation: { screen: OrientationPage },
+    ScheduleOrientation: { screen: ScheduleOrientation },
+    Symptoms: { screen: SymptomsPage },
     //AA: { screen: AAPage },
   },
-  {initialRouteName: 'Home'},
+  { initialRouteName: 'Home' },
 );
 
 //App external routes
 const AuthenticationStackNavigator = createStackNavigator(
   {
     //Create Account
-    Disclaimer: {screen: DisclaimerPage},
-    TakePhoto: {screen: TakePhotoPage},
-    TookPhoto: {screen: TookPhotoPage},
-    PersonalData: {screen: PersonalDataPage},
-    PersonalAddress: {screen: PersonalAddressPage},
-    AlreadyHadCoronavirus: {screen: AlreadyHadCoronavirusPage},
-    AlreadyHadCoronavirusTest: {screen: AlreadyHadCoronavirusTestPage},
-    TestResult: {screen: TestResultPage},
-    SomeoneDiagnosed: {screen: SomeoneDiagnosedPage},
-    SomeoneSuspicious: {screen: SomeoneSuspiciousPage},
-    Comorbidities: {screen: ComorbiditiesPage},
-    FinishUncontaminated: {screen: FinishUncontaminatedPage},
-    FinishContaminated: {screen: FinishContaminatedPage},
+    Disclaimer: { screen: DisclaimerPage },
+    TakePhoto: { screen: TakePhotoPage },
+    TookPhoto: { screen: TookPhotoPage },
+    PersonalData: { screen: PersonalDataPage },
+    PersonalAddress: { screen: PersonalAddressPage },
+    AlreadyHadCoronavirus: { screen: AlreadyHadCoronavirusPage },
+    AlreadyHadCoronavirusTest: { screen: AlreadyHadCoronavirusTestPage },
+    TestResult: { screen: TestResultPage },
+    SomeoneDiagnosed: { screen: SomeoneDiagnosedPage },
+    SomeoneSuspicious: { screen: SomeoneSuspiciousPage },
+    Comorbidities: { screen: ComorbiditiesPage },
+    FinishUncontaminated: { screen: FinishUncontaminatedPage },
+    FinishContaminated: { screen: FinishContaminatedPage },
 
-    Login: {screen: LoginPage},
+    Login: { screen: LoginPage },
     // Splash: {screen: SplashPage},
 
     //Preventive Profile
-    Medicines: {screen: MedicinesPage},
-    AlreadyHadFluVaccine: {screen: AlreadyHadFluVaccinePage},
-    WeekLeaveHomeTimes: {screen: WeekLeaveHomeTimesPage},
-    SocialDistance: {screen: SocialDistancePage},
-    ProtectionUsage: {screen: ProtectionUsagePage},
-    TouchingPrecaution: {screen: TouchingPrecautionPage},
-    HomePrecautions: {screen: HomePrecautionsPage},
-    OutsideWork: {screen: OutsideWorkPage},
-    RelativesLeavingHome: {screen: RelativesLeavingHomePage},
-    RelativesHomePrecautions: {screen: RelativesHomePrecautionsPage},
-    FinishRemaining: {screen: FinishRemainingPage},
-    FinishComplete: {screen: FinishCompletePage},
-
-    // Profile
-    RiskProfile: {screen: RiskProfile},
-
-    // Orientation
-    Orientation:{screen: Orientation},
-    ScheduleOrientation:{screen:ScheduleOrientation},
-
-
-    Symptoms: { screen: SymptomsPage },
-
+    Medicines: { screen: MedicinesPage },
+    AlreadyHadFluVaccine: { screen: AlreadyHadFluVaccinePage },
+    WeekLeaveHomeTimes: { screen: WeekLeaveHomeTimesPage },
+    SocialDistance: { screen: SocialDistancePage },
+    ProtectionUsage: { screen: ProtectionUsagePage },
+    TouchingPrecaution: { screen: TouchingPrecautionPage },
+    HomePrecautions: { screen: HomePrecautionsPage },
+    OutsideWork: { screen: OutsideWorkPage },
+    RelativesLeavingHome: { screen: RelativesLeavingHomePage },
+    RelativesHomePrecautions: { screen: RelativesHomePrecautionsPage },
+    FinishRemaining: { screen: FinishRemainingPage },
+    FinishComplete: { screen: FinishCompletePage },
   },
   {
     initialRouteName: 'Disclaimer',
@@ -109,7 +104,7 @@ const RoutesSwitchNavigator = createAppContainer(
       Authentication: AuthenticationStackNavigator,
       Application: ApplicationStackNavigator,
     },
-    {initialRouteName: 'Splash'},
+    { initialRouteName: 'Splash' },
   ),
 );
 
