@@ -58,7 +58,11 @@ export default class HomePage extends Component {
           <HeartButton />
         </View>
         <View style={{ marginTop: 50 }}>
-          <UserDetails photo={currentUser.photo} name={"Maria José da Silva"} aliasName={this.getFirstLetterName("Maria José da Silva")} />
+          <UserDetails
+            onPress={this.executeCardAnimation}
+            photo={currentUser.photo}
+            name={"Maria José da Silva"}
+            aliasName={this.getFirstLetterName("Maria José da Silva")} />
           {this.renderCard()}
           {/* <UserDetails photo={currentUser.photo} name={currentUser.name} aliasName={this.getFirstLetterName(currentUser.name)} /> */}
           <View>
@@ -147,6 +151,26 @@ export default class HomePage extends Component {
       });
     }
   };
+  executeCardAnimation = () => {
+    let opened = false;
+    let goToOffset = offset === 250 ? 0 : 250;
+    if (goToOffset === 250)
+      opened = true;
+    else {
+      translateY.setValue(offset);
+      translateY.setOffset(0);
+      offset = 0;
+    }
+    Animated.timing(translateY, {
+      toValue: goToOffset,
+      duration: 200,
+      useNativeDriver: true
+    }).start(() => {
+      offset = goToOffset;
+      translateY.setOffset(offset);
+      translateY.setValue(0);
+    });
+  };
 };
 
 const MapButton = ({ onPress }) => (
@@ -178,9 +202,9 @@ const UserDetails = ({ photo, name, aliasName, onPress }) => (
       </View>
     </View>
     <Text numberOfLines={1} style={styles.userName}><Text numberOfLines={1} style={styles.boldText}>{name}</Text></Text>
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={() => { onPress() }}>
       <Icon
-        name="chevron-down"
+        name={offset === 0 ? "chevron-down" : "chevron-up"}
         size={40}
         color={Colors.secondaryColor} />
     </TouchableOpacity>
