@@ -32,6 +32,8 @@ import RelativesHomePrecautionsPage from '../pages/preventiveanalysis/relativesh
 import FinishRemainingPage from '../pages/preventiveanalysis/finishremaining';
 import FinishCompletePage from '../pages/preventiveanalysis/finishcomplete';
 import RiskProfile from '../pages/profile/riskprofile';
+import Orientation from '../pages/orientation/index';
+import ScheduleOrientation from '../pages/orientation/scheduleOrientation';
 
 import SymptomsPage from '../pages/symptoms/symptons';
 
@@ -82,11 +84,16 @@ const AuthenticationStackNavigator = createStackNavigator(
     // Profile
     RiskProfile: {screen: RiskProfile},
 
+    // Orientation
+    Orientation:{screen: Orientation},
+    ScheduleOrientation:{screen:ScheduleOrientation},
+
+
     Symptoms: { screen: SymptomsPage },
 
   },
   {
-    initialRouteName: 'Disclaimer',
+    initialRouteName: 'Orientation',
   },
 );
 
