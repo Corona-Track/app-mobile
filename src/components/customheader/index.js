@@ -55,6 +55,8 @@ const styles = StyleSheet.create({
   },
   centerComponent: {
     flexDirection: 'row',
+    height: '100%',
+    alignItems: 'center',
   },
   avatarContainerIcon: {
     width: 45,
@@ -63,7 +65,6 @@ const styles = StyleSheet.create({
   userName: {
     textAlign: 'center',
     width: 150,
-    textAlignVertical: 'center',
     fontFamily: Colors.fontFamily,
     color: Colors.navigatorIconColor,
     fontWeight: 'bold',

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 
 // Components
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, SafeAreaView, View } from 'react-native'
 import { WebView } from 'react-native-webview';
 import { Header } from 'react-native-elements';
 import { LeftComponent, CenterComponent } from '../../../components/customheader';
 import { getUser } from '../../../firebase/User';
+import {Colors} from '../../../themes/variables';
 
 
 ScheduleOrientation.navigationOptions = {
@@ -29,27 +30,24 @@ export default function ScheduleOrientation(props) {
                 name,
                 photo
             })
-        })
-            .catch(err => {
-                console.log('Error getting document', err);
-            });
+        }).catch(err => { console.log('Error getting document', err); });
     }
 
     onLeftButtonPress = () => {
         navigation.pop();
     };
 
-    return <View style={styles.page}>
-        <Header
-            containerStyle={styles.header}
-            leftComponent={<LeftComponent onPress={onLeftButtonPress} />}
-            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
-        />
+    return <SafeAreaView style={styles.page}>
+         <View style={{width: '100%', marginHorizontal: 20}}>
+            <Header
+                containerStyle={styles.header}
+                leftComponent={<LeftComponent onPress={onLeftButtonPress} />}
+                centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />} />
+        </View>
         <WebView
             source={{ uri: 'https://www.aliancamedica.org' }}
-            style={{ flex: 1 }}
-        />
-    </View>
+            style={{ flex: 1 }} />
+    </SafeAreaView>
 }
 
 const styles = StyleSheet.create({
@@ -57,6 +55,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        backgroundColor: '#FFFFFF'
+        backgroundColor: Colors.secondaryColor
     },
 })
