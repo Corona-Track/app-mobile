@@ -49,6 +49,10 @@ export default class OrientationPage extends Component {
         console.error(error);
       });
   };
+
+  onPressScheduleOrientation(props){
+    props.navigation.navigate("ScheduleOrientation");
+  }
   componentDidMount() {}
   render = () => {
     let { entity } = this.state;
@@ -75,7 +79,7 @@ export default class OrientationPage extends Component {
           mode="outlined"
           color={Colors.primaryTextColor}
           labelStyle={styles.textOrin}
-          onPress={this.onSignUpButtonPress}>
+          onPress={() => this.onPressScheduleOrientation(this.props)}>
           AGENDAR TELEORIENTAÇÃO
         </Button>
         <Button
