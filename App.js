@@ -1,3 +1,4 @@
+import 'react-native-get-random-values';
 import {createAppContainer} from 'react-navigation';
 import React, {useState} from 'react';
 import {YellowBox} from 'react-native';
