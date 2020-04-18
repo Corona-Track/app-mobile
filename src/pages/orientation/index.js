@@ -176,6 +176,6 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     width: '100%',
-    paddingHorizontal: 35
+    paddingHorizontal: 15
   },
 });
