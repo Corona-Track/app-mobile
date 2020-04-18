@@ -1,6 +1,22 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
+export const getUser = () => {
+  return new Promise((resolve, reject) => {
+    const { uid } = auth().currentUser;
+    firestore()
+      .collection('users')
+      .doc(uid)
+      .get()
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        reject(new Error(error));
+      });
+  });
+};
+
 export const signOut = () => {
   return new Promise((resolve, reject) => {
     auth()
@@ -20,7 +36,7 @@ export const SignIn = (email, password) => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        const {uid} = auth().currentUser;
+        const { uid } = auth().currentUser;
         resolve(uid);
       })
       .catch(error => {
@@ -50,7 +66,7 @@ export const SignUp = (email, password, name, photo) => {
   return new Promise((resolve, reject) => {
     const currentUser = auth().currentUser;
     if (currentUser) {
-      const {uid} = auth().currentUser;
+      const { uid } = auth().currentUser;
       resolve(uid);
       return;
     }
@@ -58,7 +74,7 @@ export const SignUp = (email, password, name, photo) => {
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        const {uid} = auth().currentUser;
+        const { uid } = auth().currentUser;
         resolve(uid);
       })
       .catch(error => {
