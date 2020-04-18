@@ -6,6 +6,7 @@ import { WebView } from 'react-native-webview';
 import { Header } from 'react-native-elements';
 import { LeftComponent, CenterComponent } from '../../../components/customheader';
 import { getUser } from '../../../firebase/User';
+import {Colors} from '../../../themes/variables';
 
 
 ScheduleOrientation.navigationOptions = {
@@ -54,6 +55,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        backgroundColor: '#FFFFFF'
+        backgroundColor: Colors.secondaryColor
     },
 })

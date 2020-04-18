@@ -52,7 +52,7 @@ export default class OrientationPage extends Component {
       <SafeAreaView style={styles.container}>
         <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <Header
-            backgroundColor={Colors.primaryTextColor}
+            backgroundColor={Colors.secondaryColor}
             leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
             centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />} />
         </View>
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "#FFFFFF",
+    backgroundColor: Colors.secondaryColor,
     height: '100%',
   },
   content: {
