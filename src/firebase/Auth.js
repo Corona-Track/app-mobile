@@ -77,3 +77,4 @@ export const SignUp = (email, password, name, photo) => {
       });
   });
 };
+
