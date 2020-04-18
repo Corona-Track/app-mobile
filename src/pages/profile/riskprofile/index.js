@@ -39,7 +39,7 @@ export default function RiskProfile(props) {
         photo: ''
     })
 
-    const riskProfileId = 1
+    const riskProfileId = 3
 
     useEffect(() => {
         getUserData()
@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
+        paddingTop:10
     },
     content: {
         alignItems: 'center',

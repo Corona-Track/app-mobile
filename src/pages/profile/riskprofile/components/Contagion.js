@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, Image, View } from 'react-native'
-import { Colors } from '../../../../themes/variables';
-import Icon from 'react-native-vector-icons/Entypo';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
+// Components
+import { StyleSheet, Text, Image, View } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/Entypo';
+
+// styles
+import { Colors } from '../../../../themes/variables';
 
 const aboutContagion = "Nosso algoritmo baseia-se nas informações reportadas pelo próprio usuário no aplicativo e seus sintomas sende estes os sintomas caracteristicos da doenca segundo ministerio da saude e sua prevalencia segundo as fontes ultilizadas por eles. Assim como práticas de higiene, bem como no seu autorrelato sobre o teste de COVID-19 (caso tenha feito um). Em futuras versões pretendemos utilizar dados de bluetooth e geolocalização para refinar os resultados.\n\nDadas as limitações do nosso algoritmo e o atual momento que vivemos, você deve seguir as recomendações gerais do Ministério da Saúde para evitar a disseminação do vírus."
 const referencesContagion = "1. DIRETRIZES PARA DIAGNÓSTICO E TRATAMENTO DA COVID-19 | Versão 1 \n\n 2. Guan W, Ni Z, Hu Y, Liang W, Ou C, He J, et al. Clinical Characteristics of Coronavirus Disease 2019 in China. N Engl J Med. 2020;1–13."
@@ -60,8 +63,35 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 50,
         alignItems: "center",
-        borderBottomColor:'#F7F7F7',
-        borderBottomWidth:1.5
+        borderBottomColor: '#F7F7F7',
+        borderBottomWidth: 1.5
+    },
+
+    image: {
+        marginTop: 50,
+        height: 60,
+        width: 60
+    },
+    label: {
+        marginTop: 25,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 16,
+        lineHeight: 18,
+        fontFamily: Colors.fontFamily,
+        color: Colors.notMainText,
+    },
+    text: {
+        marginTop: 25,
+        textAlign: 'justify',
+        fontWeight: '300',
+        fontSize: 14,
+        lineHeight: 20,
+        fontFamily: Colors.fontFamily,
+        color: '#333333',
+    },
+    aboutButton: {
+        marginBottom: 25,
     },
     aboutContainer: {
         backgroundColor: '#F7F7F7',
@@ -84,37 +114,11 @@ const styles = StyleSheet.create({
         color: Colors.notMainText,
     },
     references: {
+        textAlign: 'justify',
         marginTop: 25,
         fontSize: 10,
         lineHeight: 17,
         fontFamily: Colors.fontFamily,
         color: Colors.notMainText,
     },
-    image: {
-        marginTop: 50,
-        height: 60,
-        width: 60
-    },
-    label: {
-        marginTop: 25,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 16,
-        lineHeight: 18,
-        fontFamily: Colors.fontFamily,
-        color: '#828282',
-    },
-    text: {
-        marginTop: 25,
-        paddingHorizontal: 15,
-        textAlign: 'justify',
-        fontWeight: '300',
-        fontSize: 14,
-        lineHeight: 20,
-        fontFamily: Colors.fontFamily,
-        color: '#333333',
-    },
-    aboutButton:{
-        marginBottom:25,
-    }
 })

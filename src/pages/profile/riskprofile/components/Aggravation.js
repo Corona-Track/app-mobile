@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
+
+// Components
 import { StyleSheet, Text, Image, View } from 'react-native'
-import { Colors } from '../../../../themes/variables';
 import Icon from 'react-native-vector-icons/Entypo';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
+// styles
+import { Colors } from '../../../../themes/variables';
 
 const aboutAggravation = "Ultilizamos como base os protocolos do ministerio da saude (MS) de COVID 19. Caso apresente alguma das comorbidades que nescessitam de acompnhamento em atençao especializada segundo o MS classificamos como um perfil de risco."
 const referencesAggravation = "1. Protocolo de Manejo Cínico do Coronavírus (COVID-19) na Atenção Primária à Saúde | Versão 7"
@@ -38,7 +42,7 @@ export default function Aggravation(props) {
                 </Text>
 
                 <Text style={styles.references}>
-                    {referencesAggravation}        
+                    {referencesAggravation}
                 </Text>
             </View>
 
@@ -64,35 +68,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 50,
         alignItems: "center"
     },
-    aboutContainer: {
-        backgroundColor: '#F7F7F7',
-        paddingVertical:40,
-        paddingHorizontal: 50,
-        width: '100%'
-    },
-    aboutLabel:{
-        fontWeight:'bold',
-        fontSize: 12,
-        lineHeight: 17,
-        fontFamily: Colors.fontFamily,
-        color: Colors.notMainText,
-    },
-    aboutText:{
-        textAlign:'justify',
-        fontSize: 12,
-        lineHeight: 17,
-        fontFamily: Colors.fontFamily,
-        color: Colors.notMainText,
-    },
-    references:{
-        marginTop: 25,
-        fontSize: 10,
-        lineHeight: 17,
-        fontFamily: Colors.fontFamily,
-        color: Colors.notMainText,
-    },
+
     image: {
-        marginTop: 50,
+        marginTop: 40,
         height: 60,
         width: 60
     },
@@ -107,7 +85,6 @@ const styles = StyleSheet.create({
     },
     text: {
         marginTop: 25,
-        paddingHorizontal: 15,
         textAlign: 'justify',
         fontWeight: '300',
         fontSize: 14,
@@ -115,7 +92,35 @@ const styles = StyleSheet.create({
         fontFamily: Colors.fontFamily,
         color: '#333333',
     },
-    aboutButton:{
-        marginBottom:25,
-    }
+    aboutButton: {
+        marginBottom: 25,
+    },
+    aboutContainer: {
+        backgroundColor: '#F7F7F7',
+        paddingVertical: 40,
+        paddingHorizontal: 50,
+        width: '100%'
+    },
+    aboutLabel: {
+        fontWeight: 'bold',
+        fontSize: 12,
+        lineHeight: 17,
+        fontFamily: Colors.fontFamily,
+        color: Colors.notMainText,
+    },
+    aboutText: {
+        textAlign: 'justify',
+        fontSize: 12,
+        lineHeight: 17,
+        fontFamily: Colors.fontFamily,
+        color: Colors.notMainText,
+    },
+    references: {
+        textAlign: 'justify',
+        marginTop: 25,
+        fontSize: 10,
+        lineHeight: 17,
+        fontFamily: Colors.fontFamily,
+        color: Colors.notMainText,
+    },
 })
