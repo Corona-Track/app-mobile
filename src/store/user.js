@@ -42,23 +42,3 @@ export class UserProvider extends Component {
     );
   }
 }
-
-// export const UserProvider = ({children}) => {
-//   const [user, setUser] = useState({});
-
-//   const updateUser = useCallback(
-//     newValue => {
-//       setUser(prevValue => [...prevValue, newValue]);
-//     },
-//     [setUser],
-//   );
-
-//   const value = {
-//     user,
-//     updateUser,
-//   };
-
-//   return <Context.Provider value={value}>{children}</Context.Provider>;
-// };
-
-// export const useUserStore = () => React.useContext(Context);

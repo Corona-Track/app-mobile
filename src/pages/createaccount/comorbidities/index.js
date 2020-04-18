@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
-import {View, SafeAreaView, StyleSheet, Text, ScrollView} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import PropTypes from 'prop-types';
-import {NavigationEvents} from 'react-navigation';
 import {Header} from 'react-native-elements';
-import firestore from '@react-native-firebase/firestore';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import {Colors} from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
@@ -48,12 +54,14 @@ export default class ComorbiditiesPage extends Component {
       {identifier: 'Doenças genéticas'},
       {identifier: 'Fibrose cística'},
     ],
+    showLoading: false,
   };
 
   render = () => {
-    let {entity, comorbiditiesList} = this.state;
+    let {entity, comorbiditiesList, showLoading} = this.state;
     return (
       <SafeAreaView style={styles.container}>
+        <Spinner visible={showLoading} />
         <Header
           containerStyle={{marginHorizontal: 20}}
           backgroundColor={Colors.secondaryColor}
@@ -159,6 +167,8 @@ export default class ComorbiditiesPage extends Component {
   onContinueButtonClick = async context => {
     let {entity} = this.state;
 
+    this.setState({showLoading: true});
+
     let nextPage = 'FinishUncontaminated';
     if (entity.contaminated) {
       nextPage = 'FinishContaminated';
@@ -166,15 +176,29 @@ export default class ComorbiditiesPage extends Component {
 
     context.updateUser({question: entity});
 
-    const user = {...context.user};
-    user.question.comorbiditiesSelected = entity.comorbiditiesSelected;
+    try {
+      const user = {...context.user};
+      user.question.comorbiditiesSelected = entity.comorbiditiesSelected;
 
-    await SignUp(user.email, user.password);
+      await SignUp(
+        user.email.toLowerCase(),
+        user.password,
+        user.name,
+        user.photo,
+      );
 
-    const {email, password, ...model} = user;
-    await SaveUser(model);
-
-    this.props.navigation.navigate(nextPage, {entity: entity});
+      const {password, ...model} = user;
+      await SaveUser(model);
+      this.setState({showLoading: false});
+      this.props.navigation.navigate(nextPage, {entity: entity});
+    } catch (error) {
+      Alert.alert(
+        'Aviso',
+        'Ocorreu um erro, tente novamente',
+        [{text: 'OK', onPress: () => this.setState({showLoading: false})}],
+        {cancelable: false},
+      );
+    }
   };
 }
 

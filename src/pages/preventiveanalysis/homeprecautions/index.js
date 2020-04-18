@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
-import {View, SafeAreaView, StyleSheet, Text, ScrollView} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import {Header} from 'react-native-elements';
-import {NavigationEvents} from 'react-navigation';
 import PropTypes from 'prop-types';
 
 import {Colors} from '../../../themes/variables';
@@ -251,6 +257,16 @@ const styles = StyleSheet.create({
   textContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        marginTop: 25,
+        marginBottom: 10,
+      },
+      android: {
+        marginTop: 20,
+        marginBottom: 10,
+      },
+    }),
   },
   simpleText: {
     fontFamily: Colors.fontFamily,

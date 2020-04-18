@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {Avatar} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -59,13 +60,17 @@ export default class FinishContaminatedPage extends Component {
                 )}
                 <IntroText userName={context.user.name} />
               </View>
-              <View style={{flex: 0.25, width: '100%'}}>
+              <View style={{flex: 0.25, width: '90%'}}>
                 <ContaminatedAnswerNowButton
                   onPress={() => {
                     this.onAnswerNowButtonPress();
                   }}
                 />
-                <ContaminatedAnswerLaterButton onPress={() => {}} />
+                <ContaminatedAnswerLaterButton
+                  onPress={() => {
+                    this.onAnswerLaterButtonPress();
+                  }}
+                />
               </View>
             </>
           )}
@@ -88,6 +93,10 @@ export default class FinishContaminatedPage extends Component {
       ],
     });
     this.props.navigation.dispatch(resetAction);
+  };
+
+  onAnswerLaterButtonPress = () => {
+    this.props.navigation.navigate('Application');
   };
 }
 
@@ -133,6 +142,11 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   textContainer: {
+    ...Platform.select({
+      ios: {
+        flex: 1,
+      },
+    }),
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
@@ -150,8 +164,15 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 20,
     marginVertical: 20,
+    ...Platform.select({
+      ios: {
+        paddingTop: 60,
+      },
+      android: {
+        paddingTop: 30,
+      },
+    }),
   },
   rightComponent: {
     flex: 0,

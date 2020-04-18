@@ -1,23 +1,4 @@
-// import {Platform} from 'react-native';
-// import firebase from './Config';
-
-// import {LoginManager, AccessToken} from 'react-native-fbsdk';
 import auth from '@react-native-firebase/auth';
-
-export const getUser = () => {
-  return new Promise((resolve, reject) => {
-    auth().onAuthStateChanged(user => {
-      if (user) {
-        return resolve(user);
-      }
-      return reject(new Error('Nenhum usuario encontrado'));
-    });
-  });
-};
-
-// export const authPersist = () => {
-//   auth().setPersistence(auth.Auth.Persistence.LOCAL);
-// };
 
 export const signOut = () => {
   return new Promise((resolve, reject) => {
@@ -32,42 +13,6 @@ export const signOut = () => {
       });
   });
 };
-
-// export const signInFacebook = () => {
-//   return new Promise(async (resolve, reject) => {
-//     if (Platform.OS === 'android') {
-//       LoginManager.setLoginBehavior('web_only');
-//     }
-
-//     const result = await LoginManager.logInWithPermissions([
-//       'public_profile',
-//       'email',
-//     ]);
-
-//     if (result.isCancelled) {
-//       reject(new Error(' Processo de login com facebook cancelado!'));
-//     }
-//     const data = await AccessToken.getCurrentAccessToken();
-
-//     if (!data) {
-//       reject(new Error('Falha ao conseguir Token.'));
-//     }
-
-//     const credential = firebase.auth.FacebookAuthProvider.credential(
-//       data.accessToken,
-//     );
-
-//     firebase
-//       .auth()
-//       .signInWithCredential(credential)
-//       .then(res => {
-//         resolve();
-//       })
-//       .catch(() => {
-//         reject(new Error('Falha ao Cadastrar usuario via facebook'));
-//       });
-//   });
-// };
 
 export const SignIn = (email, password) => {
   return new Promise((resolve, reject) => {
@@ -100,7 +45,7 @@ export const SignIn = (email, password) => {
   });
 };
 
-export const SignUp = (email, password) => {
+export const SignUp = (email, password, name, photo) => {
   return new Promise((resolve, reject) => {
     const currentUser = auth().currentUser;
     if (currentUser) {

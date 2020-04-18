@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {View, SafeAreaView, StyleSheet, Text} from 'react-native';
+import {View, SafeAreaView, StyleSheet, Text, Platform} from 'react-native';
 import {Header} from 'react-native-elements';
-import {NavigationEvents} from 'react-navigation';
 import PropTypes from 'prop-types';
 
 import {Colors} from '../../../themes/variables';
@@ -151,7 +150,14 @@ const styles = StyleSheet.create({
   textContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    ...Platform.select({
+      ios: {
+        marginTop: 25,
+      },
+      android: {
+        marginTop: 20,
+      },
+    }),
   },
   simpleText: {
     fontFamily: Colors.fontFamily,

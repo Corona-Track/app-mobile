@@ -1,8 +1,16 @@
 import React, {Component} from 'react';
-import {View, SafeAreaView, StyleSheet, Text, ScrollView} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Platform,
+  Alert,
+} from 'react-native';
 import {Header} from 'react-native-elements';
-import {NavigationEvents} from 'react-navigation';
 import PropTypes from 'prop-types';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import {Colors} from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
@@ -20,6 +28,8 @@ import {
   RadioButtonYesOrNoItem,
 } from '../../../components/customcheckboxitem';
 
+import {SaveUser} from '../../../firebase/User';
+
 import {UserConsumer} from '../../../store/user';
 
 export default class RelativesHomePrecautionsPage extends Component {
@@ -36,14 +46,16 @@ export default class RelativesHomePrecautionsPage extends Component {
       relativesChangeClothesAnswer: null,
       relativesContainerCleanupAnswer: null,
     },
+    showLoading: false,
   };
 
   render = () => {
-    let {entity} = this.state;
+    let {entity, showLoading} = this.state;
     return (
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
+            <Spinner visible={showLoading} />
             <View style={{flex: 0.8, width: '100%'}}>
               <View style={{width: '100%', paddingHorizontal: 20}}>
                 <Header
@@ -150,14 +162,36 @@ export default class RelativesHomePrecautionsPage extends Component {
     context.updateUser({question: entity});
     this.props.navigation.navigate('FinishRemaining', {entity: entity});
   };
-  onContinueButtonClick = context => {
+  onContinueButtonClick = async context => {
     let {entity} = this.state;
+
+    this.setState({showLoading: true});
+
     let nextRoute = 'FinishComplete';
     if (entity.skippedAnswer) {
       nextRoute = 'FinishRemaining';
     }
     context.updateUser({question: entity});
-    this.props.navigation.navigate(nextRoute, {entity: entity});
+
+    try {
+      let user = context.user;
+      user.relativesShowerAnswer = entity.relativesShowerAnswer;
+      user.relativesChangeClothesAnswer = entity.relativesChangeClothesAnswer;
+      user.relativesContainerCleanupAnswer =
+        entity.relativesContainerCleanupAnswer;
+
+      const {password, ...model} = user;
+      await SaveUser(model);
+      this.setState({showLoading: false});
+      this.props.navigation.navigate(nextRoute, {entity: entity});
+    } catch (error) {
+      Alert.alert(
+        'Aviso',
+        'Ocorreu um erro, tente novamente',
+        [{text: 'OK', onPress: () => this.setState({showLoading: false})}],
+        {cancelable: false},
+      );
+    }
   };
   disableButton = () => {
     let {entity} = this.state;
@@ -265,6 +299,16 @@ const styles = StyleSheet.create({
   textContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        marginTop: 25,
+        marginBottom: 20,
+      },
+      android: {
+        marginTop: 20,
+        marginBottom: 20,
+      },
+    }),
   },
   simpleText: {
     fontFamily: Colors.fontFamily,

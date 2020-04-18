@@ -5,15 +5,12 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {Avatar} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import PropTypes from 'prop-types';
-import {
-  NavigationEvents,
-  StackActions,
-  NavigationActions,
-} from 'react-navigation';
+import auth from '@react-native-firebase/auth';
+import {StackActions, NavigationActions} from 'react-navigation';
 
 import {Colors} from '../../../themes/variables';
 import {
@@ -59,13 +56,17 @@ export default class FinishUncontaminatedPage extends Component {
                 )}
                 <IntroText userName={context.user.name} />
               </View>
-              <View style={{flex: 0.25, width: '100%'}}>
+              <View style={{flex: 0.25, width: '90%'}}>
                 <UncontaminatedAnswerNowButton
                   onPress={() => {
                     this.onAnswerNowButtonPress();
                   }}
                 />
-                <UncontaminatedAnswerLaterButton onPress={() => {}} />
+                <UncontaminatedAnswerLaterButton
+                  onPress={() => {
+                    this.onAnswerLaterButtonPress();
+                  }}
+                />
               </View>
             </>
           )}
@@ -79,6 +80,7 @@ export default class FinishUncontaminatedPage extends Component {
   };
 
   onAnswerNowButtonPress = () => {
+    console.log(auth().currentUser);
     const resetAction = StackActions.reset({
       index: 0,
       actions: [
@@ -88,6 +90,10 @@ export default class FinishUncontaminatedPage extends Component {
       ],
     });
     this.props.navigation.dispatch(resetAction);
+  };
+
+  onAnswerLaterButtonPress = () => {
+    this.props.navigation.navigate('Application');
   };
 }
 
@@ -130,6 +136,11 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   textContainer: {
+    ...Platform.select({
+      ios: {
+        flex: 1,
+      },
+    }),
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
@@ -147,8 +158,15 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 20,
     marginVertical: 20,
+    ...Platform.select({
+      ios: {
+        paddingTop: 60,
+      },
+      android: {
+        paddingTop: 30,
+      },
+    }),
   },
   rightComponent: {
     flex: 0,

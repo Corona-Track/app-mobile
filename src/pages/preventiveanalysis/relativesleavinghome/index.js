@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
-import {View, SafeAreaView, StyleSheet, Text, ScrollView} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import {Header} from 'react-native-elements';
-import {NavigationEvents} from 'react-navigation';
 import PropTypes from 'prop-types';
 
 import {Colors} from '../../../themes/variables';
@@ -65,7 +71,7 @@ export default class RelativesLeavingHomePage extends Component {
               <ScrollView>
                 <IntroText />
                 <View style={styles.radioButtonItemContainer}>
-                  <View style={{alignSelf: 'center', height: 50}}>
+                  <View style={{alignSelf: 'center', height: 70}}>
                     <RadioButtonYesOrNoItem
                       value={entity.relativesLeavingHome}
                       onPressCheckbox={this.onChangeRelativesLeavingHome}
@@ -229,6 +235,16 @@ const styles = StyleSheet.create({
   textContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        marginTop: 25,
+        marginBottom: 20,
+      },
+      android: {
+        marginTop: 20,
+        marginBottom: 20,
+      },
+    }),
   },
   simpleText: {
     fontFamily: Colors.fontFamily,

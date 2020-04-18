@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
-import {View, SafeAreaView, StyleSheet, Text, ScrollView} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import {Header} from 'react-native-elements';
-import {NavigationEvents} from 'react-navigation';
 import PropTypes from 'prop-types';
 
 import {Colors} from '../../../themes/variables';
@@ -69,12 +75,12 @@ export default class OutsideWorkPage extends Component {
                 <IntroText />
                 <View style={styles.radioButtonItemContainer}>
                   {outsideWorkList.map(work => {
-                    let customHeight = 40;
+                    let customHeight = 45;
                     if (
                       work.identifier ===
                       'Em um ambiente fechado com mais pessoas, como clínica, escritório, loja ou motorista de aplicativo'
                     ) {
-                      customHeight = 70;
+                      customHeight = Platform.OS === 'ios' ? 110 : 100;
                     }
                     return (
                       <View
@@ -182,7 +188,16 @@ const styles = StyleSheet.create({
   textContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    ...Platform.select({
+      ios: {
+        marginTop: 25,
+        marginBottom: 20,
+      },
+      android: {
+        marginTop: 20,
+        marginBottom: 20,
+      },
+    }),
   },
   simpleText: {
     fontFamily: Colors.fontFamily,

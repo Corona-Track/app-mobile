@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
-import {View, SafeAreaView, StyleSheet, Text, ScrollView} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import {Header, Slider} from 'react-native-elements';
-import {NavigationEvents} from 'react-navigation';
 import PropTypes from 'prop-types';
 
 import {Colors} from '../../../themes/variables';
@@ -77,7 +83,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
                       <View
                         style={{
                           marginVertical: 2,
-                          height: 40,
+                          height: 45,
                           paddingHorizontal: 20,
                         }}>
                         <RadioButtonItem
@@ -248,7 +254,14 @@ const styles = StyleSheet.create({
   textContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 5,
+    ...Platform.select({
+      ios: {
+        marginTop: 25,
+      },
+      android: {
+        marginTop: 5,
+      },
+    }),
   },
   simpleText: {
     fontFamily: Colors.fontFamily,

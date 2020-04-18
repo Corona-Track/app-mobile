@@ -1,9 +1,16 @@
 import React, {Component} from 'react';
-import {View, SafeAreaView, StyleSheet, Text, ScrollView} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import {Header} from 'react-native-elements';
 import PropTypes from 'prop-types';
-import {NavigationEvents} from 'react-navigation';
 import moment from 'moment';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import {Colors} from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
@@ -27,9 +34,12 @@ import {
   cepValidator,
   phoneValidator,
   cellphoneValidator,
+  isValidCPF,
 } from '../../../services/formvalidatorservice';
 
 import {UserConsumer} from '../../../store/user';
+
+import {getUserFilter} from '../../../firebase/User';
 
 export default class PersonalDataPage extends Component {
   static navigationOptions = {
@@ -43,22 +53,24 @@ export default class PersonalDataPage extends Component {
 
   state = {
     entity: {
-      //   photo: '',
-      name: 'Bruno Kenji Sato Romeu Yassuda',
-      cpf: '42418904822',
+      name: '',
+      cpf: '',
       birthday: null,
       genre: '',
       pregnancy: '',
-      cellphone: '12982573000',
-      email: 'bruno.sato@live.com',
-      password: '123456',
+      cellphone: '',
+      email: '',
+      password: '',
     },
     genreList: [
       {key: 'N', text: 'Não informar'},
       {key: 'M', text: 'Masculino'},
       {key: 'F', text: 'Feminino'},
     ],
+    emailTouched: false,
+    cpfTouched: false,
     showPregnancy: false,
+    showLoading: false,
     pregnancyList: [{key: '1', text: 'Sim'}, {key: '0', text: 'Não'}],
     minimumDateBirthday: new Date(1900, 1, 1),
     maximumDateBirthday: moment(moment().format('DD/MM/YYYY'), 'DD/MM/YYYY')
@@ -74,9 +86,11 @@ export default class PersonalDataPage extends Component {
       pregnancyList,
       minimumDateBirthday,
       maximumDateBirthday,
+      showLoading,
     } = this.state;
     return (
       <SafeAreaView style={styles.container}>
+        <Spinner visible={showLoading} />
         <View style={{width: '100%', paddingHorizontal: 20}}>
           <Header
             backgroundColor={Colors.secondaryColor}
@@ -101,6 +115,7 @@ export default class PersonalDataPage extends Component {
                   label="CPF"
                   value={entity.cpf}
                   onChangeText={this.onHandleCPF}
+                  valid={this.isCpfValid()}
                 />
                 <SimpleDateTextInput
                   minimumDate={minimumDateBirthday}
@@ -138,6 +153,7 @@ export default class PersonalDataPage extends Component {
                   label="E-mail"
                   value={entity.email}
                   onChangeText={this.onHandleEmail}
+                  valid={this.isEmailValid()}
                 />
                 <PasswordTextInput
                   label="Senha"
@@ -148,8 +164,7 @@ export default class PersonalDataPage extends Component {
                   <ContinueRequiredButton
                     disabled={this.disableButton()}
                     onPress={() => {
-                      context.updateUser(this.state.entity);
-                      this.onContinueButtonClick();
+                      this.onContinueButtonClick(context);
                     }}
                   />
                 </View>
@@ -167,9 +182,49 @@ export default class PersonalDataPage extends Component {
   onRightButtonPress = () => {
     this.props.navigation.pop();
   };
-  onContinueButtonClick = () => {
+  onContinueButtonClick = async context => {
     let {entity} = this.state;
-    this.props.navigation.navigate('PersonalAddress', {entity: entity});
+    this.setState({showLoading: true});
+
+    try {
+      const resEmail = await getUserFilter(
+        'email',
+        '==',
+        entity.email.toLowerCase(),
+      );
+
+      const resCpf = await getUserFilter('cpf', '==', entity.cpf);
+
+      if (resEmail && resEmail.length > 0) {
+        Alert.alert(
+          'Aviso',
+          'Já existe um usuário com este email',
+          [{text: 'OK', onPress: () => this.setState({showLoading: false})}],
+          {cancelable: false},
+        );
+        return;
+      }
+      if (resCpf && resCpf.length > 0) {
+        Alert.alert(
+          'Aviso',
+          'Já existe um usuário com este cpf',
+          [{text: 'OK', onPress: () => this.setState({showLoading: false})}],
+          {cancelable: false},
+        );
+        return;
+      }
+
+      context.updateUser(entity);
+      this.setState({showLoading: false});
+      this.props.navigation.navigate('PersonalAddress', {entity: entity});
+    } catch (error) {
+      Alert.alert(
+        'Aviso',
+        'Ocorreu um erro, tente novamente',
+        [{text: 'OK', onPress: () => this.setState({showLoading: false})}],
+        {cancelable: false},
+      );
+    }
   };
   onHandleName = name => {
     let {entity} = this.state;
@@ -179,7 +234,7 @@ export default class PersonalDataPage extends Component {
   onHandleCPF = cpf => {
     let {entity} = this.state;
     entity.cpf = cpf;
-    this.setState({entity});
+    this.setState({entity, cpfTouched: true});
   };
   onPressBirthdayPicker = () => {
     this.setState({showBirthday: true});
@@ -211,7 +266,7 @@ export default class PersonalDataPage extends Component {
   onHandleEmail = email => {
     let {entity} = this.state;
     entity.email = email;
-    this.setState({entity});
+    this.setState({entity, emailTouched: true});
   };
   onHandlePassword = password => {
     let {entity} = this.state;
@@ -236,7 +291,10 @@ export default class PersonalDataPage extends Component {
   };
   isCpfValid = () => {
     let {cpf} = this.state.entity;
-    return cpfValidor(cpf);
+    if (!this.state.cpfTouched) {
+      return true;
+    }
+    return cpfValidor(cpf) && isValidCPF(cpf);
   };
   isBirthdayValid = () => {
     let {birthday} = this.state.entity;
@@ -262,6 +320,9 @@ export default class PersonalDataPage extends Component {
   };
   isEmailValid = () => {
     let {email} = this.state.entity;
+    if (!this.state.emailTouched) {
+      return true;
+    }
     return emailValidator(email);
   };
   isPasswordValid = () => {

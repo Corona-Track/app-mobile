@@ -1,13 +1,6 @@
 import React, {Component} from 'react';
-import {
-  View,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import {View, SafeAreaView, StyleSheet, Text} from 'react-native';
 import {Avatar} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PropTypes from 'prop-types';
 
 import {Colors} from '../../../themes/variables';
@@ -15,7 +8,6 @@ import {FinishCompleteButton} from '../../../components/custombutton';
 import {getFirstName} from '../../../services/formvalidatorservice';
 
 import {UserConsumer} from '../../../store/user';
-import {SaveUser} from '../../../firebase/User';
 
 export default class FinishCompletePage extends Component {
   static navigationOptions = {
@@ -56,7 +48,7 @@ export default class FinishCompletePage extends Component {
               )}
               <IntroText userName={context.user.name} />
             </View>
-            <View style={{flex: 0.2, width: '100%'}}>
+            <View style={{flex: 0.2, width: '90%'}}>
               <FinishCompleteButton
                 onPress={() => {
                   this.onFinishCompletePress(context);
@@ -72,8 +64,6 @@ export default class FinishCompletePage extends Component {
     this.props.navigation.pop();
   };
   onFinishCompletePress = async context => {
-    const {email, password, ...model} = context.user;
-    await SaveUser(model);
     this.props.navigation.navigate('Application');
   };
 }

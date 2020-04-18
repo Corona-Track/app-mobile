@@ -1,13 +1,18 @@
 import React, {Component} from 'react';
-import {View, SafeAreaView, StyleSheet, Text, ScrollView} from 'react-native';
+import {
+  View,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import PropTypes from 'prop-types';
-import {NavigationEvents} from 'react-navigation';
 import {Header, CheckBox} from 'react-native-elements';
 
 import {Colors} from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import {
-  LeftComponent,
   CenterComponent,
   RightComponent,
 } from '../../../components/customheader';
@@ -41,7 +46,6 @@ export default class MedicinesPage extends Component {
   };
 
   render = () => {
-    let {entity} = this.state;
     return (
       <UserConsumer>
         {context => (
@@ -49,7 +53,6 @@ export default class MedicinesPage extends Component {
             <Header
               containerStyle={{marginHorizontal: 20}}
               backgroundColor={Colors.secondaryColor}
-              // leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
               centerComponent={
                 <CenterComponent
                   photo={context.user.photo}
@@ -215,11 +218,7 @@ export default class MedicinesPage extends Component {
           isExpanded={isExpanded}
         />
         {isExpanded && (
-          <View
-            style={{
-              width: '100%',
-              backgroundColor: Colors.searchBackgroundColor,
-            }}>
+          <View style={styles.viewExpanded}>
             <FrequencyItem
               identifier={identifier}
               isChecked={this.isCheckedFrequencyRadio}
@@ -318,7 +317,7 @@ const FrequencyItem = ({identifier, isChecked, onClickCheck}) => {
       <Text style={[styles.frequencyText]}>
         <Text style={styles.boldText}>Com qual frequência?</Text>
       </Text>
-      <View style={{height: 20, marginVertical: 2, paddingHorizontal: 20}}>
+      <View style={styles.frequencyItem}>
         <FrequencyRadioButtonItem
           frequency={'Diariamente'}
           identifier={identifier}
@@ -326,7 +325,7 @@ const FrequencyItem = ({identifier, isChecked, onClickCheck}) => {
           onClickCheck={onClickCheck}
         />
       </View>
-      <View style={{height: 20, marginVertical: 2, paddingHorizontal: 20}}>
+      <View style={styles.frequencyItem}>
         <FrequencyRadioButtonItem
           frequency={'Alguns dias desta semana'}
           identifier={identifier}
@@ -334,7 +333,7 @@ const FrequencyItem = ({identifier, isChecked, onClickCheck}) => {
           onClickCheck={onClickCheck}
         />
       </View>
-      <View style={{height: 20, marginVertical: 2, paddingHorizontal: 20}}>
+      <View style={styles.frequencyItem}>
         <FrequencyRadioButtonItem
           frequency={'Alguns dias da semana passada'}
           identifier={identifier}
@@ -342,7 +341,7 @@ const FrequencyItem = ({identifier, isChecked, onClickCheck}) => {
           onClickCheck={onClickCheck}
         />
       </View>
-      <View style={{height: 20, marginVertical: 2, paddingHorizontal: 20}}>
+      <View style={styles.frequencyItem}>
         <FrequencyRadioButtonItem
           frequency={'Alguns dias no último mês'}
           identifier={identifier}
@@ -350,7 +349,7 @@ const FrequencyItem = ({identifier, isChecked, onClickCheck}) => {
           onClickCheck={onClickCheck}
         />
       </View>
-      <View style={{height: 20, marginVertical: 2, paddingHorizontal: 20}}>
+      <View style={styles.frequencyItem}>
         <FrequencyRadioButtonItem
           frequency={'Só quando tenho sintomas'}
           identifier={identifier}
@@ -398,6 +397,11 @@ const styles = StyleSheet.create({
   textContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        marginTop: 25,
+      },
+    }),
   },
   simpleText: {
     fontFamily: Colors.fontFamily,
@@ -412,6 +416,29 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginHorizontal: 20,
   },
+  viewExpanded: {
+    width: '100%',
+    backgroundColor: Colors.searchBackgroundColor,
+    ...Platform.select({
+      ios: {
+        height: 300,
+      },
+    }),
+  },
+  frequencyItem: {
+    ...Platform.select({
+      ios: {
+        height: 43,
+        marginVertical: 0,
+        paddingHorizontal: 0,
+      },
+      android: {
+        height: 20,
+        marginVertical: 2,
+        paddingHorizontal: 20,
+      },
+    }),
+  },
   frequencyText: {
     fontFamily: Colors.fontFamily,
     fontSize: 14,
@@ -419,7 +446,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 15,
   },
-
   radioButtonContainer: {
     backgroundColor: 'transparent',
     borderWidth: 0,

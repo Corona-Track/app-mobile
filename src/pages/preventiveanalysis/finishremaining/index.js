@@ -4,20 +4,15 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  Image,
 } from 'react-native';
 import {Avatar} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PropTypes from 'prop-types';
-import {NavigationEvents, SwitchActions} from 'react-navigation';
 import {ProgressBar} from 'react-native-paper';
 
 import {Colors} from '../../../themes/variables';
 import {FinishRemainingButton} from '../../../components/custombutton';
 import {getFirstName} from '../../../services/formvalidatorservice';
 import {UserConsumer} from '../../../store/user';
-import {SaveUser} from '../../../firebase/User';
 
 export default class FinishRemainingPage extends Component {
   static navigationOptions = {
@@ -68,7 +63,7 @@ export default class FinishRemainingPage extends Component {
                 </Text>
               </View>
             </View>
-            <View style={{flex: 0.2, width: '100%'}}>
+            <View style={{flex: 0.2, width: '90%'}}>
               <FinishRemainingButton
                 onPress={() => {
                   this.onFinishRemainingPress(context);
@@ -84,8 +79,6 @@ export default class FinishRemainingPage extends Component {
     this.props.navigation.pop();
   };
   onFinishRemainingPress = async context => {
-    const {email, password, ...model} = context.user;
-    await SaveUser(model);
     this.props.navigation.navigate('Application');
   };
 }
