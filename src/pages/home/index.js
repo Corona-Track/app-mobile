@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, SafeAreaView, StyleSheet, Text, ImageBackground, TouchableOpacity, View, ScrollView, Animated } from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text, ImageBackground, TouchableOpacity, View, Alert, Animated } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import auth from '@react-native-firebase/auth';
@@ -7,7 +7,8 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Avatar } from 'react-native-elements';
 import { Button } from 'react-native-paper';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
-
+import { getUser } from '../../firebase/User';
+import moment from 'moment';
 
 import { Colors } from '../../themes/variables';
 import { signOut } from '../../firebase/Auth';
@@ -40,8 +41,36 @@ export default class HomePage extends Component {
       .catch(error => { console.error(error); });
   };
   initialize = () => {
-    let currentUser = auth().currentUser;
-    this.setState({ showLoading: false, currentUser: currentUser });
+    getUser()
+      .then(this.onGetUserDataSuccess)
+      .catch(this.onGetUserDataFailure)
+      .finally(this.onGetUserDataFinally);
+  };
+
+  onGetUserDataSuccess = doc => {
+    let currentUser = doc.data();
+    currentUser.age = moment().diff(new Date(currentUser.birthday.seconds * 1000), 'years');
+    this.setState({ currentUser });
+  };
+
+  onGetUserDataFailure = error => {
+    Alert.alert("Aviso!", "Houve um erro buscar seus dados, tente novamente mais tarde.");
+  };
+
+  onGetUserDataFinally = () => {
+    this.setState({ showLoading: false });
+    translateY.setValue(offset);
+    translateY.setOffset(0);
+    offset = 0;
+    Animated.timing(translateY, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true
+    }).start(() => {
+      offset = 0;
+      translateY.setOffset(offset);
+      translateY.setValue(0);
+    });
   };
 
   onSymptomsButtonPress = () => {
@@ -71,10 +100,9 @@ export default class HomePage extends Component {
           <UserDetails
             onPress={this.executeCardAnimation}
             photo={currentUser.photo}
-            name={"Maria José da Silva"}
-            aliasName={this.getFirstLetterName("Maria José da Silva")} />
-          {this.renderCard()}
-          {/* <UserDetails photo={currentUser.photo} name={currentUser.name} aliasName={this.getFirstLetterName(currentUser.name)} /> */}
+            name={currentUser.name}
+            aliasName={this.getFirstLetterName(currentUser.name)} />
+          {this.renderCard(currentUser)}
           <View>
             <Animated.ScrollView style={{
               height: 300,
@@ -111,7 +139,7 @@ export default class HomePage extends Component {
       </View>
     );
   };
-  renderCard = () => {
+  renderCard = (currentUser) => {
     return (
       <View style={styles.cardContent}>
         <PanGestureHandler onGestureEvent={animatedEvent} onHandlerStateChange={this.onHandlerStateChange}>
@@ -124,15 +152,15 @@ export default class HomePage extends Component {
               }),
             }]
           }]}>
-            <View style={{}}>
-              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>37 anos</Text>
-              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>987.654.321-00</Text>
-              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>01.234.567-89</Text>
+            <View>
+              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>{currentUser.age}</Text>
+              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>{currentUser.cpf}</Text>
+              {/* <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>01.234.567-89</Text> */}
             </View>
             <Image style={styles.imageContainer}
               source={{ uri: "https://canaltech.com.br/conteudo/Pedro/O_que_e_QRcode/qr_code_ud.jpg" }} />
             <Text numberOfLines={1} style={[styles.cardText, { fontSize: 12 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>VERDE</Text></Text>
-            <ProfileButton />
+            <ProfileButton onPress={() => { alert() }} />
           </Animated.View>
         </PanGestureHandler >
       </View>
@@ -253,7 +281,7 @@ const VersionDetails = () => (
 );
 
 const ProfileButton = ({ onPress }) => (
-  <View style={styles.buttonContainer}>
+  <TouchableOpacity onPress={() => onPress()} style={styles.buttonContainer}>
     <Button
       style={styles.innerButtonContainer}
       contentStyle={styles.contentButton}
@@ -261,7 +289,7 @@ const ProfileButton = ({ onPress }) => (
       color={"#27AE60"}
       labelStyle={styles.buttonText}
       onPress={onPress}>ENTENDA MELHOR O SEU PERFIL</Button>
-  </View>
+  </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({
