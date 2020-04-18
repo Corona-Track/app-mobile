@@ -79,7 +79,7 @@ export default class HomePage extends Component {
                 outputRange: [0, 1]
               })
             }}>
-              <View style={{ height: 300, marginHorizontal: 20 }}>
+              <View style={{ height: 300, marginHorizontal: 40 }}>
                 {/* <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" /> */}
                 {this.renderOptionsList()}
                 <VersionDetails />
@@ -99,8 +99,8 @@ export default class HomePage extends Component {
     return (
       <View style={{ width: "100%" }}>
         <MenuItem icon="account" name="INFORMAÇÕES DO PERFIL" />
-        <MenuItem icon="heart-pulse" name="MINHA SAÚDE" />
-        <MenuItem icon="monitor" name="TELEORIENTAÇÃO" />
+        <MenuItem onPress={() => this.navigateScreen("Symptoms")} icon="heart-pulse" name="MINHA SAÚDE" />
+        <MenuItem onPress={() => this.navigateScreen("Orientation")} icon="monitor" name="TELEORIENTAÇÃO" />
         <MenuItem icon="account" name="UTILIDADE PÚBLICA" />
         <MenuItem icon="settings" name="CONFIGURAÇÕES" />
         <MenuItem onPress={this.setSignOut} icon="logout" name="SAIR" />
@@ -176,6 +176,9 @@ export default class HomePage extends Component {
       translateY.setOffset(offset);
       translateY.setValue(0);
     });
+  };
+  navigateScreen = screen => {
+    this.props.navigation.navigate(screen);
   };
 };
 
