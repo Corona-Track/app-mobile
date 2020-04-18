@@ -25,7 +25,7 @@ export default class LoginPage extends Component {
   };
   state = {
     entity: {
-      email: 'teste@teste.com',
+      email: 'bruno.sato@live.com',
       password: '123456',
     },
     loading: false,
@@ -85,7 +85,6 @@ export default class LoginPage extends Component {
         this.props.navigation.navigate('Application');
       })
       .catch(error => {
-        console.log('entro2')
         this.setState({
           loading: false,
           error: error.message,
