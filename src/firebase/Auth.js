@@ -1,23 +1,5 @@
-// import {Platform} from 'react-native';
-// import firebase from './Config';
-
-// import {LoginManager, AccessToken} from 'react-native-fbsdk';
 import auth from '@react-native-firebase/auth';
-
-export const getUser = () => {
-  return new Promise((resolve, reject) => {
-    auth().onAuthStateChanged(user => {
-      if (user) {
-        return resolve(user);
-      }
-      return reject(new Error('Nenhum usuário encontrado'));
-    });
-  });
-};
-
-// export const authPersist = () => {
-//   auth().setPersistence(auth.Auth.Persistence.LOCAL);
-// };
+import firestore from '@react-native-firebase/firestore';
 
 export const signOut = () => {
   return new Promise((resolve, reject) => {
@@ -33,53 +15,15 @@ export const signOut = () => {
   });
 };
 
-// export const signInFacebook = () => {
-//   return new Promise(async (resolve, reject) => {
-//     if (Platform.OS === 'android') {
-//       LoginManager.setLoginBehavior('web_only');
-//     }
-
-//     const result = await LoginManager.logInWithPermissions([
-//       'public_profile',
-//       'email',
-//     ]);
-
-//     if (result.isCancelled) {
-//       reject(new Error(' Processo de login com facebook cancelado!'));
-//     }
-//     const data = await AccessToken.getCurrentAccessToken();
-
-//     if (!data) {
-//       reject(new Error('Falha ao conseguir Token.'));
-//     }
-
-//     const credential = firebase.auth.FacebookAuthProvider.credential(
-//       data.accessToken,
-//     );
-
-//     firebase
-//       .auth()
-//       .signInWithCredential(credential)
-//       .then(res => {
-//         resolve();
-//       })
-//       .catch(() => {
-//         reject(new Error('Falha ao Cadastrar usuario via facebook'));
-//       });
-//   });
-// };
-
 export const SignIn = (email, password) => {
   return new Promise((resolve, reject) => {
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(() => {
-        console.log('entro nice')
         const {uid} = auth().currentUser;
         resolve(uid);
       })
       .catch(error => {
-        console.log(error)
         let errorMessage = '';
         switch (error.code) {
           case 'auth/invalid-email':
@@ -101,3 +45,36 @@ export const SignIn = (email, password) => {
       });
   });
 };
+
+export const SignUp = (email, password, name, photo) => {
+  return new Promise((resolve, reject) => {
+    const currentUser = auth().currentUser;
+    if (currentUser) {
+      const {uid} = auth().currentUser;
+      resolve(uid);
+      return;
+    }
+
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        const {uid} = auth().currentUser;
+        resolve(uid);
+      })
+      .catch(error => {
+        let errorMessage = '';
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            errorMessage = 'Email ja está em uso!';
+            break;
+          case 'auth/invalid-email':
+            errorMessage = 'Seu email é invalidado!';
+            break;
+          default:
+        }
+
+        reject(new Error(errorMessage));
+      });
+  });
+};
+

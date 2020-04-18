@@ -43,6 +43,12 @@ export default class HomePage extends Component {
     let currentUser = auth().currentUser;
     this.setState({ showLoading: false, currentUser: currentUser });
   };
+
+  onSymptomsButtonPress = () => {
+        console.log("Symptoms");
+        this.props.navigation.navigate("Symptoms");
+   };
+
   render = () => {
     let { showLoading, currentUser } = this.state;
     return (
