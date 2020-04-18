@@ -134,7 +134,7 @@ export default class HomePage extends Component {
         <MenuItem onPress={() => this.navigateScreen("Symptoms")} icon="heart-pulse" name="MINHA SAÚDE" />
         <MenuItem onPress={() => this.navigateScreen("Orientation")} icon="monitor" name="TELEORIENTAÇÃO" />
         <MenuItem icon="account" name="UTILIDADE PÚBLICA" />
-        <MenuItem icon="settings" name="CONFIGURAÇÕES" />
+        {/* <MenuItem icon="settings" name="CONFIGURAÇÕES" /> */}
         <MenuItem onPress={this.setSignOut} icon="logout" name="SAIR" />
       </View>
     );
@@ -158,9 +158,10 @@ export default class HomePage extends Component {
               {/* <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>01.234.567-89</Text> */}
             </View>
             <Image style={styles.imageContainer}
-              source={{ uri: "https://canaltech.com.br/conteudo/Pedro/O_que_e_QRcode/qr_code_ud.jpg" }} />
-            <Text numberOfLines={1} style={[styles.cardText, { fontSize: 12 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>VERDE</Text></Text>
-            <ProfileButton onPress={() => { alert() }} />
+              source={require('../../assets/images/qrcode.png')}
+            />
+            <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>VERDE</Text></Text>
+            {/* <ProfileButton onPress={() => { alert() }} /> */}
           </Animated.View>
         </PanGestureHandler >
       </View>
@@ -391,12 +392,12 @@ const styles = StyleSheet.create({
   cardText: {
     textAlign: "center",
     fontFamily: Colors.fontFamily,
-    fontSize: 15,
+    fontSize: 17,
     marginVertical: 2,
   },
   imageContainer: {
-    width: 100,
-    height: 100,
+    width: 125,
+    height: 125,
     marginVertical: 10
   },
   buttonContainer: {
@@ -423,7 +424,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     backgroundColor: "#FFF",
-    borderRadius: 4,
+    borderRadius: 10,
     marginVertical: 10,
     justifyContent: "center",
     alignItems: "center",
