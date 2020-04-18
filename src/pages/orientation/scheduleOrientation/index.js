@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { getUser } from '../../../firebase/Auth';
 
 // Components
 import { StyleSheet, View } from 'react-native'
 import { WebView } from 'react-native-webview';
 import { Header } from 'react-native-elements';
 import { LeftComponent, CenterComponent } from '../../../components/customheader';
+import { getUser } from '../../../firebase/User';
 
 
 ScheduleOrientation.navigationOptions = {
