@@ -80,7 +80,7 @@ export default function RiskProfile(props) {
 
             case riskProfileTypes.YELLOW: {
                 setRiskProfile({
-                    label: 'AMERELO',
+                    label: 'AMARELO',
                     color: Colors.yellowRiskProfile
                 })
                 setContagionRisk(contagionRiskTypes.LOW)
