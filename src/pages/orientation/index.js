@@ -2,12 +2,13 @@
 import React, { Component } from 'react';
 import { Image, SafeAreaView, StyleSheet, View, Text, ActivityIndicator, TouchableHighlight } from 'react-native';
 import { Colors } from '../../themes/variables';
-import { signOut, getUser } from '../../firebase/Auth';
+import { signOut } from '../../firebase/Auth';
 import { Header } from 'react-native-elements';
 import { LeftComponent, CenterComponent, RightComponent } from '../../components/customheader';
 import PropTypes from 'prop-types';
 
 import { TextInput, Button } from 'react-native-paper';
+import { getUser } from '../../firebase/User';
 
 export default class OrientationPage extends Component {
   constructor(props) {

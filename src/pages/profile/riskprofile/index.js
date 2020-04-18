@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { getUser } from '../../../firebase/User';
 
 // Components
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
@@ -15,7 +16,7 @@ import aggravationRiskTypes from "../../../utils/enums/aggravationRiskTypes";
 
 // style
 import { Colors } from '../../../themes/variables';
-import { getUser } from '../../../firebase/Auth';
+
 
 
 RiskProfile.navigationOptions = {
