@@ -1,45 +1,33 @@
 /* eslint-disable react/jsx-no-undef */
-import React, {Component} from 'react';
-import {Image, SafeAreaView, StyleSheet, Text, ActivityIndicator, TouchableHighlight} from 'react-native';
-import {NavigationActions, StackActions, SwitchActions} from 'react-navigation';
-import {Colors} from '../../themes/variables';
-import {signOut} from '../../firebase/Auth';
+import React, { Component } from 'react';
+import { Image, SafeAreaView, StyleSheet, View, Text, ActivityIndicator, TouchableHighlight } from 'react-native';
+import { Colors } from '../../themes/variables';
+import { signOut, getUser } from '../../firebase/Auth';
 import { Header } from 'react-native-elements';
 import { LeftComponent, CenterComponent, RightComponent } from '../../components/customheader';
 import PropTypes from 'prop-types';
 
-import {TextInput, Button} from 'react-native-paper';
+import { TextInput, Button } from 'react-native-paper';
 
 export default class OrientationPage extends Component {
-  
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      entity: {
+        name: '',
+        photo: null
+      },
+    };
+  }
   static navigationOptions = {
     headerShown: false,
     gestureEnabled: false,
   };
   static propTypes = {
-      entity: PropTypes.object,
+    entity: PropTypes.object,
   }
-  state = {
-      entity: {
-          hadFluVaccine: null,
-      },
-  };
-  initialize(props) {
-      if (!props)
-          return;
-      let { navigation } = props;
-      let { entity } = this.state;
-      let previousEntity = navigation.getParam('entity', null);
-      if (!previousEntity)
-          return;
-      let converted = {
-          ...entity,
-          ...previousEntity
-      };
-      this.setState({ entity: converted });
-  };
 
-  state = {};
   setSignOut = () => {
     signOut()
       .then(() => {
@@ -50,49 +38,73 @@ export default class OrientationPage extends Component {
       });
   };
 
-  onPressScheduleOrientation(props){
+  onPressScheduleOrientation(props) {
     props.navigation.navigate("ScheduleOrientation");
   }
-  componentDidMount() {}
+  componentDidMount() {
+    getUser().then(doc => {
+      const { name, photo } = doc.data()
+
+      this.setState({
+        entity: {
+          name,
+          photo
+        }
+      });
+    })
+      .catch(err => {
+        console.log('Error getting document', err);
+      });
+  }
+
+  onLeftButtonPress(props) {
+    props.navigation.pop()
+  }
+
+  onRightButtonPress(props) {
+    props.navigation.pop()
+  }
+
   render = () => {
     let { entity } = this.state;
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <Header
-            backgroundColor={Colors.primaryTextColor}
-            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-            centerComponent={<CenterComponent photo={null} userName={null} />}
-            rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
-        <Text style={styles.title}>Teleorientação</Text>
-        <Image
-          style={styles.imageMain}
-          resizeMode="contain"
-          source={require('../../assets/images/orientation.png')}
-          PlaceholderContent={<ActivityIndicator />}
-        />
-        <Text style={styles.desc}>Você será direcionado para o aplicativo da nossa parceira Aliança Médica.
-        Eles farão parte do agendamento de teleorientação com um médico voluntário e avisarão quando estiver disponível.
+          backgroundColor={Colors.primaryTextColor}
+          leftComponent={<LeftComponent onPress={() => this.onLeftButtonPress(this.props)} />}
+          centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+          rightComponent={<RightComponent onPress={() => this.onRightButtonPress(this.props)} />} />
+
+        <View style={styles.content}>
+          <Text style={styles.title}>Teleorientação</Text>
+          <Image
+            style={styles.imageMain}
+            resizeMode="contain"
+            source={require('../../assets/images/orientation.png')}
+            PlaceholderContent={<ActivityIndicator />}
+          />
+          <Text style={styles.desc}>Você será direcionado para o aplicativo da nossa parceira Aliança Médica.
+          Eles farão parte do agendamento de teleorientação com um médico voluntário e avisarão quando estiver disponível.
         </Text>
-        <Button
-          style={styles.buttonOrin}
-          contentStyle={styles.containerButton}
-          mode="outlined"
-          color={Colors.primaryTextColor}
-          labelStyle={styles.textOrin}
-          onPress={() => this.onPressScheduleOrientation(this.props)}>
-          AGENDAR TELEORIENTAÇÃO
-        </Button>
-        <Button
-          style={styles.buttoBack}
-          contentStyle={styles.containerButton}
-          mode="outlined"
-          color={Colors.buttonPrimaryColor}
-          labelStyle={styles.textOrin}
-          onPress={this.onSignUpButtonPress}>
-          VOLTAR
-        </Button>
-        <Text onPress={() => this.setSignOut()}>Sair</Text>
-      </SafeAreaView>
+          <View style={styles.buttonsContainer}>
+            <Button
+              style={styles.buttonOrin}
+              mode="contained"
+              color={Colors.buttonPrimaryColor}
+              labelStyle={styles.textOrin}
+              onPress={() => this.onPressScheduleOrientation(this.props)}
+            >AGENDAR TELEORIENTAÇÃO</Button>
+
+            <Button
+              style={styles.buttoBack}
+              mode="contained"
+              color={'#FFFFFF'}
+              labelStyle={styles.buttoBackText}
+            >VOLTAR PARA O INÍCIO</Button>
+          </View>
+        </View>
+
+      </View>
     );
   };
 }
@@ -102,8 +114,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFF',
-    height: '100%',
-    marginHorizontal: 20,
+    paddingHorizontal: 20,
+    flex: 1
+
+  },
+  content: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     fontSize: 20,
@@ -118,7 +137,7 @@ const styles = StyleSheet.create({
     height: 203,
     width: 254,
   },
-  desc : {
+  desc: {
     fontSize: 16,
     lineHeight: 20,
     width: '70%',
@@ -126,29 +145,37 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Colors.notMainText
   },
+
+
   buttonOrin: {
-    marginTop: 30, 
-    height: 50, 
-    borderRadius: 50, 
-    backgroundColor: Colors.buttonPrimaryColor, 
-    width: '90%',
-  },  
-  containerButton: {
-    height: 50,
     width: '100%',
-    textAlign: 'center',
+    marginTop: 30,
+    borderRadius: 50,
+    height: 50,
+    justifyContent: 'center',
+
   },
-  buttoBack : {
-    marginTop: 15, 
-    height: 50, 
-    borderRadius: 50, 
-    width: '90%',
-    borderWidth: 1,
-    borderColor: Colors.buttonPrimaryColor,
-    marginBottom: 10
-  },
-  textOrin : {
+  textOrin: {
+    color: Colors.primaryTextColor,
     fontFamily: Colors.fontFamily,
-    fontSize: 16
-  }, 
+  },
+  buttoBack: {
+    width: '100%',
+    marginTop: 20,
+    borderRadius: 50,
+    height: 50,
+    justifyContent: 'center',
+    borderColor: Colors.buttonPrimaryColor,
+    borderWidth: 1,
+
+  },
+  buttoBackText: {
+    color: Colors.buttonPrimaryColor,
+    fontFamily: Colors.fontFamily,
+
+  },
+  buttonsContainer: {
+    width: '100%',
+    paddingHorizontal: 35
+  },
 });
