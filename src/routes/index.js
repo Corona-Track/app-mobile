@@ -93,7 +93,7 @@ const AuthenticationStackNavigator = createStackNavigator(
 
   },
   {
-    initialRouteName: 'Orientation',
+    initialRouteName: 'Disclaimer',
   },
 );
 
