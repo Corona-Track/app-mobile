@@ -45,9 +45,9 @@ export default class HomePage extends Component {
   };
 
   onSymptomsButtonPress = () => {
-        console.log("Symptoms");
-        this.props.navigation.navigate("Symptoms");
-   };
+    console.log("Symptoms");
+    this.props.navigation.navigate("Symptoms");
+  };
 
   render = () => {
     let { showLoading, currentUser } = this.state;
@@ -60,7 +60,7 @@ export default class HomePage extends Component {
           resizeMethod="auto"
           style={styles.backgroundImageStyle} />
         <View>
-          <MapButton onPress={this.setSignOut} />
+          <MapButton />
           <HeartButton />
         </View>
         <View style={{ marginTop: 50 }}>
@@ -103,7 +103,7 @@ export default class HomePage extends Component {
         <MenuItem icon="monitor" name="TELEORIENTAÇÃO" />
         <MenuItem icon="account" name="UTILIDADE PÚBLICA" />
         <MenuItem icon="settings" name="CONFIGURAÇÕES" />
-        <MenuItem icon="logout" name="SAIR" />
+        <MenuItem onPress={this.setSignOut} icon="logout" name="SAIR" />
       </View>
     );
   };
@@ -210,7 +210,7 @@ const UserDetails = ({ photo, name, aliasName, onPress }) => (
     <Text numberOfLines={1} style={styles.userName}><Text numberOfLines={1} style={styles.boldText}>{name}</Text></Text>
     <TouchableOpacity onPress={() => { onPress() }}>
       <Icon
-        name={offset === 0 ? "chevron-down" : "chevron-up"}
+        name={"chevron-down"}
         size={40}
         color={Colors.secondaryColor} />
     </TouchableOpacity>
