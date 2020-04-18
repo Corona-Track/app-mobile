@@ -33,7 +33,8 @@ export default class HomePage extends Component {
 
   state = {
     showLoading: false,
-    currentUser: {}
+    currentUser: {},
+    chevronIcon: "chevron-down"
   };
   setSignOut = () => {
     signOut()
@@ -70,6 +71,7 @@ export default class HomePage extends Component {
       offset = 0;
       translateY.setOffset(offset);
       translateY.setValue(0);
+      this.setState({ chevronIcon: offset === 250 ? "chevron-up" : "chevron-down" });
     });
   };
 
@@ -83,7 +85,7 @@ export default class HomePage extends Component {
   };
 
   render = () => {
-    let { showLoading, currentUser } = this.state;
+    let { showLoading, currentUser, chevronIcon } = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <Spinner visible={showLoading} />
@@ -94,10 +96,12 @@ export default class HomePage extends Component {
           style={styles.backgroundImageStyle} />
         <View>
           <MapButton onPress={this.onMapButtonPress} />
-          <HeartButton />
+          <HeartButton onPress={() => this.navigateScreen("Symptoms")} />
         </View>
         <View style={{ marginTop: 50 }}>
           <UserDetails
+            chevronIcon={chevronIcon}
+            onPressAvatar={this.openProfileDetails}
             onPress={this.executeCardAnimation}
             photo={currentUser.photo}
             name={currentUser.name}
@@ -187,6 +191,7 @@ export default class HomePage extends Component {
         offset = opened ? 250 : 0;
         translateY.setOffset(offset);
         translateY.setValue(0);
+        this.setState({ chevronIcon: offset === 250 ? "chevron-up" : "chevron-down" });
       });
     }
   };
@@ -208,10 +213,14 @@ export default class HomePage extends Component {
       offset = goToOffset;
       translateY.setOffset(offset);
       translateY.setValue(0);
+      this.setState({ chevronIcon: offset === 250 ? "chevron-up" : "chevron-down" });
     });
   };
   navigateScreen = screen => {
     this.props.navigation.navigate(screen);
+  };
+  openProfileDetails = () => {
+    this.props.navigation.navigate("RiskProfile");
   };
 };
 
@@ -233,8 +242,8 @@ const HeartButton = ({ onPress }) => (
   </TouchableOpacity>
 );
 
-const UserDetails = ({ photo, name, aliasName, onPress }) => (
-  <View style={styles.userDetailsContainer}>
+const UserDetails = ({ photo, name, aliasName, onPress, onPressAvatar, chevronIcon }) => (
+  <TouchableOpacity onPress={() => onPressAvatar()} style={styles.userDetailsContainer}>
     <View style={styles.userDetailsInnerContainer}>
       <View style={[styles.riskContainer, { borderColor: "#27AE60" }]}>
         {photo && <Image
@@ -246,11 +255,11 @@ const UserDetails = ({ photo, name, aliasName, onPress }) => (
     <Text numberOfLines={1} style={styles.userName}><Text numberOfLines={1} style={styles.boldText}>{name}</Text></Text>
     <TouchableOpacity onPress={() => { onPress() }}>
       <Icon
-        name={"chevron-down"}
+        name={chevronIcon}
         size={40}
         color={Colors.secondaryColor} />
     </TouchableOpacity>
-  </View>
+  </TouchableOpacity>
 );
 
 // const UserPersonalData = ({ age, cpf, rg }) => (

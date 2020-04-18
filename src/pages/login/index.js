@@ -162,7 +162,7 @@ export default class LoginPage extends Component {
         </Button>
         <Text style={styles.other}>─────────── OU ───────────</Text>
 
-        <Button
+        {/* <Button
           icon="facebook"
           style={styles.facebookButtonContainer}
           contentStyle={styles.facebookButton}
@@ -172,7 +172,7 @@ export default class LoginPage extends Component {
           uppercase={false}
           onPress={this.onFacebookButtonPress}>
           Entrar com Facebook
-        </Button>
+        </Button> */}
         <Button
           style={styles.signUpButtonContainer}
           contentStyle={styles.signUpButton}
@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   },
   signUpButtonContainer: {
     width: '100%',
-    marginVertical: 20,
+    marginVertical: 5,
     borderRadius: 50,
     borderColor: Colors.buttonPrimaryColor,
     borderWidth: 1,
