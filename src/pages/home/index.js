@@ -20,11 +20,18 @@ export default class HomePage extends Component {
         console.error(error);
       });
   };
+
+  onSymptomsButtonPress = () => {
+        console.log("Symptoms");
+        this.props.navigation.navigate("Symptoms");
+   };
+
   componentDidMount() {}
   render = () => {
     return (
       <SafeAreaView style={styles.container}>
         <Text>Home</Text>
+        <Text onPress={() => this.onSymptomsButtonPress()}>Sintomas</Text>
         <Text onPress={() => this.setSignOut()}>Sair</Text>
       </SafeAreaView>
     );

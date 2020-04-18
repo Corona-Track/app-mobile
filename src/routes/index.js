@@ -33,6 +33,8 @@ import FinishRemainingPage from '../pages/preventiveanalysis/finishremaining';
 import FinishCompletePage from '../pages/preventiveanalysis/finishcomplete';
 import RiskProfile from '../pages/profile/riskprofile';
 
+import SymptomsPage from '../pages/symptoms/symptons';
+
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator(
   {
@@ -78,7 +80,10 @@ const AuthenticationStackNavigator = createStackNavigator(
     FinishComplete: {screen: FinishCompletePage},
 
     // Profile
-    RiskProfile: {screen: RiskProfile}
+    RiskProfile: {screen: RiskProfile},
+
+    Symptoms: { screen: SymptomsPage },
+
   },
   {
     initialRouteName: 'Disclaimer',
