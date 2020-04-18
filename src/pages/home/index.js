@@ -23,6 +23,8 @@ const animatedEvent = Animated.event(
   ],
   { useNativeDriver: true },
 );
+let offset = 0;
+
 export default class HomePage extends Component {
   static navigationOptions = {
     headerShown: false,
@@ -41,7 +43,6 @@ export default class HomePage extends Component {
     let currentUser = auth().currentUser;
     this.setState({ showLoading: false, currentUser: currentUser });
   };
-  componentDidMount() { }
   render = () => {
     let { showLoading, currentUser } = this.state;
     return (
@@ -61,13 +62,19 @@ export default class HomePage extends Component {
           {this.renderCard()}
           {/* <UserDetails photo={currentUser.photo} name={currentUser.name} aliasName={this.getFirstLetterName(currentUser.name)} /> */}
           <View>
-            <ScrollView style={{ height: 300 }}>
+            <Animated.ScrollView style={{
+              height: 300,
+              opacity: translateY.interpolate({
+                inputRange: [0, 200],
+                outputRange: [0, 1]
+              })
+            }}>
               <View style={{ height: 300, marginHorizontal: 20 }}>
                 <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" />
                 {this.renderOptionsList()}
                 <VersionDetails />
               </View>
-            </ScrollView>
+            </Animated.ScrollView>
           </View>
         </View>
       </SafeAreaView>
@@ -96,7 +103,11 @@ export default class HomePage extends Component {
         <PanGestureHandler onGestureEvent={animatedEvent} onHandlerStateChange={this.onHandlerStateChange}>
           <Animated.View style={[styles.card, {
             transform: [{
-              translateY,
+              translateY: translateY.interpolate({
+                inputRange: [-350, 0, 290],
+                outputRange: [-50, 0, 290],
+                extrapolate: "clamp"
+              }),
             }]
           }]}>
             <View style={{}}>
@@ -114,7 +125,27 @@ export default class HomePage extends Component {
     )
   };
   onHandlerStateChange = event => {
-
+    if (event.nativeEvent.oldState === State.ACTIVE) {
+      const { translationY } = event.nativeEvent;
+      let opened = false;
+      offset += translationY;
+      if (translationY >= 100)
+        opened = true;
+      else{
+        translateY.setValue(offset);
+        translateY.setOffset(0);
+        offset = 0;
+      }
+      Animated.timing(translateY, {
+        toValue: opened ? 290 : 0,
+        duration: 200,
+        useNativeDriver: true
+      }).start(() => {
+        offset = opened ? 290 : 0;
+        translateY.setOffset(offset);
+        translateY.setValue(0);
+      });
+    }
   };
 };
 
