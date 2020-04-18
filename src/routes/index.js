@@ -37,10 +37,15 @@ import ScheduleOrientation from '../pages/orientation/scheduleOrientation';
 
 import SymptomsPage from '../pages/symptoms/symptons';
 
+import Maps from "../pages/maps";
+
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator(
   {
     Home: {screen: HomePage},
+    Maps: {screen: Maps,navigationOptions:{
+      header:null
+    }}
     //AA: { screen: AAPage },
   },
   {initialRouteName: 'Home'},

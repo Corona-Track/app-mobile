@@ -49,6 +49,10 @@ export default class HomePage extends Component {
     this.props.navigation.navigate("Symptoms");
   };
 
+  onMapButtonPress = () => {
+    this.props.navigation.navigate("Maps");
+  };
+
   render = () => {
     let { showLoading, currentUser } = this.state;
     return (
@@ -60,7 +64,7 @@ export default class HomePage extends Component {
           resizeMethod="auto"
           style={styles.backgroundImageStyle} />
         <View>
-          <MapButton />
+          <MapButton onPress={this.onMapButtonPress} />
           <HeartButton />
         </View>
         <View style={{ marginTop: 50 }}>
