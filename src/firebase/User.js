@@ -8,6 +8,7 @@ export const getUser = () => {
     firestore()
       .collection(KEYS.TABLE_USER)
       .doc(uid)
+      .get()
       .then(res => {
         resolve(res);
       })
