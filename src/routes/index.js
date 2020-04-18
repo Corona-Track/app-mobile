@@ -31,6 +31,7 @@ import RelativesLeavingHomePage from '../pages/preventiveanalysis/relativesleavi
 import RelativesHomePrecautionsPage from '../pages/preventiveanalysis/relativeshomeprecautions';
 import FinishRemainingPage from '../pages/preventiveanalysis/finishremaining';
 import FinishCompletePage from '../pages/preventiveanalysis/finishcomplete';
+import RiskProfile from '../pages/profile/riskprofile';
 
 import SymptomsPage from '../pages/symptoms/symptons';
 
@@ -77,6 +78,9 @@ const AuthenticationStackNavigator = createStackNavigator(
     RelativesHomePrecautions: {screen: RelativesHomePrecautionsPage},
     FinishRemaining: {screen: FinishRemainingPage},
     FinishComplete: {screen: FinishCompletePage},
+
+    // Profile
+    RiskProfile: {screen: RiskProfile},
 
     Symptoms: { screen: SymptomsPage },
 
