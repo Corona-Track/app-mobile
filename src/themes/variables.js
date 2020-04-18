@@ -15,7 +15,8 @@ export const Colors = {
   searchBackgroundColor: '#e5e5e5',
   searchIconColor: '#E0E0E0',
   contaminatedColor: '#DE4D4D',
-  greenRiskProfile:'#27AE60',
-  yellowRiskProfile:'#FFC700',
-  redRiskProfile:'#FF0000',
+  errorColor: '#e74c3c',
+  greenRiskProfile: '#27AE60',
+  yellowRiskProfile: '#FFC700',
+  redRiskProfile: '#FF0000',
 };
