@@ -57,8 +57,8 @@ export default class HomePage extends Component {
           <MapButton onPress={this.setSignOut} />
           <HeartButton />
         </View>
-        <View style={{ marginVertical: 50 }}>
-          <UserDetails photo={currentUser.photo} name={"Lourenço José Roberti de Araújo"} aliasName={this.getFirstLetterName("Lourenço José Roberti de Araújo")} />
+        <View style={{ marginTop: 50 }}>
+          <UserDetails photo={currentUser.photo} name={"Maria José da Silva"} aliasName={this.getFirstLetterName("Maria José da Silva")} />
           {this.renderCard()}
           {/* <UserDetails photo={currentUser.photo} name={currentUser.name} aliasName={this.getFirstLetterName(currentUser.name)} /> */}
           <View>
@@ -70,7 +70,7 @@ export default class HomePage extends Component {
               })
             }}>
               <View style={{ height: 300, marginHorizontal: 20 }}>
-                <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" />
+                {/* <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" /> */}
                 {this.renderOptionsList()}
                 <VersionDetails />
               </View>
@@ -104,8 +104,8 @@ export default class HomePage extends Component {
           <Animated.View style={[styles.card, {
             transform: [{
               translateY: translateY.interpolate({
-                inputRange: [-350, 0, 290],
-                outputRange: [-50, 0, 290],
+                inputRange: [-350, 0, 250],
+                outputRange: [-50, 0, 250],
                 extrapolate: "clamp"
               }),
             }]
@@ -131,17 +131,17 @@ export default class HomePage extends Component {
       offset += translationY;
       if (translationY >= 100)
         opened = true;
-      else{
+      else {
         translateY.setValue(offset);
         translateY.setOffset(0);
         offset = 0;
       }
       Animated.timing(translateY, {
-        toValue: opened ? 290 : 0,
+        toValue: opened ? 250 : 0,
         duration: 200,
         useNativeDriver: true
       }).start(() => {
-        offset = opened ? 290 : 0;
+        offset = opened ? 250 : 0;
         translateY.setOffset(offset);
         translateY.setValue(0);
       });
@@ -187,13 +187,13 @@ const UserDetails = ({ photo, name, aliasName, onPress }) => (
   </View>
 );
 
-const UserPersonalData = ({ age, cpf, rg }) => (
-  <View style={styles.userPersonalDataContainer}>
-    <Text numberOfLines={1} style={styles.userPersonalDataText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>{age}</Text>
-    <Text numberOfLines={1} style={styles.userPersonalDataText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>{cpf}</Text>
-    <Text numberOfLines={1} style={styles.userPersonalDataText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>{rg}</Text>
-  </View>
-);
+// const UserPersonalData = ({ age, cpf, rg }) => (
+//   <View style={styles.userPersonalDataContainer}>
+//     <Text numberOfLines={1} style={styles.userPersonalDataText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>{age}</Text>
+//     <Text numberOfLines={1} style={styles.userPersonalDataText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>{cpf}</Text>
+//     <Text numberOfLines={1} style={styles.userPersonalDataText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>{rg}</Text>
+//   </View>
+// );
 
 const MenuItem = ({ icon, name, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.menuItemContainer}>
@@ -329,14 +329,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginVertical: 2,
   },
-
   imageContainer: {
     width: 100,
     height: 100,
     marginVertical: 10
   },
-
-
   buttonContainer: {
     marginHorizontal: 20
   },
@@ -352,8 +349,6 @@ const styles = StyleSheet.create({
     fontFamily: Colors.fontFamily,
     fontSize: 11
   },
-
-
   cardContent: {
     flex: 1,
     zIndex: 5,
@@ -371,7 +366,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    marginVertical: 20,
     height: 300,
     marginHorizontal: 20
   }
