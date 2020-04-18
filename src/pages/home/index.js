@@ -30,8 +30,12 @@ export default class HomePage extends Component {
   render = () => {
     return (
       <SafeAreaView style={styles.container}>
+<<<<<<< HEAD
         <Text>Home</Text>
         <Text onPress={() => this.onSymptomsButtonPress()}>Sintomas</Text>
+=======
+        <Text>Home2</Text>
+>>>>>>> 1cbd9a7e17940c7f353b4c90f29e33114cc7571d
         <Text onPress={() => this.setSignOut()}>Sair</Text>
       </SafeAreaView>
     );
