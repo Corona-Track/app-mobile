@@ -1,6 +1,5 @@
 import {createSwitchNavigator, createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-// import AuthLoading from '../pages/authLoading';
 
 import SplashPage from '../pages/splash';
 import DisclaimerPage from '../pages/disclaimer';
@@ -32,12 +31,14 @@ import RelativesHomePrecautionsPage from '../pages/preventiveanalysis/relativesh
 import FinishRemainingPage from '../pages/preventiveanalysis/finishremaining';
 import FinishCompletePage from '../pages/preventiveanalysis/finishcomplete';
 import RiskProfile from '../pages/profile/riskprofile';
-import Orientation from '../pages/orientation/index';
+import OrientationPage from '../pages/orientation/index';
 import ScheduleOrientation from '../pages/orientation/scheduleOrientation';
 
 import SymptomsPage from '../pages/symptoms/symptons';
 
 import Maps from '../pages/maps';
+import PublicUtilityPage from '../pages/publicutility';
+import TermsPage from '../pages/terms';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator(
@@ -49,10 +50,14 @@ const ApplicationStackNavigator = createStackNavigator(
         header: null,
       },
     },
-    Symptoms: {screen: SymptomsPage},
-    // Orientation
-    Orientation: {screen: Orientation},
+    RiskProfile: {screen: RiskProfile},
+    Orientation: {screen: OrientationPage},
     ScheduleOrientation: {screen: ScheduleOrientation},
+    Symptoms: {screen: SymptomsPage},
+    PublicUtility: {screen: PublicUtilityPage},
+    Terms: {screen: TermsPage},
+
+    //AA: { screen: AAPage },
   },
   {initialRouteName: 'Home'},
 );
@@ -91,9 +96,6 @@ const AuthenticationStackNavigator = createStackNavigator(
     RelativesHomePrecautions: {screen: RelativesHomePrecautionsPage},
     FinishRemaining: {screen: FinishRemainingPage},
     FinishComplete: {screen: FinishCompletePage},
-
-    // Profile
-    RiskProfile: {screen: RiskProfile},
   },
   {
     initialRouteName: 'Disclaimer',

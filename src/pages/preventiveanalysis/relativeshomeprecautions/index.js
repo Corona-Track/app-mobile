@@ -82,9 +82,9 @@ export default class RelativesHomePrecautionsPage extends Component {
                     <RadioButtonTripleResizableItem
                       value={entity.relativesShowerAnswer}
                       onPressCheckbox={this.onChangeRelativesShowerAnswer}
-                      firstTitle={'Uma'}
-                      secondTitle={'Duas'}
-                      thirdTitle={'Três ou mais'}
+                      firstTitle={'Sempre'}
+                      secondTitle={'Às vezes'}
+                      thirdTitle={'Nunca'}
                     />
                   </View>
                   <ChangeClothesText />
@@ -94,9 +94,9 @@ export default class RelativesHomePrecautionsPage extends Component {
                       onPressCheckbox={
                         this.onChangeRelativesChangeClothesAnswer
                       }
-                      firstTitle={'Uma'}
-                      secondTitle={'Duas'}
-                      thirdTitle={'Três ou mais'}
+                      firstTitle={'Sempre'}
+                      secondTitle={'Às vezes'}
+                      thirdTitle={'Nunca'}
                     />
                   </View>
                   <CleanPotText />
@@ -106,9 +106,9 @@ export default class RelativesHomePrecautionsPage extends Component {
                       onPressCheckbox={
                         this.onChangeRelativesContainerCleanupAnswer
                       }
-                      firstTitle={'Uma'}
-                      secondTitle={'Duas'}
-                      thirdTitle={'Três ou mais'}
+                      firstTitle={'Sempre'}
+                      secondTitle={'Às vezes'}
+                      thirdTitle={'Nunca'}
                     />
                   </View>
                 </View>

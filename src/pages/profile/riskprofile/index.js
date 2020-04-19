@@ -16,6 +16,7 @@ import aggravationRiskTypes from "../../../utils/enums/aggravationRiskTypes";
 
 // style
 import { Colors } from '../../../themes/variables';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
@@ -40,9 +41,10 @@ export default function RiskProfile(props) {
         photo: ''
     })
 
-    const riskProfileId = 3
+    let riskProfileId = 1;
 
     useEffect(() => {
+        riskProfileId = parseInt(navigation.getParam('risk', 1));
         getUserData()
         getRiskInfo(riskProfileId)
     }, [])
@@ -117,12 +119,11 @@ export default function RiskProfile(props) {
 
 
 
-    return <View style={styles.page}>
+    return <SafeAreaView style={styles.page}>
         <Header
             containerStyle={styles.header}
             leftComponent={<LeftComponent onPress={onLeftButtonPress} />}
             centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
-            rightComponent={<RightComponent onPress={onRightButtonPress} />}
         />
         <ScrollView style={styles.container}
             contentContainerStyle={styles.content}>
@@ -150,7 +151,7 @@ export default function RiskProfile(props) {
         </ScrollView>
 
 
-    </View>
+    </SafeAreaView>
 }
 
 const styles = StyleSheet.create({
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        paddingTop:10
+        paddingTop: 10
     },
     content: {
         alignItems: 'center',
@@ -168,7 +169,8 @@ const styles = StyleSheet.create({
     },
     header: {
         borderBottomWidth: 0,
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#FFFFFF',
+        marginHorizontal: 20
     },
     label: {
         fontSize: 16,
