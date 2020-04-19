@@ -71,7 +71,7 @@ const Maps = props => {
 
   useEffect(() => {
     onGPSButtonPress();
-  }, [onGPSButtonPress]);
+  }, []);
 
   const red = 'rgba(207, 84, 84,0.6)';
   const yellow = 'rgba(233, 205, 106,0.6)';

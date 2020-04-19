@@ -1,27 +1,3 @@
-<<<<<<< HEAD
-import React, {Component} from 'react';
-import {
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
-  View,
-  ScrollView,
-  Animated,
-} from 'react-native';
-import {NavigationEvents} from 'react-navigation';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import auth from '@react-native-firebase/auth';
-import Spinner from 'react-native-loading-spinner-overlay';
-import {Avatar} from 'react-native-elements';
-import {Button} from 'react-native-paper';
-import {PanGestureHandler, State} from 'react-native-gesture-handler';
-
-import {Colors} from '../../themes/variables';
-import {signOut} from '../../firebase/Auth';
-=======
 import React, { Component } from 'react';
 import { Image, SafeAreaView, StyleSheet, Text, ImageBackground, TouchableOpacity, View, Alert, Animated } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
@@ -36,7 +12,6 @@ import moment from 'moment';
 
 import { Colors } from '../../themes/variables';
 import { signOut } from '../../firebase/Auth';
->>>>>>> development
 
 const translateY = new Animated.Value(0);
 const animatedEvent = Animated.event(
@@ -105,7 +80,6 @@ export default class HomePage extends Component {
   };
 
   onSymptomsButtonPress = () => {
-    console.log('Symptoms');
     this.props.navigation.navigate('Symptoms');
   };
 
