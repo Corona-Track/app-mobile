@@ -137,7 +137,7 @@ export default class HomePage extends Component {
         <MenuItem icon="account" name="INFORMAÇÕES DO PERFIL" />
         <MenuItem onPress={() => this.navigateScreen("Symptoms")} icon="heart-pulse" name="MINHA SAÚDE" />
         <MenuItem onPress={() => this.navigateScreen("Orientation")} icon="monitor" name="TELEORIENTAÇÃO" />
-        <MenuItem icon="account" name="UTILIDADE PÚBLICA" />
+        <MenuItem icon="account" onPress={() => this.navigateScreen("PublicUtility")} name="UTILIDADE PÚBLICA" />
         {/* <MenuItem icon="settings" name="CONFIGURAÇÕES" /> */}
         <MenuItem onPress={this.setSignOut} icon="logout" name="SAIR" />
       </View>
@@ -220,7 +220,7 @@ export default class HomePage extends Component {
     this.props.navigation.navigate(screen);
   };
   openProfileDetails = () => {
-    this.props.navigation.navigate("RiskProfile");
+    this.props.navigation.navigate("RiskProfile", { risk: 2 });
   };
 };
 
@@ -243,15 +243,15 @@ const HeartButton = ({ onPress }) => (
 );
 
 const UserDetails = ({ photo, name, aliasName, onPress, onPressAvatar, chevronIcon }) => (
-  <TouchableOpacity onPress={() => onPressAvatar()} style={styles.userDetailsContainer}>
-    <View style={styles.userDetailsInnerContainer}>
+  <View style={styles.userDetailsContainer}>
+    <TouchableOpacity onPress={() => onPressAvatar()} style={styles.userDetailsInnerContainer}>
       <View style={[styles.riskContainer, { borderColor: "#27AE60" }]}>
         {photo && <Image
           source={{ uri: photo }}
           style={styles.imageStyle} />}
         {!photo && <Avatar rounded size={100} title={aliasName} />}
       </View>
-    </View>
+    </TouchableOpacity>
     <Text numberOfLines={1} style={styles.userName}><Text numberOfLines={1} style={styles.boldText}>{name}</Text></Text>
     <TouchableOpacity onPress={() => { onPress() }}>
       <Icon
@@ -259,7 +259,7 @@ const UserDetails = ({ photo, name, aliasName, onPress, onPressAvatar, chevronIc
         size={40}
         color={Colors.secondaryColor} />
     </TouchableOpacity>
-  </TouchableOpacity>
+  </View>
 );
 
 // const UserPersonalData = ({ age, cpf, rg }) => (
