@@ -114,7 +114,7 @@ const SecondDisclaimerText = () => {
         <Text style={[styles.simpleText]}>classificaremos seu perfil</Text>
         <Text style={[styles.simpleText]}>em Verde, Amarelo ou</Text>
         <Text style={[styles.simpleText]}>Vermelho <Text style={[styles.boldText]}>para lhe ajudar</Text></Text>
-        <Text style={[styles.simpleText]}><Text style={[styles.boldText]}>nas decisões</Text>de como e</Text>
+        <Text style={[styles.simpleText]}><Text style={[styles.boldText]}>nas decisões</Text> de como e</Text>
         <Text style={[styles.simpleText]}>quando sair de casa.</Text>
     </View>)
 };
@@ -135,9 +135,9 @@ const ThirdDisclaimerText = () => {
         <Text style={[styles.simpleText]}>e as recomendações da</Text>
         <Text style={[styles.simpleText]}>Organização Mundial da Saúde.</Text>
         <View style={{ flexDirection: "row", marginTop: 20 }}>
-            <Image style={styles.organizationImage}
+            <Image style={styles.susImage}
                 source={require('../../assets/images/sus.png')} />
-            <Image style={styles.organizationImage}
+            <Image style={styles.whoImage}
                 source={require('../../assets/images/who.png')} />
         </View>
     </View>)
@@ -145,7 +145,7 @@ const ThirdDisclaimerText = () => {
 
 const FourthDisclaimerText = ({ onPress }) => {
     return (<View style={styles.textContainer}>
-          <Image style={styles.pagesImage}
+        <Image style={styles.hospitalImage}
             source={require('../../assets/images/hospital.png')} />
         <Text style={[styles.simpleText]}>Caso deseje ou precise de</Text>
         <Text style={[styles.simpleText]}>uma consulta médica, você</Text>
@@ -210,9 +210,25 @@ const styles = StyleSheet.create({
         marginBottom: 0
     },
     pagesImage: {
-        marginBottom: 20
+        marginBottom: 20,
+        height: 100,
+        width: 80
     },
-    organizationImage: {
-        marginHorizontal: 10
+    susImage: {
+        width: 125,
+        height: 50,
+        resizeMode: "contain"
+    },
+    whoImage: {
+        width: 125,
+        height: 50,
+        resizeMode: "contain"
+    },
+    hospitalImage: {
+        marginBottom: 20,
+        width: 80,
+        height: 80,
+        resizeMode: "contain"
     }
+
 });
