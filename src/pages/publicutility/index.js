@@ -46,7 +46,7 @@ export default function PublicUtilityPage(props) {
         </View>
         <WebView
             source={{ uri: 'https://coronavirus.saude.gov.br/' }}
-            style={{ flex: 1, marginTop: 20 }} />
+            style={{ flex: 1, marginTop: 10 }} />
     </SafeAreaView>
 }
 

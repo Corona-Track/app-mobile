@@ -46,7 +46,7 @@ export default function TermsPage(props) {
         </View>
         <WebView
             source={{ uri: 'https://coronatrack.com.br/politica-de-privacidade-v0/' }}
-            style={{ flex: 1, marginTop: 20 }} />
+            style={{ flex: 1, marginTop: 10 }} />
     </SafeAreaView>
 }
 
