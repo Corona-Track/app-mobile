@@ -41,10 +41,9 @@ export default function RiskProfile(props) {
         photo: ''
     })
 
-    let riskProfileId = 1;
+    let riskProfileId = parseInt(navigation.getParam('riskProfile', 1))
 
     useEffect(() => {
-        riskProfileId = parseInt(navigation.getParam('risk', 1));
         getUserData()
         getRiskInfo(riskProfileId)
     }, [])
