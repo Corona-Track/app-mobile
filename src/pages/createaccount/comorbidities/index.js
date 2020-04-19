@@ -60,38 +60,38 @@ export default class ComorbiditiesPage extends Component {
   render = () => {
     let {entity, comorbiditiesList, showLoading} = this.state;
     return (
-      <SafeAreaView style={styles.container}>
-        <Spinner visible={showLoading} />
-        <Header
-          containerStyle={{marginHorizontal: 20}}
-          backgroundColor={Colors.secondaryColor}
-          leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-          centerComponent={
-            <CenterComponent photo={entity.photo} userName={entity.name} />
-          }
-          rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
-        />
-        <ScrollView nestedScrollEnabled={true} style={{width: '100%'}}>
-          <IntroText />
-          <View style={styles.checkboxItemContainer}>
-            {comorbiditiesList.map(comorbidity => {
-              return (
-                <View style={{height: 40, paddingHorizontal: 20}}>
-                  <CheckboxItem
-                    identifier={comorbidity.identifier}
-                    isChecked={this.isChecked}
-                    onClickCheck={
-                      comorbidity.identifier === 'Nenhuma das opções'
-                        ? this.onClickNoneOfOptions
-                        : this.onClickCheck
-                    }
-                  />
-                </View>
-              );
-            })}
-          </View>
-          <UserConsumer>
-            {context => (
+      <UserConsumer>
+        {context => (
+          <SafeAreaView style={styles.container}>
+            <Spinner visible={showLoading} />
+            <Header
+              containerStyle={{marginHorizontal: 20}}
+              backgroundColor={Colors.secondaryColor}
+              leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+              centerComponent={
+                <CenterComponent photo={context.user.photo} userName={context.user.name} />
+              }
+              rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
+            />
+            <ScrollView nestedScrollEnabled={true} style={{width: '100%'}}>
+              <IntroText />
+              <View style={styles.checkboxItemContainer}>
+                {comorbiditiesList.map(comorbidity => {
+                  return (
+                    <View style={{height: 40, paddingHorizontal: 20}}>
+                      <CheckboxItem
+                        identifier={comorbidity.identifier}
+                        isChecked={this.isChecked}
+                        onClickCheck={
+                          comorbidity.identifier === 'Nenhuma das opções'
+                            ? this.onClickNoneOfOptions
+                            : this.onClickCheck
+                        }
+                      />
+                    </View>
+                  );
+                })}
+              </View>
               <View style={styles.buttonContainer}>
                 <ContinueRequiredButton
                   disabled={this.disableButton()}
@@ -100,11 +100,11 @@ export default class ComorbiditiesPage extends Component {
                   }}
                 />
               </View>
-            )}
-          </UserConsumer>
-        </ScrollView>
-        <ProgressTracking amount={7} position={5} />
-      </SafeAreaView>
+            </ScrollView>
+            <ProgressTracking amount={7} position={5} />
+          </SafeAreaView>
+        )}
+      </UserConsumer>
     );
   };
   onLeftButtonPress = () => {

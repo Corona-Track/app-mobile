@@ -32,7 +32,7 @@ export class UserProvider extends Component {
                 },
               },
               () => {
-                console.log(this.state.user);
+                console.log('UserContext:', this.state.user);
               },
             );
           },

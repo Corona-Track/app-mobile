@@ -1,6 +1,5 @@
-import { createSwitchNavigator, createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-// import AuthLoading from '../pages/authLoading';
+import {createSwitchNavigator, createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 
 import SplashPage from '../pages/splash';
 import DisclaimerPage from '../pages/disclaimer';
@@ -35,67 +34,81 @@ import RiskProfile from '../pages/profile/riskprofile';
 import OrientationPage from '../pages/orientation/index';
 import ScheduleOrientation from '../pages/orientation/scheduleOrientation';
 
-import SymptomsPage from '../pages/symptoms/symptons';
+import SymptomsPage from '../pages/symptoms/symptom';
+import ReportSymptomsPage from '../pages/symptoms/reportsymptoms';
+import ReportTestPage from '../pages/symptoms/reporttest';
+import SymptomsTestPage from '../pages/symptoms/symptomstest';
 
-import Maps from "../pages/maps";
+import Maps from '../pages/maps';
 import PublicUtilityPage from '../pages/publicutility';
 import TermsPage from '../pages/terms';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator(
   {
-    Home: { screen: HomePage },
+    Home: {screen: HomePage},
     Maps: {
-      screen: Maps, navigationOptions: {
-        header: null
+      screen: Maps,
+      navigationOptions: {
+        header: null,
       },
     },
-    RiskProfile: { screen: RiskProfile },
-    Orientation: { screen: OrientationPage },
-    ScheduleOrientation: { screen: ScheduleOrientation },
-    Symptoms: { screen: SymptomsPage },
-    PublicUtility: { screen: PublicUtilityPage },
-    Terms: { screen: TermsPage }
+    RiskProfile: {screen: RiskProfile},
+    Orientation: {screen: OrientationPage},
+    ScheduleOrientation: {screen: ScheduleOrientation},
+    PublicUtility: {screen: PublicUtilityPage},
+    Terms: {screen: TermsPage},
 
-    //AA: { screen: AAPage },
+    Symptoms: { screen: SymptomsPage,navigationOptions:{
+      header:null
+    } },
+    ReportSymptoms: { screen: ReportSymptomsPage,navigationOptions:{
+      header:null
+    }},
+    ReportTest: { screen: ReportTestPage ,navigationOptions:{
+      header:null
+    }},
+    SymptomsTest: { screen: SymptomsTestPage ,navigationOptions:{
+      header:null
+    }},
   },
-  { initialRouteName: 'Home' },
+  {initialRouteName: 'Home'},
 );
 
 //App external routes
 const AuthenticationStackNavigator = createStackNavigator(
   {
     //Create Account
-    Disclaimer: { screen: DisclaimerPage },
-    TakePhoto: { screen: TakePhotoPage },
-    TookPhoto: { screen: TookPhotoPage },
-    PersonalData: { screen: PersonalDataPage },
-    PersonalAddress: { screen: PersonalAddressPage },
-    AlreadyHadCoronavirus: { screen: AlreadyHadCoronavirusPage },
-    AlreadyHadCoronavirusTest: { screen: AlreadyHadCoronavirusTestPage },
-    TestResult: { screen: TestResultPage },
-    SomeoneDiagnosed: { screen: SomeoneDiagnosedPage },
-    SomeoneSuspicious: { screen: SomeoneSuspiciousPage },
-    Comorbidities: { screen: ComorbiditiesPage },
-    FinishUncontaminated: { screen: FinishUncontaminatedPage },
-    FinishContaminated: { screen: FinishContaminatedPage },
+    Disclaimer: {screen: DisclaimerPage},
+    TakePhoto: {screen: TakePhotoPage},
+    TookPhoto: {screen: TookPhotoPage},
+    PersonalData: {screen: PersonalDataPage},
+    PersonalAddress: {screen: PersonalAddressPage},
+    AlreadyHadCoronavirus: {screen: AlreadyHadCoronavirusPage},
+    AlreadyHadCoronavirusTest: {screen: AlreadyHadCoronavirusTestPage},
+    TestResult: {screen: TestResultPage},
+    SomeoneDiagnosed: {screen: SomeoneDiagnosedPage},
+    SomeoneSuspicious: {screen: SomeoneSuspiciousPage},
+    Comorbidities: {screen: ComorbiditiesPage},
+    FinishUncontaminated: {screen: FinishUncontaminatedPage},
+    FinishContaminated: {screen: FinishContaminatedPage},
 
-    Login: { screen: LoginPage },
+    Login: {screen: LoginPage},
     // Splash: {screen: SplashPage},
 
     //Preventive Profile
-    Medicines: { screen: MedicinesPage },
-    AlreadyHadFluVaccine: { screen: AlreadyHadFluVaccinePage },
-    WeekLeaveHomeTimes: { screen: WeekLeaveHomeTimesPage },
-    SocialDistance: { screen: SocialDistancePage },
-    ProtectionUsage: { screen: ProtectionUsagePage },
-    TouchingPrecaution: { screen: TouchingPrecautionPage },
-    HomePrecautions: { screen: HomePrecautionsPage },
-    OutsideWork: { screen: OutsideWorkPage },
-    RelativesLeavingHome: { screen: RelativesLeavingHomePage },
-    RelativesHomePrecautions: { screen: RelativesHomePrecautionsPage },
-    FinishRemaining: { screen: FinishRemainingPage },
-    FinishComplete: { screen: FinishCompletePage },
+    Medicines: {screen: MedicinesPage},
+    AlreadyHadFluVaccine: {screen: AlreadyHadFluVaccinePage},
+    WeekLeaveHomeTimes: {screen: WeekLeaveHomeTimesPage},
+    SocialDistance: {screen: SocialDistancePage},
+    ProtectionUsage: {screen: ProtectionUsagePage},
+    TouchingPrecaution: {screen: TouchingPrecautionPage},
+    HomePrecautions: {screen: HomePrecautionsPage},
+    OutsideWork: {screen: OutsideWorkPage},
+    RelativesLeavingHome: {screen: RelativesLeavingHomePage},
+    RelativesHomePrecautions: {screen: RelativesHomePrecautionsPage},
+    FinishRemaining: {screen: FinishRemainingPage},
+    FinishComplete: {screen: FinishCompletePage},
   },
   {
     initialRouteName: 'Disclaimer',
@@ -109,7 +122,7 @@ const RoutesSwitchNavigator = createAppContainer(
       Authentication: AuthenticationStackNavigator,
       Application: ApplicationStackNavigator,
     },
-    { initialRouteName: 'Splash' },
+    {initialRouteName: 'Splash'},
   ),
 );
 

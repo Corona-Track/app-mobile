@@ -16,7 +16,6 @@
     "@react-native-firebase/app": "^6.4.0",
     "@react-native-firebase/auth": "^6.4.0",
     "@react-native-firebase/firestore": "^6.4.0",
-    "add": "^2.0.6",
     "axios": "^0.19.2",
     "moment": "^2.24.0",
     "react": "16.11.0",

@@ -39,27 +39,27 @@ export default class AlreadyHadCoronavirusTestPage extends Component {
   render = () => {
     let {entity} = this.state;
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={{width: '100%', paddingHorizontal: 20}}>
-          <Header
-            backgroundColor={Colors.secondaryColor}
-            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-            centerComponent={
-              <CenterComponent photo={entity.photo} userName={entity.name} />
-            }
-            rightComponent={
-              <RightComponent onPress={this.onRightButtonPress} />
-            }
-          />
-        </View>
-        <View style={{flex: 0.6, justifyContent: 'center'}}>
-          <IntroText />
-          <View style={styles.avatarContainer}>
-            <ImageIcon source={require('../../../assets/images/virus.png')} />
-          </View>
-        </View>
-        <UserConsumer>
-          {context => (
+      <UserConsumer>
+        {context => (
+          <SafeAreaView style={styles.container}>
+            <View style={{width: '100%', paddingHorizontal: 20}}>
+              <Header
+                backgroundColor={Colors.secondaryColor}
+                leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                centerComponent={
+                  <CenterComponent photo={context.user.photo} userName={context.user.name} />
+                }
+                rightComponent={
+                  <RightComponent onPress={this.onRightButtonPress} />
+                }
+              />
+            </View>
+            <View style={{flex: 0.6, justifyContent: 'center'}}>
+              <IntroText />
+              <View style={styles.avatarContainer}>
+                <ImageIcon source={require('../../../assets/images/virus.png')} />
+              </View>
+            </View>
             <View style={{flex: 0.4, width: '100%', paddingHorizontal: 20}}>
               <DenyButton
                 onPress={() => {
@@ -72,10 +72,10 @@ export default class AlreadyHadCoronavirusTestPage extends Component {
                 }}
               />
             </View>
-          )}
-        </UserConsumer>
-        <ProgressTracking amount={7} position={4} />
-      </SafeAreaView>
+            <ProgressTracking amount={7} position={4} />
+          </SafeAreaView>
+        )}
+      </UserConsumer>
     );
   };
   onLeftButtonPress = () => {

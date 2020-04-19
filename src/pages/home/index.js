@@ -19,11 +19,11 @@ const animatedEvent = Animated.event(
   [
     {
       nativeEvent: {
-        translationY: translateY
-      }
-    }
+        translationY: translateY,
+      },
+    },
   ],
-  { useNativeDriver: true },
+  {useNativeDriver: true},
 );
 let offset = 0;
 
@@ -39,8 +39,12 @@ export default class HomePage extends Component {
   };
   setSignOut = () => {
     signOut()
-      .then(() => { this.props.navigation.navigate('Login'); })
-      .catch(error => { console.error(error); });
+      .then(() => {
+        this.props.navigation.navigate('Login');
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
   initialize = () => {
     getUser()
@@ -77,12 +81,11 @@ export default class HomePage extends Component {
   };
 
   onSymptomsButtonPress = () => {
-    console.log("Symptoms");
-    this.props.navigation.navigate("Symptoms");
+    this.props.navigation.navigate('Symptoms');
   };
 
   onMapButtonPress = () => {
-    this.props.navigation.navigate("Maps");
+    this.props.navigation.navigate('Maps');
   };
 
   render = () => {
@@ -94,12 +97,13 @@ export default class HomePage extends Component {
         <ImageBackground
           source={require('../../assets/images/homebackground.png')}
           resizeMethod="auto"
-          style={styles.backgroundImageStyle} />
+          style={styles.backgroundImageStyle}
+        />
         <View>
           <MapButton onPress={this.onMapButtonPress} />
           <HeartButton onPress={() => this.navigateScreen("Symptoms")} />
         </View>
-        <View style={{ marginTop: 50 }}>
+        <View style={{marginTop: 50}}>
           <UserDetails
             chevronIcon={chevronIcon}
             onPressAvatar={() => this.openProfileDetails(currentUser)}
@@ -111,14 +115,15 @@ export default class HomePage extends Component {
             aliasName={this.getFirstLetterName(currentUser.name)} />
           {this.renderCard(currentUser)}
           <View>
-            <Animated.ScrollView style={{
-              height: 300,
-              opacity: translateY.interpolate({
-                inputRange: [0, 200],
-                outputRange: [0, 1]
-              })
-            }}>
-              <View style={{ height: 300, marginHorizontal: 40 }}>
+            <Animated.ScrollView
+              style={{
+                height: 300,
+                opacity: translateY.interpolate({
+                  inputRange: [0, 200],
+                  outputRange: [0, 1],
+                }),
+              }}>
+              <View style={{height: 300, marginHorizontal: 40}}>
                 {/* <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" /> */}
                 {this.renderOptionsList(currentUser)}
                 <VersionDetails />
@@ -130,9 +135,13 @@ export default class HomePage extends Component {
     );
   };
   getFirstLetterName = name => {
-    if (!name)
+    if (!name) {
       return null;
-    return name.trim().charAt(0).toUpperCase();
+    }
+    return name
+      .trim()
+      .charAt(0)
+      .toUpperCase();
   };
   getRiskProfileColor = riskProfile => {
     switch (riskProfile) {
@@ -193,18 +202,18 @@ export default class HomePage extends Component {
             <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>{currentUserPerfilColor}</Text></Text>
             {/* <ProfileButton onPress={() => { alert() }} /> */}
           </Animated.View>
-        </PanGestureHandler >
+        </PanGestureHandler>
       </View>
-    )
+    );
   };
   onHandlerStateChange = event => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
-      const { translationY } = event.nativeEvent;
+      const {translationY} = event.nativeEvent;
       let opened = false;
       offset += translationY;
-      if (translationY >= 100)
+      if (translationY >= 100) {
         opened = true;
-      else {
+      } else {
         translateY.setValue(offset);
         translateY.setOffset(0);
         offset = 0;
@@ -212,7 +221,7 @@ export default class HomePage extends Component {
       Animated.timing(translateY, {
         toValue: opened ? 250 : 0,
         duration: 200,
-        useNativeDriver: true
+        useNativeDriver: true,
       }).start(() => {
         offset = opened ? 250 : 0;
         translateY.setOffset(offset);
@@ -224,9 +233,9 @@ export default class HomePage extends Component {
   executeCardAnimation = () => {
     let opened = false;
     let goToOffset = offset === 250 ? 0 : 250;
-    if (goToOffset === 250)
+    if (goToOffset === 250) {
       opened = true;
-    else {
+    } else {
       translateY.setValue(offset);
       translateY.setOffset(0);
       offset = 0;
@@ -234,7 +243,7 @@ export default class HomePage extends Component {
     Animated.timing(translateY, {
       toValue: goToOffset,
       duration: 200,
-      useNativeDriver: true
+      useNativeDriver: true,
     }).start(() => {
       offset = goToOffset;
       translateY.setOffset(offset);
@@ -250,21 +259,15 @@ export default class HomePage extends Component {
   };
 };
 
-const MapButton = ({ onPress }) => (
+const MapButton = ({onPress}) => (
   <TouchableOpacity style={styles.mapButton} onPress={onPress}>
-    <Icon
-      name="map-marker-outline"
-      size={40}
-      color={Colors.secondaryColor} />
+    <Icon name="map-marker-outline" size={40} color={Colors.secondaryColor} />
   </TouchableOpacity>
 );
 
-const HeartButton = ({ onPress }) => (
+const HeartButton = ({onPress}) => (
   <TouchableOpacity style={styles.heartButton} onPress={onPress}>
-    <Icon
-      name="heart-pulse"
-      size={40}
-      color={Colors.secondaryColor} />
+    <Icon name="heart-pulse" size={40} color={Colors.secondaryColor} />
   </TouchableOpacity>
 );
 
@@ -296,23 +299,24 @@ const UserDetails = ({ photo, name, aliasName, currentUser,getRiskProfileColor, 
 //   </View>
 // );
 
-const MenuItem = ({ icon, name, onPress }) => (
+const MenuItem = ({icon, name, onPress}) => (
   <TouchableOpacity onPress={onPress} style={styles.menuItemContainer}>
     <View style={styles.menuItemFirstColumn}>
-      <Icon
-        name={icon}
-        size={32}
-        color={Colors.secondaryColor} />
+      <Icon name={icon} size={32} color={Colors.secondaryColor} />
     </View>
     <View style={styles.menuItemSecondColumn}>
-      <Text numberOfLines={1} style={styles.menuItemText}>{name}</Text>
+      <Text numberOfLines={1} style={styles.menuItemText}>
+        {name}
+      </Text>
     </View>
   </TouchableOpacity>
 );
 
 const VersionDetails = () => (
   <View style={styles.versionContainer}>
-    <Text numberOfLines={1} style={styles.versionText}>Versão 1.0.0</Text>
+    <Text numberOfLines={1} style={styles.versionText}>
+      Versão 1.0.0
+    </Text>
   </View>
 );
 
@@ -322,7 +326,7 @@ const ProfileButton = ({ onPress }) => (
       style={styles.innerButtonContainer}
       contentStyle={styles.contentButton}
       mode="contained"
-      color={"#27AE60"}
+      color={'#27AE60'}
       labelStyle={styles.buttonText}
       onPress={onPress}>ENTENDA MELHOR O SEU PERFIL</Button>
   </TouchableOpacity>
@@ -335,14 +339,14 @@ const styles = StyleSheet.create({
   },
   backgroundImageStyle: {
     flex: 1,
-    width: "100%",
+    width: '100%',
     height: 300,
-    position: "absolute",
-    marginTop: 30
+    position: 'absolute',
+    marginTop: 30,
   },
   mapButton: {
     flex: 0,
-    position: "absolute",
+    position: 'absolute',
     left: 15,
     top: 15,
     width: 40,
@@ -350,60 +354,60 @@ const styles = StyleSheet.create({
   },
   heartButton: {
     flex: 0,
-    position: "absolute",
+    position: 'absolute',
     right: 15,
     top: 15,
     width: 40,
     height: 40,
   },
   userDetailsContainer: {
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
   imageStyle: {
     width: 100,
     height: 100,
     borderRadius: 60,
-    borderColor: "#FFFFFF",
-    borderWidth: 2
+    borderColor: '#FFFFFF',
+    borderWidth: 2,
   },
   userDetailsInnerContainer: {
     borderWidth: 4,
     borderRadius: 100,
-    borderColor: "#FFFFFF"
+    borderColor: '#FFFFFF',
   },
   riskContainer: {
     borderWidth: 15,
-    borderRadius: 100
+    borderRadius: 100,
   },
   userName: {
     fontFamily: Colors.fontFamily,
     color: Colors.primaryTextColor,
     fontSize: 18,
     marginTop: 10,
-    maxWidth: "80%"
+    maxWidth: '80%',
   },
   boldText: {
-    fontWeight: "bold"
+    fontWeight: 'bold',
   },
   menuItemContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
     borderBottomWidth: 2,
-    borderBottomColor: "#A7A7A7",
-    padding: 0
+    borderBottomColor: '#A7A7A7',
+    padding: 0,
   },
   menuItemFirstColumn: {
-    width: "15%",
-    justifyContent: "center"
+    width: '15%',
+    justifyContent: 'center',
   },
   menuItemSecondColumn: {
-    width: "85%",
-    justifyContent: "center"
+    width: '85%',
+    justifyContent: 'center',
   },
   menuItemText: {
     fontFamily: Colors.fontFamily,
-    color: "#FFFFFF"
+    color: '#FFFFFF',
   },
   userPersonalDataText: {
     fontFamily: Colors.fontFamily,
@@ -412,20 +416,20 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
   userPersonalDataContainer: {
-    width: "100%",
-    alignItems: "center",
-    marginTop: 20
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 20,
   },
   versionContainer: {
-    width: "100%",
-    marginTop: 15
+    width: '100%',
+    marginTop: 15,
   },
   versionText: {
     fontFamily: Colors.fontFamily,
-    color: "#FFFFFF",
+    color: '#FFFFFF',
   },
   cardText: {
-    textAlign: "center",
+    textAlign: 'center',
     fontFamily: Colors.fontFamily,
     fontSize: 17,
     marginVertical: 2,
@@ -436,39 +440,38 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
   buttonContainer: {
-    marginHorizontal: 20
+    marginHorizontal: 20,
   },
   innerButtonContainer: {
     borderRadius: 50,
   },
   contentButton: {
     height: 40,
-    textAlign: "center",
+    textAlign: 'center',
   },
   buttonText: {
     color: Colors.primaryTextColor,
     fontFamily: Colors.fontFamily,
-    fontSize: 11
+    fontSize: 11,
   },
   cardContent: {
     flex: 1,
     zIndex: 5,
-    height: "100%",
-    flexDirection: "column"
+    height: '100%',
+    flexDirection: 'column',
   },
   card: {
     flex: 1,
     backgroundColor: "#FFF",
     borderRadius: 10,
     marginVertical: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     height: 300,
-    marginHorizontal: 20
-  }
-
+    marginHorizontal: 20,
+  },
 });

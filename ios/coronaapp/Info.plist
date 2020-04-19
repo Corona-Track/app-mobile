@@ -40,9 +40,11 @@
 	<key>NSCameraUsageDescription</key>
 	<string>User image storage</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Location always in use</string>
+	<string>Use the location to know what events are related to you</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location in use</string>
+	<string>Use the location to show on the map</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Use the location to get information about events</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

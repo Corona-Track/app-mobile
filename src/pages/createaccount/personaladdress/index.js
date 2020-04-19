@@ -64,55 +64,55 @@ export default class PersonalAddressPage extends Component {
   render = () => {
     let {entity, showLoading} = this.state;
     return (
-      <SafeAreaView style={styles.container}>
-        <Spinner visible={showLoading} />
-        <View style={{width: '100%', paddingHorizontal: 20}}>
-          <Header
-            backgroundColor={Colors.secondaryColor}
-            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-            centerComponent={
-              <CenterComponent photo={entity.photo} userName={entity.name} />
-            }
-            rightComponent={
-              <RightComponent onPress={this.onRightButtonPress} />
-            }
-          />
-        </View>
-        <ScrollView style={{width: '100%', paddingHorizontal: 20}}>
-          <IntroText userName={entity.name} />
-          {/* <GPSButton onGPSButtonPress={this.onGPSButtonPress} /> */}
-          <CEPTextInput
-            label="CEP"
-            value={entity.cep}
-            onChangeText={this.onHandleCEP}
-          />
-          <SimpleTextInput
-            label="Bairro"
-            value={entity.neighborhood}
-            onChangeText={this.onHandleNeighborhood}
-          />
-          <SimpleTextInput
-            label="Cidade"
-            value={entity.city}
-            onChangeText={this.onHandleCity}
-          />
-          <SimpleTextInput
-            label="UF"
-            value={entity.uf}
-            onChangeText={this.onHandleUF}
-          />
-          <SimpleTextInput
-            label="Av, Rua"
-            value={entity.street}
-            onChangeText={this.onHandleStreet}
-          />
-          <SimpleNumericTextInput
-            label="Número"
-            value={entity.number}
-            onChangeText={this.onHandleNumber}
-          />
-          <UserConsumer>
-            {context => (
+      <UserConsumer>
+        {context => (
+          <SafeAreaView style={styles.container}>
+            <Spinner visible={showLoading} />
+            <View style={{width: '100%', paddingHorizontal: 20}}>
+              <Header
+                backgroundColor={Colors.secondaryColor}
+                leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                centerComponent={
+                  <CenterComponent photo={context.user.photo} userName={context.user.name} />
+                }
+                rightComponent={
+                  <RightComponent onPress={this.onRightButtonPress} />
+                }
+              />
+            </View>
+            <ScrollView style={{width: '100%', paddingHorizontal: 20}}>
+              <IntroText userName={entity.name} />
+              {/* <GPSButton onGPSButtonPress={this.onGPSButtonPress} /> */}
+              <CEPTextInput
+                label="CEP"
+                value={entity.cep}
+                onChangeText={this.onHandleCEP}
+              />
+              <SimpleTextInput
+                label="Bairro"
+                value={entity.neighborhood}
+                onChangeText={this.onHandleNeighborhood}
+              />
+              <SimpleTextInput
+                label="Cidade"
+                value={entity.city}
+                onChangeText={this.onHandleCity}
+              />
+              <SimpleTextInput
+                label="UF"
+                value={entity.uf}
+                onChangeText={this.onHandleUF}
+              />
+              <SimpleTextInput
+                label="Av, Rua"
+                value={entity.street}
+                onChangeText={this.onHandleStreet}
+              />
+              <SimpleNumericTextInput
+                label="Número"
+                value={entity.number}
+                onChangeText={this.onHandleNumber}
+              />
               <View style={{paddingVertical: 20}}>
                 <ContinueRequiredButton
                   disabled={this.disableButton()}
@@ -122,11 +122,11 @@ export default class PersonalAddressPage extends Component {
                   }}
                 />
               </View>
-            )}
-          </UserConsumer>
-        </ScrollView>
-        <ProgressTracking amount={7} position={3} />
-      </SafeAreaView>
+            </ScrollView>
+            <ProgressTracking amount={7} position={3} />
+          </SafeAreaView>
+        )}
+      </UserConsumer>
     );
   };
   onLeftButtonPress = () => {
