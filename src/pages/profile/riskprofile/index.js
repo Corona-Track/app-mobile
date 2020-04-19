@@ -41,9 +41,10 @@ export default function RiskProfile(props) {
         photo: ''
     })
 
-    const riskProfileId = 3
+    let riskProfileId = 1;
 
     useEffect(() => {
+        riskProfileId = parseInt(navigation.getParam('risk', 1));
         getUserData()
         getRiskInfo(riskProfileId)
     }, [])
@@ -119,12 +120,11 @@ export default function RiskProfile(props) {
 
 
     return <SafeAreaView style={styles.page}>
-            <Header
-                containerStyle={styles.header}
-                leftComponent={<LeftComponent onPress={onLeftButtonPress} />}
-                centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
-                rightComponent={<RightComponent onPress={onRightButtonPress} />}
-            />
+        <Header
+            containerStyle={styles.header}
+            leftComponent={<LeftComponent onPress={onLeftButtonPress} />}
+            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
+        />
         <ScrollView style={styles.container}
             contentContainerStyle={styles.content}>
             <Title />
