@@ -30,7 +30,7 @@ export default function PublicUtilityPage(props) {
                 name,
                 photo
             })
-        }).catch(err => { console.log('Error getting document', err); });
+        }).catch(err => { Alert.alert("Aviso!", "Falha ao carregar a página web, tente novamente mais tarde."); });
     }
 
     onLeftButtonPress = () => {

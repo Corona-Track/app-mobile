@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, SafeAreaView, StyleSheet, Text, ScrollView, Dimensions } from 'react-native';
+import { View, SafeAreaView, StyleSheet, Text, ScrollView, Dimensions, Image } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { NavigationActions, StackActions } from 'react-navigation';
 
@@ -91,15 +91,17 @@ const FirstDisclaimerText = () => {
             <Text style={[styles.simpleText]}>associados ao coronavírus.</Text>
 
             <Text style={[styles.simpleText, { marginTop: 30 }]}><Text style={[styles.boldText]}>Contamos com sua</Text></Text>
-            <Text style={[styles.simpleText]}><Text style={[styles.boldText]}>colaboração para que</Text></Text>
-            <Text style={[styles.simpleText]}><Text style={[styles.boldText]}>juntos tornemos o ambiente</Text></Text>
-            <Text style={[styles.simpleText]}><Text style={[styles.boldText]}>mais seguro a todos.</Text></Text>
+            <Text style={[styles.simpleText]}><Text style={[styles.boldText]}>colaboração </Text>para que</Text>
+            <Text style={[styles.simpleText]}>juntos tornemos o ambiente</Text>
+            <Text style={[styles.simpleText]}>mais seguro a todos.</Text>
         </View>
     </ScrollView>)
 };
 
 const SecondDisclaimerText = () => {
     return (<View style={styles.textContainer}>
+        <Image style={styles.pagesImage}
+            source={require('../../assets/images/pages.png')} />
         <Text style={[styles.simpleText]}>Ao concordar em</Text>
         <Text style={[styles.simpleText]}>compartilhar conosco seus</Text>
         <Text style={[styles.simpleText]}>dados, estimaremos tanto o</Text>
@@ -111,8 +113,8 @@ const SecondDisclaimerText = () => {
         <Text style={[styles.simpleText, { marginTop: 20 }]}>Com esses dados,</Text>
         <Text style={[styles.simpleText]}>classificaremos seu perfil</Text>
         <Text style={[styles.simpleText]}>em Verde, Amarelo ou</Text>
-        <Text style={[styles.simpleText]}>Vermelho para lhe ajudar</Text>
-        <Text style={[styles.simpleText]}>nas decisões de como e</Text>
+        <Text style={[styles.simpleText]}>Vermelho <Text style={[styles.boldText]}>para lhe ajudar</Text></Text>
+        <Text style={[styles.simpleText]}><Text style={[styles.boldText]}>nas decisões</Text>de como e</Text>
         <Text style={[styles.simpleText]}>quando sair de casa.</Text>
     </View>)
 };
@@ -127,17 +129,24 @@ const ThirdDisclaimerText = () => {
         <Text style={[styles.simpleText]}>contrariar as recomendações</Text>
         <Text style={[styles.simpleText]}>do governo de sua região.</Text>
 
-        <Text style={[styles.simpleText, { marginTop: 20 }]}>Esteja atento às</Text>
+        <Text style={[styles.simpleText, { marginTop: 20 }]}><Text style={[styles.boldText]}>Esteja atento</Text> às</Text>
         <Text style={[styles.simpleText]}>recomendações do Ministério</Text>
         <Text style={[styles.simpleText]}>da Saúde para a sua região</Text>
         <Text style={[styles.simpleText]}>e as recomendações da</Text>
-        <Text style={[styles.simpleText]}>Organização Mundial da</Text>
-        <Text style={[styles.simpleText]}>Saúde.</Text>
+        <Text style={[styles.simpleText]}>Organização Mundial da Saúde.</Text>
+        <View style={{ flexDirection: "row", marginTop: 20 }}>
+            <Image style={styles.organizationImage}
+                source={require('../../assets/images/sus.png')} />
+            <Image style={styles.organizationImage}
+                source={require('../../assets/images/who.png')} />
+        </View>
     </View>)
 };
 
 const FourthDisclaimerText = ({ onPress }) => {
     return (<View style={styles.textContainer}>
+          <Image style={styles.pagesImage}
+            source={require('../../assets/images/hospital.png')} />
         <Text style={[styles.simpleText]}>Caso deseje ou precise de</Text>
         <Text style={[styles.simpleText]}>uma consulta médica, você</Text>
         <Text style={[styles.simpleText]}>pode usar nossa plataforma</Text>
@@ -148,10 +157,10 @@ const FourthDisclaimerText = ({ onPress }) => {
 
         <Text style={[styles.simpleText, { marginTop: 20 }]}>Caso sinta algo que julgue</Text>
         <Text style={[styles.simpleText]}>ser uma urgência, por favor</Text>
-        <Text style={[styles.simpleText]}>encaminhe-se para o posto</Text>
-        <Text style={[styles.simpleText]}>de saúde ou pronto-socorro</Text>
-        <Text style={[styles.simpleText]}>mas próximo.</Text>
-        <View style={{ paddingHorizontal: 20, width: "100%", marginTop: 40 }}>
+        <Text style={[styles.simpleText]}><Text style={[styles.boldText]}>encaminhe-se para o posto</Text></Text>
+        <Text style={[styles.simpleText]}><Text style={[styles.boldText]}>de saúde ou pronto-socorro</Text></Text>
+        <Text style={[styles.simpleText]}><Text style={[styles.boldText]}>mas próximo.</Text></Text>
+        <View style={{ paddingHorizontal: 20, width: "100%", marginTop: 20 }}>
             <DisclaimerButton onPress={() => onPress()} />
         </View>
     </View>)
@@ -179,7 +188,7 @@ const styles = StyleSheet.create({
     },
     simpleText: {
         fontFamily: Colors.fontFamily,
-        fontSize: 18,
+        fontSize: 19,
         color: Colors.secondaryColor
     },
     boldText: {
@@ -199,5 +208,11 @@ const styles = StyleSheet.create({
         paddingBottom: 0,
         marginTop: 0,
         marginBottom: 0
+    },
+    pagesImage: {
+        marginBottom: 20
+    },
+    organizationImage: {
+        marginHorizontal: 10
     }
 });
