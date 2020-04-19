@@ -12,6 +12,7 @@ import moment from 'moment';
 
 import { Colors } from '../../themes/variables';
 import { signOut } from '../../firebase/Auth';
+import riskProfileTypes from '../../utils/enums/riskProfileTypes';
 
 const translateY = new Animated.Value(0);
 const animatedEvent = Animated.event(
@@ -32,7 +33,7 @@ export default class HomePage extends Component {
   };
 
   state = {
-    showLoading: false,
+    showLoading: true,
     currentUser: {},
     chevronIcon: "chevron-down"
   };
@@ -105,8 +106,10 @@ export default class HomePage extends Component {
         <View style={{marginTop: 50}}>
           <UserDetails
             chevronIcon={chevronIcon}
-            onPressAvatar={this.openProfileDetails}
+            onPressAvatar={() => this.openProfileDetails(currentUser)}
             onPress={this.executeCardAnimation}
+            currentUser={currentUser}
+            getRiskProfileColor={this.getRiskProfileColor}
             photo={currentUser.photo}
             name={currentUser.name}
             aliasName={this.getFirstLetterName(currentUser.name)} />
@@ -122,7 +125,7 @@ export default class HomePage extends Component {
               }}>
               <View style={{height: 300, marginHorizontal: 40}}>
                 {/* <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" /> */}
-                {this.renderOptionsList()}
+                {this.renderOptionsList(currentUser)}
                 <VersionDetails />
               </View>
             </Animated.ScrollView>
@@ -140,10 +143,25 @@ export default class HomePage extends Component {
       .charAt(0)
       .toUpperCase();
   };
-  renderOptionsList = () => {
+  getRiskProfileColor = riskProfile => {
+    switch (riskProfile) {
+      case riskProfileTypes.GREEN:
+        return Colors.greenRiskProfile
+      case riskProfileTypes.YELLOW:
+        return Colors.yellowRiskProfile
+      case riskProfileTypes.RED:
+        return Colors.redRiskProfile
+
+
+
+      default:
+        return Colors.greenRiskProfile
+    }
+  }
+  renderOptionsList = (currentUser) => {
     return (
-      <View style={{width: '100%'}}>
-        <MenuItem icon="account" name="INFORMAÇÕES DO PERFIL" />
+      <View style={{ width: "100%" }}>
+        <MenuItem icon="account" name="INFORMAÇÕES DO PERFIL" onPress={() => this.navigateScreen('RiskProfile',{ riskProfile: currentUser.riskProfile })} />
         <MenuItem onPress={() => this.navigateScreen("Symptoms")} icon="heart-pulse" name="MINHA SAÚDE" />
         <MenuItem onPress={() => this.navigateScreen("Orientation")} icon="monitor" name="TELEORIENTAÇÃO" />
         <MenuItem icon="account" onPress={() => this.navigateScreen("PublicUtility")} name="UTILIDADE PÚBLICA" />
@@ -153,6 +171,14 @@ export default class HomePage extends Component {
     );
   };
   renderCard = (currentUser) => {
+    let currentUserPerfilColor
+    if (currentUser.riskProfile === riskProfileTypes.GREEN)
+      currentUserPerfilColor = 'VERDE'
+    else if (currentUser.riskProfile === riskProfileTypes.YELLOW)
+      currentUserPerfilColor = 'AMARELO'
+    else if (currentUser.riskProfile === riskProfileTypes.RED)
+      currentUserPerfilColor = 'VERMELHO'
+
     return (
       <View style={styles.cardContent}>
         <PanGestureHandler onGestureEvent={animatedEvent} onHandlerStateChange={this.onHandlerStateChange}>
@@ -173,7 +199,7 @@ export default class HomePage extends Component {
             <Image style={styles.imageContainer}
               source={require('../../assets/images/qrcode.png')}
             />
-            <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>VERDE</Text></Text>
+            <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>{currentUserPerfilColor}</Text></Text>
             {/* <ProfileButton onPress={() => { alert() }} /> */}
           </Animated.View>
         </PanGestureHandler>
@@ -225,11 +251,11 @@ export default class HomePage extends Component {
       this.setState({ chevronIcon: offset === 250 ? "chevron-up" : "chevron-down" });
     });
   };
-  navigateScreen = screen => {
-    this.props.navigation.navigate(screen);
+  navigateScreen = (screen,params) => {
+    this.props.navigation.navigate(screen,params);
   };
-  openProfileDetails = () => {
-    this.props.navigation.navigate("RiskProfile", { risk: 2 });
+  openProfileDetails = (currentUser) => {
+    this.props.navigation.navigate("RiskProfile", { riskProfile: currentUser.riskProfile });
   };
 };
 
@@ -245,10 +271,10 @@ const HeartButton = ({onPress}) => (
   </TouchableOpacity>
 );
 
-const UserDetails = ({ photo, name, aliasName, onPress, onPressAvatar, chevronIcon }) => (
+const UserDetails = ({ photo, name, aliasName, currentUser,getRiskProfileColor, onPress, onPressAvatar, chevronIcon }) => (
   <View style={styles.userDetailsContainer}>
     <TouchableOpacity onPress={() => onPressAvatar()} style={styles.userDetailsInnerContainer}>
-      <View style={[styles.riskContainer, { borderColor: "#27AE60" }]}>
+      <View style={[styles.riskContainer, { borderColor: getRiskProfileColor(currentUser.riskProfile) }]}>
         {photo && <Image
           source={{ uri: photo }}
           style={styles.imageStyle} />}
