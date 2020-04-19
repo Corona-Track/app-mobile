@@ -35,7 +35,10 @@ import RiskProfile from '../pages/profile/riskprofile';
 import Orientation from '../pages/orientation/index';
 import ScheduleOrientation from '../pages/orientation/scheduleOrientation';
 
-import SymptomsPage from '../pages/symptoms/symptons';
+import SymptomsPage from '../pages/symptoms/symptom';
+import ReportSymptomsPage from '../pages/symptoms/reportsymptoms';
+import ReportTestPage from '../pages/symptoms/reporttest';
+import SymptomsTestPage from '../pages/symptoms/symptomstest';
 
 import Maps from "../pages/maps";
 
@@ -45,7 +48,19 @@ const ApplicationStackNavigator = createStackNavigator(
     Home: {screen: HomePage},
     Maps: {screen: Maps,navigationOptions:{
       header:null
-    }}
+    }},
+    Symptoms: { screen: SymptomsPage,navigationOptions:{
+      header:null
+    } },
+    ReportSymptoms: { screen: ReportSymptomsPage,navigationOptions:{
+      header:null
+    }},
+    ReportTest: { screen: ReportTestPage ,navigationOptions:{
+      header:null
+    }},
+    SymptomsTest: { screen: SymptomsTestPage ,navigationOptions:{
+      header:null
+    }},
     //AA: { screen: AAPage },
   },
   {initialRouteName: 'Home'},
@@ -92,9 +107,6 @@ const AuthenticationStackNavigator = createStackNavigator(
     // Orientation
     Orientation:{screen: Orientation},
     ScheduleOrientation:{screen:ScheduleOrientation},
-
-
-    Symptoms: { screen: SymptomsPage },
 
   },
   {

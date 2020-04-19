@@ -1,22 +1,19 @@
 import React, { Component } from 'react';
-import { Image, SafeAreaView, StyleSheet, Text, View, ScrollView } from 'react-native';
-import { Header, Avatar, Divider } from 'react-native-elements';
-import { NavigationActions, StackActions, NavigationEvents } from 'react-navigation';
+import { SafeAreaView, StyleSheet, Text, View, ScrollView, Dimensions } from 'react-native';
+import { Header } from 'react-native-elements';
+import { NavigationEvents } from 'react-navigation';
 import PropTypes from 'prop-types';
-import { RadioButton, IconButton, Button } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import CalendarPicker from 'react-native-calendar-picker';
 import { Colors } from '../../../themes/variables';
 
 
-import { LeftComponent, CenterComponent, RightComponent } from '../../../components/customheader';
-import { SimpleDateTextInput } from '../../../components/customtextinput';
+import { LeftComponent, CenterComponent } from '../../../components/customheader';
 import CustomHiddenView  from '../../../components/customhiddenview';
-import { ContinueRequiredButton, DoubtButton } from '../../../components/custombutton';
-import { CheckboxItem, CheckboxItemWithPlus, CheckboxItemWithExpand, RadioButtonYesOrNoItem, RadioButtonTripleResizableItem, RadioButtonItem } from '../../../components/customcheckboxitem';
+import { ContinueRequiredButton } from '../../../components/custombutton';
+import { CheckboxItemWithExpand, RadioButtonYesOrNoItem} from '../../../components/customcheckboxitem';
 
-export default class SymptomsPage extends Component {
+export default class ReportSymptomsPage extends Component {
     static navigationOptions = {
         headerShown: false,
         gestureEnabled: false,
@@ -26,6 +23,8 @@ export default class SymptomsPage extends Component {
     }
     state = {
         entity: {
+            photo:"",
+            name:"MARIA JOSÉ DA SILVA",
             symptonsSelected: [],
             hasSymptonsList: [],
             symptonsStartDate:null,
@@ -37,20 +36,30 @@ export default class SymptomsPage extends Component {
             shortBreath: null,
             shortBreathAnswer: null,
             symptonsList: [
-                { identifier: "Falta de Ar" },
-                { identifier: "Tontura" },
-                { identifier: "Desmaio" },
-                { identifier: "Febre" },
-                { identifier: "Tosse" },
-                { identifier: "Dor de Garganta" },
-                { identifier: "Fadiga" },
-                { identifier: "Dor no Corpo" },
-                { identifier: "Diarréia" },
-                { identifier: "Não tive sintomas" }
+                { identifier: "Falta de Ar", check:false, start:"",end:""},
+                { identifier: "Tonturas", check:false, start:"",end:""},
+                { identifier: "Desmaio", check:false, start:"",end:""},
+                { identifier: "Febre", check:false, start:"",end:""},
+                { identifier: "Falta de apetite", check:false, start:"",end:""},
+                { identifier: "Produção de catarro", check:false, start:"",end:""},
+                { identifier: "Confusão", check:false, start:"",end:""},
+                { identifier: "Cansaço", check:false, start:"",end:""},
+                { identifier: "Tosse", check:false, start:"",end:"" },
+                { identifier: "Dor de Garganta", check:false, start:"",end:""},
+                { identifier: "Fadiga", check:false, start:"",end:""},
+                { identifier: "Dor no Corpo", check:false, start:"",end:""},
+                { identifier: "Dor de Cabeça", check:false, start:"",end:""},
+                { identifier: "Dor no Peito", check:false, start:"",end:""},
+                { identifier: "Tosse com sangue", check:false, start:"",end:""},
+                { identifier: "Náusea ou vômito", check:false, start:"",end:""},
+                { identifier: "Dor de barriga", check:false, start:"",end:""},
+                { identifier: "Diarréia", check:false, start:"",end:""},
+                { identifier: "Olhos vermelhos", check:false, start:"",end:""},
+                { identifier: "Não tive sintomas", check:false, start:"",end:""}
             ],
         },
         breathConditionList: [
-            { identifier: "Leve: falta de are ao fazer algum tipo de esforço físico" },
+            { identifier: "Leve: falta de ar ao fazer algum tipo de esforço físico" },
             { identifier: "Moderada: não conseguir completar frases sem precisar respirar no meio" },
             { identifier: "Grave: falta de ar quando em repouso, respiração acelerada, sensação de estar se afogando" },
            ],
@@ -73,13 +82,11 @@ export default class SymptomsPage extends Component {
             ...previousEntity
         };
         this.setState({ entity: converted });
-
-
-
-    };
+    }; 
 
     render = () => {
-        let { entity, minimumDate, maximumDate, showDatePicker, continueNoSymptons, breathConditionList} = this.state;
+        console.log(moment().subtract(14, 'days'))
+        let { entity, minimumDate, maximumDate, showDatePicker, continueNoSymptons, breathConditionList,load} = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
@@ -88,7 +95,7 @@ export default class SymptomsPage extends Component {
                         backgroundColor={Colors.secondaryColor}
                         leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
                         centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
-                        rightComponent={<RightComponent onPress={this.onRightButtonPress} />} />
+                    />
                 </View>
                 <IntroText />
                 <ScrollView>
@@ -97,10 +104,11 @@ export default class SymptomsPage extends Component {
                             <RadioButtonYesOrNoItem value={entity.showSymptons} onPressCheckbox={this.onPressCheckBox}/>
                         </View>
                     </View>
+                    {entity.showSymptons === true ?  <WhatFelling/> : entity.showSymptons === false && <HaveSymptoms/>}
                     <View style={styles.bottom}>
-                        <CustomHiddenView show={entity.showSymptons}>
-                            <CustomHiddenView show={entity.hasSymptons}>
-                                <View>
+                        <CustomHiddenView show={entity.showSymptons || entity.showSymptons === false}>
+                            {/* <CustomHiddenView show={entity.hasSymptons}> */}
+                                {/* <View>
                                     {this.state.entity.hasSymptonsList.map(symp => {
                                          return (
                                              <View style={{ height: 40, paddingHorizontal: 20, flexDirection: 'column' }}>
@@ -121,35 +129,43 @@ export default class SymptomsPage extends Component {
                                              </View>
                                          );
                                      })}
-                                </View>
-                                <View style={styles.dateContainer}>
-                                         <CalendarPicker
-                                            startFromMonday={true}
-                                            allowRangeSelection={true}
-                                             weekdays={['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom']}
-                                              months={['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']}
-                                              previousTitle="Anterior"
-                                              nextTitle="Próximo"
-                                              todayBackgroundColor="#f8f8f7"
-                                              selectedDayColor={Colors.navigatorIconColor}
-                                           onDateChange={this.onHandleDate}
-                                         />
-                                </View>
-                                <View style={styles.oximeterContainer}>
+                                </View> */}
+
+                                {/* CALENDAR */}
+                                {/* <View style={styles.dateContainer}>
+                                    <CalendarPicker
+                                        startFromMonday={true}
+                                        allowRangeSelection={true}
+                                        selectedDayTextColor={"white"}
+                                        weekdays={['S', 'T', 'Q', 'Q', 'S', 'S', 'D']}
+                                        months={['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']}
+                                        previousTitle=" "
+                                        nextTitle=" "
+                                        todayBackgroundColor={"#eee"}
+                                        todayTextStyle={{color:'#828282'}}
+                                        selectedDayColor={Colors.navigatorIconColor}
+                                        onDateChange={this.onHandleDate}
+                                        textStyle={{
+                                            color: '#828282',
+                                        }}
+                                    />
+                                </View> */}
+
+                                {/* <View style={styles.oximeterContainer}>
                                     <OximeterText />
                                     <View style={styles.oximeterContainerRadioBtn}>
                                         <RadioButtonYesOrNoItem value={entity.hasOximeter} onPressCheckbox={this.onPressCheckBoxOximeter}/>
                                     </View>
-                                </View>
-                                <CustomHiddenView show={entity.hasOximeter}>
+                                </View> */}
+                                {/* <CustomHiddenView show={entity.hasOximeter}>
                                     <View style={styles.oximeterContainer}>
                                         <SaturationText />
                                         <View style={styles.oximeterContainerRadioBtn}>
                                             <RadioButtonYesOrNoItem value={entity.hasSaturation} onPressCheckbox={this.onPressCheckBoxSaturation}/>
                                         </View>
                                      </View>
-                                </CustomHiddenView>
-                                <CustomHiddenView show={entity.shortBreath}>
+                                </CustomHiddenView> */}
+                                {/* <CustomHiddenView show={entity.shortBreath}>
                                     <View style={styles.breathContainer}>
                                         <AirBreathText />
                                      <View style={{ justifyContent: "center" }}>
@@ -165,44 +181,84 @@ export default class SymptomsPage extends Component {
                                         })}
                                     </View>
                                     </View>
-                                </CustomHiddenView>
+                                </CustomHiddenView> */}
+                            {/* </CustomHiddenView> */}
+                                <View style={styles.checkboxItemContainer}>
+                                    {entity.symptonsList.map((symptons,idx) => {
+                                        return (
+                                            <View key={idx} style={{ minHeight:40, height: "auto", }}>
+                                                <CheckboxItemWithExpand
+                                                    identifier={symptons.identifier}
+                                                    isChecked={this.isChecked}
+                                                    onClickCheck={() => symptons.identifier === "Não tive sintomas" ? this.onClickNoneOfOptions(symptons) : this.onClickCheck(symptons)}
+                                                    onPressExpand={()=>{      
+                                                        symptons.check = !symptons.check
+                                                        
+                                                        let newArr = entity.symptonsList
 
-                            </CustomHiddenView>
+                                                        newArr[newArr.length - 1].check = false
 
-
-                             <View style={styles.checkboxItemContainer}>
-                                 {entity.symptonsList.map(symptons => {
-                                     return (
-                                         <View style={{ height: 40, paddingHorizontal: 20, flexDirection: 'column' }}>
-                                             <CheckboxItemWithExpand
-                                                 identifier={symptons.identifier}
-                                                 isChecked={this.isChecked}
-                                                 onClickCheck={symptons.identifier === "Não tive sintomas" ? this.onClickNoneOfOptions : this.onClickCheck}
-                                                  onPressExpand={()=>{
-                                                       this.setState({
-                                                           isChecked:!this.state.isChecked
-                                                       })
-                                                     }}
-                                                 />
-                                         </View>
-                                     );
-                                 })}
-                             </View>
-                             <View>
-                                 <ContinueRequiredButton
-                                     onPress={() => { this.symptonsButtonPress() }}
-                                     disabled={this.isSymptonsBtnDisabled()} />
-                              </View>
+                                                        if(symptons.identifier !== "Não tive sintomas"){
+                                                            this.setState({
+                                                              symptonsList: newArr
+                                                            })
+                                                        }
+                                                    }}
+                                                />
+                                                {symptons.check && (
+                                                    <View style={styles.dateContainer}>
+                                                        <Text style={{
+                                                            marginTop:10,
+                                                            textAlign:"center",
+                                                            fontSize:18,
+                                                            fontWeight:"500",
+                                                            color:"#828282"
+                                                        }}>Desde Quando?</Text>
+                                                        <CalendarPicker
+                                                            minDate={moment().subtract(14, 'days')}
+                                                            maxDate={new Date()}
+                                                            allowRangeSelection={true}
+                                                            selectedDayTextColor={"white"}
+                                                            weekdays={['S', 'T', 'Q', 'Q', 'S', 'S', 'D']}
+                                                            months={['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']}
+                                                            previousTitle="Anterior"
+                                                            nextTitle="Proximo"
+                                                            todayBackgroundColor={"#eee"}
+                                                            todayTextStyle={{color:'#828282'}}
+                                                            selectedDayColor={Colors.navigatorIconColor}
+                                                            onDateChange={(date,type) => this.onHandleDate(date,type,symptons)}
+                                                            textStyle={{
+                                                                color: '#828282',
+                                                            }}
+                                                            selectedStartDate={symptons.start}
+                                                            selectedEndDate={symptons.end}
+                                                        />
+                                                    </View>
+                                                )}
+                                            </View>
+                                        );
+                                    })}
+                                </View>
                         </CustomHiddenView>
-                         <CustomHiddenView show={continueNoSymptons}>
-                            <ContinueRequiredButton
-                             onPress={() => { this.noSymptons() }}
-                             disabled={false} />
-                         </CustomHiddenView>
                     </View>
                 </ScrollView>
+                {
+                    entity.showSymptons === true ? (
+                        <View style={styles.wrapButton}>
+                            <ContinueRequiredButton
+                                onPress={() => { this.symptonsButtonPress() }}
+                                disabled={this.isSymptonsBtnDisabled()} />
+                        </View>
+                    ) : entity.showSymptons === false && (
+                        <View style={styles.wrapButton}>
+                            <ContinueRequiredButton
+                                onPress={() => { this.symptonsButtonPress() }}
+                                disabled={this.isSymptonsBtnDisabled()} />
+                        </View>
+                    )
+                }
             </SafeAreaView>
-            )
+        )
     };
 
     isCheckedBreath = (identifier) => {
@@ -214,22 +270,30 @@ export default class SymptomsPage extends Component {
         entity.shortBreathAnswer = identifier;
         this.setState({ entity });
     };
-    onHandleDate = (date, type) => {
+    onHandleDate = (date, type,symptons) => {
         let { entity } = this.state;
         if (type === 'END_DATE') {
-            entity.symptonsendDate = date;
-            this.setState({
-                entity: entity,
-                showDatePicker: false
-            });
+            symptons.end = date._d;
         } else {
-            entity.symptonsStartDate = date;
-          this.setState({
-              entity: entity,
-              showDatePicker: false
-          });
+            symptons.start = date._d;
         }
+
+        let obj = symptons;
+
+        let indexSyntom = this.state.entity.symptonsSelected.findIndex(item => item.identifier === obj.identifier)
+        this.state.entity.symptonsSelected[indexSyntom].start = obj.start
+        this.state.entity.symptonsSelected[indexSyntom].end = obj.end
+
+        this.setState({
+            symptonsSelected: this.state.entity.symptonsSelected
+        })
+    
+        let newArr = this.state.entity.symptonsList;
+        this.setState({
+            symptonsList:newArr
+        })
     };
+
      onPressDatePicker = () => {
         this.setState({ showDatePicker: true });
     };
@@ -243,7 +307,6 @@ export default class SymptomsPage extends Component {
         }else{
             this.setState({continueNoSymptons: false});
         }
-
     };
     onChangeAirBreathAnswer = value => {
         let { entity } = this.state;
@@ -309,9 +372,10 @@ export default class SymptomsPage extends Component {
               this.setState({ entity });
            }
 
-          let currentSymptonsPosition = entity.symptonsSelected.findIndex(selected => selected === identifier);
+          let currentSymptonsPosition = entity.symptonsSelected.findIndex(selected => selected.identifier === identifier.identifier);
           if (currentSymptonsPosition === -1) {
               entity.symptonsSelected.push(identifier);
+              identifier.check = true;
               this.checkBreath();
               this.setState({ entity });
               return;
@@ -319,7 +383,10 @@ export default class SymptomsPage extends Component {
           entity.symptonsSelected.splice(currentSymptonsPosition, 1);
 
 
-          if(!(entity.symptonsSelected.length >0)){
+          if(!(entity.symptonsSelected.length > 0)){
+            identifier.check = false;
+            identifier.start = "";
+            identifier.end = "";
             entity.hasSymptons = false;
             entity.hasOximeter = false;
             entity.hasSaturation = false;
@@ -330,7 +397,7 @@ export default class SymptomsPage extends Component {
       };
       onClickNoneOfOptions = (identifier) => {
           let { entity } = this.state;
-          let noneOfOptionsPosition = entity.symptonsSelected.findIndex(selected => selected === "Não tive sintomas");
+          let noneOfOptionsPosition = entity.symptonsSelected.findIndex(selected => selected.identifier === "Não tive sintomas");
           if (noneOfOptionsPosition > -1) {
               entity.symptonsSelected.splice(noneOfOptionsPosition, 1);
               entity.hasSymptons = false;
@@ -352,13 +419,10 @@ export default class SymptomsPage extends Component {
       };
       isChecked = (identifier) => {
           let { entity } = this.state;
-          let currentSymptonsPosition = entity.symptonsSelected.findIndex(selected => selected === identifier);
+          let currentSymptonsPosition = entity.symptonsSelected.findIndex(selected => selected.identifier === identifier);
           return currentSymptonsPosition > -1;
       };
       onLeftButtonPress = () => {
-          this.props.navigation.pop();
-      };
-      onRightButtonPress = () => {
           this.props.navigation.pop();
       };
 
@@ -372,33 +436,58 @@ export default class SymptomsPage extends Component {
           return !(entity.symptonsSelected.length > 0);
       };
       symptonsButtonPress = () => {
-          let { entity } = this.state;
-          if (entity.symptonsSelected.length > 0){
-              entity.hasSymptons = true;
-              this.checkBreath();
-              this.setState({ entity });
-          }else{
-              this.setState({ entity });
-          }
-          if((entity.hasSymptonsList.length > 0)){
-               entity.hasSymptonsList = entity.symptonsSelected;
-               this.setState({ entity });
-               //Go
-                console.log("Go to action with Symptons");
-          }else{
-                entity.hasSymptonsList = entity.symptonsSelected;
-                this.checkBreath();
-                this.setState({ entity });
-          }
+        //   let { entity } = this.state;
+        //   if (entity.symptonsSelected.length > 0){
+        //       entity.hasSymptons = true;
+        //       this.checkBreath();
+        //       this.setState({ entity });
+        //   }else{
+        //       this.setState({ entity });
+        //   }
+        //   if((entity.hasSymptonsList.length > 0)){
+        //        entity.hasSymptonsList = entity.symptonsSelected;
+        //        this.setState({ entity });
+        //        //Go
+        //         console.log("Go to action with Symptons");
+        //   }else{
+        //         entity.hasSymptonsList = entity.symptonsSelected;
+        //         this.checkBreath();
+        //         this.setState({ entity });
+        //   }
+
+        console.log({
+            data : this.state.entity.symptonsSelected,
+            haveSymptons: this.state.entity.showSymptons
+        })
 
       };
 
 }
 const IntroText = () => (
+    <View style={{marginTop:20}}>
+        <View style={styles.textContainer}>
+            <View style={styles.centerText}>
+                <Text style={styles.simpleText}>Você <Text style={styles.boldText}>está com sintomas</Text></Text>
+                <Text style={styles.simpleText}>hoje?</Text>
+            </View>
+        </View>
+    </View>
+);
+
+const WhatFelling = () => (
     <View style={styles.textContainer}>
         <View style={styles.centerText}>
-            <Text style={styles.simpleText}>Você <Text style={styles.boldText}>está com sintomas</Text></Text>
-            <Text style={styles.simpleText}>no momento?</Text>
+            <Text style={styles.boldText}>O que <Text style={styles.simpleText}>você está</Text></Text>
+            <Text style={styles.simpleText}>sentindo no momento?</Text>
+        </View>
+    </View>
+);
+
+const HaveSymptoms = () => (
+    <View style={styles.textContainer}>
+        <View style={styles.centerText}>
+            <Text style={styles.simpleText}>Você teve <Text style={styles.boldText}>algum destes</Text></Text>
+            <Text style={styles.simpleText}><Text style={styles.boldText}>sintomas</Text> nos últimos 14 dias?</Text>
         </View>
     </View>
 );
@@ -471,7 +560,6 @@ const styles = StyleSheet.create({
     },
     RadioButtonMiddle: {
         alignSelf: "center",
-        height: 50,
     },
      bottom: {
          flex: 0.9,
@@ -482,6 +570,7 @@ const styles = StyleSheet.create({
          marginTop: 5,
        },
        checkboxItemContainer:{
+        flex:1,
         marginTop: 15,
        },
      headerFig: {
@@ -519,7 +608,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
       },
       dateContainer: {
+        height:355,
         backgroundColor: "#ededeb",
+        marginBottom:15,
+        marginTop:5
       },
       oximeterContainer: {
       backgroundColor: "#ededeb",
@@ -538,4 +630,9 @@ const styles = StyleSheet.create({
         alignSelf: "center",
         height: 50,
       },
+      wrapButton:{
+        paddingHorizontal:25,
+        paddingTop:10,
+        width:Dimensions.get("window").width
+      }
 });
