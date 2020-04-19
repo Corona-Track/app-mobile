@@ -57,7 +57,6 @@ const ApplicationStackNavigator = createStackNavigator(
     Orientation: {screen: OrientationPage},
     ScheduleOrientation: {screen: ScheduleOrientation},
     PublicUtility: {screen: PublicUtilityPage},
-    Terms: {screen: TermsPage},
 
     Symptoms: { screen: SymptomsPage,navigationOptions:{
       header:null
@@ -109,6 +108,8 @@ const AuthenticationStackNavigator = createStackNavigator(
     RelativesHomePrecautions: {screen: RelativesHomePrecautionsPage},
     FinishRemaining: {screen: FinishRemainingPage},
     FinishComplete: {screen: FinishCompletePage},
+
+    Terms: {screen: TermsPage},
   },
   {
     initialRouteName: 'Disclaimer',
