@@ -26,8 +26,8 @@ export default class LoginPage extends Component {
   };
   state = {
     entity: {
-      email: 'bruno1@live.com',
-      password: '123456',
+      email: '',
+      password: '',
     },
     loading: false,
     error: '',
