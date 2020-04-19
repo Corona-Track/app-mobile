@@ -32,7 +32,7 @@ const Maps = (props) => {
         },
         error => {
             onGPSErrorMessage();
-        }
+        },
     );
   };
 

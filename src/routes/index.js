@@ -37,16 +37,22 @@ import ScheduleOrientation from '../pages/orientation/scheduleOrientation';
 
 import SymptomsPage from '../pages/symptoms/symptons';
 
-import Maps from "../pages/maps";
+import Maps from '../pages/maps';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator(
   {
     Home: {screen: HomePage},
-    Maps: {screen: Maps,navigationOptions:{
-      header:null
-    }}
-    //AA: { screen: AAPage },
+    Maps: {
+      screen: Maps,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    Symptoms: {screen: SymptomsPage},
+    // Orientation
+    Orientation: {screen: Orientation},
+    ScheduleOrientation: {screen: ScheduleOrientation},
   },
   {initialRouteName: 'Home'},
 );
@@ -88,14 +94,6 @@ const AuthenticationStackNavigator = createStackNavigator(
 
     // Profile
     RiskProfile: {screen: RiskProfile},
-
-    // Orientation
-    Orientation:{screen: Orientation},
-    ScheduleOrientation:{screen:ScheduleOrientation},
-
-
-    Symptoms: { screen: SymptomsPage },
-
   },
   {
     initialRouteName: 'Disclaimer',
