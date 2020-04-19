@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {View, SafeAreaView, StyleSheet, Text} from 'react-native';
 import {Header} from 'react-native-elements';
-import {Button} from 'react-native-paper';
 import {Colors} from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import {
@@ -15,7 +14,6 @@ import {
   DenyButton,
   DoubtButton,
 } from '../../../components/custombutton';
-import {NavigationEvents} from 'react-navigation';
 import {ImageIcon} from '../../../components/customimageicon';
 
 import {UserConsumer} from '../../../store/user';
@@ -39,27 +37,27 @@ export default class SomeoneSuspiciousPage extends Component {
   render = () => {
     let {entity} = this.state;
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={{width: '100%', paddingHorizontal: 20}}>
-          <Header
-            backgroundColor={Colors.secondaryColor}
-            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-            centerComponent={
-              <CenterComponent photo={entity.photo} userName={entity.name} />
-            }
-            rightComponent={
-              <RightComponent onPress={this.onRightButtonPress} />
-            }
-          />
-        </View>
-        <View style={{flex: 0.6, justifyContent: 'center'}}>
-          <IntroText />
-          <View style={styles.avatarContainer}>
-            <ImageIcon source={require('../../../assets/images/sweat.png')} />
-          </View>
-        </View>
-        <UserConsumer>
-          {context => (
+      <UserConsumer>
+        {context => (
+          <SafeAreaView style={styles.container}>
+            <View style={{width: '100%', paddingHorizontal: 20}}>
+              <Header
+                backgroundColor={Colors.secondaryColor}
+                leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+                centerComponent={
+                  <CenterComponent photo={context.user.photo} userName={context.user.name} />
+                }
+                rightComponent={
+                  <RightComponent onPress={this.onRightButtonPress} />
+                }
+              />
+            </View>
+            <View style={{flex: 0.6, justifyContent: 'center'}}>
+              <IntroText />
+              <View style={styles.avatarContainer}>
+                <ImageIcon source={require('../../../assets/images/sweat.png')} />
+              </View>
+            </View>
             <View style={{flex: 0.4, width: '100%', paddingHorizontal: 20}}>
               <DenyButton
                 onPress={() => {
@@ -78,10 +76,10 @@ export default class SomeoneSuspiciousPage extends Component {
                 label="Não tenho certeza"
               />
             </View>
-          )}
-        </UserConsumer>
-        <ProgressTracking amount={7} position={4} />
-      </SafeAreaView>
+            <ProgressTracking amount={7} position={4} />
+          </SafeAreaView>
+        )}
+      </UserConsumer>
     );
   };
   onLeftButtonPress = () => {

@@ -54,7 +54,7 @@ export default class TakePhotoPage extends Component {
                 icon={{
                   name: 'camera-outline',
                   type: 'material-community',
-                  color: Colors.defaultIconColor,
+                  color: Colors.buttonPrimaryColor,
                   size: 50,
                 }}
               />
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   avatarContainerIcon: {
     backgroundColor: Colors.secondaryColor,
-    borderColor: Colors.defaultIconColor,
+    borderColor: Colors.buttonPrimaryColor,
     borderWidth: 3,
   },
   textContainer: {

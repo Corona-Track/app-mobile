@@ -538,6 +538,8 @@ PODS:
     - React
   - react-native-geolocation (1.4.2):
     - React
+  - react-native-get-random-values (1.3.1):
+    - React
   - react-native-google-maps (0.27.1):
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 3.5.0)
@@ -663,6 +665,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-camera (from `../node_modules/react-native-camera`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+  - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -760,6 +763,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-camera"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
+  react-native-get-random-values:
+    :path: "../node_modules/react-native-get-random-values"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-maps:
@@ -861,6 +866,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 8e5913c4c6c54f0d3f9c9fc630c465a89cded65d
   react-native-camera: 1b52abea404d04e040edb3e74b7c5523c01a3089
   react-native-geolocation: a7b94614afbd5fd8350e0233a2025c8228fc8041
+  react-native-get-random-values: 148a42f97f2ce180a52d219144e83c278d4fe24b
   react-native-google-maps: 0a989abda71059db2caa98b9dacca7a8f38a47d0
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-safe-area-context: 52342d2d80ea8faadd0ffa76d83b6051f20c5329
@@ -888,6 +894,6 @@ SPEC CHECKSUMS:
   Yoga: 9db9ff2025ad21d1ac0a8b3c85d5ac4e7c29d525
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: f609b18c863b79f207becf38e0ace10c6520d1ac
+PODFILE CHECKSUM: bfdff62cc400a8a91d8f819c8e39cc2b129e067d
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1

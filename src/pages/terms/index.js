@@ -4,16 +4,16 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, SafeAreaView, View } from 'react-native'
 import { WebView } from 'react-native-webview';
 import { Header } from 'react-native-elements';
-import { LeftComponent, CenterComponent } from '../../../components/customheader';
-import { getUser } from '../../../firebase/User';
-import { Colors } from '../../../themes/variables';
+import { LeftComponent, CenterComponent } from '../../components/customheader';
+import { getUser } from '../../firebase/User';
+import { Colors } from '../../themes/variables';
 
 
-ScheduleOrientation.navigationOptions = {
+TermsPage.navigationOptions = {
     headerShown: false
 }
 
-export default function ScheduleOrientation(props) {
+export default function TermsPage(props) {
     const { navigation } = props
     const [entity, setEntity] = useState({
         name: '',
@@ -45,7 +45,7 @@ export default function ScheduleOrientation(props) {
                 centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />} />
         </View>
         <WebView
-            source={{ uri: 'https://www.aliancamedica.org' }}
+            source={{ uri: 'https://coronatrack.com.br/politica-de-privacidade-v0/' }}
             style={{ flex: 1, marginTop: 10 }} />
     </SafeAreaView>
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, SafeAreaView, StyleSheet, Text, ImageBackground, TouchableOpacity, View, ScrollView, Animated } from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text, ImageBackground, TouchableOpacity, View, Alert, Animated } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import auth from '@react-native-firebase/auth';
@@ -7,21 +7,23 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Avatar } from 'react-native-elements';
 import { Button } from 'react-native-paper';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
-
+import { getUser } from '../../firebase/User';
+import moment from 'moment';
 
 import { Colors } from '../../themes/variables';
 import { signOut } from '../../firebase/Auth';
+import riskProfileTypes from '../../utils/enums/riskProfileTypes';
 
 const translateY = new Animated.Value(0);
 const animatedEvent = Animated.event(
   [
     {
       nativeEvent: {
-        translationY: translateY
-      }
-    }
+        translationY: translateY,
+      },
+    },
   ],
-  { useNativeDriver: true },
+  {useNativeDriver: true},
 );
 let offset = 0;
 
@@ -31,30 +33,63 @@ export default class HomePage extends Component {
   };
 
   state = {
-    showLoading: false,
-    currentUser: {}
+    showLoading: true,
+    currentUser: {},
+    chevronIcon: "chevron-down"
   };
   setSignOut = () => {
     signOut()
-      .then(() => { this.props.navigation.navigate('Login'); })
-      .catch(error => { console.error(error); });
+      .then(() => {
+        this.props.navigation.navigate('Login');
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
   initialize = () => {
-    let currentUser = auth().currentUser;
-    this.setState({ showLoading: false, currentUser: currentUser });
+    getUser()
+      .then(this.onGetUserDataSuccess)
+      .catch(this.onGetUserDataFailure)
+      .finally(this.onGetUserDataFinally);
+  };
+
+  onGetUserDataSuccess = doc => {
+    let currentUser = doc.data();
+    currentUser.age = moment().diff(new Date(currentUser.birthday.seconds * 1000), 'years');
+    this.setState({ currentUser });
+  };
+
+  onGetUserDataFailure = error => {
+    Alert.alert("Aviso!", "Houve um erro buscar seus dados, tente novamente mais tarde.");
+  };
+
+  onGetUserDataFinally = () => {
+    this.setState({ showLoading: false });
+    translateY.setValue(offset);
+    translateY.setOffset(0);
+    offset = 0;
+    Animated.timing(translateY, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true
+    }).start(() => {
+      offset = 0;
+      translateY.setOffset(offset);
+      translateY.setValue(0);
+      this.setState({ chevronIcon: offset === 250 ? "chevron-up" : "chevron-down" });
+    });
   };
 
   onSymptomsButtonPress = () => {
-    console.log("Symptoms");
-    this.props.navigation.navigate("Symptoms");
+    this.props.navigation.navigate('Symptoms');
   };
 
   onMapButtonPress = () => {
-    this.props.navigation.navigate("Maps");
+    this.props.navigation.navigate('Maps');
   };
 
   render = () => {
-    let { showLoading, currentUser } = this.state;
+    let { showLoading, currentUser, chevronIcon } = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <Spinner visible={showLoading} />
@@ -62,30 +97,35 @@ export default class HomePage extends Component {
         <ImageBackground
           source={require('../../assets/images/homebackground.png')}
           resizeMethod="auto"
-          style={styles.backgroundImageStyle} />
+          style={styles.backgroundImageStyle}
+        />
         <View>
           <MapButton onPress={this.onMapButtonPress} />
-          <HeartButton />
+          <HeartButton onPress={() => this.navigateScreen("Symptoms")} />
         </View>
-        <View style={{ marginTop: 50 }}>
+        <View style={{marginTop: 50}}>
           <UserDetails
+            chevronIcon={chevronIcon}
+            onPressAvatar={() => this.openProfileDetails(currentUser)}
             onPress={this.executeCardAnimation}
+            currentUser={currentUser}
+            getRiskProfileColor={this.getRiskProfileColor}
             photo={currentUser.photo}
-            name={"Maria José da Silva"}
-            aliasName={this.getFirstLetterName("Maria José da Silva")} />
-          {this.renderCard()}
-          {/* <UserDetails photo={currentUser.photo} name={currentUser.name} aliasName={this.getFirstLetterName(currentUser.name)} /> */}
+            name={currentUser.name}
+            aliasName={this.getFirstLetterName(currentUser.name)} />
+          {this.renderCard(currentUser)}
           <View>
-            <Animated.ScrollView style={{
-              height: 300,
-              opacity: translateY.interpolate({
-                inputRange: [0, 200],
-                outputRange: [0, 1]
-              })
-            }}>
-              <View style={{ height: 300, marginHorizontal: 40 }}>
+            <Animated.ScrollView
+              style={{
+                height: 300,
+                opacity: translateY.interpolate({
+                  inputRange: [0, 200],
+                  outputRange: [0, 1],
+                }),
+              }}>
+              <View style={{height: 300, marginHorizontal: 40}}>
                 {/* <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" /> */}
-                {this.renderOptionsList()}
+                {this.renderOptionsList(currentUser)}
                 <VersionDetails />
               </View>
             </Animated.ScrollView>
@@ -95,23 +135,50 @@ export default class HomePage extends Component {
     );
   };
   getFirstLetterName = name => {
-    if (!name)
+    if (!name) {
       return null;
-    return name.trim().charAt(0).toUpperCase();
+    }
+    return name
+      .trim()
+      .charAt(0)
+      .toUpperCase();
   };
-  renderOptionsList = () => {
+  getRiskProfileColor = riskProfile => {
+    switch (riskProfile) {
+      case riskProfileTypes.GREEN:
+        return Colors.greenRiskProfile
+      case riskProfileTypes.YELLOW:
+        return Colors.yellowRiskProfile
+      case riskProfileTypes.RED:
+        return Colors.redRiskProfile
+
+
+
+      default:
+        return Colors.greenRiskProfile
+    }
+  }
+  renderOptionsList = (currentUser) => {
     return (
       <View style={{ width: "100%" }}>
-        <MenuItem icon="account" name="INFORMAÇÕES DO PERFIL" />
+        <MenuItem icon="account" name="INFORMAÇÕES DO PERFIL" onPress={() => this.navigateScreen('RiskProfile',{ riskProfile: currentUser.riskProfile })} />
         <MenuItem onPress={() => this.navigateScreen("Symptoms")} icon="heart-pulse" name="MINHA SAÚDE" />
         <MenuItem onPress={() => this.navigateScreen("Orientation")} icon="monitor" name="TELEORIENTAÇÃO" />
-        <MenuItem icon="account" name="UTILIDADE PÚBLICA" />
-        <MenuItem icon="settings" name="CONFIGURAÇÕES" />
+        <MenuItem icon="account" onPress={() => this.navigateScreen("PublicUtility")} name="UTILIDADE PÚBLICA" />
+        {/* <MenuItem icon="settings" name="CONFIGURAÇÕES" /> */}
         <MenuItem onPress={this.setSignOut} icon="logout" name="SAIR" />
       </View>
     );
   };
-  renderCard = () => {
+  renderCard = (currentUser) => {
+    let currentUserPerfilColor
+    if (currentUser.riskProfile === riskProfileTypes.GREEN)
+      currentUserPerfilColor = 'VERDE'
+    else if (currentUser.riskProfile === riskProfileTypes.YELLOW)
+      currentUserPerfilColor = 'AMARELO'
+    else if (currentUser.riskProfile === riskProfileTypes.RED)
+      currentUserPerfilColor = 'VERMELHO'
+
     return (
       <View style={styles.cardContent}>
         <PanGestureHandler onGestureEvent={animatedEvent} onHandlerStateChange={this.onHandlerStateChange}>
@@ -124,28 +191,29 @@ export default class HomePage extends Component {
               }),
             }]
           }]}>
-            <View style={{}}>
-              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>37 anos</Text>
-              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>987.654.321-00</Text>
-              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>01.234.567-89</Text>
+            <View>
+              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>{currentUser.age}</Text>
+              <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>{currentUser.cpf}</Text>
+              {/* <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>01.234.567-89</Text> */}
             </View>
             <Image style={styles.imageContainer}
-              source={{ uri: "https://canaltech.com.br/conteudo/Pedro/O_que_e_QRcode/qr_code_ud.jpg" }} />
-            <Text numberOfLines={1} style={[styles.cardText, { fontSize: 12 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>VERDE</Text></Text>
-            <ProfileButton />
+              source={require('../../assets/images/qrcode.png')}
+            />
+            <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>{currentUserPerfilColor}</Text></Text>
+            {/* <ProfileButton onPress={() => { alert() }} /> */}
           </Animated.View>
-        </PanGestureHandler >
+        </PanGestureHandler>
       </View>
-    )
+    );
   };
   onHandlerStateChange = event => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
-      const { translationY } = event.nativeEvent;
+      const {translationY} = event.nativeEvent;
       let opened = false;
       offset += translationY;
-      if (translationY >= 100)
+      if (translationY >= 100) {
         opened = true;
-      else {
+      } else {
         translateY.setValue(offset);
         translateY.setOffset(0);
         offset = 0;
@@ -153,20 +221,21 @@ export default class HomePage extends Component {
       Animated.timing(translateY, {
         toValue: opened ? 250 : 0,
         duration: 200,
-        useNativeDriver: true
+        useNativeDriver: true,
       }).start(() => {
         offset = opened ? 250 : 0;
         translateY.setOffset(offset);
         translateY.setValue(0);
+        this.setState({ chevronIcon: offset === 250 ? "chevron-up" : "chevron-down" });
       });
     }
   };
   executeCardAnimation = () => {
     let opened = false;
     let goToOffset = offset === 250 ? 0 : 250;
-    if (goToOffset === 250)
+    if (goToOffset === 250) {
       opened = true;
-    else {
+    } else {
       translateY.setValue(offset);
       translateY.setOffset(0);
       offset = 0;
@@ -174,50 +243,48 @@ export default class HomePage extends Component {
     Animated.timing(translateY, {
       toValue: goToOffset,
       duration: 200,
-      useNativeDriver: true
+      useNativeDriver: true,
     }).start(() => {
       offset = goToOffset;
       translateY.setOffset(offset);
       translateY.setValue(0);
+      this.setState({ chevronIcon: offset === 250 ? "chevron-up" : "chevron-down" });
     });
   };
-  navigateScreen = screen => {
-    this.props.navigation.navigate(screen);
+  navigateScreen = (screen,params) => {
+    this.props.navigation.navigate(screen,params);
+  };
+  openProfileDetails = (currentUser) => {
+    this.props.navigation.navigate("RiskProfile", { riskProfile: currentUser.riskProfile });
   };
 };
 
-const MapButton = ({ onPress }) => (
+const MapButton = ({onPress}) => (
   <TouchableOpacity style={styles.mapButton} onPress={onPress}>
-    <Icon
-      name="map-marker-outline"
-      size={40}
-      color={Colors.secondaryColor} />
+    <Icon name="map-marker-outline" size={40} color={Colors.secondaryColor} />
   </TouchableOpacity>
 );
 
-const HeartButton = ({ onPress }) => (
+const HeartButton = ({onPress}) => (
   <TouchableOpacity style={styles.heartButton} onPress={onPress}>
-    <Icon
-      name="heart-pulse"
-      size={40}
-      color={Colors.secondaryColor} />
+    <Icon name="heart-pulse" size={40} color={Colors.secondaryColor} />
   </TouchableOpacity>
 );
 
-const UserDetails = ({ photo, name, aliasName, onPress }) => (
+const UserDetails = ({ photo, name, aliasName, currentUser,getRiskProfileColor, onPress, onPressAvatar, chevronIcon }) => (
   <View style={styles.userDetailsContainer}>
-    <View style={styles.userDetailsInnerContainer}>
-      <View style={[styles.riskContainer, { borderColor: "#27AE60" }]}>
+    <TouchableOpacity onPress={() => onPressAvatar()} style={styles.userDetailsInnerContainer}>
+      <View style={[styles.riskContainer, { borderColor: getRiskProfileColor(currentUser.riskProfile) }]}>
         {photo && <Image
           source={{ uri: photo }}
           style={styles.imageStyle} />}
         {!photo && <Avatar rounded size={100} title={aliasName} />}
       </View>
-    </View>
+    </TouchableOpacity>
     <Text numberOfLines={1} style={styles.userName}><Text numberOfLines={1} style={styles.boldText}>{name}</Text></Text>
     <TouchableOpacity onPress={() => { onPress() }}>
       <Icon
-        name={"chevron-down"}
+        name={chevronIcon}
         size={40}
         color={Colors.secondaryColor} />
     </TouchableOpacity>
@@ -232,36 +299,37 @@ const UserDetails = ({ photo, name, aliasName, onPress }) => (
 //   </View>
 // );
 
-const MenuItem = ({ icon, name, onPress }) => (
+const MenuItem = ({icon, name, onPress}) => (
   <TouchableOpacity onPress={onPress} style={styles.menuItemContainer}>
     <View style={styles.menuItemFirstColumn}>
-      <Icon
-        name={icon}
-        size={32}
-        color={Colors.secondaryColor} />
+      <Icon name={icon} size={32} color={Colors.secondaryColor} />
     </View>
     <View style={styles.menuItemSecondColumn}>
-      <Text numberOfLines={1} style={styles.menuItemText}>{name}</Text>
+      <Text numberOfLines={1} style={styles.menuItemText}>
+        {name}
+      </Text>
     </View>
   </TouchableOpacity>
 );
 
 const VersionDetails = () => (
   <View style={styles.versionContainer}>
-    <Text numberOfLines={1} style={styles.versionText}>Versão 1.0.0</Text>
+    <Text numberOfLines={1} style={styles.versionText}>
+      Versão 1.0.0
+    </Text>
   </View>
 );
 
 const ProfileButton = ({ onPress }) => (
-  <View style={styles.buttonContainer}>
+  <TouchableOpacity onPress={() => onPress()} style={styles.buttonContainer}>
     <Button
       style={styles.innerButtonContainer}
       contentStyle={styles.contentButton}
       mode="contained"
-      color={"#27AE60"}
+      color={'#27AE60'}
       labelStyle={styles.buttonText}
       onPress={onPress}>ENTENDA MELHOR O SEU PERFIL</Button>
-  </View>
+  </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({
@@ -271,14 +339,14 @@ const styles = StyleSheet.create({
   },
   backgroundImageStyle: {
     flex: 1,
-    width: "100%",
+    width: '100%',
     height: 300,
-    position: "absolute",
-    marginTop: 30
+    position: 'absolute',
+    marginTop: 30,
   },
   mapButton: {
     flex: 0,
-    position: "absolute",
+    position: 'absolute',
     left: 15,
     top: 15,
     width: 40,
@@ -286,60 +354,60 @@ const styles = StyleSheet.create({
   },
   heartButton: {
     flex: 0,
-    position: "absolute",
+    position: 'absolute',
     right: 15,
     top: 15,
     width: 40,
     height: 40,
   },
   userDetailsContainer: {
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
   imageStyle: {
     width: 100,
     height: 100,
     borderRadius: 60,
-    borderColor: "#FFFFFF",
-    borderWidth: 2
+    borderColor: '#FFFFFF',
+    borderWidth: 2,
   },
   userDetailsInnerContainer: {
     borderWidth: 4,
     borderRadius: 100,
-    borderColor: "#FFFFFF"
+    borderColor: '#FFFFFF',
   },
   riskContainer: {
     borderWidth: 15,
-    borderRadius: 100
+    borderRadius: 100,
   },
   userName: {
     fontFamily: Colors.fontFamily,
     color: Colors.primaryTextColor,
     fontSize: 18,
     marginTop: 10,
-    maxWidth: "80%"
+    maxWidth: '80%',
   },
   boldText: {
-    fontWeight: "bold"
+    fontWeight: 'bold',
   },
   menuItemContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
     borderBottomWidth: 2,
-    borderBottomColor: "#A7A7A7",
-    padding: 0
+    borderBottomColor: '#A7A7A7',
+    padding: 0,
   },
   menuItemFirstColumn: {
-    width: "15%",
-    justifyContent: "center"
+    width: '15%',
+    justifyContent: 'center',
   },
   menuItemSecondColumn: {
-    width: "85%",
-    justifyContent: "center"
+    width: '85%',
+    justifyContent: 'center',
   },
   menuItemText: {
     fontFamily: Colors.fontFamily,
-    color: "#FFFFFF"
+    color: '#FFFFFF',
   },
   userPersonalDataText: {
     fontFamily: Colors.fontFamily,
@@ -348,63 +416,62 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
   userPersonalDataContainer: {
-    width: "100%",
-    alignItems: "center",
-    marginTop: 20
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 20,
   },
   versionContainer: {
-    width: "100%",
-    marginTop: 15
+    width: '100%',
+    marginTop: 15,
   },
   versionText: {
     fontFamily: Colors.fontFamily,
-    color: "#FFFFFF",
+    color: '#FFFFFF',
   },
   cardText: {
-    textAlign: "center",
+    textAlign: 'center',
     fontFamily: Colors.fontFamily,
-    fontSize: 15,
+    fontSize: 17,
     marginVertical: 2,
   },
   imageContainer: {
-    width: 100,
-    height: 100,
+    width: 125,
+    height: 125,
     marginVertical: 10
   },
   buttonContainer: {
-    marginHorizontal: 20
+    marginHorizontal: 20,
   },
   innerButtonContainer: {
     borderRadius: 50,
   },
   contentButton: {
     height: 40,
-    textAlign: "center",
+    textAlign: 'center',
   },
   buttonText: {
     color: Colors.primaryTextColor,
     fontFamily: Colors.fontFamily,
-    fontSize: 11
+    fontSize: 11,
   },
   cardContent: {
     flex: 1,
     zIndex: 5,
-    height: "100%",
-    flexDirection: "column"
+    height: '100%',
+    flexDirection: 'column',
   },
   card: {
     flex: 1,
     backgroundColor: "#FFF",
-    borderRadius: 4,
+    borderRadius: 10,
     marginVertical: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     height: 300,
-    marginHorizontal: 20
-  }
-
+    marginHorizontal: 20,
+  },
 });

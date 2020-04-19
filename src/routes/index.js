@@ -1,6 +1,5 @@
 import {createSwitchNavigator, createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-// import AuthLoading from '../pages/authLoading';
 
 import SplashPage from '../pages/splash';
 import DisclaimerPage from '../pages/disclaimer';
@@ -32,21 +31,46 @@ import RelativesHomePrecautionsPage from '../pages/preventiveanalysis/relativesh
 import FinishRemainingPage from '../pages/preventiveanalysis/finishremaining';
 import FinishCompletePage from '../pages/preventiveanalysis/finishcomplete';
 import RiskProfile from '../pages/profile/riskprofile';
-import Orientation from '../pages/orientation/index';
+import OrientationPage from '../pages/orientation/index';
 import ScheduleOrientation from '../pages/orientation/scheduleOrientation';
 
-import SymptomsPage from '../pages/symptoms/symptons';
+import SymptomsPage from '../pages/symptoms/symptom';
+import ReportSymptomsPage from '../pages/symptoms/reportsymptoms';
+import ReportTestPage from '../pages/symptoms/reporttest';
+import SymptomsTestPage from '../pages/symptoms/symptomstest';
 
-import Maps from "../pages/maps";
+import Maps from '../pages/maps';
+import PublicUtilityPage from '../pages/publicutility';
+import TermsPage from '../pages/terms';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator(
   {
     Home: {screen: HomePage},
-    Maps: {screen: Maps,navigationOptions:{
+    Maps: {
+      screen: Maps,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    RiskProfile: {screen: RiskProfile},
+    Orientation: {screen: OrientationPage},
+    ScheduleOrientation: {screen: ScheduleOrientation},
+    PublicUtility: {screen: PublicUtilityPage},
+    Terms: {screen: TermsPage},
+
+    Symptoms: { screen: SymptomsPage,navigationOptions:{
       header:null
-    }}
-    //AA: { screen: AAPage },
+    } },
+    ReportSymptoms: { screen: ReportSymptomsPage,navigationOptions:{
+      header:null
+    }},
+    ReportTest: { screen: ReportTestPage ,navigationOptions:{
+      header:null
+    }},
+    SymptomsTest: { screen: SymptomsTestPage ,navigationOptions:{
+      header:null
+    }},
   },
   {initialRouteName: 'Home'},
 );
@@ -85,17 +109,6 @@ const AuthenticationStackNavigator = createStackNavigator(
     RelativesHomePrecautions: {screen: RelativesHomePrecautionsPage},
     FinishRemaining: {screen: FinishRemainingPage},
     FinishComplete: {screen: FinishCompletePage},
-
-    // Profile
-    RiskProfile: {screen: RiskProfile},
-
-    // Orientation
-    Orientation:{screen: Orientation},
-    ScheduleOrientation:{screen:ScheduleOrientation},
-
-
-    Symptoms: { screen: SymptomsPage },
-
   },
   {
     initialRouteName: 'Disclaimer',

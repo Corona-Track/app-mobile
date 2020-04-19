@@ -29,53 +29,33 @@ export default class OrientationPage extends Component {
     entity: PropTypes.object,
   }
 
-  setSignOut = () => {
-    signOut()
-      .then(() => {
-        this.props.navigation.navigate('Login');
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
-
   onPressScheduleOrientation(props) {
     props.navigation.navigate("ScheduleOrientation");
   }
   componentDidMount() {
     getUser().then(doc => {
-      const { name, photo } = doc.data()
-
+      const { name, photo } = doc.data();
       this.setState({
         entity: {
           name,
           photo
         }
       });
-    })
-      .catch(err => {
-        console.log('Error getting document', err);
-      });
+    }).catch(err => { console.log('Error getting document', err); });
   }
-
-  onLeftButtonPress(props) {
-    props.navigation.pop()
+  onLeftButtonPress = () => {
+    this.props.navigation.pop();
   }
-
-  onRightButtonPress(props) {
-    props.navigation.pop()
-  }
-
   render = () => {
     let { entity } = this.state;
     return (
-      <View style={styles.container}>
-        <Header
-          backgroundColor={Colors.primaryTextColor}
-          leftComponent={<LeftComponent onPress={() => this.onLeftButtonPress(this.props)} />}
-          centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />}
-          rightComponent={<RightComponent onPress={() => this.onRightButtonPress(this.props)} />} />
-
+      <SafeAreaView style={styles.container}>
+        <View style={{ width: '100%', marginHorizontal: 20 }}>
+          <Header
+            backgroundColor={Colors.secondaryColor}
+            leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
+            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />} />
+        </View>
         <View style={styles.content}>
           <Text style={styles.title}>Teleorientação</Text>
           <Image
@@ -95,29 +75,29 @@ export default class OrientationPage extends Component {
               labelStyle={styles.textOrin}
               onPress={() => this.onPressScheduleOrientation(this.props)}
             >AGENDAR TELEORIENTAÇÃO</Button>
-
+            {/* 
             <Button
               style={styles.buttoBack}
               mode="contained"
               color={'#FFFFFF'}
               labelStyle={styles.buttoBackText}
-            >VOLTAR PARA O INÍCIO</Button>
+            >VOLTAR PARA O INÍCIO</Button> */}
           </View>
         </View>
 
-      </View>
+      </SafeAreaView>
     );
   };
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFF',
-    paddingHorizontal: 20,
-    flex: 1
-
+    flex: 1,
+    // flexDirection: 'column',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // backgroundColor: Colors.secondaryColor,
+    // height: '100%',
   },
   content: {
     flex: 1,
@@ -177,6 +157,6 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     width: '100%',
-    paddingHorizontal: 15
+    paddingHorizontal: 20
   },
 });
