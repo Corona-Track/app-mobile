@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps'
 import Geolocation from 'react-native-geolocation-service';
-import { View, Text, StyleSheet, Image, SafeAreaView, Dimensions, PermissionsAndroid, Platform, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, Dimensions, PermissionsAndroid, Platform, TouchableHighlight, TouchableOpacity, Alert } from 'react-native';
 import { Colors } from '../../themes/variables';
 
 // ASSETS
