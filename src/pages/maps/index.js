@@ -11,7 +11,9 @@ import contagionBar from "../../assets/images/contagionBar.png";
 const Maps = (props) => {
   const [userLocation, setUserLocation] = useState();
 
-  const onGPSErrorMessage = () => {
+  const onGPSErrorMessage = error => {
+    if (error)
+      console.log(error);
     Alert.alert(
       'Aviso!',
       "Falha ao acessar a sua localização, tente novamente mais tarde!",
@@ -31,7 +33,7 @@ const Maps = (props) => {
         })
       },
       error => {
-        onGPSErrorMessage();
+        onGPSErrorMessage(error);
       }
     );
   };
@@ -47,9 +49,10 @@ const Maps = (props) => {
       });
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         await getLocation();
+        return;
       }
       onGPSErrorMessage();
-    } catch { onGPSErrorMessage(); }
+    } catch (e) { onGPSErrorMessage(e); }
   };
 
   useEffect(() => {

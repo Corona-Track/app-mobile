@@ -33,7 +33,7 @@ export default class HomePage extends Component {
   };
 
   state = {
-    showLoading: false,
+    showLoading: true,
     currentUser: {},
     chevronIcon: "chevron-down"
   };

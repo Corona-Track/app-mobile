@@ -46,7 +46,7 @@ export default function ScheduleOrientation(props) {
         </View>
         <WebView
             source={{ uri: 'https://www.aliancamedica.org' }}
-            style={{ flex: 1, marginTop: 20 }} />
+            style={{ flex: 1, marginTop: 10 }} />
     </SafeAreaView>
 }
 
