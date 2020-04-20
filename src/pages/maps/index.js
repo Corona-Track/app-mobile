@@ -96,50 +96,56 @@ export default class MapsPage extends Component {
     // N
     // W E
     // S
+    console.log("central region");
+    console.log("LA");
+    console.log(region.latitude);
+    console.log("LO");
+    console.log(region.longitude);
 
+    console.log("markerNorthWest region");
+    console.log("NLA");
+    console.log(corners.northLatitude);
+    console.log("WLO");
+    console.log(corners.westLongitude);
     let markerNorthWest = {
       latitude: corners.northLatitude,
       longitude: corners.westLongitude,
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
     };
+    console.log("markerSouthWest region");
+    console.log("SLA");
+    console.log(corners.southLatitude);
+    console.log("WLO");
+    console.log(corners.westLongitude);
     let markerSouthWest = {
       latitude: corners.southLatitude,
       longitude: corners.westLongitude,
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
     };
+    console.log("markerNorthEast region");
+    console.log("NLA");
+    console.log(corners.northLatitude);
+    console.log("ELO");
+    console.log(corners.eastLongitude);
     let markerNorthEast = {
       latitude: corners.northLatitude,
       longitude: corners.eastLongitude,
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
     };
+    console.log("markerSouthEast region");
+    console.log("SLA");
+    console.log(corners.southLatitude);
+    console.log("ELO");
+    console.log(corners.eastLongitude);
     let markerSouthEast = {
       latitude: corners.southLatitude,
       longitude: corners.eastLongitude,
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
     };
-    // let markerNorthWest = {
-    //   latitude: corners.northLatitude,
-    //   longitude: corners.westLongitude,
-    //   latitudeDelta: 0.05,
-    //   longitudeDelta: 0.05,
-    // };
-    // let markerNorthWest = {
-    //   latitude: corners.northLatitude,
-    //   longitude: corners.westLongitude,
-    //   latitudeDelta: 0.05,
-    //   longitudeDelta: 0.05,
-    // },
-
-
-
-
-
-
-
     this.setState({
       currentLocation: {
         latitude: region.latitude,
