@@ -20,6 +20,7 @@ import { Colors } from '../../themes/variables';
 import cross from '../../assets/images/cross.png';
 import contagionBar from '../../assets/images/contagionBar.png';
 
+let map = null;
 export default class MapsPage extends Component {
   static navigationOptions = {
     headerShown: false,
@@ -38,7 +39,8 @@ export default class MapsPage extends Component {
       longitudeDelta: 0.05,
       latitudeDelta: 0.05,
     },
-    mapKey: null
+    mapKey: null,
+    cornersMarkers: []
   };
 
 
@@ -47,13 +49,14 @@ export default class MapsPage extends Component {
       .catch(this.onGPSErrorMessage);
   };
   render = () => {
-    let { mapKey, userLocation, currentLocation } = this.state;
+    let { mapKey, userLocation, currentLocation, cornersMarkers } = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
         <MapHeader onPress={this.closeMap} />
         {userLocation && userLocation.latitude && (
           <MapView
+            ref={map => { this.map = map }}
             provider={PROVIDER_GOOGLE}
             style={{ flex: 1 }}
             region={currentLocation}
@@ -62,6 +65,10 @@ export default class MapsPage extends Component {
             loadingEnabled={true}
             minZoomLevel={1}
             maxZoomLevel={20}>
+
+            {cornersMarkers.map((item, idx) => (
+              <Marker coordinate={item} />
+            ))}
             <Marker coordinate={userLocation} />
             {data &&
               data.length > 0 &&
@@ -85,6 +92,54 @@ export default class MapsPage extends Component {
     )
   };
   updateCurrentLocation = region => {
+    let corners = getCornersBox(region);
+    // N
+    // W E
+    // S
+
+    let markerNorthWest = {
+      latitude: corners.northLatitude,
+      longitude: corners.westLongitude,
+      latitudeDelta: 0.05,
+      longitudeDelta: 0.05,
+    };
+    let markerSouthWest = {
+      latitude: corners.southLatitude,
+      longitude: corners.westLongitude,
+      latitudeDelta: 0.05,
+      longitudeDelta: 0.05,
+    };
+    let markerNorthEast = {
+      latitude: corners.northLatitude,
+      longitude: corners.eastLongitude,
+      latitudeDelta: 0.05,
+      longitudeDelta: 0.05,
+    };
+    let markerSouthEast = {
+      latitude: corners.southLatitude,
+      longitude: corners.eastLongitude,
+      latitudeDelta: 0.05,
+      longitudeDelta: 0.05,
+    };
+    // let markerNorthWest = {
+    //   latitude: corners.northLatitude,
+    //   longitude: corners.westLongitude,
+    //   latitudeDelta: 0.05,
+    //   longitudeDelta: 0.05,
+    // };
+    // let markerNorthWest = {
+    //   latitude: corners.northLatitude,
+    //   longitude: corners.westLongitude,
+    //   latitudeDelta: 0.05,
+    //   longitudeDelta: 0.05,
+    // },
+
+
+
+
+
+
+
     this.setState({
       currentLocation: {
         latitude: region.latitude,
@@ -92,7 +147,8 @@ export default class MapsPage extends Component {
         latitudeDelta: region.latitudeDelta,
         longitudeDelta: region.longitudeDelta,
       },
-      mapKey: Math.floor(Math.random() * 100)
+      mapKey: Math.floor(Math.random() * 100),
+      cornersMarkers: [markerNorthWest, markerSouthWest, markerNorthEast, markerSouthEast]
     })
   };
   getUserLocation = async () => {
@@ -194,6 +250,22 @@ let data = [
     diameter: 500,
   },
 ];
+
+const getCornersBox = region => {
+  return {
+    westLongitude: region.longitude - region.longitudeDelta / 2,
+    southLatitude: region.latitude - region.latitudeDelta / 2,
+    eastLongitude: region.longitude + region.longitudeDelta / 2,
+    northLatitude: region.latitude + region.latitudeDelta / 2
+  };
+}
+
+// [
+//   region.longitude - region.longitudeDelta / 2, // westLng - min lng
+//   region.latitude - region.latitudeDelta / 2, // southLat - min lat
+//   region.longitude + region.longitudeDelta / 2, // eastLng - max lng
+//   region.latitude + region.latitudeDelta / 2 // northLat - max lat
+// ]}
 
 const MapHeader = ({ onPress }) => (
   <View style={styles.containerHeader}>
