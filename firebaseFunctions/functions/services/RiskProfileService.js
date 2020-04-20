@@ -1,9 +1,9 @@
 const riskProfileTypes = require('../utils/enums/riskProfileTypes');
+var moment = require('moment');
 
 exports.calculateRiskProfileQuestionsPoints = (questions) => {
 
     const {
-        comorbiditiesSelected,
         someoneDiagnosed,
         someoneSuspicious,
         alreadyHadCoronavirusTest,
@@ -38,13 +38,7 @@ exports.calculateRiskProfileQuestionsPoints = (questions) => {
     //     'relativesShowerAnswer'+relativesShowerAnswer
     //     )
 
-    if (comorbiditiesSelected) {
-        if (comorbiditiesSelected.length > 1)
-            return riskProfileTypes.RED
 
-        if (!comorbiditiesSelected.includes("Nenhuma das opções"))
-            return riskProfileTypes.RED
-    }
 
     let points = 0
     let habitsNotPreventives = 0
@@ -117,77 +111,106 @@ exports.calculateRiskProfileQuestionsPoints = (questions) => {
 
 
 
-exports.calculateRiskProfileSymptonsPoints = (symptonsList) => {
+exports.calculateRiskProfileSymptonsPoints = (symptonsList, hasSymptoms) => {
+    if (symptonsList) {
+        let points = 0
 
-    const points = symptonsList.map(symptom => {
-        return calculatePointOfSympton(symptom.identifier, symptom.start, symptom.end)
-    });
+        symptonsList.forEach(symptom => {
+
+            points += calculatePointOfSympton(symptom.identifier, hasSymptoms, symptom.start, symptom.end)
 
 
-    return points
+
+        });
+        return points
+    }
+
+    return 0
 }
 
-const calculatePointOfSympton = (identifier, start, end) => {
+const calculatePointOfSympton = (identifier, hasSymptoms, start, end) => {
     const valueToMax = 5
+    let frequency
+    if (hasSymptoms) {
+        const today = new Date()
+        const startDate = start.toDate();
+        frequency = calculateFrequency(startDate, today)
+    } else {
+        const startDate = start.toDate();
+        const endDate = end.toDate();
+
+
+        frequency = calculateFrequency(startDate, endDate)
+    }
     switch (identifier) {
         case 'Febre': {
-            return calculatePoints(0, valueToMax, 10, 5)
+            return calculatePoints(frequency, valueToMax, 10, 5)
         }
         case 'Dor de cabeça': {
-            return calculatePoints(0, valueToMax, 3, 1)
+            return calculatePoints(frequency, valueToMax, 3, 1)
         }
         case 'Secreção nasal ou espirros': {
-            return calculatePoints(0, valueToMax, 3, 1)
+            return calculatePoints(frequency, valueToMax, 3, 1)
         }
         case 'Dor/irritação de garganta': {
-            return calculatePoints(0, valueToMax, 3, 1)
+            return calculatePoints(frequency, valueToMax, 3, 1)
         }
         case 'Tosse seca': {
-            return calculatePoints(0, valueToMax, 6, 3)
+            return calculatePoints(frequency, valueToMax, 6, 3)
         }
         case 'Dificuldade Respiratória': {
-            return calculatePoints(0, valueToMax, 20, 10)
+            return calculatePoints(frequency, valueToMax, 20, 10)
         }
         case 'Dores no corpo': {
-            return calculatePoints(0, valueToMax, 3, 1)
+            return calculatePoints(frequency, valueToMax, 3, 1)
         }
         case 'Diarreia': {
-            return calculatePoints(0, valueToMax, 2, 1)
+            return calculatePoints(frequency, valueToMax, 2, 1)
         }
         case 'Fadiga (Cansaço)': {
-            return calculatePoints(0, valueToMax, 4, 2)
+            return calculatePoints(frequency, valueToMax, 4, 2)
         }
         case 'Falta de apetite': {
-            return calculatePoints(0, valueToMax, 2, 1)
+            return calculatePoints(frequency, valueToMax, 2, 1)
         }
         case 'Confusão': {
-            return calculatePoints(0, valueToMax, 3, 1)
+            return calculatePoints(frequency, valueToMax, 3, 1)
         }
         case 'Tontura': {
-            return calculatePoints(0, valueToMax, 3, 1)
+            return calculatePoints(frequency, valueToMax, 3, 1)
         }
         case 'Dor no peito': {
-            return calculatePoints(0, valueToMax, 3, 1)
+            return calculatePoints(frequency, valueToMax, 3, 1)
         }
         case 'Tosse com sangue': {
-            return calculatePoints(0, valueToMax, 4, 2)
+            return calculatePoints(frequency, valueToMax, 4, 2)
         }
         case 'Náusea / vômito': {
-            return calculatePoints(0, valueToMax, 3, 1)
+            return calculatePoints(frequency, valueToMax, 3, 1)
         }
         case 'Dor abdominal': {
-            return calculatePoints(0, valueToMax, 2, 1)
+            return calculatePoints(frequency, valueToMax, 2, 1)
         }
         case 'Olhos vermelhos infeccionados': {
-            return calculatePoints(0, valueToMax, 3, 1)
+            return calculatePoints(frequency, valueToMax, 3, 1)
         }
         case 'Perda de olfato': {
-            return calculatePoints(0, valueToMax, 4, 2)
+            return calculatePoints(frequency, valueToMax, 4, 2)
         }
 
         default:
             return 0
     }
+}
+
+const calculateFrequency = (start, end) => {
+    const betweenDays = 14
+    const momentStart = moment(start)
+    const momentEnd = moment(end)
+
+
+    const frequency = momentEnd.diff(momentStart, 'days')
+    return frequency
 }
 
 
