@@ -49,9 +49,9 @@ exports.calculateRiskProfileQuestionsPoints = (questions) => {
 
     if (someoneSuspicious) {
         if (someoneSuspicious === "confirm")
-            points += calculatePoints(2, 5, 15, 1)
+            points += calculatePoints(3, 5, 15, 1)
         if (someoneSuspicious === "doubt")
-            points += calculatePoints(1, 5, 15, 1)
+            points += calculatePoints(2, 5, 15, 1)
     }
 
 
@@ -146,28 +146,31 @@ const calculatePointOfSympton = (identifier, hasSymptoms, start, end) => {
         case 'Febre': {
             return calculatePoints(frequency, valueToMax, 10, 5)
         }
-        case 'Dor de cabeça': {
+        case 'Dor de Cabeça': {
             return calculatePoints(frequency, valueToMax, 3, 1)
         }
-        case 'Secreção nasal ou espirros': {
+        case 'Produção de catarro': {
             return calculatePoints(frequency, valueToMax, 3, 1)
         }
-        case 'Dor/irritação de garganta': {
+        case 'Dor de Garganta': {
             return calculatePoints(frequency, valueToMax, 3, 1)
         }
-        case 'Tosse seca': {
+        case 'Tosse': {
             return calculatePoints(frequency, valueToMax, 6, 3)
         }
-        case 'Dificuldade Respiratória': {
+        case 'Falta de Ar': {
             return calculatePoints(frequency, valueToMax, 20, 10)
         }
-        case 'Dores no corpo': {
+        case 'Dor no Corpo': {
             return calculatePoints(frequency, valueToMax, 3, 1)
         }
-        case 'Diarreia': {
+        case 'Diarréia': {
             return calculatePoints(frequency, valueToMax, 2, 1)
         }
-        case 'Fadiga (Cansaço)': {
+        case 'Cansaço': {
+            return calculatePoints(frequency, valueToMax, 4, 2)
+        }
+        case 'Fadiga': {
             return calculatePoints(frequency, valueToMax, 4, 2)
         }
         case 'Falta de apetite': {
@@ -176,27 +179,27 @@ const calculatePointOfSympton = (identifier, hasSymptoms, start, end) => {
         case 'Confusão': {
             return calculatePoints(frequency, valueToMax, 3, 1)
         }
-        case 'Tontura': {
+        case 'Tonturas': {
             return calculatePoints(frequency, valueToMax, 3, 1)
         }
-        case 'Dor no peito': {
+        case 'Dor no Peito': {
             return calculatePoints(frequency, valueToMax, 3, 1)
         }
         case 'Tosse com sangue': {
             return calculatePoints(frequency, valueToMax, 4, 2)
         }
-        case 'Náusea / vômito': {
+        case 'Náusea ou vômito': {
             return calculatePoints(frequency, valueToMax, 3, 1)
         }
-        case 'Dor abdominal': {
+        case 'Dor de barriga': {
             return calculatePoints(frequency, valueToMax, 2, 1)
         }
-        case 'Olhos vermelhos infeccionados': {
+        case 'Olhos vermelhos': {
             return calculatePoints(frequency, valueToMax, 3, 1)
         }
-        case 'Perda de olfato': {
-            return calculatePoints(frequency, valueToMax, 4, 2)
-        }
+        // case 'Perda de olfato': {
+        //     return calculatePoints(frequency, valueToMax, 4, 2)
+        // }
 
         default:
             return 0
