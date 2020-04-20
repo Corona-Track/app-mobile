@@ -39,16 +39,16 @@ import ReportSymptomsPage from '../pages/symptoms/reportsymptoms';
 import ReportTestPage from '../pages/symptoms/reporttest';
 import SymptomsTestPage from '../pages/symptoms/symptomstest';
 
-import Maps from '../pages/maps';
 import PublicUtilityPage from '../pages/publicutility';
 import TermsPage from '../pages/terms';
+import MapsPage from '../pages/maps';
 
 //App internal routes
 const ApplicationStackNavigator = createStackNavigator(
   {
     Home: {screen: HomePage},
     Maps: {
-      screen: Maps,
+      screen: MapsPage,
       navigationOptions: {
         header: null,
       },
@@ -57,6 +57,7 @@ const ApplicationStackNavigator = createStackNavigator(
     Orientation: {screen: OrientationPage},
     ScheduleOrientation: {screen: ScheduleOrientation},
     PublicUtility: {screen: PublicUtilityPage},
+    
 
     Symptoms: { screen: SymptomsPage,navigationOptions:{
       header:null

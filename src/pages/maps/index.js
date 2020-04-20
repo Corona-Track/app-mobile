@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import MapView, {PROVIDER_GOOGLE, Marker, Circle} from 'react-native-maps';
+import React, { Component } from 'react';
+import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {
   View,
@@ -14,45 +14,51 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {Colors} from '../../themes/variables';
+import { NavigationEvents } from 'react-navigation';
 
-// ASSETS
+import { Colors } from '../../themes/variables';
 import cross from '../../assets/images/cross.png';
 import contagionBar from '../../assets/images/contagionBar.png';
 
-const Maps = props => {
-  const [userLocation, setUserLocation] = useState();
-
-  const onGPSErrorMessage = error => {
-    if (error)
-      console.log(error);
-    Alert.alert(
-      'Aviso!',
-      'Falha ao acessar a sua localização, tente novamente mais tarde!',
-      [{text: 'OK'}],
-      {cancelable: false},
-    );
+export default class MapsPage extends Component {
+  static navigationOptions = {
+    headerShown: false,
+    gestureEnabled: false,
+  };
+  state = {
+    userLocation: {
+      latitude: null,
+      longitude: null,
+      longitudeDelta: 0.05,
+      latitudeDelta: 0.05,
+    },
+    mapKey: null
   };
 
-  const getLocation = () => {
+  getLocation = () => {
     Geolocation.getCurrentPosition(
       position => {
-        setUserLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          longitudeDelta: 0.05,
-          latitudeDelta: 0.05,
+        this.setState({
+          userLocation: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            longitudeDelta: 0.05,
+            latitudeDelta: 0.05
+          }
         });
       },
       error => {
-        onGPSErrorMessage(error);
+        this.onGPSErrorMessage(error);
       }
     );
   };
+  initialize = () => {
+    this.getLocation();
+  };
 
-  const onGPSButtonPress = async () => {
+  onGPSButtonPress = async () => {
     if (Platform.OS === 'ios') {
-      await getLocation();
+      await this.getLocation();
     }
     try {
       const granted = await PermissionsAndroid.request(
@@ -66,127 +72,124 @@ const Maps = props => {
         await getLocation();
         return;
       }
-      onGPSErrorMessage();
-    } catch (e) { onGPSErrorMessage(e); }
+      this.onGPSErrorMessage();
+    } catch (e) { this.onGPSErrorMessage(e); }
   };
 
-  useEffect(() => {
-    onGPSButtonPress();
-  }, []);
 
-  const red = 'rgba(207, 84, 84,0.6)';
-  const yellow = 'rgba(233, 205, 106,0.6)';
-  const blue = 'rgba(136, 166, 231,0.6)';
-  const orange = 'rgba(247, 176, 84,0.6)';
-  const green = 'rgba(111, 219, 136,0.6)';
-
-  // COORDINATES BASED ON MY LOCATION = LAT: -23.221476  LONG: -45.906629
-
-  const data = [
-    {
-      latitude: -23.212005,
-      longitude: -45.902983,
-      color: red,
-      diameter: 300,
-    },
-    {
-      latitude: -23.21927,
-      longitude: -45.906924,
-      color: blue,
-      diameter: 400,
-    },
-    {
-      latitude: -23.231793,
-      longitude: -45.906085,
-      color: yellow,
-      diameter: 700,
-    },
-    {
-      latitude: -23.225158,
-      longitude: -45.890335,
-      color: green,
-      diameter: 350,
-    },
-    {
-      latitude: -23.237756,
-      longitude: -45.887005,
-      color: orange,
-      diameter: 400,
-    },
-    {
-      latitude: -23.231329,
-      longitude: -45.920235,
-      color: red,
-      diameter: 500,
-    },
-  ];
-
-  const [showCircle, setShowCircle] = useState(false);
-
-  return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.containerHeader}>
-        <Text style={styles.textHeader}>Minha Localização</Text>
-        <TouchableOpacity
-          style={{position: 'absolute', right: 20}}
-          onPress={() => {
-            setUserLocation();
-            props.navigation.pop();
-          }}>
-          <View>
-            <Image style={styles.cross} source={cross} />
-          </View>
-        </TouchableOpacity>
-      </View>
-
-      {/* MAP */}
-      {userLocation && userLocation.latitude && (
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          style={{flex: 1}}
-          region={userLocation}
-          onMapReady={() => setShowCircle(true)}
-          showsUserLocation={true}
-          minZoomLevel={1}
-          maxZoomLevel={20}>
-          <Marker coordinate={userLocation} />
-          {showCircle &&
-            data &&
-            data.length > 0 &&
-            data.map((item, idx) => (
-              <Circle
-                key={idx}
-                center={{
-                  latitude: item.latitude,
-                  longitude: item.longitude,
-                }}
-                radius={item.diameter}
-                strokeWidth={1}
-                fillColor={item.color}
-                strokeColor={item.color}
-              />
-            ))}
-        </MapView>
-      )}
-
-      {/* Bottom */}
-      <View style={styles.containerBottom}>
-        <Image style={styles.bar} source={contagionBar} />
-        <View style={styles.spacingText}>
-          <View style={{width: 50}}>
-            <Text style={styles.textBottom}>Leve Suspeita</Text>
-          </View>
-          <View style={{width: 70}}>
-            <Text style={styles.textBottom}>Sério risco de contágio</Text>
+  render = () => {
+    let { userLocation, mapKey } = this.state;
+    return (
+      <SafeAreaView style={styles.container}>
+        <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
+        <View style={styles.containerHeader}>
+          <Text style={styles.textHeader}>Minha Localização</Text>
+          <TouchableOpacity
+            style={{ position: 'absolute', right: 20 }}
+            onPress={() => {
+              data.splice(0, 1);
+              this.setState({
+                mapKey: Math.floor(Math.random() * 100)
+              })
+              // setUserLocation();
+              // props.navigation.pop();
+            }}>
+            <View>
+              <Image style={styles.cross} source={cross} />
+            </View>
+          </TouchableOpacity>
+        </View>
+        {userLocation && userLocation.latitude && (
+          <MapView
+            provider={PROVIDER_GOOGLE}
+            style={{ flex: 1 }}
+            region={userLocation}
+            // onMapReady={() => setShowCircle(true)}
+            showsUserLocation={true}
+            minZoomLevel={1}
+            maxZoomLevel={20}>
+            <Marker coordinate={userLocation} />
+            {data &&
+              data.length > 0 &&
+              data.map((item, idx) => (
+                <Circle
+                  key={idx}
+                  center={{
+                    latitude: item.latitude,
+                    longitude: item.longitude,
+                  }}
+                  radius={item.diameter}
+                  strokeWidth={1}
+                  fillColor={item.color}
+                  strokeColor={item.color}
+                />
+              ))}
+          </MapView>
+        )}
+        <View style={styles.containerBottom}>
+          <Image style={styles.bar} source={contagionBar} />
+          <View style={styles.spacingText}>
+            <View style={{ flexDirection: "column" }}>
+              <Text style={styles.textBottom}>Leve</Text>
+              <Text style={styles.textBottom}>Suspeita</Text>
+            </View>
+            <View style={{ flexDirection: "column" }}>
+              <Text style={styles.textBottom}>Sério risco</Text>
+              <Text style={styles.textBottom}>de contágio</Text>
+            </View>
           </View>
         </View>
-      </View>
-    </SafeAreaView>
-  );
-};
+      </SafeAreaView>
+    )
+  };
 
-export default Maps;
+}
+
+const red = 'rgba(207, 84, 84,0.6)';
+const yellow = 'rgba(233, 205, 106,0.6)';
+const blue = 'rgba(136, 166, 231,0.6)';
+const orange = 'rgba(247, 176, 84,0.6)';
+const green = 'rgba(111, 219, 136,0.6)';
+
+
+let data = [
+  {
+    latitude: -23.212005,
+    longitude: -45.902983,
+    color: red,
+    diameter: 300,
+  },
+  {
+    latitude: -23.21927,
+    longitude: -45.906924,
+    color: blue,
+    diameter: 400,
+  },
+  {
+    latitude: -23.231793,
+    longitude: -45.906085,
+    color: yellow,
+    diameter: 700,
+  },
+  {
+    latitude: -23.225158,
+    longitude: -45.890335,
+    color: green,
+    diameter: 350,
+  },
+  {
+    latitude: -23.237756,
+    longitude: -45.887005,
+    color: orange,
+    diameter: 400,
+  },
+  {
+    latitude: -23.231329,
+    longitude: -45.920235,
+    color: red,
+    diameter: 500,
+  },
+];
 
 const styles = StyleSheet.create({
   container: {
