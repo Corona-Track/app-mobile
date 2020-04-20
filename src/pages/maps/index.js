@@ -32,80 +32,34 @@ export default class MapsPage extends Component {
       longitudeDelta: 0.05,
       latitudeDelta: 0.05,
     },
+    currentLocation: {
+      latitude: null,
+      longitude: null,
+      longitudeDelta: 0.05,
+      latitudeDelta: 0.05,
+    },
     mapKey: null
   };
 
-  getLocation = () => {
-    Geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          userLocation: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            longitudeDelta: 0.05,
-            latitudeDelta: 0.05
-          }
-        });
-      },
-      error => {
-        this.onGPSErrorMessage(error);
-      }
-    );
-  };
+
   initialize = () => {
-    this.getLocation();
+    this.getUserLocation()
+      .catch(this.onGPSErrorMessage);
   };
-
-  onGPSButtonPress = async () => {
-    if (Platform.OS === 'ios') {
-      await this.getLocation();
-    }
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Acesso de localização',
-          message: 'Para buscar sua localização precisamos de sua permissão.',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        await getLocation();
-        return;
-      }
-      this.onGPSErrorMessage();
-    } catch (e) { this.onGPSErrorMessage(e); }
-  };
-
-
   render = () => {
-    let { userLocation, mapKey } = this.state;
+    let { mapKey, userLocation, currentLocation } = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-        <View style={styles.containerHeader}>
-          <Text style={styles.textHeader}>Minha Localização</Text>
-          <TouchableOpacity
-            style={{ position: 'absolute', right: 20 }}
-            onPress={() => {
-              data.splice(0, 1);
-              this.setState({
-                mapKey: Math.floor(Math.random() * 100)
-              })
-              // setUserLocation();
-              // props.navigation.pop();
-            }}>
-            <View>
-              <Image style={styles.cross} source={cross} />
-            </View>
-          </TouchableOpacity>
-        </View>
+        <MapHeader onPress={this.closeMap} />
         {userLocation && userLocation.latitude && (
           <MapView
             provider={PROVIDER_GOOGLE}
             style={{ flex: 1 }}
-            region={userLocation}
-            // onMapReady={() => setShowCircle(true)}
+            region={currentLocation}
+            onRegionChangeComplete={this.updateCurrentLocation}
             showsUserLocation={true}
+            loadingEnabled={true}
             minZoomLevel={1}
             maxZoomLevel={20}>
             <Marker coordinate={userLocation} />
@@ -126,23 +80,73 @@ export default class MapsPage extends Component {
               ))}
           </MapView>
         )}
-        <View style={styles.containerBottom}>
-          <Image style={styles.bar} source={contagionBar} />
-          <View style={styles.spacingText}>
-            <View style={{ flexDirection: "column" }}>
-              <Text style={styles.textBottom}>Leve</Text>
-              <Text style={styles.textBottom}>Suspeita</Text>
-            </View>
-            <View style={{ flexDirection: "column" }}>
-              <Text style={styles.textBottom}>Sério risco</Text>
-              <Text style={styles.textBottom}>de contágio</Text>
-            </View>
-          </View>
-        </View>
+        <MapBottom />
       </SafeAreaView>
     )
   };
-
+  updateCurrentLocation = region => {
+    this.setState({
+      currentLocation: {
+        latitude: region.latitude,
+        longitude: region.longitude,
+        latitudeDelta: region.latitudeDelta,
+        longitudeDelta: region.longitudeDelta,
+      },
+      mapKey: Math.floor(Math.random() * 100)
+    })
+  };
+  getUserLocation = async () => {
+    if (Platform.OS === 'ios') {
+      await this.getLocation();
+      return;
+    }
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Acesso de localização',
+          message: 'Para buscar sua localização precisamos de sua permissão.',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        await this.getLocation();
+        return;
+      }
+      this.onGPSErrorMessage();
+    } catch (e) { this.onGPSErrorMessage(e); }
+  };
+  getLocation = () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        let userLocation = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          longitudeDelta: 0.05,
+          latitudeDelta: 0.05
+        };
+        this.setState({
+          userLocation: userLocation,
+          currentLocation: userLocation
+        });
+      },
+      error => {
+        this.onGPSErrorMessage(error);
+      }
+    );
+  };
+  onGPSErrorMessage = error => {
+    if (error)
+      console.log(error);
+    Alert.alert(
+      'Aviso!',
+      'Falha ao acessar a sua localização, tente novamente mais tarde!',
+      [{ text: 'OK' }],
+      { cancelable: false },
+    );
+  };
+  closeMap = () => {
+    this.props.navigation.pop();
+  };
 }
 
 const red = 'rgba(207, 84, 84,0.6)';
@@ -190,6 +194,35 @@ let data = [
     diameter: 500,
   },
 ];
+
+const MapHeader = ({ onPress }) => (
+  <View style={styles.containerHeader}>
+    <Text style={styles.textHeader}>Minha Localização</Text>
+    <TouchableOpacity
+      style={styles.closeButtonHeader}
+      onPress={onPress}>
+      <View>
+        <Image style={styles.cross} source={cross} />
+      </View>
+    </TouchableOpacity>
+  </View>
+);
+
+const MapBottom = () => (
+  <View style={styles.containerBottom}>
+    <Image style={styles.bar} source={contagionBar} />
+    <View style={styles.spacingText}>
+      <View style={{ flexDirection: "column" }}>
+        <Text style={styles.textBottom}>Leve</Text>
+        <Text style={styles.textBottom}>Suspeita</Text>
+      </View>
+      <View style={{ flexDirection: "column" }}>
+        <Text style={styles.textBottom}>Sério risco</Text>
+        <Text style={styles.textBottom}>de contágio</Text>
+      </View>
+    </View>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -241,4 +274,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#4F4F4F',
   },
+  closeButtonHeader: {
+    position: 'absolute',
+    right: 20
+  }
 });
