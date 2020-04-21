@@ -2,6 +2,8 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const RiskProfileService = require('./services/RiskProfileService');
 const riskProfileTypes = require('./utils/enums/riskProfileTypes');
+const aggravationRiskTypes = require('./utils/enums/aggravationRiskTypes');
+
 var moment = require('moment');
 
 var _ = require('lodash');
@@ -31,7 +33,6 @@ exports.onUserUpdate = functions.firestore.document('/users/{userId}')
         }
 
         let symptomData = await getSymptomByUser(context.params.userId)
-        let riskProfile
 
         const { comorbiditiesSelected } = newUserData.question
 
@@ -44,19 +45,27 @@ exports.onUserUpdate = functions.firestore.document('/users/{userId}')
             riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(symptomData[0].symptons, symptomData[0].hasSymptoms)
 
 
-        riskProfile = RiskProfileService.getRisk(riskProfileQuestionPoints + riskProfileSymptonsPoints)
+        let contagionRisk = RiskProfileService.getContagionRisk(riskProfileQuestionPoints + riskProfileSymptonsPoints)
 
+
+        let aggravationRisk = aggravationRiskTypes.LOW
 
         if (comorbiditiesSelected) {
-            if (comorbiditiesSelected.length > 1)
-                riskProfile = riskProfileTypes.RED
+            if (comorbiditiesSelected.length > 1) {
+                aggravationRisk = aggravationRiskTypes.HIGH
+            }
 
-            if (!comorbiditiesSelected.includes("Nenhuma das opções"))
-                riskProfile = riskProfileTypes.RED
+            if (!comorbiditiesSelected.includes("Nenhuma das opções")) {
+                aggravationRisk = aggravationRiskTypes.HIGH
+            }
         }
 
+        const riskProfile = RiskProfileService.getRisk(contagionRisk, aggravationRisk)
+
         return change.after.ref.set({
-            riskProfile: riskProfile
+            riskProfile: riskProfile,
+            aggravationRisk: aggravationRisk,
+            contagionRisk: contagionRisk
         }, { merge: true });
     })
 
@@ -99,7 +108,6 @@ exports.onSymptomsUpdate = functions.firestore.document('/symptoms/{symptomsId}'
         } else {
             const riskProfileQuestionPoints = RiskProfileService.calculateRiskProfileQuestionsPoints(userData.question)
             const riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(newSymptomsData.symptons, newSymptomsData.hasSymptoms)
-            console.log(riskProfileSymptonsPoints)
             riskProfile = RiskProfileService.getRisk(riskProfileQuestionPoints + riskProfileSymptonsPoints)
         }
 

@@ -1,4 +1,8 @@
 const riskProfileTypes = require('../utils/enums/riskProfileTypes');
+const contagionRiskTypes = require('../utils/enums/contagionRiskTypes');
+const aggravationRiskTypes = require('../utils/enums/aggravationRiskTypes');
+
+
 var moment = require('moment');
 
 exports.calculateRiskProfileQuestionsPoints = (questions) => {
@@ -20,24 +24,6 @@ exports.calculateRiskProfileQuestionsPoints = (questions) => {
         relativesContainerCleanupAnswer,
         relativesShowerAnswer
     } = questions
-
-    // console.log('comorbiditiesSelected:'+comorbiditiesSelected,
-    //     'someoneDiagnosed'+someoneDiagnosed,
-    //     'someoneSuspicious'+someoneSuspicious,
-    //     'alreadyHadCoronavirusTest'+alreadyHadCoronavirusTest,
-    //     'keepDistance'+keepDistance,
-    //     'protectionAnswer'+protectionAnswer,
-    //     'touchingPrecaution'+touchingPrecaution,
-    //     'showerAnswer'+showerAnswer,
-    //     'changeClothesAnswer'+changeClothesAnswer,
-    //     'containerCleanupAnswer'+containerCleanupAnswer,
-    //     'outsideWorkAnswer'+outsideWorkAnswer,
-    //     'relativesLeavingHome'+relativesLeavingHome,
-    //     'relativesChangeClothesAnswer'+relativesChangeClothesAnswer,
-    //     'relativesContainerCleanupAnswer'+relativesContainerCleanupAnswer,
-    //     'relativesShowerAnswer'+relativesShowerAnswer
-    //     )
-
 
 
     let points = 0
@@ -139,7 +125,6 @@ const calculatePointOfSympton = (identifier, hasSymptoms, start, end) => {
         const startDate = start.toDate();
         const endDate = end.toDate();
 
-
         frequency = calculateFrequency(startDate, endDate)
     }
     switch (identifier) {
@@ -197,9 +182,9 @@ const calculatePointOfSympton = (identifier, hasSymptoms, start, end) => {
         case 'Olhos vermelhos': {
             return calculatePoints(frequency, valueToMax, 3, 1)
         }
-        // case 'Perda de olfato': {
-        //     return calculatePoints(frequency, valueToMax, 4, 2)
-        // }
+        case 'Perda de olfato': {
+            return calculatePoints(frequency, valueToMax, 4, 2)
+        }
 
         default:
             return 0
@@ -231,15 +216,35 @@ const calculatePoints = (value, valueToMax, max, min) => {
     return points
 }
 
-exports.getRisk = (points) => {
+exports.getContagionRisk = (points) => {
     if (points <= 9) {
-        return riskProfileTypes.GREEN
+        return contagionRiskTypes.LOW
     } else if (points > 9 && points <= 19) {
-        return riskProfileTypes.YELLOW
+        return contagionRiskTypes.MEDIUM
     }
 
-    return riskProfileTypes.RED
+    return contagionRiskTypes.HIGH
+}
 
+exports.getRisk = (contagionRisk, aggravationRisk) => {
+    if (aggravationRisk === aggravationRiskTypes.HIGH)
+        return riskProfileTypes.RED
+
+    switch (contagionRisk) {
+        case contagionRiskTypes.LOW: {
+            return riskProfileTypes.GREEN
+        }
+        case contagionRiskTypes.MEDIUM: {
+            return riskProfileTypes.YELLOW
+        }
+        case contagionRiskTypes.HIGH: {
+            return riskProfileTypes.RED
+        }
+
+        default: {
+            return riskProfileTypes.GREEN
+        }
+    }
 
 
 }
