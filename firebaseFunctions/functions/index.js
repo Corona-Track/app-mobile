@@ -3,13 +3,14 @@ const admin = require('firebase-admin');
 const RiskProfileService = require('./services/RiskProfileService');
 const riskProfileTypes = require('./utils/enums/riskProfileTypes');
 var moment = require('moment');
+const HeatMapService = require('./services/heatmapservice');
 
 var _ = require('lodash');
 
 admin.initializeApp(functions.config().firestore)
 
 
-const firestore = admin.firestore()
+const firestore = admin.firestore();
 
 
 exports.onUserUpdate = functions.firestore.document('/users/{userId}')
@@ -153,7 +154,21 @@ const getSymptomByUser = (userId) => {
     });
 };
 
-
+exports.getMapElementsByPosition = functions.https.onRequest(async (req, res) => {
+    try {
+        let { markerCentral, markerNorthWest, markerSouthWest, markerNorthEast, markerSouthEast } = req.body;
+        //Check for null because it can use negative values
+        if (!(markerCentral !== null &&
+            markerNorthWest !== null &&
+            markerSouthWest !== null &&
+            markerNorthEast !== null &&
+            markerSouthEast !== null))
+            return res.sendStatus(500);
+        return res.status(200).send(JSON.stringify(HeatMapService.generateGrid(req.body)));
+    } catch (e) {
+        return res.sendStatus(500);
+    }
+});
 
 
 
