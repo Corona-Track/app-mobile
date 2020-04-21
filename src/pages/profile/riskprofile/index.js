@@ -42,10 +42,19 @@ export default function RiskProfile(props) {
     })
 
     let riskProfileId = parseInt(navigation.getParam('riskProfile', 1))
+    let contagionRiskId = parseInt(navigation.getParam('contagionRisk', 1))
+
+    let aggravationRiskId = parseInt(navigation.getParam('aggravationRisk', 1))
+
+    // alert('riskProfileId:'+riskProfileId+'aggravationRiskId:'+ aggravationRiskId+ 'contagionRiskId:'+ contagionRiskId)
+
+
 
     useEffect(() => {
         getUserData()
         getRiskInfo(riskProfileId)
+        getContagionRiskId(contagionRiskId)
+        getAggravationRiskId(aggravationRiskId)
     }, [])
 
     onLeftButtonPress = () => {
@@ -75,33 +84,60 @@ export default function RiskProfile(props) {
                     label: 'VERDE',
                     color: Colors.greenRiskProfile
                 })
-                setContagionRisk(contagionRiskTypes.LOW)
-                setAggravationRisk(aggravationRiskTypes.LOW)
+                return
             }
-                break;
 
             case riskProfileTypes.YELLOW: {
                 setRiskProfile({
                     label: 'AMARELO',
                     color: Colors.yellowRiskProfile
                 })
-                setContagionRisk(contagionRiskTypes.LOW)
-                setAggravationRisk(aggravationRiskTypes.MEDIUM)
+                return
             }
-                break;
 
             case riskProfileTypes.RED: {
                 setRiskProfile({
                     label: 'VERMELHO',
                     color: Colors.redRiskProfile
                 })
-                setContagionRisk(contagionRiskTypes.MEDIUM)
-                setAggravationRisk(aggravationRiskTypes.HIGH)
+                return
             }
-                break;
         }
+    }
 
+    function getContagionRiskId(contagionRiskId) {
+        switch (contagionRiskId) {
+            case contagionRiskTypes.LOW.id: {
+                setContagionRisk(contagionRiskTypes.LOW)
+                return
+            }
 
+            case contagionRiskTypes.MEDIUM.id: {
+                setContagionRisk(contagionRiskTypes.MEDIUM)
+                return
+            }
+
+            case contagionRiskTypes.HIGH.id: {
+                setContagionRisk(contagionRiskTypes.HIGH)
+                return
+            }
+
+        }
+    }
+
+    function getAggravationRiskId(aggravationRiskId) {
+        switch (aggravationRiskId) {
+            case aggravationRiskTypes.LOW.id: {
+                setAggravationRisk(aggravationRiskTypes.LOW)
+                return
+            }
+
+            case aggravationRiskTypes.HIGH.id: {
+                setAggravationRisk(aggravationRiskTypes.HIGH)
+                return
+            }
+
+        }
     }
 
     function Title() {
@@ -114,8 +150,6 @@ export default function RiskProfile(props) {
             <Text style={titleStyle}>{riskProfile.label}</Text>
         </View>
     }
-
-
 
 
     return <SafeAreaView style={styles.page}>
