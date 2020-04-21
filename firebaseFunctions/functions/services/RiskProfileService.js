@@ -140,6 +140,9 @@ const calculatePointOfSympton = (identifier, hasSymptoms, start, end) => {
         case 'Dor de Garganta': {
             return calculatePoints(frequency, valueToMax, 3, 1)
         }
+        case 'Desmaio': {
+            return calculatePoints(frequency, valueToMax, 20, 10)
+        }
         case 'Tosse': {
             return calculatePoints(frequency, valueToMax, 6, 3)
         }
