@@ -30,8 +30,18 @@ exports.generateGrid = params => {
         latitude: parseFloat(markerNorthWest.latitude),
         longitude: parseFloat(markerNorthWest.longitude)
     };
-    let generated = generateLine(totalColumns, initialPosition, squareSide);
-    return [...markers, ...generated];
+    for (var i = 0; i < totalColumns; i++) {
+        let generated = generateLine(totalColumns, {
+            latitude: initialPosition.latitude,
+            longitude: initialPosition.longitude,
+        }, squareSide);
+        initialPosition = {
+            latitude: initialPosition.latitude - squareSide,
+            longitude: initialPosition.longitude,
+        };
+        markers = [...markers, ...generated];
+    }
+    return markers;
 };
 
 const getLineDistance = (westLinePosition, eastLinePosition) => {
@@ -46,11 +56,31 @@ const generateLine = (totalColumns, initialPosition, squareSide) => {
     debugger;
     for (var i = 0; i < totalColumns; i++) {
         console.log(currentPosition);
-        columns.push({
+
+        let position = {
             latitude: currentPosition.latitude,
             longitude: currentPosition.longitude,
+        };
+        //NorthWest
+        columns.push({
+            latitude: position.latitude,
+            longitude: position.longitude,
         });
-        // currentPosition.latitude += squareSide;
+        //NorthEast
+        columns.push({
+            latitude: position.latitude,
+            longitude: position.longitude + squareSide,
+        });
+        //SouthWest
+        columns.push({
+            latitude: position.latitude - squareSide,
+            longitude: position.longitude,
+        });
+        //SouthEast
+        columns.push({
+            latitude: position.latitude - squareSide,
+            longitude: position.longitude + squareSide,
+        });
         currentPosition.longitude += squareSide;
     }
     return columns;

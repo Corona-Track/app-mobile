@@ -15,6 +15,7 @@ import {
   Alert,
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { Colors } from '../../themes/variables';
 import cross from '../../assets/images/cross.png';
@@ -42,7 +43,7 @@ export default class MapsPage extends Component {
       latitudeDelta: 0.05,
     },
     mapKey: null,
-    cornersMarkers: []
+    cornersMarkers: [],
   };
 
 
@@ -64,7 +65,6 @@ export default class MapsPage extends Component {
             region={currentLocation}
             onRegionChangeComplete={this.updateCurrentLocation}
             showsUserLocation={true}
-            loadingEnabled={true}
             minZoomLevel={1}
             maxZoomLevel={20}>
 
