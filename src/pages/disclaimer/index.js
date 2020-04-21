@@ -83,7 +83,7 @@ const FirstDisclaimerText = () => {
             <Text style={[styles.simpleText]}>de COVID-19, doença</Text>
             <Text style={[styles.simpleText]}>causada pelo novo</Text>
             <Text style={[styles.simpleText]}>coronavírus. Caso queira</Text>
-            <Text style={[styles.simpleText]}>usá-lo. saiba que</Text>
+            <Text style={[styles.simpleText]}>usá-lo, saiba que</Text>
             <Text style={[styles.simpleText]}>utilizaremos dados como sua</Text>
             <Text style={[styles.simpleText]}>geolocalização e algumas</Text>
             <Text style={[styles.simpleText]}>informações pessoais para</Text>

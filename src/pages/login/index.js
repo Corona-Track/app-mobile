@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -8,16 +8,17 @@ import {
   ScrollView,
   Image,
   Platform,
+  TouchableOpacity
 } from 'react-native';
 
-import {TextInput, Button} from 'react-native-paper';
-import {SwitchActions} from 'react-navigation';
+import { TextInput, Button } from 'react-native-paper';
+import { SwitchActions } from 'react-navigation';
 
 // Auth
-import {SignIn} from '../../firebase/Auth';
+import { SignIn } from '../../firebase/Auth';
 
 // Variables
-import {Colors} from '../../themes/variables';
+import { Colors } from '../../themes/variables';
 
 export default class LoginPage extends Component {
   static navigationOptions = {
@@ -25,27 +26,27 @@ export default class LoginPage extends Component {
   };
   state = {
     entity: {
-      email: 'bruno1@live.com',
-      password: '123456',
+      email: '',
+      password: '',
     },
     loading: false,
     error: '',
   };
 
   handleOnEmailChange = email => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.email = email;
-    this.setState({entity});
+    this.setState({ entity });
   };
 
   handleOnPasswordChange = password => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.password = password;
-    this.setState({entity});
+    this.setState({ entity });
   };
 
   isFormDisabled = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return !(entity.email && entity.password);
   };
 
@@ -71,7 +72,7 @@ export default class LoginPage extends Component {
   };
 
   onSignInButtonPress = () => {
-    const {email, password} = this.state.entity;
+    const { email, password } = this.state.entity;
 
     this.setState({
       loading: true,
@@ -107,7 +108,7 @@ export default class LoginPage extends Component {
   };
 
   render = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
 
     return (
       <SafeAreaView style={styles.container}>
@@ -182,10 +183,17 @@ export default class LoginPage extends Component {
           onPress={this.onSignUpButtonPress}>
           CADASTRE-SE
         </Button>
+        <TermsButton onPress={() => { this.props.navigation.navigate('Terms'); }} label="Ao se cadastrar você aceita os Termos e Condições de Uso." />
       </SafeAreaView>
     );
   };
 }
+
+const TermsButton = ({ onPress, label }) => (
+  <TouchableOpacity onPress={onPress} style={styles.skipContainer}>
+    <Text style={styles.skipButtonText}>Ao se cadastrar você aceita os Termos e Condições de Uso</Text>
+  </TouchableOpacity>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -260,5 +268,14 @@ const styles = StyleSheet.create({
     marginTop: 8,
     color: Colors.colorDanger,
     textAlign: 'left',
+  },
+  skipButtonText: {
+    fontFamily: Colors.fontFamily,
+    color: Colors.placeholderTextColor,
+textAlign: "center"
+  },
+  skipContainer: {
+    marginTop: 5,
+    marginBottom: 10,
   },
 });
