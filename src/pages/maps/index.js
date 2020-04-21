@@ -67,10 +67,17 @@ export default class MapsPage extends Component {
             showsUserLocation={true}
             minZoomLevel={1}
             maxZoomLevel={20}>
-
-            {cornersMarkers.map((item, idx) => (
-              <Marker coordinate={item} />
-            ))}
+            {cornersMarkers.map((item, idx) => {
+              console.log("I:" + JSON.stringify(item));
+              return (
+                <>
+                  <Marker coordinate={item.northWest} />
+                  <Marker coordinate={item.northEast} />
+                  <Marker coordinate={item.southWest} />
+                  <Marker coordinate={item.southEast} />
+                </>
+              )
+            })}
             <Marker coordinate={userLocation} />
             {data &&
               data.length > 0 &&
@@ -110,9 +117,9 @@ export default class MapsPage extends Component {
       latitudeDelta: region.latitudeDelta,
       longitudeDelta: region.longitudeDelta,
     };
-    // console.log("markerNorthWest region");
-    // console.log("NLA");
-    // console.log(corners.northLatitude);
+    console.log("markerNorthWest region");
+    console.log("NLA");
+    console.log(corners.northLatitude);
     // console.log("WLO");
     // console.log(corners.westLongitude);
     let markerNorthWest = {
@@ -121,9 +128,9 @@ export default class MapsPage extends Component {
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
     };
-    // console.log("markerSouthWest region");
-    // console.log("SLA");
-    // console.log(corners.southLatitude);
+    console.log("markerSouthWest region");
+    console.log("SLA");
+    console.log(corners.southLatitude);
     // console.log("WLO");
     // console.log(corners.westLongitude);
     let markerSouthWest = {
