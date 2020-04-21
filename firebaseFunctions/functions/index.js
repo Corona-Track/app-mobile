@@ -95,24 +95,34 @@ exports.onSymptomsUpdate = functions.firestore.document('/symptoms/{symptomsId}'
 
         let userData = getDoc.data()
 
-        let riskProfile
 
         const { comorbiditiesSelected } = userData
 
-        if (comorbiditiesSelected) {
-            if (comorbiditiesSelected.length > 1)
-                riskProfile = riskProfileTypes.RED
 
-            if (!comorbiditiesSelected.includes("Nenhuma das opções"))
-                riskProfile = riskProfileTypes.RED
-        } else {
-            const riskProfileQuestionPoints = RiskProfileService.calculateRiskProfileQuestionsPoints(userData.question)
-            const riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(newSymptomsData.symptons, newSymptomsData.hasSymptoms)
-            riskProfile = RiskProfileService.getRisk(riskProfileQuestionPoints + riskProfileSymptonsPoints)
+        const riskProfileQuestionPoints = RiskProfileService.calculateRiskProfileQuestionsPoints(userData.question)
+        const riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(newSymptomsData.symptons, newSymptomsData.hasSymptoms)
+        let contagionRisk = RiskProfileService.getContagionRisk(riskProfileQuestionPoints + riskProfileSymptonsPoints)
+
+
+        let aggravationRisk = aggravationRiskTypes.LOW
+
+        if (comorbiditiesSelected) {
+            if (comorbiditiesSelected.length > 1) {
+                aggravationRisk = aggravationRiskTypes.HIGH
+            }
+
+            if (!comorbiditiesSelected.includes("Nenhuma das opções")) {
+                aggravationRisk = aggravationRiskTypes.HIGH
+            }
         }
 
+        const riskProfile = RiskProfileService.getRisk(contagionRisk, aggravationRisk)
+
+
         return userRef.set({
-            riskProfile: riskProfile
+            riskProfile: riskProfile,
+            aggravationRisk: aggravationRisk,
+            contagionRisk: contagionRisk
         }, { merge: true });
 
     })
