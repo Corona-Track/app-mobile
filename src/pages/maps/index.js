@@ -19,6 +19,8 @@ import { NavigationEvents } from 'react-navigation';
 import { Colors } from '../../themes/variables';
 import cross from '../../assets/images/cross.png';
 import contagionBar from '../../assets/images/contagionBar.png';
+import { getMapElementsByPosition } from '../../services/mapservice';
+
 
 let map = null;
 export default class MapsPage extends Component {
@@ -96,67 +98,90 @@ export default class MapsPage extends Component {
     // N
     // W E
     // S
-    console.log("central region");
-    console.log("LA");
-    console.log(region.latitude);
-    console.log("LO");
-    console.log(region.longitude);
+    // console.log("central region");
+    // console.log("LA");
+    // console.log(region.latitude);
+    // console.log("LO");
+    // console.log(region.longitude);
 
-    console.log("markerNorthWest region");
-    console.log("NLA");
-    console.log(corners.northLatitude);
-    console.log("WLO");
-    console.log(corners.westLongitude);
+    let markerCentral = {
+      latitude: region.latitude,
+      longitude: region.longitude,
+      latitudeDelta: region.latitudeDelta,
+      longitudeDelta: region.longitudeDelta,
+    };
+    // console.log("markerNorthWest region");
+    // console.log("NLA");
+    // console.log(corners.northLatitude);
+    // console.log("WLO");
+    // console.log(corners.westLongitude);
     let markerNorthWest = {
       latitude: corners.northLatitude,
       longitude: corners.westLongitude,
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
     };
-    console.log("markerSouthWest region");
-    console.log("SLA");
-    console.log(corners.southLatitude);
-    console.log("WLO");
-    console.log(corners.westLongitude);
+    // console.log("markerSouthWest region");
+    // console.log("SLA");
+    // console.log(corners.southLatitude);
+    // console.log("WLO");
+    // console.log(corners.westLongitude);
     let markerSouthWest = {
       latitude: corners.southLatitude,
       longitude: corners.westLongitude,
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
     };
-    console.log("markerNorthEast region");
-    console.log("NLA");
-    console.log(corners.northLatitude);
-    console.log("ELO");
-    console.log(corners.eastLongitude);
+    // console.log("markerNorthEast region");
+    // console.log("NLA");
+    // console.log(corners.northLatitude);
+    // console.log("ELO");
+    // console.log(corners.eastLongitude);
     let markerNorthEast = {
       latitude: corners.northLatitude,
       longitude: corners.eastLongitude,
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
     };
-    console.log("markerSouthEast region");
-    console.log("SLA");
-    console.log(corners.southLatitude);
-    console.log("ELO");
-    console.log(corners.eastLongitude);
+    // console.log("markerSouthEast region");
+    // console.log("SLA");
+    // console.log(corners.southLatitude);
+    // console.log("ELO");
+    // console.log(corners.eastLongitude);
     let markerSouthEast = {
       latitude: corners.southLatitude,
       longitude: corners.eastLongitude,
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
     };
-    this.setState({
-      currentLocation: {
-        latitude: region.latitude,
-        longitude: region.longitude,
-        latitudeDelta: region.latitudeDelta,
-        longitudeDelta: region.longitudeDelta,
-      },
-      mapKey: Math.floor(Math.random() * 100),
-      cornersMarkers: [markerNorthWest, markerSouthWest, markerNorthEast, markerSouthEast]
-    })
+    let filter = {
+      markerCentral,
+      markerNorthWest,
+      markerSouthWest,
+      markerNorthEast,
+      markerSouthEast,
+    };
+    // let filter = {
+    //   markerCentral: markerCentral,
+    //   markerNorthWest: markerNorthWest,
+    //   markerSouthWest: markerSouthWest,
+    //   markerNorthEast: markerNorthEast,
+    //   markerSouthEast: markerSouthEast,
+    // };
+    getMapElementsByPosition(filter)
+      .then(response => this.onSuccessGetMapElementsByPosition(response, filter))
+      .catch(this.onGPSErrorMessage);
   };
+
+  onSuccessGetMapElementsByPosition = (response, filter) => {
+    let { data } = response;
+    this.setState({
+      currentLocation: filter.markerCentral,
+      mapKey: Math.floor(Math.random() * 100),
+      cornersMarkers: data
+    });
+  };
+
   getUserLocation = async () => {
     if (Platform.OS === 'ios') {
       await this.getLocation();
