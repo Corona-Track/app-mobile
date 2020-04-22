@@ -164,10 +164,20 @@ exports.getMapElementsByPosition = functions.https.onRequest(async (req, res) =>
             markerNorthEast !== null &&
             markerSouthEast !== null))
             return res.sendStatus(500);
-        let users = await getUsersInsideRange(req.body);
-        let citiesContent = await getAllCities(req.body);
+        let region = {
+            markerCentral,
+            markerNorthWest,
+            markerSouthWest,
+            markerNorthEast,
+            markerSouthEast
+        };
+        let users = await getUsersInsideRange(region);
+        let citiesContent = await getAllCities(region);
         let convertedUsers = HeatMapService.populateUserCity(citiesContent.allCities, users);
-        return res.status(200).send(JSON.stringify(convertedUsers));
+        let grid = HeatMapService.generateGrid(region, citiesContent, convertedUsers);
+        return res.status(200).send(JSON.stringify(grid));
+
+        // return res.status(200).send(JSON.stringify(convertedUsers));
     } catch (e) {
         return res.statusCode(500);
     }
@@ -195,8 +205,8 @@ exports.getMapElementsByPosition = functions.https.onRequest(async (req, res) =>
 //     });
 // };
 
-const getUsersInsideRange = async params => {
-    let { markerNorthWest, markerSouthWest, markerNorthEast } = params;
+const getUsersInsideRange = async region => {
+    let { markerNorthWest, markerSouthWest, markerNorthEast } = region;
     return new Promise((resolve, reject) => {
         let usersPositionCollection = firestore.collection('usersposition');
         let usersQuery = usersPositionCollection
@@ -218,8 +228,8 @@ const getUsersInsideRange = async params => {
     });
 };
 
-const getAllCities = async params => {
-    let { markerNorthWest, markerSouthWest, markerNorthEast } = params;
+const getAllCities = async region => {
+    let { markerNorthWest, markerSouthWest, markerNorthEast } = region;
     return new Promise((resolve, reject) => {
         let citiesCollection = firestore.collection('cities');
         citiesCollection.get()

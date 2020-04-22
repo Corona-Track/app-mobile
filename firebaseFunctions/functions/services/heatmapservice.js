@@ -28,18 +28,23 @@ exports.populateUserCity = (cities, users) => {
 // }
 
 
-exports.generateGrid = params => {
+exports.generateGrid = (region, citiesContent, convertedUsers) => {
     debugger;
     let totalColumns = 6;
     let { markerCentral,
         markerNorthWest,
         markerSouthWest,
         markerNorthEast,
-        markerSouthEast } = params;
+        markerSouthEast } = region;
     let horizontalDistance = getLineDistance(markerNorthWest, markerNorthEast);
     let squareSide = horizontalDistance / parseFloat(totalColumns);
     let verticalDistance = getColumnDistance(markerNorthWest, markerSouthWest);
     let totalLines = Math.floor(verticalDistance / squareSide);
+
+
+
+
+
 
     // let initialPosition = {
     //     latitude: parseFloat(markerNorthWest.latitude),
@@ -145,6 +150,11 @@ const generateLine = (totalColumns, initialPosition, squareSide) => {
             northEast: null,
             southWest: null,
             southEast: null,
+            internalCircleDiameter: {
+                degress: null,
+                meters: null
+            },
+            central: null,
         };
         //NorthWest
         square.northWest = {
@@ -166,9 +176,28 @@ const generateLine = (totalColumns, initialPosition, squareSide) => {
             latitude: position.latitude - squareSide,
             longitude: position.longitude + squareSide,
         };
+        square.internalCircleDiameter = calculateDistanceBetweenToPoints(square.southWest, square.northEast);
+        //Central
+        square.central = {
+            latitude: position.latitude - (squareSide / parseFloat(2)),
+            longitude: position.longitude + (squareSide / parseFloat(2)),
+        };
         currentPosition.longitude += squareSide;
         squares.push(square);
     }
     return squares;
 };
 
+
+const calculateDistanceBetweenToPoints = (firstPosition, secondPosition) => {
+    let xLngCel = Math.pow((secondPosition.longitude - firstPosition.longitude), 2);
+    let yLatCel = Math.pow((secondPosition.latitude - firstPosition.latitude), 2);
+    let pythagoras = Math.sqrt(xLngCel + yLatCel)
+    //Meters conversion
+    const earthRadius = 6371000;
+    let earthConversion = 2 * Math.PI * earthRadius;
+    return {
+        degress: pythagoras,
+        meters: (pythagoras * earthConversion) / 360
+    };
+};

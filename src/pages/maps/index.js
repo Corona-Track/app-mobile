@@ -69,7 +69,7 @@ export default class MapsPage extends Component {
             loadingEnabled={true}
             minZoomLevel={1}
             maxZoomLevel={20}>
-            {cornersMarkers.map((item, idx) => {
+            {/* {cornersMarkers.map((item, idx) => {
               return (
                 <Marker coordinate={{
                   latitude: item.latitude,
@@ -78,15 +78,29 @@ export default class MapsPage extends Component {
                   latitudeDelta: 0.05,
                 }} />
               )
+            })} */}
+            {cornersMarkers.map((item, idx) => {
+              return (
+                <>
+                  {/* <Marker coordinate={item.northWest} />
+                <Marker coordinate={item.northEast} />
+                <Marker coordinate={item.southWest} />
+                <Marker coordinate={item.southEast} /> */}
+                  <Marker coordinate={item.central} />
+                  <Circle
+                    key={idx}
+                    center={item.central}
+                    radius={(item.internalCircleDiameter.meters / 2)}
+                    strokeWidth={1}
+                    fillColor={blue}
+                    strokeColor={blue}
+                  />
+                </>
+              )
             })}
-            {/* <Marker coordinate={{
-              latitude: -23.1805011,
-              longitude: -45.8872969,
-              longitudeDelta: 0.05,
-              latitudeDelta: 0.05,
-            }} /> */}
+
             {/* <Marker coordinate={userLocation} /> */}
-            {data &&
+            {/* {data &&
               data.length > 0 &&
               data.map((item, idx) => (
                 <Circle
@@ -100,7 +114,7 @@ export default class MapsPage extends Component {
                   fillColor={item.color}
                   strokeColor={item.color}
                 />
-              ))}
+              ))} */}
           </MapView>
         )}
         <MapBottom />
