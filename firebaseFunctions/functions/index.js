@@ -164,11 +164,82 @@ exports.getMapElementsByPosition = functions.https.onRequest(async (req, res) =>
             markerNorthEast !== null &&
             markerSouthEast !== null))
             return res.sendStatus(500);
-        return res.status(200).send(JSON.stringify(HeatMapService.generateGrid(req.body)));
+        let users = await getUsersInsideRange(req.body);
+        let cities = await getAllCities();
+        let convertedUsers = HeatMapService.populateUserCity(cities, users);
+        return res.status(200).send(JSON.stringify(convertedUsers));
     } catch (e) {
-        return res.sendStatus(500);
+        return res.statusCode(500);
     }
 });
 
+const getCitiesInsideRange = async params => {
+    let { markerNorthWest, markerSouthWest, markerNorthEast } = params;
+    return new Promise((resolve, reject) => {
+        let citiesCollection = firestore.collection('cities');
+        let citiesQuery = citiesCollection
+            .where('longitude', '>=', parseFloat(markerNorthWest.longitude))
+            .where('longitude', '<=', parseFloat(markerNorthEast.longitude));
+        citiesQuery.get()
+            .then(res => {
+                let citiesPositionList = [];
+                res.docs.forEach(doc => {
+                    let cityPosition = doc.data();
+                    if (cityPosition.latitude >= markerSouthWest.latitude &&
+                        cityPosition.latitude <= markerNorthWest.latitude)
+                        citiesPositionList.push(cityPosition);
+                });
+                return resolve(citiesPositionList);
+            })
+            .catch(error => { return reject(new Error(error)); });
+    });
+};
 
+const getUsersInsideRange = async params => {
+    let { markerNorthWest, markerSouthWest, markerNorthEast } = params;
+    return new Promise((resolve, reject) => {
+        let usersPositionCollection = firestore.collection('usersposition');
+        let usersQuery = usersPositionCollection
+            .where('longitude', '>=', markerNorthWest.longitude)
+            .where('longitude', '<=', markerNorthEast.longitude);
+        usersQuery
+            .get()
+            .then(res => {
+                let usersPositionList = [];
+                res.docs.forEach(doc => {
+                    let userPosition = doc.data();
+                    if (userPosition.latitude >= markerSouthWest.latitude &&
+                        userPosition.latitude <= markerNorthWest.latitude)
+                        usersPositionList.push(userPosition);
+                });
+                return resolve(usersPositionList);
+            })
+            .catch(error => { reject(new Error(error)); });
+    });
+};
+
+// const getUserCity = async user => {
+//     return new Promise((resolve, reject) => {
+//         firestore.collection('cities')
+//             .get()
+//             .then(res => {
+//                return resolve(res);
+//             })
+//             .catch(error => {
+//                 return reject(new Error(error));
+//             });
+//     });
+// };
+
+const getAllCities = async () => {
+    return new Promise((resolve, reject) => {
+        let citiesCollection = firestore.collection('cities');
+        citiesCollection.get()
+            .then(res => {
+                let result = res.docs.map(item => item.data());
+                return resolve(result);
+            })
+            .catch(error => { return reject(new Error(error)); });
+    });
+};
 

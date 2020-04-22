@@ -1,7 +1,19 @@
-// const functions = require('firebase-functions');
-// const admin = require('firebase-admin');
-// const firestore = admin.firestore();
-// admin.initializeApp(functions.config().firestore)
+let firestore = null;
+
+exports.populateUserCity = (cities, users) => {
+    let convertedUsers = [];
+    for (var i = 0; i < users.length; i++) {
+        let currentUser = users[i];
+        let currentCity = cities.filter(city => {
+            return parseInt(city.ibgeid) === parseInt(currentUser.cityReference);
+        });
+        if (currentCity)
+            currentCity = currentCity[0];
+        currentUser.city = currentCity;
+        convertedUsers.push(currentUser);
+    }
+    return convertedUsers;
+};
 
 // exports.getMapElements = async params => {
 //     let docs = await getAllCities();
@@ -159,3 +171,4 @@ const generateLine = (totalColumns, initialPosition, squareSide) => {
     }
     return squares;
 };
+
