@@ -68,6 +68,7 @@ export default class ReportSymptomsPage extends Component {
         {identifier: 'Dor de barriga', check: false, start: '', end: ''},
         {identifier: 'Diarréia', check: false, start: '', end: ''},
         {identifier: 'Olhos vermelhos', check: false, start: '', end: ''},
+        {identifier: 'Perda de olfato', check: false, start: '', end: ''},
       ],
     },
     breathConditionList: [

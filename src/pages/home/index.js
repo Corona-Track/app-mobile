@@ -23,7 +23,7 @@ const animatedEvent = Animated.event(
       },
     },
   ],
-  {useNativeDriver: true},
+  { useNativeDriver: true },
 );
 let offset = 0;
 
@@ -103,7 +103,7 @@ export default class HomePage extends Component {
           <MapButton onPress={this.onMapButtonPress} />
           <HeartButton onPress={() => this.navigateScreen("Symptoms")} />
         </View>
-        <View style={{marginTop: 50}}>
+        <View style={{ marginTop: 50 }}>
           <UserDetails
             chevronIcon={chevronIcon}
             onPressAvatar={() => this.openProfileDetails(currentUser)}
@@ -123,7 +123,7 @@ export default class HomePage extends Component {
                   outputRange: [0, 1],
                 }),
               }}>
-              <View style={{height: 300, marginHorizontal: 40}}>
+              <View style={{ height: 300, marginHorizontal: 40 }}>
                 {/* <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" /> */}
                 {this.renderOptionsList(currentUser)}
                 <VersionDetails />
@@ -161,7 +161,9 @@ export default class HomePage extends Component {
   renderOptionsList = (currentUser) => {
     return (
       <View style={{ width: "100%" }}>
-        <MenuItem icon="account" name="INFORMAÇÕES DO PERFIL" onPress={() => this.navigateScreen('RiskProfile',{ riskProfile: currentUser.riskProfile })} />
+        <MenuItem icon="account" name="INFORMAÇÕES DO PERFIL" onPress={() => this.navigateScreen('RiskProfile',
+          { riskProfile: currentUser.riskProfile, aggravationRisk: currentUser.aggravationRisk, contagionRisk: currentUser.contagionRisk })}
+        />
         <MenuItem onPress={() => this.navigateScreen("Symptoms")} icon="heart-pulse" name="MINHA SAÚDE" />
         <MenuItem onPress={() => this.navigateScreen("Orientation")} icon="monitor" name="TELEORIENTAÇÃO" />
         <MenuItem icon="account" onPress={() => this.navigateScreen("PublicUtility")} name="UTILIDADE PÚBLICA" />
@@ -208,7 +210,7 @@ export default class HomePage extends Component {
   };
   onHandlerStateChange = event => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
-      const {translationY} = event.nativeEvent;
+      const { translationY } = event.nativeEvent;
       let opened = false;
       offset += translationY;
       if (translationY >= 100) {
@@ -251,27 +253,27 @@ export default class HomePage extends Component {
       this.setState({ chevronIcon: offset === 250 ? "chevron-up" : "chevron-down" });
     });
   };
-  navigateScreen = (screen,params) => {
-    this.props.navigation.navigate(screen,params);
+  navigateScreen = (screen, params) => {
+    this.props.navigation.navigate(screen, params);
   };
   openProfileDetails = (currentUser) => {
-    this.props.navigation.navigate("RiskProfile", { riskProfile: currentUser.riskProfile });
+    this.props.navigation.navigate("RiskProfile", { riskProfile: currentUser.riskProfile, aggravationRisk: currentUser.aggravationRisk, contagionRisk: currentUser.contagionRisk });
   };
 };
 
-const MapButton = ({onPress}) => (
+const MapButton = ({ onPress }) => (
   <TouchableOpacity style={styles.mapButton} onPress={onPress}>
     <Icon name="map-marker-outline" size={40} color={Colors.secondaryColor} />
   </TouchableOpacity>
 );
 
-const HeartButton = ({onPress}) => (
+const HeartButton = ({ onPress }) => (
   <TouchableOpacity style={styles.heartButton} onPress={onPress}>
     <Icon name="heart-pulse" size={40} color={Colors.secondaryColor} />
   </TouchableOpacity>
 );
 
-const UserDetails = ({ photo, name, aliasName, currentUser,getRiskProfileColor, onPress, onPressAvatar, chevronIcon }) => (
+const UserDetails = ({ photo, name, aliasName, currentUser, getRiskProfileColor, onPress, onPressAvatar, chevronIcon }) => (
   <View style={styles.userDetailsContainer}>
     <TouchableOpacity onPress={() => onPressAvatar()} style={styles.userDetailsInnerContainer}>
       <View style={[styles.riskContainer, { borderColor: getRiskProfileColor(currentUser.riskProfile) }]}>
@@ -299,7 +301,7 @@ const UserDetails = ({ photo, name, aliasName, currentUser,getRiskProfileColor, 
 //   </View>
 // );
 
-const MenuItem = ({icon, name, onPress}) => (
+const MenuItem = ({ icon, name, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.menuItemContainer}>
     <View style={styles.menuItemFirstColumn}>
       <Icon name={icon} size={32} color={Colors.secondaryColor} />
