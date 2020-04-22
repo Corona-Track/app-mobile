@@ -165,35 +165,35 @@ exports.getMapElementsByPosition = functions.https.onRequest(async (req, res) =>
             markerSouthEast !== null))
             return res.sendStatus(500);
         let users = await getUsersInsideRange(req.body);
-        let cities = await getAllCities();
-        let convertedUsers = HeatMapService.populateUserCity(cities, users);
+        let citiesContent = await getAllCities(req.body);
+        let convertedUsers = HeatMapService.populateUserCity(citiesContent.allCities, users);
         return res.status(200).send(JSON.stringify(convertedUsers));
     } catch (e) {
         return res.statusCode(500);
     }
 });
 
-const getCitiesInsideRange = async params => {
-    let { markerNorthWest, markerSouthWest, markerNorthEast } = params;
-    return new Promise((resolve, reject) => {
-        let citiesCollection = firestore.collection('cities');
-        let citiesQuery = citiesCollection
-            .where('longitude', '>=', parseFloat(markerNorthWest.longitude))
-            .where('longitude', '<=', parseFloat(markerNorthEast.longitude));
-        citiesQuery.get()
-            .then(res => {
-                let citiesPositionList = [];
-                res.docs.forEach(doc => {
-                    let cityPosition = doc.data();
-                    if (cityPosition.latitude >= markerSouthWest.latitude &&
-                        cityPosition.latitude <= markerNorthWest.latitude)
-                        citiesPositionList.push(cityPosition);
-                });
-                return resolve(citiesPositionList);
-            })
-            .catch(error => { return reject(new Error(error)); });
-    });
-};
+// const getCitiesInsideRange = async params => {
+//     let { markerNorthWest, markerSouthWest, markerNorthEast } = params;
+//     return new Promise((resolve, reject) => {
+//         let citiesCollection = firestore.collection('cities');
+//         let citiesQuery = citiesCollection
+//             .where('longitude', '>=', parseFloat(markerNorthWest.longitude))
+//             .where('longitude', '<=', parseFloat(markerNorthEast.longitude));
+//         citiesQuery.get()
+//             .then(res => {
+//                 let citiesPositionList = [];
+//                 res.docs.forEach(doc => {
+//                     let cityPosition = doc.data();
+//                     if (cityPosition.latitude >= markerSouthWest.latitude &&
+//                         cityPosition.latitude <= markerNorthWest.latitude)
+//                         citiesPositionList.push(cityPosition);
+//                 });
+//                 return resolve(citiesPositionList);
+//             })
+//             .catch(error => { return reject(new Error(error)); });
+//     });
+// };
 
 const getUsersInsideRange = async params => {
     let { markerNorthWest, markerSouthWest, markerNorthEast } = params;
@@ -218,26 +218,27 @@ const getUsersInsideRange = async params => {
     });
 };
 
-// const getUserCity = async user => {
-//     return new Promise((resolve, reject) => {
-//         firestore.collection('cities')
-//             .get()
-//             .then(res => {
-//                return resolve(res);
-//             })
-//             .catch(error => {
-//                 return reject(new Error(error));
-//             });
-//     });
-// };
-
-const getAllCities = async () => {
+const getAllCities = async params => {
+    let { markerNorthWest, markerSouthWest, markerNorthEast } = params;
     return new Promise((resolve, reject) => {
         let citiesCollection = firestore.collection('cities');
         citiesCollection.get()
             .then(res => {
-                let result = res.docs.map(item => item.data());
-                return resolve(result);
+                let allCities = [];
+                let citiesInsideRange = [];
+                res.docs.forEach(doc => {
+                    let cityPosition = doc.data();
+                    allCities.push(cityPosition);
+                    if (cityPosition.latitude >= markerSouthWest.latitude &&
+                        cityPosition.latitude <= markerNorthWest.latitude &&
+                        cityPosition.longitude <= markerNorthWest.longitude &&
+                        cityPosition.longitude <= markerNorthEast.longitude)
+                        citiesInsideRange.push(cityPosition);
+                });
+                return resolve({
+                    allCities: allCities,
+                    insideRange: citiesInsideRange
+                });
             })
             .catch(error => { return reject(new Error(error)); });
     });

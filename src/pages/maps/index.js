@@ -70,7 +70,6 @@ export default class MapsPage extends Component {
             minZoomLevel={1}
             maxZoomLevel={20}>
             {cornersMarkers.map((item, idx) => {
-              console.log("I:" + JSON.stringify(item));
               return (
                 <Marker coordinate={{
                   latitude: item.latitude,
@@ -109,12 +108,17 @@ export default class MapsPage extends Component {
     )
   };
   updateCurrentLocation = region => {
-    let { currentLocation } = this.state;
-    if (currentLocation.latitude === region.latitude &&
-      currentLocation.longitude === region.longitude &&
-      currentLocation.latitudeDelta === region.latitudeDelta &&
-      currentLocation.longitudeDelta === region.longitudeDelta)
+    // let { currentLocation } = this.state;
+    // if (currentLocation.latitude === region.latitude &&
+    //   currentLocation.longitude === region.longitude &&
+    //   currentLocation.latitudeDelta === region.latitudeDelta &&
+    //   currentLocation.longitudeDelta === region.longitudeDelta)
+    //   return;
+
+    let { showLoading } = this.state;
+    if (showLoading)
       return;
+
     this.setState({
       showLoading: true
     }, () => {
@@ -135,13 +139,17 @@ export default class MapsPage extends Component {
         longitudeDelta: region.longitudeDelta,
       };
 
+      console.log("markerCentral")
+      console.log("LAD:" + markerCentral.latitudeDelta);
+      console.log("LOD:" + markerCentral.longitudeDelta);
+
       // console.log("WLO");
       // console.log(corners.westLongitude);
       let markerNorthWest = {
         latitude: corners.northLatitude,
         longitude: corners.westLongitude,
-        latitudeDelta: 0.05,
-        longitudeDelta: 0.05,
+        latitudeDelta: region.latitudeDelta,
+        longitudeDelta: region.longitudeDelta,
       };
 
       // console.log("markerSouthWest region");
@@ -152,21 +160,21 @@ export default class MapsPage extends Component {
       let markerSouthWest = {
         latitude: corners.southLatitude,
         longitude: corners.westLongitude,
-        latitudeDelta: 0.05,
-        longitudeDelta: 0.05,
+        latitudeDelta: region.latitudeDelta,
+        longitudeDelta: region.longitudeDelta,
       };
 
-      console.log("markerNorthEast region");
+      // console.log("markerNorthEast region");
 
-      console.log("NLA");
-      console.log(corners.northLatitude);
+      // console.log("NLA");
+      // console.log(corners.northLatitude);
       // console.log("ELO");
       // console.log(corners.eastLongitude);
       let markerNorthEast = {
         latitude: corners.northLatitude,
         longitude: corners.eastLongitude,
-        latitudeDelta: 0.05,
-        longitudeDelta: 0.05,
+        latitudeDelta: region.latitudeDelta,
+        longitudeDelta: region.longitudeDelta,
       };
       // console.log("markerSouthEast region");
       // console.log("SLA");
@@ -176,8 +184,8 @@ export default class MapsPage extends Component {
       let markerSouthEast = {
         latitude: corners.southLatitude,
         longitude: corners.eastLongitude,
-        latitudeDelta: 0.05,
-        longitudeDelta: 0.05,
+        latitudeDelta: region.latitudeDelta,
+        longitudeDelta: region.longitudeDelta,
       };
       let filter = {
         markerCentral,
@@ -186,12 +194,11 @@ export default class MapsPage extends Component {
         markerNorthEast,
         markerSouthEast,
       };
-
       console.log("============================");
       console.log("============================");
       let { userLocation } = this.state;
-      console.log(userLocation.latitude);
-      console.log(userLocation.longitude);
+      console.log("ULA" + userLocation.latitude);
+      console.log("ULO" + userLocation.longitude);
       // console.log("NW");
       // console.log("LA: " + corners.northLatitude);
       // console.log("LO: " + corners.westLongitude);
@@ -209,29 +216,21 @@ export default class MapsPage extends Component {
       // console.log("SE");
       // console.log("LA: " + corners.southLatitude);
       // console.log("LO: " + corners.eastLongitude);
-
-      // let filter = {
-      //   markerCentral: markerCentral,
-      //   markerNorthWest: markerNorthWest,
-      //   markerSouthWest: markerSouthWest,
-      //   markerNorthEast: markerNorthEast,
-      //   markerSouthEast: markerSouthEast,
-      // };
       getMapElementsByPosition(filter)
         .then(response => this.onSuccessGetMapElementsByPosition(response, filter))
-        .catch(this.onGPSErrorMessage);
+        .catch(this.onGPSErrorMessage)
+        .finally(() => { this.setState({ showLoading: false }); });
     });
   };
 
   onSuccessGetMapElementsByPosition = (response, filter) => {
     let { data } = response;
     console.log("filter:" + JSON.stringify(filter));
-    this.setState({ showLoading: false }, () => {
-      this.setState({
-        currentLocation: filter.markerCentral,
-        mapKey: Math.floor(Math.random() * 100),
-        cornersMarkers: data
-      });
+    console.log("data:" + JSON.stringify(data));
+    this.setState({
+      currentLocation: filter.markerCentral,
+      mapKey: Math.floor(Math.random() * 100),
+      cornersMarkers: data
     });
   };
 
@@ -275,6 +274,7 @@ export default class MapsPage extends Component {
     );
   };
   onGPSErrorMessage = error => {
+    this.setState({ showLoading: false });
     if (error)
       console.log(error);
     Alert.alert(
