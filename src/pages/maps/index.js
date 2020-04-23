@@ -69,19 +69,8 @@ export default class MapsPage extends Component {
             loadingEnabled={true}
             minZoomLevel={1}
             maxZoomLevel={20}>
-            {/* {cornersMarkers.map((item, idx) => {
-              return (
-                <Marker coordinate={{
-                  latitude: item.latitude,
-                  longitude: item.longitude,
-                  longitudeDelta: 0.05,
-                  latitudeDelta: 0.05,
-                }} />
-              )
-            })} */}
-            {cornersMarkers.map((item, idx) => {
-
-
+            {this.renderMarkers(cornersMarkers)}
+            {/* {cornersMarkers && cornersMarkers.map((item, idx) => {
               return (
                 <>
                   {item.cities.map(city => {
@@ -100,22 +89,22 @@ export default class MapsPage extends Component {
                       latitudeDelta: 0.05,
                     }} />)
                   })}
-                  {/* <Marker coordinate={item.northWest} />
+                  <Marker coordinate={item.northWest} />
                   <Marker coordinate={item.northEast} />
                   <Marker coordinate={item.southWest} />
-                  <Marker coordinate={item.southEast} /> */}
-                  {/* <Marker coordinate={item.central} /> */}
-                  {/* <Circle
+                  <Marker coordinate={item.southEast} />
+                  <Marker coordinate={item.central} />
+                  <Circle
                     key={idx}
                     center={item.central}
                     radius={(item.internalCircleDiameter.meters / 2)}
                     strokeWidth={1}
                     fillColor={blue}
                     strokeColor={blue}
-                  /> */}
+                  />
                 </>
               )
-            })}
+            })} */}
 
             {/* <Marker coordinate={userLocation} /> */}
             {/* {data &&
@@ -138,6 +127,40 @@ export default class MapsPage extends Component {
         <MapBottom />
       </SafeAreaView>
     )
+  };
+  renderMarkers = (cornersMarkers) => {
+    if (!cornersMarkers || (cornersMarkers && cornersMarkers.marker))
+      return (<></>);
+    return (<>
+      {cornersMarkers.map((item, idx) => {
+        console.log("item: " + JSON.stringify(item));
+        return (
+          <>
+            <Marker coordinate={item.northWest} />
+            <Marker coordinate={item.northEast} />
+            <Marker coordinate={item.southWest} />
+            <Marker coordinate={item.southEast} />
+            {item.cities.map(city => {
+              return (<Marker pinColor="#0000FF" coordinate={{
+                latitude: city.latitude,
+                longitude: city.longitude,
+                longitudeDelta: 0.05,
+                latitudeDelta: 0.05,
+              }} />)
+            })}
+            {item.users.map(user => {
+              return (<Marker pinColor="#00FF00" coordinate={{
+                latitude: user.latitude,
+                longitude: user.longitude,
+                longitudeDelta: 0.05,
+                latitudeDelta: 0.05,
+              }} />)
+            })}
+          </>
+        )
+      })}
+    </>)
+
   };
   updateCurrentLocation = region => {
     // let { currentLocation } = this.state;

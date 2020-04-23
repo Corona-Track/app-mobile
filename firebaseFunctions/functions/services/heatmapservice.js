@@ -1,10 +1,9 @@
 let firestore = null;
 
 exports.processGridSquares = (gridsSquares) => {
+    debugger;
     //Removing empty grids
-    let notEmptySquares = gridsSquares.filter(square => square.users.length > 0);
-    if (!notEmptySquares || (notEmptySquares && notEmptySquares.length === 0))
-        return [];
+    let notEmptySquares = removeEmptyUsersSquares(gridsSquares)
     let squaresToProcess = sortUsersInsideSquares(notEmptySquares);
     if (!squaresToProcess || (squaresToProcess && squaresToProcess.length === 0))
         return [];
@@ -18,60 +17,46 @@ const processSquares = squaresToProcess => {
     while (isProcessing) {
         if (!squaresInProcessing || (squaresInProcessing && squaresInProcessing.length === 0)) {
             isProcessing = false;
-            return;
+            continue;
         }
-        let currentSquare = squaresInProcessing.first();
+        let currentSquare = squaresInProcessing[0];
         let currentSquareUsers = currentSquare.users;
         squaresToCalculte.push(currentSquare);
-
-        //Remove first
+        //Removing first
         squaresInProcessing.splice(0, 1);
-
-
-        // let squaresUserRemoving = [...squaresInProcessing];
-
-
-        // squaresUserRemoving.forEach(square => {
-
-        // });
-
-
-
-
-        /*
-        Remover da squaresInProcessing o first;
-        Remover usuários do first square dos outros squares to process
-        remover os squares sem usuários
-        ordenar e começar de novo
-        
-        */
-
-
-
-
+        let squaresUserRemoving = [...squaresInProcessing];
+        //Removing users from first square removed
+        squaresInProcessing = removeUsersFromSquares(currentSquareUsers, squaresUserRemoving);
+        //Removing empty square users
+        squaresInProcessing = removeEmptyUsersSquares(squaresInProcessing);
+        //Reorder to process
+        squaresInProcessing = sortUsersInsideSquares(squaresInProcessing);
     }
+    return squaresToCalculte;
 };
 
-const removeUsersFromSquares = (users, squares) => {
+const removeUsersFromSquares = (usersOfRemovedSquare, squares) => {
     let squaresToReplace = [];
-
     for (var i = 0; i < squares.length; i++) {
-
         let usersAfterRemoving = [];
-
-        squares[i].users.forEach(squareUsers => {
-            squareUsers
-        })
-
+        let currentSquare = squares[i];
+        currentSquare.users.forEach(squareUser => {
+            let userPosition = usersOfRemovedSquare.findIndex(user => { return user.userId === squareUser.userId });
+            if (userPosition === -1)
+                usersAfterRemoving.push(squareUser);
+        });
+        currentSquare.users = usersAfterRemoving;
+        squaresToReplace.push(currentSquare);
     }
-
-    squares.forEach(square => {
-        square.users.f
-    });
-
+    return squaresToReplace;
 };
 
-
+const removeEmptyUsersSquares = gridsSquares => {
+    let notEmptySquares = gridsSquares.filter(square => square.users.length > 0);
+    if (!notEmptySquares || (notEmptySquares && notEmptySquares.length === 0))
+        return [];
+    return notEmptySquares;
+}
 
 const sortUsersInsideSquares = squares => {
     if (!squares)
