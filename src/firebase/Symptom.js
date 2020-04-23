@@ -5,7 +5,7 @@ import KEYS from './Constant';
 
 export const GetSymptomByUser = () => {
   return new Promise((resolve, reject) => {
-    const {uid} = auth().currentUser;
+    const { uid } = auth().currentUser;
 
     firestore()
       .collection(KEYS.TABLE_SYMPTOM)
@@ -29,17 +29,56 @@ export const GetSymptomByUser = () => {
   });
 };
 
-export const SaveSymptom = model => {
-  return new Promise((resolve, reject) => {
-    const {uid} = auth().currentUser;
+export const SaveSymptom = async model => {
 
+
+  const symptomsRegister = await GetSymptomByUser()
+  const lastSymptomsRegisterDate = symptomsRegister[0].created_at.toDate()
+
+
+  const isSameRegisterOfToday = moment().isSame(lastSymptomsRegisterDate, 'day')
+
+  if (isSameRegisterOfToday)
+    return new Promise((resolve, reject) => {
+      const { uid } = auth().currentUser;
+      model.user_id = uid;
+
+      const symptonsRef = firestore().collection(KEYS.TABLE_SYMPTOM)
+      symptonsRef.where("user_id", "==", uid).where("created_at", "==", symptomsRegister[0].created_at).limit(1).get().then(snapshot => {
+        if (snapshot.empty) {
+          console.log('No matching documents.');
+          return;
+        }
+        let symptonId
+
+        snapshot.forEach(function (doc) {
+          if (doc.id)
+            symptonId = doc.id
+        });
+
+
+        symptonsRef.doc(symptonId).update({
+          ...model
+        }).then(res => {
+          resolve(res);
+        })
+      }
+      )
+
+        .catch(error => {
+          console.log(error)
+          reject(new Error(error));
+        });
+    });
+
+  return new Promise((resolve, reject) => {
+    const { uid } = auth().currentUser;
     model.user_id = uid;
 
     firestore()
       .collection(KEYS.TABLE_SYMPTOM)
       .add(model)
       .then(res => {
-        console.log('SaveSymptom', res);
         resolve(res);
       })
       .catch(error => {

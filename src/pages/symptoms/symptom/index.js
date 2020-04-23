@@ -40,18 +40,18 @@ const SymptomPage = props => {
     try {
       context.updateUser(user);
       contextSymptom.updateSymptom({type});
-      const result = await GetSymptomByUser();
-      if (result && result.length > 0) {
-        if (moment(result[0].created_at.toDate()).isSame(moment(), 'day')) {
-          Alert.alert(
-            'Aviso',
-            'Você já possui um registro hoje',
-            [{text: 'OK', onPress: () => setLoading(false)}],
-            {cancelable: false},
-          );
-          return;
-        }
-      }
+      // const result = await GetSymptomByUser();
+      // if (result && result.length > 0) {
+      //   if (moment(result[0].created_at.toDate()).isSame(moment(), 'day')) {
+      //     Alert.alert(
+      //       'Aviso',
+      //       'Você já possui um registro hoje',
+      //       [{text: 'OK', onPress: () => setLoading(false)}],
+      //       {cancelable: false},
+      //     );
+      //     return;
+      //   }
+      // }
       setLoading(false);
       props.navigation.push(route);
     } catch (error) {
