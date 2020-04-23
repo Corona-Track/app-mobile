@@ -175,8 +175,9 @@ exports.getMapElementsByPosition = functions.https.onRequest(async (req, res) =>
         let citiesContent = await getAllCities(region);
         let convertedUsers = HeatMapService.populateUserCity(citiesContent.allCities, users);
         let gridSquares = HeatMapService.generateGrid(region, citiesContent, convertedUsers);
-        let result = HeatMapService.processGridSquares(gridSquares);
-        return res.status(200).send(JSON.stringify(result));
+        let squaresToCalculate = HeatMapService.processGridSquares(gridSquares);
+        let calculatedSquares = HeatMapService.calculateSquares(squaresToCalculate);
+        return res.status(200).send(JSON.stringify(calculatedSquares));
     } catch (e) {
         return res.statusCode(500);
     }

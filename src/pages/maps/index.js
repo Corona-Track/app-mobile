@@ -136,18 +136,25 @@ export default class MapsPage extends Component {
         console.log("item: " + JSON.stringify(item));
         return (
           <>
-            <Marker pinColor={item.color} coordinate={item.northWest} />
+            <Circle
+              key={idx}
+              center={item.central}
+              radius={(item.internalCircleDiameter.meters / 2)}
+              strokeWidth={1}
+              fillColor={item.circleColor === "red" ? red : yellow}
+              strokeColor={item.circleColor === "red" ? red : yellow} />
+            {/* <Marker pinColor={item.color} coordinate={item.northWest} />
             <Marker pinColor={item.color} coordinate={item.northEast} />
             <Marker pinColor={item.color} coordinate={item.southWest} />
-            <Marker pinColor={item.color} coordinate={item.southEast} />
-            {item.cities.map(city => {
+            <Marker pinColor={item.color} coordinate={item.southEast} /> */}
+            {/* {item.cities.map(city => {
               return (<Marker pinColor="#0000FF" coordinate={{
                 latitude: city.latitude,
                 longitude: city.longitude,
                 longitudeDelta: 0.05,
                 latitudeDelta: 0.05,
               }} />)
-            })}
+            })} */}
             {item.users.map(user => {
               return (<Marker pinColor="#00FF00" coordinate={{
                 latitude: user.latitude,

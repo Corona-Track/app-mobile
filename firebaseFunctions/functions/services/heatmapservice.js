@@ -1,73 +1,68 @@
-let firestore = null;
+exports.calculateSquares = squaresToCalculate => {
+    let squaresToShow = [];
+    if (!squaresToCalculate || (squaresToCalculate && squaresToCalculate.length === 0))
+        return [];
+    for (var i = 0; i < squaresToCalculate.length; i++) {
+        let currentSquare = squaresToCalculate[i];
+        let contaminatedAmount = currentSquare.users.length;
+
+        //Circles rule
+        let { meters } = currentSquare.internalCircleDiameter;
+        let radiusKilometers = (meters / 1000);
+        let circleArea = Math.PI * Math.pow(radiusKilometers, 2);
+        let estimatedDensity = (contaminatedAmount / circleArea);
+
+        //Cities rule
+        let cityBasalDensity = 0;
+        let citiesArea = 0;
+        currentSquare.cities.forEach(city => {
+            citiesArea += city.area;
+            cityBasalDensity += (city.basalDensity * city.area);
+        });
+        let weightedAverage = (cityBasalDensity / citiesArea);
+
+        let densityResultant = estimatedDensity + weightedAverage;
+
+        let redCircleLimit = 0.00004;
+        let yellowCircleMinimumLimit = 0.000016;
+        let yellowCircleMaximumLimit = 0.00004;
+
+        currentSquare.calculation = {
+            contaminatedAmount,
+            radiusKilometers,
+            circleArea,
+            estimatedDensity,
+            citiesArea,
+            cityBasalDensity,
+            weightedAverage,
+            densityResultant,
+            redCircleLimit,
+            yellowCircleMinimumLimit,
+            yellowCircleMaximumLimit
+        };
+
+        if (densityResultant >= redCircleLimit) {
+            currentSquare.circleColor = "red";
+            // squaresToShow.push(currentSquare);
+            // continue;
+        }
+        if (densityResultant > yellowCircleMinimumLimit && densityResultant < yellowCircleMaximumLimit) {
+            currentSquare.circleColor = "yellow";
+            // squaresToShow.push(currentSquare);
+            // continue;
+        }
+        squaresToShow.push(currentSquare);
+    }
+    return squaresToShow;
+};
 
 exports.processGridSquares = (gridsSquares) => {
-    debugger;
     //Removing empty grids
     let notEmptySquares = removeEmptyUsersSquares(gridsSquares)
     let squaresToProcess = sortUsersInsideSquares(notEmptySquares);
     if (!squaresToProcess || (squaresToProcess && squaresToProcess.length === 0))
         return [];
     return processSquares(squaresToProcess);
-};
-
-const processSquares = squaresToProcess => {
-    let squaresInProcessing = [...squaresToProcess];
-    let squaresToCalculte = [];
-    let isProcessing = true;
-    while (isProcessing) {
-        if (!squaresInProcessing || (squaresInProcessing && squaresInProcessing.length === 0)) {
-            isProcessing = false;
-            continue;
-        }
-        let currentSquare = squaresInProcessing[0];
-        let currentSquareUsers = currentSquare.users;
-        squaresToCalculte.push(currentSquare);
-        //Removing first
-        squaresInProcessing.splice(0, 1);
-        let squaresUserRemoving = [...squaresInProcessing];
-        //Removing users from first square removed
-        squaresInProcessing = removeUsersFromSquares(currentSquareUsers, squaresUserRemoving);
-        //Removing empty square users
-        squaresInProcessing = removeEmptyUsersSquares(squaresInProcessing);
-        //Reorder to process
-        squaresInProcessing = sortUsersInsideSquares(squaresInProcessing);
-    }
-    return squaresToCalculte;
-};
-
-const removeUsersFromSquares = (usersOfRemovedSquare, squares) => {
-    let squaresToReplace = [];
-    for (var i = 0; i < squares.length; i++) {
-        let usersAfterRemoving = [];
-        let currentSquare = squares[i];
-        currentSquare.users.forEach(squareUser => {
-            let userPosition = usersOfRemovedSquare.findIndex(user => { return user.userId === squareUser.userId });
-            if (userPosition === -1)
-                usersAfterRemoving.push(squareUser);
-        });
-        currentSquare.users = usersAfterRemoving;
-        squaresToReplace.push(currentSquare);
-    }
-    return squaresToReplace;
-};
-
-const removeEmptyUsersSquares = gridsSquares => {
-    let notEmptySquares = gridsSquares.filter(square => square.users.length > 0);
-    if (!notEmptySquares || (notEmptySquares && notEmptySquares.length === 0))
-        return [];
-    return notEmptySquares;
-}
-
-const sortUsersInsideSquares = squares => {
-    if (!squares)
-        return [];
-    return squares.sort((a, b) => {
-        if (a.users.length > b.users.length)
-            return -1;
-        if (a.name < b.name)
-            return 1;
-        return 0;
-    });
 };
 
 exports.populateUserCity = (cities, users) => {
@@ -86,7 +81,6 @@ exports.populateUserCity = (cities, users) => {
 };
 
 exports.generateGrid = (region, citiesContent, convertedUsers) => {
-    debugger;
     let totalColumns = 6;
     let { markerCentral,
         markerNorthWest,
@@ -161,6 +155,66 @@ exports.generateGrid = (region, citiesContent, convertedUsers) => {
     return gridsSquares;
 };
 
+const processSquares = squaresToProcess => {
+    let squaresInProcessing = [...squaresToProcess];
+    let squaresToCalculte = [];
+    let isProcessing = true;
+    while (isProcessing) {
+        if (!squaresInProcessing || (squaresInProcessing && squaresInProcessing.length === 0)) {
+            isProcessing = false;
+            continue;
+        }
+        let currentSquare = squaresInProcessing[0];
+        let currentSquareUsers = currentSquare.users;
+        squaresToCalculte.push(currentSquare);
+        //Removing first
+        squaresInProcessing.splice(0, 1);
+        let squaresUserRemoving = [...squaresInProcessing];
+        //Removing users from first square removed
+        squaresInProcessing = removeUsersFromSquares(currentSquareUsers, squaresUserRemoving);
+        //Removing empty square users
+        squaresInProcessing = removeEmptyUsersSquares(squaresInProcessing);
+        //Reorder to process
+        squaresInProcessing = sortUsersInsideSquares(squaresInProcessing);
+    }
+    return squaresToCalculte;
+};
+
+const removeUsersFromSquares = (usersOfRemovedSquare, squares) => {
+    let squaresToReplace = [];
+    for (var i = 0; i < squares.length; i++) {
+        let usersAfterRemoving = [];
+        let currentSquare = squares[i];
+        currentSquare.users.forEach(squareUser => {
+            let userPosition = usersOfRemovedSquare.findIndex(user => { return user.userId === squareUser.userId });
+            if (userPosition === -1)
+                usersAfterRemoving.push(squareUser);
+        });
+        currentSquare.users = usersAfterRemoving;
+        squaresToReplace.push(currentSquare);
+    }
+    return squaresToReplace;
+};
+
+const removeEmptyUsersSquares = gridsSquares => {
+    let notEmptySquares = gridsSquares.filter(square => square.users.length > 0);
+    if (!notEmptySquares || (notEmptySquares && notEmptySquares.length === 0))
+        return [];
+    return notEmptySquares;
+}
+
+const sortUsersInsideSquares = squares => {
+    if (!squares)
+        return [];
+    return squares.sort((a, b) => {
+        if (a.users.length > b.users.length)
+            return -1;
+        if (a.name < b.name)
+            return 1;
+        return 0;
+    });
+};
+
 const generateCustomGrid = ({
     initialPosition,
     totalColumns,
@@ -214,7 +268,6 @@ const generateLine = ({
     color }) => {
     let squares = [];
     let currentPosition = initialPosition;
-    debugger;
     for (var i = 0; i < totalColumns; i++) {
         let position = {
             latitude: currentPosition.latitude,
@@ -285,7 +338,6 @@ const calculateDistanceBetweenToPoints = (firstPosition, secondPosition) => {
 };
 
 const verifyContentInsideSquare = (square, convertedUsers, citiesInsideRange) => {
-    debugger;
     let content = {
         users: [],
         cities: []
@@ -331,4 +383,3 @@ const verifyContentInsideSquare = (square, convertedUsers, citiesInsideRange) =>
     });
     return content;
 };
-
