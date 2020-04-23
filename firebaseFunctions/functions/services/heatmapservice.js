@@ -231,12 +231,15 @@ const calculateDistanceBetweenToPoints = (firstPosition, secondPosition) => {
 
 
 const verifyContentInsideSquare = (square, convertedUsers, citiesInsideRange) => {
+    debugger;
     let content = {
         users: [],
         cities: []
     };
+
     if (!convertedUsers || (convertedUsers && convertedUsers.length === 0))
-        return content;
+        convertedUsers = [];
+
     let { southWest, northWest, northEast } = square;
     let usersInsideSquareRange = convertedUsers.filter(user => {
         return user.latitude >= southWest.latitude &&
@@ -244,14 +247,14 @@ const verifyContentInsideSquare = (square, convertedUsers, citiesInsideRange) =>
             user.longitude >= northWest.longitude &&
             user.longitude <= northEast.longitude
     });
+
     if (!usersInsideSquareRange || (usersInsideSquareRange && usersInsideSquareRange.length === 0))
-        return content;
+        usersInsideSquareRange = [];
+
     content.users = usersInsideSquareRange;
 
-    if (!citiesInsideRange || (citiesInsideRange && citiesInsideRange.length === 0)) {
-        content.cities = [];
-        return content;
-    }
+    if (!citiesInsideRange || (citiesInsideRange && citiesInsideRange.length === 0))
+        citiesInsideRange = [];
 
     let citiesInsideSquareRange = citiesInsideRange.filter(city => {
         return city.latitude >= southWest.latitude &&
@@ -259,10 +262,19 @@ const verifyContentInsideSquare = (square, convertedUsers, citiesInsideRange) =>
             city.longitude >= northWest.longitude &&
             city.longitude <= northEast.longitude
     });
-    if (!citiesInsideSquareRange || (citiesInsideSquareRange && citiesInsideSquareRange.length === 0)) {
-        content.cities = [];
-        return content;
-    }
+
+    if (!citiesInsideSquareRange || (citiesInsideSquareRange && citiesInsideSquareRange.length === 0))
+        citiesInsideSquareRange = [];
     content.cities = citiesInsideSquareRange;
+
+    if (!(content.users && content.users.length > 0))
+        return content;
+
+    content.users.forEach(user => {
+        let cityPosition = content.cities.findIndex(city => city.ibgeid === user.city.ibgeid);
+        if (cityPosition === -1)
+            content.cities.push(user.city);
+    });
     return content;
 };
+

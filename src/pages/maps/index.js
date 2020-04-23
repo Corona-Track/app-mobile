@@ -80,8 +80,19 @@ export default class MapsPage extends Component {
               )
             })} */}
             {cornersMarkers.map((item, idx) => {
+
+
               return (
                 <>
+                  {item.cities.map(city => {
+                    console.log(city);
+                    return (<Marker pinColor="#0000FF" coordinate={{
+                      latitude: city.latitude,
+                      longitude: city.longitude,
+                      longitudeDelta: 0.05,
+                      latitudeDelta: 0.05,
+                    }} />)
+                  })}
                   {/* <Marker coordinate={item.northWest} />
                 <Marker coordinate={item.northEast} />
                 <Marker coordinate={item.southWest} />
