@@ -42,14 +42,44 @@ const SymptomPage = props => {
       contextSymptom.updateSymptom({type});
       const result = await GetSymptomByUser();
       if (result && result.length > 0) {
-        if (moment(result[0].created_at.toDate()).isSame(moment(), 'day')) {
-          Alert.alert(
-            'Aviso',
-            'Você já possui um registro hoje',
-            [{text: 'OK', onPress: () => setLoading(false)}],
-            {cancelable: false},
-          );
-          return;
+        if (result.length > 1) {
+          if (
+            ((moment(result[0].created_at.toDate()).isSame(moment(), 'day') &&
+              result[0].type === 'test') ||
+              (moment(result[1].created_at.toDate()).isSame(moment(), 'day') &&
+                result[1].type === 'test')) &&
+            type === 'test'
+          ) {
+            Alert.alert(
+              'Aviso',
+              'Você já possui um registro hoje',
+              [{text: 'OK', onPress: () => setLoading(false)}],
+              {cancelable: false},
+            );
+            return;
+          }
+
+          if (result[0].type !== 'test') {
+            if (moment(result[0].created_at.toDate()).isSame(moment(), 'day'))
+              contextSymptom.updateSymptom({...result[0]});
+          } else {
+            if (moment(result[1].created_at.toDate()).isSame(moment(), 'day'))
+              contextSymptom.updateSymptom({...result[1]});
+          }
+        } else if (result.length === 1) {
+          if (
+            moment(result[0].created_at.toDate()).isSame(moment(), 'day') &&
+            result[0].type === 'test' &&
+            type === 'test'
+          ) {
+            Alert.alert(
+              'Aviso',
+              'Você já possui um registro hoje',
+              [{text: 'OK', onPress: () => setLoading(false)}],
+              {cancelable: false},
+            );
+            return;
+          }
         }
       }
       setLoading(false);
@@ -79,7 +109,10 @@ const SymptomPage = props => {
                   }
                   centerComponent={
                     user && (
-                      <CenterComponent photo={user.photo} userName={user.name} />
+                      <CenterComponent
+                        photo={user.photo}
+                        userName={user.name}
+                      />
                     )
                   }
                 />
@@ -94,7 +127,14 @@ const SymptomPage = props => {
                 <TouchableHighlight
                   activeOpacity={0.6}
                   underlayColor="transparent"
-                  onPress={() => validation(context, contextSymptom, 'symptom', 'ReportSymptoms')}>
+                  onPress={() =>
+                    validation(
+                      context,
+                      contextSymptom,
+                      'symptom',
+                      'ReportSymptoms',
+                    )
+                  }>
                   <View style={styles.wrap}>
                     <View style={styles.circle}>
                       <Image style={styles.stethoscope} source={stethoscope} />
@@ -106,7 +146,9 @@ const SymptomPage = props => {
                 <TouchableHighlight
                   activeOpacity={0.6}
                   underlayColor="transparent"
-                  onPress={() => validation(context, contextSymptom, 'test', 'ReportTest')}>
+                  onPress={() =>
+                    validation(context, contextSymptom, 'test', 'ReportTest')
+                  }>
                   <View style={styles.wrap}>
                     <View style={styles.circle}>
                       <Image style={styles.virus} source={blueVirus} />

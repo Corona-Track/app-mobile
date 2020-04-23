@@ -13,7 +13,11 @@ export const GetSymptomByUser = () => {
       .get()
       .then(res => {
         if (!res.empty) {
-          let result = res.docs.map(item => item.data());
+          let result = res.docs.map(item => {
+            let data = item.data();
+            data.id = item.id;
+            return data;
+          });
           result = result.sort(
             (a, b) =>
               moment(b.created_at.toDate()).unix() -
@@ -40,6 +44,27 @@ export const SaveSymptom = model => {
       .add(model)
       .then(res => {
         console.log('SaveSymptom', res);
+        resolve(res);
+      })
+      .catch(error => {
+        reject(new Error(error));
+      });
+  });
+};
+
+export const UpdateSymptom = model => {
+  return new Promise((resolve, reject) => {
+    const {uid} = auth().currentUser;
+    const id = model.id;
+    model.user_id = uid;
+
+    delete model.id;
+
+    firestore()
+      .collection(KEYS.TABLE_SYMPTOM)
+      .doc(id)
+      .set(model)
+      .then(res => {
         resolve(res);
       })
       .catch(error => {
