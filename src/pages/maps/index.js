@@ -136,10 +136,10 @@ export default class MapsPage extends Component {
         console.log("item: " + JSON.stringify(item));
         return (
           <>
-            <Marker coordinate={item.northWest} />
-            <Marker coordinate={item.northEast} />
-            <Marker coordinate={item.southWest} />
-            <Marker coordinate={item.southEast} />
+            <Marker pinColor={item.color} coordinate={item.northWest} />
+            <Marker pinColor={item.color} coordinate={item.northEast} />
+            <Marker pinColor={item.color} coordinate={item.southWest} />
+            <Marker pinColor={item.color} coordinate={item.southEast} />
             {item.cities.map(city => {
               return (<Marker pinColor="#0000FF" coordinate={{
                 latitude: city.latitude,

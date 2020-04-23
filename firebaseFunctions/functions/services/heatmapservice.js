@@ -108,7 +108,8 @@ exports.generateGrid = (region, citiesContent, convertedUsers) => {
         totalLines: totalLines,
         squareSide: squareSide,
         citiesContent,
-        convertedUsers
+        convertedUsers,
+        color: "#00ADF1"
     };
     let firstGridSquares = generateCustomGrid(firstGrid);
     gridsSquares = [...gridsSquares, ...firstGridSquares];
@@ -122,7 +123,8 @@ exports.generateGrid = (region, citiesContent, convertedUsers) => {
         totalLines: totalLines,
         squareSide: squareSide,
         citiesContent,
-        convertedUsers
+        convertedUsers,
+        color: "#EE008C"
     };
     let secondGridSquares = generateCustomGrid(secondGrid);
     gridsSquares = [...gridsSquares, ...secondGridSquares];
@@ -136,7 +138,8 @@ exports.generateGrid = (region, citiesContent, convertedUsers) => {
         totalLines: totalLines - 1,
         squareSide: squareSide,
         citiesContent,
-        convertedUsers
+        convertedUsers,
+        color: "#FEF102"
     };
     let thirdGridSquares = generateCustomGrid(thirdGrid);
     gridsSquares = [...gridsSquares, ...thirdGridSquares];
@@ -150,7 +153,8 @@ exports.generateGrid = (region, citiesContent, convertedUsers) => {
         totalLines: totalLines - 1,
         squareSide: squareSide,
         citiesContent,
-        convertedUsers
+        convertedUsers,
+        color: "#000000"
     };
     let fourthGridSquares = generateCustomGrid(fourthGrid);
     gridsSquares = [...gridsSquares, ...fourthGridSquares];
@@ -163,7 +167,8 @@ const generateCustomGrid = ({
     totalLines,
     squareSide,
     citiesContent,
-    convertedUsers }) => {
+    convertedUsers,
+    color }) => {
 
     let markers = [];
     for (var i = 0; i < totalLines; i++) {
@@ -175,7 +180,8 @@ const generateCustomGrid = ({
             },
             squareSide,
             citiesContent,
-            convertedUsers
+            convertedUsers,
+            color
         };
         let generated = generateLine(processingParams);
         initialPosition = {
@@ -204,7 +210,8 @@ const generateLine = ({
     initialPosition,
     squareSide,
     citiesContent,
-    convertedUsers }) => {
+    convertedUsers,
+    color }) => {
     let squares = [];
     let currentPosition = initialPosition;
     debugger;
@@ -215,6 +222,7 @@ const generateLine = ({
         };
         let square = {
             column: i,
+            color: color,
             northWest: null,
             northEast: null,
             southWest: null,
@@ -224,6 +232,8 @@ const generateLine = ({
                 meters: null
             },
             central: null,
+            users: [],
+            cities: []
         };
         //NorthWest
         square.northWest = {
