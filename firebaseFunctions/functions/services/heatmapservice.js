@@ -70,8 +70,11 @@ exports.generateGrid = (region, citiesContent, convertedUsers) => {
         },
         totalColumns: totalColumns,
         totalLines: totalLines,
-        squareSide: squareSide
+        squareSide: squareSide,
+        citiesContent,
+        convertedUsers
     };
+
     return generateCustomGrid(firstGrid);
 
     // let secondGrid = {
@@ -108,13 +111,27 @@ exports.generateGrid = (region, citiesContent, convertedUsers) => {
     // return generateCustomGrid(fourGrid);
 };
 
-const generateCustomGrid = ({ initialPosition, totalColumns, totalLines, squareSide }) => {
+const generateCustomGrid = ({
+    initialPosition,
+    totalColumns,
+    totalLines,
+    squareSide,
+    citiesContent,
+    convertedUsers }) => {
+
     let markers = [];
     for (var i = 0; i < totalLines; i++) {
-        let generated = generateLine(totalColumns, {
-            latitude: initialPosition.latitude,
-            longitude: initialPosition.longitude,
-        }, squareSide);
+        let processingParams = {
+            totalColumns,
+            initialPosition: {
+                latitude: initialPosition.latitude,
+                longitude: initialPosition.longitude,
+            },
+            squareSide,
+            citiesContent,
+            convertedUsers
+        };
+        let generated = generateLine(processingParams);
         initialPosition = {
             latitude: initialPosition.latitude - squareSide,
             longitude: initialPosition.longitude,
@@ -136,7 +153,12 @@ const getColumnDistance = (northPosition, southPosition) => {
     return northConverted - southConverted;
 };
 
-const generateLine = (totalColumns, initialPosition, squareSide) => {
+const generateLine = ({
+    totalColumns,
+    initialPosition,
+    squareSide,
+    citiesContent,
+    convertedUsers }) => {
     let squares = [];
     let currentPosition = initialPosition;
     debugger;
@@ -146,6 +168,7 @@ const generateLine = (totalColumns, initialPosition, squareSide) => {
             longitude: currentPosition.longitude,
         };
         let square = {
+            column: i,
             northWest: null,
             northEast: null,
             southWest: null,
@@ -182,6 +205,10 @@ const generateLine = (totalColumns, initialPosition, squareSide) => {
             latitude: position.latitude - (squareSide / parseFloat(2)),
             longitude: position.longitude + (squareSide / parseFloat(2)),
         };
+        //Verify Users inside square
+        let contentInside = verifyContentInsideSquare(square, convertedUsers, citiesContent.insideRange);
+        square.users = contentInside.users;
+        square.cities = contentInside.cities;
         currentPosition.longitude += squareSide;
         squares.push(square);
     }
@@ -200,4 +227,42 @@ const calculateDistanceBetweenToPoints = (firstPosition, secondPosition) => {
         degress: pythagoras,
         meters: (pythagoras * earthConversion) / 360
     };
+};
+
+
+const verifyContentInsideSquare = (square, convertedUsers, citiesInsideRange) => {
+    let content = {
+        users: [],
+        cities: []
+    };
+    if (!convertedUsers || (convertedUsers && convertedUsers.length === 0))
+        return content;
+    let { southWest, northWest, northEast } = square;
+    let usersInsideSquareRange = convertedUsers.filter(user => {
+        return user.latitude >= southWest.latitude &&
+            user.latitude <= northWest.latitude &&
+            user.longitude >= northWest.longitude &&
+            user.longitude <= northEast.longitude
+    });
+    if (!usersInsideSquareRange || (usersInsideSquareRange && usersInsideSquareRange.length === 0))
+        return content;
+    content.users = usersInsideSquareRange;
+
+    if (!citiesInsideRange || (citiesInsideRange && citiesInsideRange.length === 0)) {
+        content.cities = [];
+        return content;
+    }
+
+    let citiesInsideSquareRange = citiesInsideRange.filter(city => {
+        return city.latitude >= southWest.latitude &&
+            city.latitude <= northWest.latitude &&
+            city.longitude >= northWest.longitude &&
+            city.longitude <= northEast.longitude
+    });
+    if (!citiesInsideSquareRange || (citiesInsideSquareRange && citiesInsideSquareRange.length === 0)) {
+        content.cities = [];
+        return content;
+    }
+    content.cities = citiesInsideSquareRange;
+    return content;
 };

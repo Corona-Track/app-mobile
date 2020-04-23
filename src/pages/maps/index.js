@@ -86,15 +86,15 @@ export default class MapsPage extends Component {
                 <Marker coordinate={item.northEast} />
                 <Marker coordinate={item.southWest} />
                 <Marker coordinate={item.southEast} /> */}
-                  <Marker coordinate={item.central} />
-                  <Circle
+                  {/* <Marker coordinate={item.central} /> */}
+                  {/* <Circle
                     key={idx}
                     center={item.central}
                     radius={(item.internalCircleDiameter.meters / 2)}
                     strokeWidth={1}
                     fillColor={blue}
                     strokeColor={blue}
-                  />
+                  /> */}
                 </>
               )
             })}
