@@ -174,36 +174,15 @@ exports.getMapElementsByPosition = functions.https.onRequest(async (req, res) =>
         let users = await getUsersInsideRange(region);
         let citiesContent = await getAllCities(region);
         let convertedUsers = HeatMapService.populateUserCity(citiesContent.allCities, users);
-        let grid = HeatMapService.generateGrid(region, citiesContent, convertedUsers);
-        return res.status(200).send(JSON.stringify(grid));
+        let gridSquares = HeatMapService.generateGrid(region, citiesContent, convertedUsers);
+        let result = HeatMapService.processGridSquares(gridSquares);
+        return res.status(200).send(JSON.stringify(result));
 
         // return res.status(200).send(JSON.stringify(convertedUsers));
     } catch (e) {
         return res.statusCode(500);
     }
 });
-
-// const getCitiesInsideRange = async params => {
-//     let { markerNorthWest, markerSouthWest, markerNorthEast } = params;
-//     return new Promise((resolve, reject) => {
-//         let citiesCollection = firestore.collection('cities');
-//         let citiesQuery = citiesCollection
-//             .where('longitude', '>=', parseFloat(markerNorthWest.longitude))
-//             .where('longitude', '<=', parseFloat(markerNorthEast.longitude));
-//         citiesQuery.get()
-//             .then(res => {
-//                 let citiesPositionList = [];
-//                 res.docs.forEach(doc => {
-//                     let cityPosition = doc.data();
-//                     if (cityPosition.latitude >= markerSouthWest.latitude &&
-//                         cityPosition.latitude <= markerNorthWest.latitude)
-//                         citiesPositionList.push(cityPosition);
-//                 });
-//                 return resolve(citiesPositionList);
-//             })
-//             .catch(error => { return reject(new Error(error)); });
-//     });
-// };
 
 const getUsersInsideRange = async region => {
     let { markerNorthWest, markerSouthWest, markerNorthEast } = region;

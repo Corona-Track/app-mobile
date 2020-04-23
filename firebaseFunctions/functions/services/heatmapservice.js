@@ -1,5 +1,90 @@
 let firestore = null;
 
+exports.processGridSquares = (gridsSquares) => {
+    //Removing empty grids
+    let notEmptySquares = gridsSquares.filter(square => square.users.length > 0);
+    if (!notEmptySquares || (notEmptySquares && notEmptySquares.length === 0))
+        return [];
+    let squaresToProcess = sortUsersInsideSquares(notEmptySquares);
+    if (!squaresToProcess || (squaresToProcess && squaresToProcess.length === 0))
+        return [];
+    return processSquares(squaresToProcess);
+};
+
+const processSquares = squaresToProcess => {
+    let squaresInProcessing = [...squaresToProcess];
+    let squaresToCalculte = [];
+    let isProcessing = true;
+    while (isProcessing) {
+        if (!squaresInProcessing || (squaresInProcessing && squaresInProcessing.length === 0)) {
+            isProcessing = false;
+            return;
+        }
+        let currentSquare = squaresInProcessing.first();
+        let currentSquareUsers = currentSquare.users;
+        squaresToCalculte.push(currentSquare);
+
+        //Remove first
+        squaresInProcessing.splice(0, 1);
+
+
+        // let squaresUserRemoving = [...squaresInProcessing];
+
+
+        // squaresUserRemoving.forEach(square => {
+
+        // });
+
+
+
+
+        /*
+        Remover da squaresInProcessing o first;
+        Remover usuários do first square dos outros squares to process
+        remover os squares sem usuários
+        ordenar e começar de novo
+        
+        */
+
+
+
+
+    }
+};
+
+const removeUsersFromSquares = (users, squares) => {
+    let squaresToReplace = [];
+
+    for (var i = 0; i < squares.length; i++) {
+
+        let usersAfterRemoving = [];
+
+        squares[i].users.forEach(squareUsers => {
+            squareUsers
+        })
+
+    }
+
+    squares.forEach(square => {
+        square.users.f
+    });
+
+};
+
+
+
+const sortUsersInsideSquares = squares => {
+    if (!squares)
+        return [];
+    return squares.sort((a, b) => {
+        if (a.users.length > b.users.length)
+            return -1;
+        if (a.name < b.name)
+            return 1;
+        return 0;
+    });
+};
+
 exports.populateUserCity = (cities, users) => {
     let convertedUsers = [];
     for (var i = 0; i < users.length; i++) {
@@ -14,19 +99,6 @@ exports.populateUserCity = (cities, users) => {
     }
     return convertedUsers;
 };
-
-// exports.getMapElements = async params => {
-//     let docs = await getAllCities();
-//     return docs;
-// };
-
-// const getAllCities = async () => {
-//     let res = await firestore.collection('cities').get();
-//     if (res.empty)
-//         return [];
-//     return res.docs;
-// }
-
 
 exports.generateGrid = (region, citiesContent, convertedUsers) => {
     debugger;
@@ -204,7 +276,6 @@ const generateLine = ({
     return squares;
 };
 
-
 const calculateDistanceBetweenToPoints = (firstPosition, secondPosition) => {
     let xLngCel = Math.pow((secondPosition.longitude - firstPosition.longitude), 2);
     let yLatCel = Math.pow((secondPosition.latitude - firstPosition.latitude), 2);
@@ -217,7 +288,6 @@ const calculateDistanceBetweenToPoints = (firstPosition, secondPosition) => {
         meters: (pythagoras * earthConversion) / 360
     };
 };
-
 
 const verifyContentInsideSquare = (square, convertedUsers, citiesInsideRange) => {
     debugger;
