@@ -42,7 +42,7 @@ exports.onUserUpdate = functions.firestore.document('/users/{userId}')
 
         let riskProfileSymptonsPoints = 0
         if (symptomData)
-            riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(symptomData[0].symptons, symptomData[0].hasSymptoms)
+            riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(symptomData)
 
 
         let contagionRisk = RiskProfileService.getContagionRisk(riskProfileQuestionPoints + riskProfileSymptonsPoints)
@@ -95,12 +95,15 @@ exports.onSymptomsUpdate = functions.firestore.document('/symptoms/{symptomsId}'
 
         let userData = getDoc.data()
 
+        let symptomData = await getSymptomByUser(newSymptomsData.user_id)
+
+
 
         const { comorbiditiesSelected } = userData
 
 
         const riskProfileQuestionPoints = RiskProfileService.calculateRiskProfileQuestionsPoints(userData.question)
-        const riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(newSymptomsData.symptons, newSymptomsData.hasSymptoms)
+        const riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(symptomData)
         let contagionRisk = RiskProfileService.getContagionRisk(riskProfileQuestionPoints + riskProfileSymptonsPoints)
 
 

@@ -97,36 +97,57 @@ exports.calculateRiskProfileQuestionsPoints = (questions) => {
 
 
 
-exports.calculateRiskProfileSymptonsPoints = (symptonsList, hasSymptoms) => {
-    if (symptonsList) {
-        let points = 0
+exports.calculateRiskProfileSymptonsPoints = (symptonsRegisters) => {
+    const maxDays = 14
+    let points = 0
 
-        symptonsList.forEach(symptom => {
+    let userSymptons = {}
 
-            points += calculatePointOfSympton(symptom.identifier, hasSymptoms, symptom.start, symptom.end)
+    symptonsRegisters.forEach(symptonsList => {
+        const registerWithLessThanMaxDays = moment().diff(symptonsList.created_at.toDate(), 'days') < maxDays
+
+        if (registerWithLessThanMaxDays) {
+            if(symptonsList.symptons.length>1){
+            symptonsList.symptons.forEach(symptom => {
+
+                if (!userSymptons[symptom.identifier])
+                    userSymptons[symptom.identifier] = { start: moment(), end: moment() }
 
 
+                if (symptom.start) {               
+                    if (userSymptons[symptom.identifier].start.isSameOrAfter(symptom.start.toDate())) {
+                        userSymptons[symptom.identifier].start = moment(symptom.start.toDate())
+                    }
+                }
 
-        });
-        return points
+                if (symptom.end) {
+                    if (userSymptons[symptom.identifier].end.isSameOrBefore(symptom.end.toDate())) {
+                        userSymptons[symptom.identifier].end = moment(symptom.end.toDate())
+                    }
+                }
+            })
+        }
+        }
+    });
+
+    for (const identifier in userSymptons) {
+        if (userSymptons.hasOwnProperty(identifier)) {
+            const sympton = userSymptons[identifier];
+            points += calculatePointOfSympton(identifier, sympton.start, sympton.end)
+        }
     }
 
-    return 0
+    return points
 }
 
-const calculatePointOfSympton = (identifier, hasSymptoms, start, end) => {
+
+
+const calculatePointOfSympton = (identifier, start, end) => {
     const valueToMax = 5
     let frequency
-    if (hasSymptoms) {
-        const today = new Date()
-        const startDate = start.toDate();
-        frequency = calculateFrequency(startDate, today)
-    } else {
-        const startDate = start.toDate();
-        const endDate = end.toDate();
 
-        frequency = calculateFrequency(startDate, endDate)
-    }
+    frequency = calculateFrequency(start, end)
+
     switch (identifier) {
         case 'Febre': {
             return calculatePoints(frequency, valueToMax, 10, 5)
@@ -214,7 +235,7 @@ const calculatePoints = (value, valueToMax, max, min) => {
     if (value > max)
         return max
 
-    const points = min + ((max - min) / (valueToMax - 1) * (value - 1))
+    const points = Math.round(min + ((max - min) / (valueToMax - 1) * (value - 1)))
 
     return points
 }
