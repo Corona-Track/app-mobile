@@ -85,7 +85,6 @@ export default class MapsPage extends Component {
               return (
                 <>
                   {item.cities.map(city => {
-                    console.log(city);
                     return (<Marker pinColor="#0000FF" coordinate={{
                       latitude: city.latitude,
                       longitude: city.longitude,
@@ -93,10 +92,18 @@ export default class MapsPage extends Component {
                       latitudeDelta: 0.05,
                     }} />)
                   })}
+                  {item.users.map(user => {
+                    return (<Marker pinColor="#00FF00" coordinate={{
+                      latitude: user.latitude,
+                      longitude: user.longitude,
+                      longitudeDelta: 0.05,
+                      latitudeDelta: 0.05,
+                    }} />)
+                  })}
                   {/* <Marker coordinate={item.northWest} />
-                <Marker coordinate={item.northEast} />
-                <Marker coordinate={item.southWest} />
-                <Marker coordinate={item.southEast} /> */}
+                  <Marker coordinate={item.northEast} />
+                  <Marker coordinate={item.southWest} />
+                  <Marker coordinate={item.southEast} /> */}
                   {/* <Marker coordinate={item.central} /> */}
                   {/* <Circle
                     key={idx}

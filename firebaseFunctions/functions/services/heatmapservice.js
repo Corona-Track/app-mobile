@@ -41,28 +41,7 @@ exports.generateGrid = (region, citiesContent, convertedUsers) => {
     let verticalDistance = getColumnDistance(markerNorthWest, markerSouthWest);
     let totalLines = Math.floor(verticalDistance / squareSide);
 
-
-
-
-
-
-    // let initialPosition = {
-    //     latitude: parseFloat(markerNorthWest.latitude),
-    //     longitude: parseFloat(markerNorthWest.longitude)
-    // };
-    // for (var i = 0; i < totalLines; i++) {
-    //     let generated = generateLine(totalColumns, {
-    //         latitude: initialPosition.latitude,
-    //         longitude: initialPosition.longitude,
-    //     }, squareSide);
-    //     initialPosition = {
-    //         latitude: initialPosition.latitude - squareSide,
-    //         longitude: initialPosition.longitude,
-    //     };
-    //     markers = [...markers, ...generated];
-    // }
-    // return markers;
-
+    let gridsSquares = [];
     let firstGrid = {
         initialPosition: {
             latitude: parseFloat(markerNorthWest.latitude),
@@ -74,41 +53,51 @@ exports.generateGrid = (region, citiesContent, convertedUsers) => {
         citiesContent,
         convertedUsers
     };
+    let firstGridSquares = generateCustomGrid(firstGrid);
+    gridsSquares = [...gridsSquares, ...firstGridSquares];
 
-    return generateCustomGrid(firstGrid);
+    let secondGrid = {
+        initialPosition: {
+            latitude: parseFloat(markerNorthWest.latitude),
+            longitude: parseFloat(markerNorthWest.longitude) + (squareSide / parseFloat(2))
+        },
+        totalColumns: totalColumns - 1,
+        totalLines: totalLines,
+        squareSide: squareSide,
+        citiesContent,
+        convertedUsers
+    };
+    let secondGridSquares = generateCustomGrid(secondGrid);
+    gridsSquares = [...gridsSquares, ...secondGridSquares];
 
-    // let secondGrid = {
-    //     initialPosition: {
-    //         latitude: parseFloat(markerNorthWest.latitude),
-    //         longitude: parseFloat(markerNorthWest.longitude) + (squareSide / parseFloat(2))
-    //     },
-    //     totalColumns: totalColumns - 1,
-    //     totalLines: totalLines,
-    //     squareSide: squareSide
-    // };
-    // return generateCustomGrid(secondGrid);
+    let thirdGrid = {
+        initialPosition: {
+            latitude: parseFloat(markerNorthWest.latitude) - (squareSide / parseFloat(2)),
+            longitude: parseFloat(markerNorthWest.longitude)
+        },
+        totalColumns: totalColumns,
+        totalLines: totalLines - 1,
+        squareSide: squareSide,
+        citiesContent,
+        convertedUsers
+    };
+    let thirdGridSquares = generateCustomGrid(thirdGrid);
+    gridsSquares = [...gridsSquares, ...thirdGridSquares];
 
-    // let thirdGrid = {
-    //     initialPosition: {
-    //         latitude: parseFloat(markerNorthWest.latitude) - (squareSide / parseFloat(2)),
-    //         longitude: parseFloat(markerNorthWest.longitude)
-    //     },
-    //     totalColumns: totalColumns,
-    //     totalLines: totalLines - 1,
-    //     squareSide: squareSide
-    // };
-    // return generateCustomGrid(thirdGrid);
-
-    // let fourGrid = {
-    //     initialPosition: {
-    //         latitude: parseFloat(markerNorthWest.latitude) - (squareSide / parseFloat(2)),
-    //         longitude: parseFloat(markerNorthWest.longitude) + (squareSide / parseFloat(2))
-    //     },
-    //     totalColumns: totalColumns - 1,
-    //     totalLines: totalLines - 1,
-    //     squareSide: squareSide
-    // };
-    // return generateCustomGrid(fourGrid);
+    let fourthGrid = {
+        initialPosition: {
+            latitude: parseFloat(markerNorthWest.latitude) - (squareSide / parseFloat(2)),
+            longitude: parseFloat(markerNorthWest.longitude) + (squareSide / parseFloat(2))
+        },
+        totalColumns: totalColumns - 1,
+        totalLines: totalLines - 1,
+        squareSide: squareSide,
+        citiesContent,
+        convertedUsers
+    };
+    let fourthGridSquares = generateCustomGrid(fourthGrid);
+    gridsSquares = [...gridsSquares, ...fourthGridSquares];
+    return gridsSquares;
 };
 
 const generateCustomGrid = ({
