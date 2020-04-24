@@ -26,7 +26,7 @@ import {
   CheckboxItem,
 } from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer,UserContext} from '../../../store/user';
 
 export default class ProtectionUsagePage extends Component {
   static navigationOptions = {
@@ -51,6 +51,16 @@ export default class ProtectionUsagePage extends Component {
       {identifier: 'Não constumo usar nenhum tipo de proteção ao sair de casa'},
     ],
   };
+
+  componentDidMount() {
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params.edit && user.question.protectionAnswer ){
+      this.setState({
+        entity: user.question
+      })
+    }
+  }
 
   render = () => {
     let {entity, situationsList, negativeSituationsList} = this.state;
@@ -207,6 +217,8 @@ export default class ProtectionUsagePage extends Component {
     this.setState({entity});
   };
 }
+
+ProtectionUsagePage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>

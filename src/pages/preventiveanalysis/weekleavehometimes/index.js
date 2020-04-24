@@ -23,7 +23,7 @@ import {
 } from '../../../components/custombutton';
 import {RadioButtonItem} from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer, UserContext} from '../../../store/user';
 
 export default class WeekLeaveHomeTimesPage extends Component {
   static navigationOptions = {
@@ -44,6 +44,16 @@ export default class WeekLeaveHomeTimesPage extends Component {
       {identifier: 'Outros motivos'},
     ],
   };
+
+  componentDidMount() {
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params.edit){
+      this.setState({
+        entity: user.question
+      })
+    }
+  }
 
   render = () => {
     let {entity, reasonsList} = this.state;
@@ -172,6 +182,8 @@ export default class WeekLeaveHomeTimesPage extends Component {
     this.props.navigation.navigate('SocialDistance', {entity: entity});
   };
 }
+
+WeekLeaveHomeTimesPage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>

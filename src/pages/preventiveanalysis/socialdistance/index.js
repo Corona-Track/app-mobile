@@ -26,7 +26,7 @@ import {
   SubCheckboxItem,
 } from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer,userContext, UserContext} from '../../../store/user';
 
 export default class SocialDistancePage extends Component {
   static navigationOptions = {
@@ -51,6 +51,16 @@ export default class SocialDistancePage extends Component {
       {identifier: 'Por causa do transporte público (trens e ônibus)'},
     ],
   };
+
+  componentDidMount() {
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params.edit){
+      this.setState({
+        entity: user.question
+      })
+    }
+  }
 
   render = () => {
     let {entity, reasonsList, reasonsToNotKeepDistanceList} = this.state;
@@ -197,6 +207,8 @@ export default class SocialDistancePage extends Component {
     this.setState({entity});
   };
 }
+
+SocialDistancePage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>

@@ -16,7 +16,7 @@ import {
 } from '../../../components/custombutton';
 import {RadioButtonYesOrNoItem} from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer,UserContext} from '../../../store/user';
 
 export default class AlreadyHadFluVaccinePage extends Component {
   static navigationOptions = {
@@ -31,6 +31,16 @@ export default class AlreadyHadFluVaccinePage extends Component {
       hadFluVaccine: null,
     },
   };
+
+  componentDidMount() {
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params.edit){
+      this.setState({
+        entity: user.question
+      })
+    }
+  }
 
   render = () => {
     let {entity} = this.state;
@@ -125,6 +135,8 @@ export default class AlreadyHadFluVaccinePage extends Component {
     this.props.navigation.navigate('WeekLeaveHomeTimes', {entity: entity});
   };
 }
+
+AlreadyHadFluVaccinePage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>

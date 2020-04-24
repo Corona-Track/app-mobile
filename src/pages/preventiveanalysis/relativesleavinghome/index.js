@@ -26,7 +26,7 @@ import {
   RadioButtonYesOrNoItem,
 } from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer,UserContext} from '../../../store/user';
 
 export default class RelativesLeavingHomePage extends Component {
   static navigationOptions = {
@@ -43,6 +43,16 @@ export default class RelativesLeavingHomePage extends Component {
       relativesLeavingTimes: null,
     },
   };
+
+  componentDidMount() {
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params.edit){
+      this.setState({
+        entity: user.question
+      })
+    }
+  } 
 
   render = () => {
     let {entity} = this.state;
@@ -180,6 +190,8 @@ export default class RelativesLeavingHomePage extends Component {
     });
   };
 }
+
+RelativesLeavingHomePage.contextType = UserContext;
 
 const PeopleOutsideHome = () => (
   <View style={[styles.textContainer, {marginTop: 20}]}>

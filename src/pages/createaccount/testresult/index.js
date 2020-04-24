@@ -15,7 +15,7 @@ import {ContinueRequiredButton} from '../../../components/custombutton';
 import {RadioButtonYesOrNoItem} from '../../../components/customcheckboxitem';
 import {SimpleCenterDateTextInput} from '../../../components/customtextinput';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer,UserContext} from '../../../store/user';
 
 export default class TestResultPage extends Component {
   static navigationOptions = {
@@ -34,6 +34,15 @@ export default class TestResultPage extends Component {
     },
     showTestDate: false,
   };
+
+  componentDidMount() {
+    let {navigation} = this.props;
+    if(navigation.state.params && navigation.state.params.edit){
+      let { user } = this.context;
+    
+      this.setState({ entity: user.question })
+    }
+  }
 
   render = () => {
     let {entity, showTestDate} = this.state;
@@ -157,6 +166,8 @@ export default class TestResultPage extends Component {
     );
   };
 }
+
+TestResultPage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>

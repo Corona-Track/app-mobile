@@ -55,7 +55,11 @@ export default class HomePage extends Component {
 
   onGetUserDataSuccess = doc => {
     let currentUser = doc.data();
-    currentUser.age = moment().diff(new Date(currentUser.birthday.seconds * 1000), 'years');
+    if(typeof currentUser.birthday === "object"){
+      currentUser.age = moment().diff(new Date(currentUser.birthday.seconds * 1000), 'years');
+    }else if(typeof currentUser.birthday === "string"){
+      currentUser.age = moment().diff(new Date(currentUser.birthday),"years");
+    }
     this.setState({ currentUser });
   };
 
