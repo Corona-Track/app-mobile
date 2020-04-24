@@ -46,9 +46,6 @@ export default class WeekLeaveHomeTimesPage extends Component {
   };
 
   componentDidMount() {
-    if (this.props.navigation.state.params) {
-      let { user } = this.context;
-
     if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
       this.setState({
         entity: user.question

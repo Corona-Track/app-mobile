@@ -26,7 +26,7 @@ import {
   SubCheckboxItem,
 } from '../../../components/customcheckboxitem';
 
-import {UserConsumer,userContext, UserContext} from '../../../store/user';
+import {UserConsumer, UserContext} from '../../../store/user';
 
 export default class SocialDistancePage extends Component {
   static navigationOptions = {
@@ -53,9 +53,6 @@ export default class SocialDistancePage extends Component {
   };
 
   componentDidMount() {
-    if (this.props.navigation.state.params) {
-      let { user } = this.context;
-
     if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
       this.setState({
         entity: user.question
