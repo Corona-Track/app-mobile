@@ -78,8 +78,6 @@ export const CustomUserCamera = ({ isVisible, onChangePhoto, onCloseCamera }) =>
     );
 };
 
-
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
