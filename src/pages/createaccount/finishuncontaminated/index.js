@@ -30,7 +30,9 @@ export default class FinishUncontaminatedPage extends Component {
   render = () => {
     return (
       <SafeAreaView style={styles.container}>
-        <CloseButton onPress={() => {}} />
+        <CloseButton onPress={() => {
+          this.props.navigation.navigate('Application');
+        }} />
         <UserConsumer>
           {context => (
             <>
@@ -80,7 +82,6 @@ export default class FinishUncontaminatedPage extends Component {
   };
 
   onAnswerNowButtonPress = () => {
-    console.log(auth().currentUser);
     const resetAction = StackActions.reset({
       index: 0,
       actions: [
@@ -130,7 +131,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.buttonPrimaryColor,
+    backgroundColor: Colors.blue,
     height: '100%',
     paddingHorizontal: 20,
     paddingBottom: 15,

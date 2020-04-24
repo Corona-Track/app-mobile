@@ -7,7 +7,7 @@ import {Colors} from '../../themes/variables';
 export const LeftComponent = ({onPress}) => {
   return (
     <TouchableOpacity style={styles.leftComponent} onPress={onPress}>
-      <Icon name="arrow-left" size={32} color={Colors.navigatorIconColor} />
+      <Icon name="arrow-left" size={32} color={Colors.blue} />
     </TouchableOpacity>
   );
 };
@@ -15,7 +15,7 @@ export const LeftComponent = ({onPress}) => {
 export const RightComponent = ({onPress}) => {
   return (
     <TouchableOpacity style={styles.rightComponent} onPress={onPress}>
-      <Icon name="close" size={32} color={Colors.navigatorIconColor} />
+      <Icon name="close" size={32} color={Colors.blue} />
     </TouchableOpacity>
   );
 };
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: 150,
     fontFamily: Colors.fontFamily,
-    color: Colors.navigatorIconColor,
+    color: Colors.greenLight,
     fontWeight: 'bold',
     textTransform: 'uppercase',
     marginLeft: 5,

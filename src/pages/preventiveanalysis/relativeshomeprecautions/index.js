@@ -30,7 +30,7 @@ import {
 
 import {SaveUser} from '../../../firebase/User';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer,UserContext} from '../../../store/user';
 
 export default class RelativesHomePrecautionsPage extends Component {
   static navigationOptions = {
@@ -48,6 +48,16 @@ export default class RelativesHomePrecautionsPage extends Component {
     },
     showLoading: false,
   };
+
+  componentDidMount() {
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
+      this.setState({
+        entity: user
+      })
+    }
+  }
 
   render = () => {
     let {entity, showLoading} = this.state;
@@ -128,7 +138,7 @@ export default class RelativesHomePrecautionsPage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
-              {!entity.contaminated ? (
+              {!context.user.question.contaminated ? (
                 <DoubtButton
                   onPress={() => {
                     this.onDoubtPress(context);
@@ -217,6 +227,8 @@ export default class RelativesHomePrecautionsPage extends Component {
     this.setState({entity});
   };
 }
+
+RelativesHomePrecautionsPage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>

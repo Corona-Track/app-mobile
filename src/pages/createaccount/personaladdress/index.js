@@ -34,7 +34,7 @@ import {
   getFirstName,
 } from '../../../services/formvalidatorservice';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer, UserContext} from '../../../store/user';
 
 export default class PersonalAddressPage extends Component {
   static navigationOptions = {
@@ -60,6 +60,15 @@ export default class PersonalAddressPage extends Component {
     },
     showLoading: false,
   };
+
+  componentDidMount() {
+    let {navigation} = this.props;
+    if(navigation.state.params && navigation.state.params.edit){
+      let { user } = this.context;
+    
+      this.setState({ entity: user.address })
+    }
+  }
 
   render = () => {
     let {entity, showLoading} = this.state;
@@ -117,7 +126,7 @@ export default class PersonalAddressPage extends Component {
                 <ContinueRequiredButton
                   disabled={this.disableButton()}
                   onPress={() => {
-                    context.updateUser({address: this.state.entity});
+                    this.context.updateUser({address: this.state.entity});
                     this.onContinueButtonClick();
                   }}
                 />
@@ -293,6 +302,8 @@ export default class PersonalAddressPage extends Component {
     return longitude ?? false;
   };
 }
+
+PersonalAddressPage.contextType = UserContext;
 
 const IntroText = ({userName}) => {
   return (

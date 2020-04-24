@@ -23,7 +23,7 @@ import {
 } from '../../../components/custombutton';
 import {RadioButtonItem} from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer,UserContext} from '../../../store/user';
 
 export default class OutsideWorkPage extends Component {
   static navigationOptions = {
@@ -46,6 +46,16 @@ export default class OutsideWorkPage extends Component {
       {identifier: 'Ao ar livre'},
     ],
   };
+
+  componentDidMount() {
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
+      this.setState({
+        entity: user.question
+      })
+    }
+  } 
 
   render = () => {
     let {entity, outsideWorkList} = this.state;
@@ -114,7 +124,7 @@ export default class OutsideWorkPage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
-              {!entity.contaminated ? (
+              {!context.user.question.contaminated ? (
                 <DoubtButton
                   onPress={() => {
                     this.onDoubtPress(context);
@@ -165,6 +175,8 @@ export default class OutsideWorkPage extends Component {
     return entity.outsideWorkAnswer === identifier;
   };
 }
+
+OutsideWorkPage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>
