@@ -8,6 +8,8 @@ exports.calculateSquares = squaresToCalculate => {
         let suspiciousAmount = 0;
         currentSquare.users.forEach(user => {
             user.userId = null;
+            user.latitude = null;
+            user.longitude = null;
             if (user.contaminated) {
                 contaminatedAmount++;
                 return;
