@@ -198,14 +198,14 @@ const getUsersInsideRange = async region => {
                     let userPosition = doc.data();
                     if (!(userPosition.latitude >= markerSouthWest.latitude &&
                         userPosition.latitude <= markerNorthWest.latitude))
-                        continue;
+                        return;
                     if (userPosition.contaminated) {
                         usersPositionList.push(userPosition);
-                        continue;
+                        return;
                     }
                     if (userPosition.contagionRisk && userPosition.contagionRisk === 3) {
                         usersPositionList.push(userPosition);
-                        continue;
+                        return;
                     }
                 });
                 return resolve(usersPositionList);
@@ -239,4 +239,3 @@ const getAllCities = async region => {
             .catch(error => { return reject(new Error(error)); });
     });
 };
-

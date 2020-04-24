@@ -73,7 +73,7 @@ export default class MapsPage extends Component {
     return (
       <SafeAreaView style={styles.container}>
         <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-        <Spinner visible={showLoading} />
+        {Platform.OS === "android" ? <Spinner visible={showLoading} /> : (<></>)}
         <MapHeader onPress={this.closeMap} />
         {userLocation && userLocation.latitude && (
           <MapView
