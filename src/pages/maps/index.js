@@ -46,7 +46,6 @@ export default class MapsPage extends Component {
     cornersMarkers: [],
   };
 
-
   initialize = () => {
     this.getUserLocation()
       .catch(this.onGPSErrorMessage);
@@ -70,58 +69,6 @@ export default class MapsPage extends Component {
             minZoomLevel={1}
             maxZoomLevel={15}>
             {this.renderMarkers(cornersMarkers)}
-            {/* {cornersMarkers && cornersMarkers.map((item, idx) => {
-              return (
-                <>
-                  {item.cities.map(city => {
-                    return (<Marker pinColor="#0000FF" coordinate={{
-                      latitude: city.latitude,
-                      longitude: city.longitude,
-                      longitudeDelta: 0.05,
-                      latitudeDelta: 0.05,
-                    }} />)
-                  })}
-                  {item.users.map(user => {
-                    return (<Marker pinColor="#00FF00" coordinate={{
-                      latitude: user.latitude,
-                      longitude: user.longitude,
-                      longitudeDelta: 0.05,
-                      latitudeDelta: 0.05,
-                    }} />)
-                  })}
-                  <Marker coordinate={item.northWest} />
-                  <Marker coordinate={item.northEast} />
-                  <Marker coordinate={item.southWest} />
-                  <Marker coordinate={item.southEast} />
-                  <Marker coordinate={item.central} />
-                  <Circle
-                    key={idx}
-                    center={item.central}
-                    radius={(item.internalCircleDiameter.meters / 2)}
-                    strokeWidth={1}
-                    fillColor={blue}
-                    strokeColor={blue}
-                  />
-                </>
-              )
-            })} */}
-
-            {/* <Marker coordinate={userLocation} /> */}
-            {/* {data &&
-              data.length > 0 &&
-              data.map((item, idx) => (
-                <Circle
-                  key={idx}
-                  center={{
-                    latitude: item.latitude,
-                    longitude: item.longitude,
-                  }}
-                  radius={item.diameter}
-                  strokeWidth={1}
-                  fillColor={item.color}
-                  strokeColor={item.color}
-                />
-              ))} */}
           </MapView>
         )}
         <MapBottom />
@@ -133,116 +80,48 @@ export default class MapsPage extends Component {
       return (<></>);
     return (<>
       {cornersMarkers.map((item, idx) => {
-        console.log("item: " + JSON.stringify(item));
-        return (
-          <>
-            <Circle
-              key={idx}
-              center={item.central}
-              radius={(item.internalCircleDiameter.meters / 2)}
-              strokeWidth={1}
-              fillColor={item.circleColor === "red" ? red : yellow}
-              strokeColor={item.circleColor === "red" ? red : yellow} />
-            {/* <Marker pinColor={item.color} coordinate={item.northWest} />
-            <Marker pinColor={item.color} coordinate={item.northEast} />
-            <Marker pinColor={item.color} coordinate={item.southWest} />
-            <Marker pinColor={item.color} coordinate={item.southEast} /> */}
-            {/* {item.cities.map(city => {
-              return (<Marker pinColor="#0000FF" coordinate={{
-                latitude: city.latitude,
-                longitude: city.longitude,
-                longitudeDelta: 0.05,
-                latitudeDelta: 0.05,
-              }} />)
-            })} */}
-            {item.users.map(user => {
-              return (<Marker pinColor="#00FF00" coordinate={{
-                latitude: user.latitude,
-                longitude: user.longitude,
-                longitudeDelta: 0.05,
-                latitudeDelta: 0.05,
-              }} />)
-            })}
-          </>
-        )
+        return (<Circle
+          key={idx}
+          center={item.central}
+          radius={(item.internalCircleDiameter.meters / 2)}
+          strokeWidth={1}
+          fillColor={item.circleColor === "red" ? red : yellow}
+          strokeColor={item.circleColor === "red" ? red : yellow} />)
       })}
     </>)
-
   };
   updateCurrentLocation = region => {
-    // let { currentLocation } = this.state;
-    // if (currentLocation.latitude === region.latitude &&
-    //   currentLocation.longitude === region.longitude &&
-    //   currentLocation.latitudeDelta === region.latitudeDelta &&
-    //   currentLocation.longitudeDelta === region.longitudeDelta)
-    //   return;
-
     let { showLoading } = this.state;
     if (showLoading)
       return;
-
     this.setState({
       showLoading: true
     }, () => {
       let corners = getCornersBox(region);
-      // N
-      // W E
-      // S
-      // console.log("central region");
-      // console.log("LA");
-      // console.log(region.latitude);
-      // console.log("LO");
-      // console.log(region.longitude);
-
       let markerCentral = {
         latitude: region.latitude,
         longitude: region.longitude,
         latitudeDelta: region.latitudeDelta,
         longitudeDelta: region.longitudeDelta,
       };
-
-      console.log("markerCentral")
-      console.log("LAD:" + markerCentral.latitudeDelta);
-      console.log("LOD:" + markerCentral.longitudeDelta);
-
-      // console.log("WLO");
-      // console.log(corners.westLongitude);
       let markerNorthWest = {
         latitude: corners.northLatitude,
         longitude: corners.westLongitude,
         latitudeDelta: region.latitudeDelta,
         longitudeDelta: region.longitudeDelta,
       };
-
-      // console.log("markerSouthWest region");
-      // console.log("SLA");
-      // console.log(corners.southLatitude);
-      // console.log("WLO");
-      // console.log(corners.westLongitude);
       let markerSouthWest = {
         latitude: corners.southLatitude,
         longitude: corners.westLongitude,
         latitudeDelta: region.latitudeDelta,
         longitudeDelta: region.longitudeDelta,
       };
-
-      // console.log("markerNorthEast region");
-
-      // console.log("NLA");
-      // console.log(corners.northLatitude);
-      // console.log("ELO");
-      // console.log(corners.eastLongitude);
       let markerNorthEast = {
         latitude: corners.northLatitude,
         longitude: corners.eastLongitude,
         latitudeDelta: region.latitudeDelta,
         longitudeDelta: region.longitudeDelta,
       };
-      // console.log("markerSouthEast region");
-      // console.log("SLA");
-      // console.log(corners.southLatitude);
-      // console.log("ELO");
-      // console.log(corners.eastLongitude);
       let markerSouthEast = {
         latitude: corners.southLatitude,
         longitude: corners.eastLongitude,
@@ -256,46 +135,20 @@ export default class MapsPage extends Component {
         markerNorthEast,
         markerSouthEast,
       };
-      console.log("============================");
-      console.log("============================");
-      let { userLocation } = this.state;
-      console.log("ULA" + userLocation.latitude);
-      console.log("ULO" + userLocation.longitude);
-      // console.log("NW");
-      // console.log("LA: " + corners.northLatitude);
-      // console.log("LO: " + corners.westLongitude);
-      // console.log("NE");
-      // console.log("LA: " + corners.northLatitude);
-      // console.log("LO: " + corners.eastLongitude);
-      // console.log("----------------------------");
-      // console.log("SJK");
-      // console.log("latitude: -23.1805011");
-      // console.log("longitude: -45.8872969");
-      // console.log("----------------------------");
-      // console.log("SW");
-      // console.log("LA: " + corners.southLatitude);
-      // console.log("LO: " + corners.westLongitude);
-      // console.log("SE");
-      // console.log("LA: " + corners.southLatitude);
-      // console.log("LO: " + corners.eastLongitude);
       getMapElementsByPosition(filter)
         .then(response => this.onSuccessGetMapElementsByPosition(response, filter))
         .catch(this.onGPSErrorMessage)
         .finally(() => { this.setState({ showLoading: false }); });
     });
   };
-
   onSuccessGetMapElementsByPosition = (response, filter) => {
     let { data } = response;
-    console.log("filter:" + JSON.stringify(filter));
-    console.log("data:" + JSON.stringify(data));
     this.setState({
       currentLocation: filter.markerCentral,
       mapKey: Math.floor(Math.random() * 100),
       cornersMarkers: data
     });
   };
-
   getUserLocation = async () => {
     if (Platform.OS === 'ios') {
       await this.getLocation();
@@ -353,49 +206,6 @@ export default class MapsPage extends Component {
 
 const red = 'rgba(207, 84, 84,0.6)';
 const yellow = 'rgba(233, 205, 106,0.6)';
-const blue = 'rgba(136, 166, 231,0.6)';
-const orange = 'rgba(247, 176, 84,0.6)';
-const green = 'rgba(111, 219, 136,0.6)';
-
-
-let data = [
-  {
-    latitude: -23.212005,
-    longitude: -45.902983,
-    color: red,
-    diameter: 300,
-  },
-  {
-    latitude: -23.21927,
-    longitude: -45.906924,
-    color: blue,
-    diameter: 400,
-  },
-  {
-    latitude: -23.231793,
-    longitude: -45.906085,
-    color: yellow,
-    diameter: 700,
-  },
-  {
-    latitude: -23.225158,
-    longitude: -45.890335,
-    color: green,
-    diameter: 350,
-  },
-  {
-    latitude: -23.237756,
-    longitude: -45.887005,
-    color: orange,
-    diameter: 400,
-  },
-  {
-    latitude: -23.231329,
-    longitude: -45.920235,
-    color: red,
-    diameter: 500,
-  },
-];
 
 const getCornersBox = region => {
   return {
@@ -405,13 +215,6 @@ const getCornersBox = region => {
     northLatitude: region.latitude + region.latitudeDelta / 2
   };
 }
-
-// [
-//   region.longitude - region.longitudeDelta / 2, // westLng - min lng
-//   region.latitude - region.latitudeDelta / 2, // southLat - min lat
-//   region.longitude + region.longitudeDelta / 2, // eastLng - max lng
-//   region.latitude + region.latitudeDelta / 2 // northLat - max lat
-// ]}
 
 const MapHeader = ({ onPress }) => (
   <View style={styles.containerHeader}>
