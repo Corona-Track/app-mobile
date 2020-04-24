@@ -47,7 +47,7 @@ export default class RelativesLeavingHomePage extends Component {
   componentDidMount() {
     let { user } = this.context;
 
-    if(this.props.navigation.state.params.edit){
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
       this.setState({
         entity: user.question
       })

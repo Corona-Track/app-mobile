@@ -48,7 +48,7 @@ export default class MedicinesPage extends Component {
   componentDidMount() {
     let { user } = this.context;
 
-    if(this.props.navigation.state.params.edit && user.question.medicinesSelected){
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit && user.question.medicinesSelected){
       this.setState({
         entity: user.question
       })
@@ -125,7 +125,7 @@ export default class MedicinesPage extends Component {
     this.props.navigation.pop();
   };
   onRightButtonPress = () => {
-    if(this.props.navigation.state.params.edit){
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
       this.props.navigation.navigate("Home");
     }else{
       this.props.navigation.pop();

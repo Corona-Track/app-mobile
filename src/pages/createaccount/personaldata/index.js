@@ -291,7 +291,7 @@ export default class PersonalDataPage extends Component {
     this.setState({entity});
   };
   disableButton = () => {
-    if(this.props.navigation.state.params.edit){
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
       return !(
         this.isNameValid() &&
         this.isCpfValid() &&
