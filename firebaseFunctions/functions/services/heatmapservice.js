@@ -7,6 +7,7 @@ exports.calculateSquares = squaresToCalculate => {
         let contaminatedAmount = 0;
         let suspiciousAmount = 0;
         currentSquare.users.forEach(user => {
+            user.userId = null;
             if (user.contaminated) {
                 contaminatedAmount++;
                 return;
