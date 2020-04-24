@@ -10,7 +10,7 @@ export const CheckboxItem = ({identifier, isChecked, onClickCheck}) => {
     <View key={identifier} style={styles.checkboxContainer}>
       <View style={styles.firstColumn}>
         <CheckBox
-          checkedColor={Colors.navigatorIconColor}
+          checkedColor={Colors.blue}
           containerStyle={styles.checkbox}
           checked={checked}
           onPress={() => {
@@ -36,7 +36,7 @@ export const CheckboxItemWithPlus = ({
     <View style={styles.checkboxWithPlusContainer}>
       <View style={styles.firstColumn}>
         <CheckBox
-          checkedColor={Colors.navigatorIconColor}
+          checkedColor={Colors.blue}
           containerStyle={styles.checkbox}
           checked={checked}
           onPress={() => {
@@ -59,11 +59,14 @@ export const CheckboxItemWithExpand = ({
   onPressExpand,
   isExpanded,
 }) => {
+  if (typeof isChecked === 'function') {
+    isChecked = isChecked();
+  }
   return (
     <View style={styles.checkboxWithExpandContainer}>
       <View style={styles.firstColumn}>
         <CheckBox
-          checkedColor={Colors.navigatorIconColor}
+          checkedColor={Colors.blue}
           containerStyle={styles.checkbox}
           checked={isChecked}
           onPress={() => {
@@ -99,7 +102,7 @@ export const RadioButtonYesOrNoItem = ({
         title={yesTitle ?? 'SIM'}
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
-        checkedColor={Colors.navigatorIconColor}
+        checkedColor={Colors.blue}
         checked={value === true}
         onPress={() => onPressCheckbox(true)}
       />
@@ -110,7 +113,7 @@ export const RadioButtonYesOrNoItem = ({
         title={noTitle ?? 'NÃO'}
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
-        checkedColor={Colors.navigatorIconColor}
+        checkedColor={Colors.blue}
         checked={value === false}
         onPress={() => onPressCheckbox(false)}
       />
@@ -128,7 +131,7 @@ export const RadioButtonItem = ({identifier, isChecked, onClickCheck}) => {
         title={identifier}
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
-        checkedColor={Colors.navigatorIconColor}
+        checkedColor={Colors.blue}
         checked={checked}
         onPress={() => onClickCheck(identifier)}
       />
@@ -142,7 +145,7 @@ export const SubCheckboxItem = ({identifier, isChecked, onClickCheck}) => {
     <View key={identifier} style={styles.subCheckboxContainer}>
       <View style={styles.firstColumn}>
         <CheckBox
-          checkedColor={Colors.navigatorIconColor}
+          checkedColor={Colors.blue}
           containerStyle={styles.checkbox}
           checked={checked}
           onPress={() => {
@@ -163,7 +166,7 @@ const ExpandIcon = ({onPress, isExpanded}) => {
       <Icon
         name={isExpanded ? 'chevron-up' : 'chevron-down'}
         size={26}
-        color={Colors.navigatorIconColor}
+        color={'#828282'}
       />
     </TouchableOpacity>
   );
@@ -240,7 +243,7 @@ export const RadioButtonTripleResizableItem = ({
     <View style={styles.tripleCheckboxContainer}>
       <View style={styles.firstColumn}>
         <CheckBox
-          checkedColor={Colors.navigatorIconColor}
+          checkedColor={Colors.blue}
           containerStyle={styles.checkbox}
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"
@@ -253,7 +256,7 @@ export const RadioButtonTripleResizableItem = ({
       </View>
       <View style={styles.firstColumn}>
         <CheckBox
-          checkedColor={Colors.navigatorIconColor}
+          checkedColor={Colors.blue}
           containerStyle={styles.checkbox}
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"
@@ -266,7 +269,7 @@ export const RadioButtonTripleResizableItem = ({
       </View>
       <TouchableOpacity style={styles.firstColumn}>
         <CheckBox
-          checkedColor={Colors.navigatorIconColor}
+          checkedColor={Colors.blue}
           containerStyle={styles.checkbox}
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"

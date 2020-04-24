@@ -23,7 +23,7 @@ import {
 } from '../../../components/custombutton';
 import {RadioButtonItem} from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer, UserContext} from '../../../store/user';
 
 export default class WeekLeaveHomeTimesPage extends Component {
   static navigationOptions = {
@@ -44,6 +44,17 @@ export default class WeekLeaveHomeTimesPage extends Component {
       {identifier: 'Outros motivos'},
     ],
   };
+
+  componentDidMount() {
+    if (this.props.navigation.state.params) {
+      let { user } = this.context;
+
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
+      this.setState({
+        entity: user.question
+      })
+    }
+  }
 
   render = () => {
     let {entity, reasonsList} = this.state;
@@ -111,7 +122,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
-              {!entity.contaminated ? (
+              {!context.user.question.contaminated ? (
                 <DoubtButton
                   onPress={() => {
                     this.onDoubtPress(context);
@@ -173,6 +184,8 @@ export default class WeekLeaveHomeTimesPage extends Component {
   };
 }
 
+WeekLeaveHomeTimesPage.contextType = UserContext;
+
 const IntroText = () => (
   <View style={styles.textContainer}>
     <Text style={[styles.simpleText]}>Quantas vezes por semana</Text>
@@ -210,7 +223,7 @@ const CustomSlider = ({value, onValueChange}) => {
         step={1}
         minimumValue={1}
         maximumValue={7}
-        minimumTrackTintColor={Colors.navigatorIconColor}
+        minimumTrackTintColor={Colors.blue}
         maximumTrackTintColor={Colors.searchIconColor}
         animationType="spring"
         thumbTintColor={Colors.secondaryColor}
@@ -314,7 +327,7 @@ const styles = StyleSheet.create({
   },
   customThumbStyle: {
     borderWidth: 6,
-    borderColor: Colors.navigatorIconColor,
+    borderColor: Colors.blue,
     width: 25,
     height: 25,
     borderRadius: 12,
@@ -322,7 +335,7 @@ const styles = StyleSheet.create({
   underlineThumb: {
     width: 35,
     height: 25,
-    backgroundColor: Colors.navigatorIconColor,
+    backgroundColor: Colors.blue,
     borderRadius: 5,
   },
   detailsLineContainer: {

@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.navigatorIconColor,
+    backgroundColor: Colors.greenLight,
     height: '100%',
     paddingHorizontal: 20,
     paddingBottom: 15,
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   simpleText: {
     fontFamily: Colors.fontFamily,
     fontSize: 18,
-    color: Colors.secondaryColor,
+    color: Colors.blackLight,
   },
   boldText: {
     fontWeight: 'bold',

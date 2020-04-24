@@ -20,7 +20,7 @@ import {UserConsumer} from '../../../store/user';
 const ReportTestPage = props => {
   const [hadTest, setHadTest] = useState(false);
 
-  const changeCoronaState = async contextSymptom => {
+  const changeCoronaState = async (contextSymptom) => {
     setHadTest(true);
 
     contextSymptom.updateSymptom({hasTest: hadTest});

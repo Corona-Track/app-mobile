@@ -180,10 +180,18 @@ export default function RiskProfile(props) {
                 >AGENDAR TELEORIENTAÇÃO</Button>
 
                 <Button
+                    onPress={() => { navigation.navigate('EditAccount')}}
+                    style={styles.scheduleTeleorientationButton}
+                    mode="contained"
+                    color={'#FFFFFF'}
+                    labelStyle={styles.scheduleTeleorientationText}
+                >EDITAR DADOS</Button>
+
+                <Button
                     onPress={() => { navigation.pop(); }}
                     style={styles.backToStarButton}
                     mode="contained"
-                    color={Colors.buttonPrimaryColor}
+                    color={Colors.blue}
                     labelStyle={styles.backToStarText}
                 >VOLTAR PARA O INÍCIO</Button>
             </View>
@@ -226,16 +234,16 @@ const styles = StyleSheet.create({
     },
     scheduleTeleorientationButton: {
         width: '100%',
-        marginTop: 35,
+        marginTop: 20,
         borderRadius: 50,
         height: 52,
         justifyContent: 'center',
-        borderColor: Colors.buttonPrimaryColor,
+        borderColor: Colors.blue,
         borderWidth: 1,
 
     },
     scheduleTeleorientationText: {
-        color: Colors.buttonPrimaryColor,
+        color: Colors.blue,
         fontFamily: Colors.fontFamily,
     },
     backToStarButton: {
@@ -251,6 +259,7 @@ const styles = StyleSheet.create({
     },
     buttonsContainer: {
         width: '100%',
-        paddingHorizontal: 35
+        paddingHorizontal: 35,
+        marginTop: 15
     }
 })

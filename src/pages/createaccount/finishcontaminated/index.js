@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.contaminatedColor,
+    backgroundColor: Colors.redRiskProfile,
     height: '100%',
     paddingHorizontal: 20,
     paddingBottom: 15,

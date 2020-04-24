@@ -26,7 +26,7 @@ import {
   CheckboxItem,
 } from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer,UserContext} from '../../../store/user';
 
 export default class TouchingPrecautionPage extends Component {
   static navigationOptions = {
@@ -47,6 +47,16 @@ export default class TouchingPrecautionPage extends Component {
       {identifier: 'Contamino as mãos e limpo quando posso'},
     ],
   };
+
+  componentDidMount() {
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
+      this.setState({
+        entity: user.question
+      })
+    }
+  }
 
   render = () => {
     let {entity, contaminationList} = this.state;
@@ -103,7 +113,7 @@ export default class TouchingPrecautionPage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
-              {!entity.contaminated ? (
+              {!context.user.question.contaminated ? (
                 <DoubtButton
                   onPress={() => {
                     this.onDoubtPress(context);
@@ -154,6 +164,8 @@ export default class TouchingPrecautionPage extends Component {
     return entity.touchingPrecaution === identifier;
   };
 }
+
+TouchingPrecautionPage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>

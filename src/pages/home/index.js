@@ -10,6 +10,8 @@ import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import { getUser } from '../../firebase/User';
 import moment from 'moment';
 
+import {UserConsumer} from '../../store/user';
+
 import { Colors } from '../../themes/variables';
 import { signOut } from '../../firebase/Auth';
 import riskProfileTypes from '../../utils/enums/riskProfileTypes';
@@ -37,9 +39,10 @@ export default class HomePage extends Component {
     currentUser: {},
     chevronIcon: "chevron-down"
   };
-  setSignOut = () => {
+  setSignOut = (context) => {
     signOut()
       .then(() => {
+        context.updateUser({});
         this.props.navigation.navigate('Login');
       })
       .catch(error => {
@@ -91,47 +94,51 @@ export default class HomePage extends Component {
   render = () => {
     let { showLoading, currentUser, chevronIcon } = this.state;
     return (
-      <SafeAreaView style={styles.container}>
-        <Spinner visible={showLoading} />
-        <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-        <ImageBackground
-          source={require('../../assets/images/homebackground.png')}
-          resizeMethod="auto"
-          style={styles.backgroundImageStyle}
-        />
-        <View>
-          <MapButton onPress={this.onMapButtonPress} />
-          <HeartButton onPress={() => this.navigateScreen("Symptoms")} />
-        </View>
-        <View style={{ marginTop: 50 }}>
-          <UserDetails
-            chevronIcon={chevronIcon}
-            onPressAvatar={() => this.openProfileDetails(currentUser)}
-            onPress={this.executeCardAnimation}
-            currentUser={currentUser}
-            getRiskProfileColor={this.getRiskProfileColor}
-            photo={currentUser.photo}
-            name={currentUser.name}
-            aliasName={this.getFirstLetterName(currentUser.name)} />
-          {this.renderCard(currentUser)}
-          <View>
-            <Animated.ScrollView
-              style={{
-                height: 300,
-                opacity: translateY.interpolate({
-                  inputRange: [0, 200],
-                  outputRange: [0, 1],
-                }),
-              }}>
-              <View style={{ height: 300, marginHorizontal: 40 }}>
-                {/* <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" /> */}
-                {this.renderOptionsList(currentUser)}
-                <VersionDetails />
+      <UserConsumer>
+        {context => (
+          <SafeAreaView style={styles.container}>
+            <Spinner visible={showLoading} />
+            <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
+            <ImageBackground
+              source={require('../../assets/images/homebackground.png')}
+              resizeMethod="auto"
+              style={styles.backgroundImageStyle}
+            />
+            <View>
+              <MapButton onPress={this.onMapButtonPress} />
+              <HeartButton onPress={() => this.navigateScreen("Symptoms")} />
+            </View>
+            <View style={{ marginTop: 50 }}>
+              <UserDetails
+                chevronIcon={chevronIcon}
+                onPressAvatar={() => this.openProfileDetails(currentUser)}
+                onPress={this.executeCardAnimation}
+                currentUser={currentUser}
+                getRiskProfileColor={this.getRiskProfileColor}
+                photo={currentUser.photo}
+                name={currentUser.name}
+                aliasName={this.getFirstLetterName(currentUser.name)} />
+              {this.renderCard(currentUser)}
+              <View>
+                <Animated.ScrollView
+                  style={{
+                    height: 300,
+                    opacity: translateY.interpolate({
+                      inputRange: [0, 200],
+                      outputRange: [0, 1],
+                    }),
+                  }}>
+                  <View style={{ height: 300, marginHorizontal: 40 }}>
+                    {/* <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" /> */}
+                    {this.renderOptionsList(currentUser, context)}
+                    <VersionDetails />
+                  </View>
+                </Animated.ScrollView>
               </View>
-            </Animated.ScrollView>
-          </View>
-        </View>
-      </SafeAreaView>
+            </View>
+          </SafeAreaView>
+        )}
+      </UserConsumer>
     );
   };
   getFirstLetterName = name => {
@@ -158,7 +165,7 @@ export default class HomePage extends Component {
         return Colors.greenRiskProfile
     }
   }
-  renderOptionsList = (currentUser) => {
+  renderOptionsList = (currentUser, context) => {
     return (
       <View style={{ width: "100%" }}>
         <MenuItem icon="account" name="INFORMAÇÕES DO PERFIL" onPress={() => this.navigateScreen('RiskProfile',
@@ -168,7 +175,7 @@ export default class HomePage extends Component {
         <MenuItem onPress={() => this.navigateScreen("Orientation")} icon="monitor" name="TELEORIENTAÇÃO" />
         <MenuItem icon="account" onPress={() => this.navigateScreen("PublicUtility")} name="UTILIDADE PÚBLICA" />
         {/* <MenuItem icon="settings" name="CONFIGURAÇÕES" /> */}
-        <MenuItem onPress={this.setSignOut} icon="logout" name="SAIR" />
+        <MenuItem onPress={() => {this.setSignOut(context)}} icon="logout" name="SAIR" />
       </View>
     );
   };

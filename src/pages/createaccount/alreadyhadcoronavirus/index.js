@@ -96,7 +96,9 @@ export default class AlreadyHadCoronavirusPage extends Component {
       nextPage = 'AlreadyHadCoronavirusTest';
       entity.contaminated = true;
     }
+
     context.updateUser({question: entity});
+
     this.setState({entity});
     this.props.navigation.navigate(nextPage, {entity: entity});
   };
