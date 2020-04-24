@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
   View,
   Text,
@@ -277,18 +278,27 @@ const MapHeader = ({ onPress }) => (
 
 const MapBottom = () => (
   <View style={styles.containerBottom}>
-    <Image style={styles.bar} source={contagionBar} />
     <View style={styles.spacingText}>
-      <View style={{ flexDirection: "column" }}>
-        <Text style={styles.textBottom}>Leve</Text>
-        <Text style={styles.textBottom}>Suspeita</Text>
+      <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "column", width: 50 }}>
+          <Icon name={"circle"} size={32} color={yellow} />
+        </View>
+        <View style={{ flexDirection: "column" }}>
+          <Text style={styles.textBottom}>Leve</Text>
+          <Text style={styles.textBottom}>Suspeita</Text>
+        </View>
       </View>
-      <View style={{ flexDirection: "column" }}>
-        <Text style={styles.textBottom}>Sério risco</Text>
-        <Text style={styles.textBottom}>de contágio</Text>
+      <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "column", width: 50 }}>
+          <Icon name={"circle"} size={32} color={red} />
+        </View>
+        <View style={{ flexDirection: "column" }}>
+          <Text style={styles.textBottom}>Sério risco</Text>
+          <Text style={styles.textBottom}>de contágio</Text>
+        </View>
       </View>
     </View>
-  </View>
+  </View >
 );
 
 const styles = StyleSheet.create({
@@ -322,10 +332,10 @@ const styles = StyleSheet.create({
   },
   containerBottom: {
     backgroundColor: Colors.primaryTextColor,
-    height: 100,
+    height: 70,
     bottom: 0,
     width: Dimensions.get('window').width,
-    padding: 25,
+    padding: 20,
     flexDirection: 'column',
   },
   bar: {
