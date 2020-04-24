@@ -68,7 +68,7 @@ export default class MapsPage extends Component {
             showsUserLocation={true}
             loadingEnabled={true}
             minZoomLevel={1}
-            maxZoomLevel={20}>
+            maxZoomLevel={15}>
             {this.renderMarkers(cornersMarkers)}
             {/* {cornersMarkers && cornersMarkers.map((item, idx) => {
               return (

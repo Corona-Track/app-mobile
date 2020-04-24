@@ -196,9 +196,17 @@ const getUsersInsideRange = async region => {
                 let usersPositionList = [];
                 res.docs.forEach(doc => {
                     let userPosition = doc.data();
-                    if (userPosition.latitude >= markerSouthWest.latitude &&
-                        userPosition.latitude <= markerNorthWest.latitude)
+                    if (!(userPosition.latitude >= markerSouthWest.latitude &&
+                        userPosition.latitude <= markerNorthWest.latitude))
+                        continue;
+                    if (userPosition.contaminated) {
                         usersPositionList.push(userPosition);
+                        continue;
+                    }
+                    if (userPosition.contagionRisk && userPosition.contagionRisk === 3) {
+                        usersPositionList.push(userPosition);
+                        continue;
+                    }
                 });
                 return resolve(usersPositionList);
             })

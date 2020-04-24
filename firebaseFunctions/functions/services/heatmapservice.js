@@ -4,14 +4,26 @@ exports.calculateSquares = squaresToCalculate => {
         return [];
     for (var i = 0; i < squaresToCalculate.length; i++) {
         let currentSquare = squaresToCalculate[i];
-        let contaminatedAmount = currentSquare.users.length;
-
+        let contaminatedAmount = 0;
+        let suspiciousAmount = 0;
+        currentSquare.users.forEach(user => {
+            if (user.contaminated) {
+                contaminatedAmount++;
+                return;
+            }
+            suspiciousAmount++;
+        });
+        //Every 5 suspects - 1 infected
+        let suspiciousConverted = Math.floor(suspiciousAmount / 5);
+        contaminatedAmount = contaminatedAmount + suspiciousConverted;
+        //No contaminated user - do not show
+        if (contaminatedAmount === 0)
+            continue;
         //Circles rule
         let { meters } = currentSquare.internalCircleDiameter;
         let radiusKilometers = (meters / 1000);
         let circleArea = Math.PI * Math.pow(radiusKilometers, 2);
         let estimatedDensity = (contaminatedAmount / circleArea);
-
         //Cities rule
         let cityBasalDensity = 0;
         let citiesArea = 0;
@@ -40,18 +52,16 @@ exports.calculateSquares = squaresToCalculate => {
             yellowCircleMinimumLimit,
             yellowCircleMaximumLimit
         };
-
         if (densityResultant >= redCircleLimit) {
             currentSquare.circleColor = "red";
-            // squaresToShow.push(currentSquare);
-            // continue;
+            squaresToShow.push(currentSquare);
+            continue;
         }
         if (densityResultant > yellowCircleMinimumLimit && densityResultant < yellowCircleMaximumLimit) {
             currentSquare.circleColor = "yellow";
-            // squaresToShow.push(currentSquare);
-            // continue;
+            squaresToShow.push(currentSquare);
+            continue;
         }
-        squaresToShow.push(currentSquare);
     }
     return squaresToShow;
 };
