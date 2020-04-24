@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
     height: 120,
     width: 120,
     borderWidth: 2,
-    borderColor: '#26B3C1',
+    borderColor: Colors.blue,
     borderRadius: 200,
     alignItems: 'center',
     justifyContent: 'center',
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   reportText: {
     marginTop: 10,
     fontSize: 18,
-    color: '#26B3C1',
+    color: Colors.blue,
     fontWeight: '500',
     textTransform: 'uppercase',
   },

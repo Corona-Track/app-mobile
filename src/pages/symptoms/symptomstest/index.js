@@ -282,7 +282,7 @@ export default class SymptomsTestPage extends Component {
                                     nextTitle="Proximo"
                                     todayBackgroundColor={'#eee'}
                                     todayTextStyle={{color: '#828282'}}
-                                    selectedDayColor={Colors.navigatorIconColor}
+                                    selectedDayColor={Colors.blue}
                                     onDateChange={(date, type) =>
                                       this.onHandleDate(date, type, symptons)
                                     }

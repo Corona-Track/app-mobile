@@ -184,7 +184,7 @@ export default class ComorbiditiesPage extends Component {
     this.setState({showLoading: true});
 
     let nextPage = 'FinishUncontaminated';
-    if (entity.contaminated) {
+    if (context.user.question.contaminated) {
       nextPage = 'FinishContaminated';
     }
 

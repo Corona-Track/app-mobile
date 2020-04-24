@@ -46,12 +46,14 @@ export default class MedicinesPage extends Component {
   };
 
   componentDidMount() {
-    let { user } = this.context;
-
-    if(this.props.navigation.state.params.edit && user.question.medicinesSelected){
-      this.setState({
-        entity: user.question
-      })
+    if (this.props.navigation.state.params) {
+      let { user } = this.context;
+  
+      if(this.props.navigation.state.params.edit && user.question.medicinesSelected){
+        this.setState({
+          entity: user.question
+        })
+      }
     }
   }
 
@@ -104,7 +106,7 @@ export default class MedicinesPage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
-              {!context.user.contaminated ? (
+              {!context.user.question.contaminated ? (
                 <DoubtButton
                   onPress={() => {
                     this.onDoubtPress(context);
@@ -125,20 +127,19 @@ export default class MedicinesPage extends Component {
     this.props.navigation.pop();
   };
   onRightButtonPress = () => {
-    if(this.props.navigation.state.params.edit){
-      this.props.navigation.navigate("Home");
-    }else{
-      this.props.navigation.pop();
-    }
+    this.props.navigation.navigate("Home");
   };
   isChecked = identifier => {
     let {entity} = this.state;
+    console.log(entity, identifier);
     if(entity.medicinesSelected){
       let currentMedicinePosition = entity.medicinesSelected.findIndex(
         selected => selected === identifier,
       );
       return currentMedicinePosition > -1;
     }
+
+    return false;
   };
   onClickCheck = identifier => {
     let {entity, expandedMedicines} = this.state;
@@ -228,7 +229,7 @@ export default class MedicinesPage extends Component {
       <View style={{paddingVertical: 5}}>
         <CheckboxItemWithExpand
           identifier={identifier}
-          isChecked={this.isChecked}
+          isChecked={() => this.isChecked(identifier)}
           onClickCheck={this.onClickCheck}
           onPressExpand={this.onPressExpand}
           isExpanded={isExpanded}
@@ -394,7 +395,7 @@ const FrequencyRadioButtonItem = ({
         title={frequency}
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
-        checkedColor={Colors.navigatorIconColor}
+        checkedColor={Colors.blue}
         checked={checked}
         onPress={() => onClickCheck(frequency, identifier)}
       />

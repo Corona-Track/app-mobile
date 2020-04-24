@@ -128,7 +128,6 @@ const AuthenticationStackNavigator = createStackNavigator(
     FinishContaminated: {screen: FinishContaminatedPage},
 
     Login: {screen: LoginPage},
-    // Splash: {screen: SplashPage},
 
     //Preventive Profile
     Medicines: {screen: MedicinesPage},
@@ -157,7 +156,7 @@ const RoutesSwitchNavigator = createAppContainer(
       Splash: SplashPage,
       Authentication: AuthenticationStackNavigator,
       Application: ApplicationStackNavigator,
-      EditAccount: EditAcountStackNavigator
+      EditAccount: EditAcountStackNavigator,
     },
     {initialRouteName: 'Splash'},
   ),

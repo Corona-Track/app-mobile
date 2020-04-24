@@ -10,7 +10,7 @@ export const Colors = {
   fontFamily: Platform.OS === 'android' ? 'Prompt-Light' : 'Prompt',
   defaultIconColor: '#BDBDBD',
   navigatorIconColor: '#EA5B2D',
-  questionCenterIconColor: '#E9F7F9',
+  questionCenterIconColor: '#F7F7F7',
   notMainText: '#828282',
   searchBackgroundColor: '#e5e5e5',
   searchIconColor: '#E0E0E0',
@@ -19,4 +19,7 @@ export const Colors = {
   greenRiskProfile: '#27AE60',
   yellowRiskProfile: '#FFC700',
   redRiskProfile: '#FF0000',
+  blue: '#0058F4',
+  greenLight: '#00FA9D',
+  blackLight: '#333333',
 };

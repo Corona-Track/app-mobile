@@ -85,7 +85,7 @@ export default class TookPhotoPage extends Component {
                         containerStyle={styles.photoIcon}
                         type="material"
                         name="camera-alt"
-                        color="#f50"
+                        color={Colors.blue}
                         size={20}
                         iconStyle={{fontSize: 25}}
                       />
@@ -119,7 +119,7 @@ export default class TookPhotoPage extends Component {
                   style={styles.continueButtonContainer}
                   contentStyle={styles.continueButton}
                   mode="contained"
-                  color={Colors.buttonPrimaryColor}
+                  color={Colors.greenLight}
                   labelStyle={styles.continueButtonText}
                   onPress={this.onContinueButtonClick}>
                   CONTINUAR
@@ -151,7 +151,6 @@ export default class TookPhotoPage extends Component {
     this.setState({
       isCameraVisible: true,
     });
-    console.log(this.context)
   };
   onCloseCamera = () => {
     this.setState({

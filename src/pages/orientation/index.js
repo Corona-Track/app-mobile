@@ -71,7 +71,7 @@ export default class OrientationPage extends Component {
             <Button
               style={styles.buttonOrin}
               mode="contained"
-              color={Colors.buttonPrimaryColor}
+              color={Colors.blue}
               labelStyle={styles.textOrin}
               onPress={() => this.onPressScheduleOrientation(this.props)}
             >AGENDAR TELEORIENTAÇÃO</Button>

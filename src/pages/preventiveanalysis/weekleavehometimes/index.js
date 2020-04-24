@@ -46,12 +46,14 @@ export default class WeekLeaveHomeTimesPage extends Component {
   };
 
   componentDidMount() {
-    let { user } = this.context;
+    if (this.props.navigation.state.params) {
+      let { user } = this.context;
 
-    if(this.props.navigation.state.params.edit){
-      this.setState({
-        entity: user.question
-      })
+      if(this.props.navigation.state.params.edit){
+        this.setState({
+          entity: user.question
+        })
+      }
     }
   }
 
@@ -121,7 +123,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
-              {!entity.contaminated ? (
+              {!context.user.question.contaminated ? (
                 <DoubtButton
                   onPress={() => {
                     this.onDoubtPress(context);
@@ -222,7 +224,7 @@ const CustomSlider = ({value, onValueChange}) => {
         step={1}
         minimumValue={1}
         maximumValue={7}
-        minimumTrackTintColor={Colors.navigatorIconColor}
+        minimumTrackTintColor={Colors.blue}
         maximumTrackTintColor={Colors.searchIconColor}
         animationType="spring"
         thumbTintColor={Colors.secondaryColor}
@@ -326,7 +328,7 @@ const styles = StyleSheet.create({
   },
   customThumbStyle: {
     borderWidth: 6,
-    borderColor: Colors.navigatorIconColor,
+    borderColor: Colors.blue,
     width: 25,
     height: 25,
     borderRadius: 12,
@@ -334,7 +336,7 @@ const styles = StyleSheet.create({
   underlineThumb: {
     width: 35,
     height: 25,
-    backgroundColor: Colors.navigatorIconColor,
+    backgroundColor: Colors.blue,
     borderRadius: 5,
   },
   detailsLineContainer: {

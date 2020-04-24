@@ -164,7 +164,7 @@ export default class PersonalDataPage extends Component {
                 />
                 <SimpleTextInput
                   label="E-mail"
-                  value={entity.email}
+                  value={entity.email.toLowerCase()}
                   onChangeText={this.onHandleEmail}
                   valid={this.isEmailValid()}
                 />

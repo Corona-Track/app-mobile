@@ -54,7 +54,7 @@ export default class TakePhotoPage extends Component {
                 icon={{
                   name: 'camera-outline',
                   type: 'material-community',
-                  color: Colors.buttonPrimaryColor,
+                  color: Colors.blue,
                   size: 50,
                 }}
               />
@@ -77,7 +77,7 @@ export default class TakePhotoPage extends Component {
                     style={styles.continueButtonContainer}
                     contentStyle={styles.continueButton}
                     mode="contained"
-                    color={Colors.buttonPrimaryColor}
+                    color={Colors.greenLight}
                     labelStyle={styles.continueButtonText}
                     onPress={this.openCamera}>
                     CONTINUAR
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   avatarContainerIcon: {
     backgroundColor: Colors.secondaryColor,
-    borderColor: Colors.buttonPrimaryColor,
+    borderColor: Colors.blue,
     borderWidth: 3,
   },
   textContainer: {

@@ -53,12 +53,14 @@ export default class SocialDistancePage extends Component {
   };
 
   componentDidMount() {
-    let { user } = this.context;
+    if (this.props.navigation.state.params) {
+      let { user } = this.context;
 
-    if(this.props.navigation.state.params.edit){
-      this.setState({
-        entity: user.question
-      })
+      if(this.props.navigation.state.params.edit){
+        this.setState({
+          entity: user.question
+        })
+      }
     }
   }
 
@@ -135,7 +137,7 @@ export default class SocialDistancePage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
-              {!entity.contaminated ? (
+              {!context.user.question.contaminated ? (
                 <DoubtButton
                   onPress={() => {
                     this.onDoubtPress(context);

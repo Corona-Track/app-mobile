@@ -1,24 +1,20 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
-  View,
   Text,
   StyleSheet,
   ActivityIndicator,
   SafeAreaView,
-  ScrollView,
   Image,
-  Platform,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 
-import { TextInput, Button } from 'react-native-paper';
-import { SwitchActions } from 'react-navigation';
+import {TextInput, Button} from 'react-native-paper';
 
 // Auth
-import { SignIn } from '../../firebase/Auth';
+import {SignIn} from '../../firebase/Auth';
 
 // Variables
-import { Colors } from '../../themes/variables';
+import {Colors} from '../../themes/variables';
 
 export default class LoginPage extends Component {
   static navigationOptions = {
@@ -34,19 +30,19 @@ export default class LoginPage extends Component {
   };
 
   handleOnEmailChange = email => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     entity.email = email;
-    this.setState({ entity });
+    this.setState({entity});
   };
 
   handleOnPasswordChange = password => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     entity.password = password;
-    this.setState({ entity });
+    this.setState({entity});
   };
 
   isFormDisabled = () => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     return !(entity.email && entity.password);
   };
 
@@ -72,7 +68,7 @@ export default class LoginPage extends Component {
   };
 
   onSignInButtonPress = () => {
-    const { email, password } = this.state.entity;
+    const {email, password} = this.state.entity;
 
     this.setState({
       loading: true,
@@ -108,7 +104,7 @@ export default class LoginPage extends Component {
   };
 
   render = () => {
-    let { entity } = this.state;
+    let {entity} = this.state;
 
     return (
       <SafeAreaView style={styles.container}>
@@ -124,7 +120,7 @@ export default class LoginPage extends Component {
           value={entity.email}
           theme={{
             colors: {
-              primary: Colors.inputPrimaryColor,
+              primary: Colors.blue,
               placeholder: Colors.placeholderTextColor,
             },
           }}
@@ -138,7 +134,7 @@ export default class LoginPage extends Component {
           value={entity.password}
           theme={{
             colors: {
-              primary: Colors.inputPrimaryColor,
+              primary: Colors.blue,
               placeholder: Colors.placeholderTextColor,
             },
           }}
@@ -155,7 +151,7 @@ export default class LoginPage extends Component {
           contentStyle={styles.signInButton}
           mode="contained"
           disabled={this.isFormDisabled()}
-          color={Colors.buttonPrimaryColor}
+          color={Colors.blue}
           labelStyle={styles.signInButtonText}
           onPress={this.onSignInButtonPress}
           loading={this.state.loading}>
@@ -183,15 +179,22 @@ export default class LoginPage extends Component {
           onPress={this.onSignUpButtonPress}>
           CADASTRE-SE
         </Button>
-        <TermsButton onPress={() => { this.props.navigation.navigate('Terms'); }} label="Ao se cadastrar você aceita os Termos e Condições de Uso." />
+        <TermsButton
+          onPress={() => {
+            this.props.navigation.navigate('Terms');
+          }}
+          label="Ao se cadastrar você aceita os Termos e Condições de Uso."
+        />
       </SafeAreaView>
     );
   };
 }
 
-const TermsButton = ({ onPress, label }) => (
+const TermsButton = ({onPress, label}) => (
   <TouchableOpacity onPress={onPress} style={styles.skipContainer}>
-    <Text style={styles.skipButtonText}>Ao se cadastrar você aceita os Termos e Condições de Uso</Text>
+    <Text style={styles.skipButtonText}>
+      Ao se cadastrar você aceita os Termos e Condições de Uso
+    </Text>
   </TouchableOpacity>
 );
 
@@ -204,8 +207,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   logo: {
-    height: 150,
-    width: 210,
+    height: 180,
+    width: 240,
   },
   input: {
     height: 50,
@@ -229,7 +232,7 @@ const styles = StyleSheet.create({
   },
   other: {
     marginVertical: 30,
-    color: Colors.placeholderTextColor,
+    color: Colors.searchIconColor,
   },
   facebookButtonText: {
     color: '#235DE3',
@@ -251,7 +254,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 5,
     borderRadius: 50,
-    borderColor: Colors.buttonPrimaryColor,
+    borderColor: Colors.blue,
     borderWidth: 1,
   },
   signUpButton: {
@@ -260,7 +263,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   signUpButtonText: {
-    color: Colors.buttonPrimaryColor,
+    color: Colors.blue,
     fontFamily: Colors.fontFamily,
   },
   textError: {
@@ -272,7 +275,7 @@ const styles = StyleSheet.create({
   skipButtonText: {
     fontFamily: Colors.fontFamily,
     color: Colors.placeholderTextColor,
-textAlign: "center"
+    textAlign: 'center',
   },
   skipContainer: {
     marginTop: 5,

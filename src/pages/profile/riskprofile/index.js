@@ -191,7 +191,7 @@ export default function RiskProfile(props) {
                     onPress={() => { navigation.pop(); }}
                     style={styles.backToStarButton}
                     mode="contained"
-                    color={Colors.buttonPrimaryColor}
+                    color={Colors.blue}
                     labelStyle={styles.backToStarText}
                 >VOLTAR PARA O INÍCIO</Button>
             </View>
@@ -238,12 +238,12 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         height: 52,
         justifyContent: 'center',
-        borderColor: Colors.buttonPrimaryColor,
+        borderColor: Colors.blue,
         borderWidth: 1,
 
     },
     scheduleTeleorientationText: {
-        color: Colors.buttonPrimaryColor,
+        color: Colors.blue,
         fontFamily: Colors.fontFamily,
     },
     backToStarButton: {
