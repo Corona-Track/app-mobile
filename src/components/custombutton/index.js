@@ -148,7 +148,7 @@ export const FinishRemainingButton = ({onPress}) => (
       style={styles.finishRemainingAnswerButtonContainer}
       contentStyle={styles.continueButton}
       mode="contained"
-      color={Colors.secondaryColor}
+      color={Colors.blue}
       labelStyle={styles.finishRemainingButtonText}
       onPress={onPress}>
       SAIR
@@ -162,7 +162,7 @@ export const FinishCompleteButton = ({onPress}) => (
       style={styles.continueButtonContainer}
       contentStyle={styles.continueButton}
       mode="contained"
-      color={Colors.primaryTextColor}
+      color={Colors.greenLight}
       labelStyle={styles.continueButtonText}
       onPress={onPress}>
       CONCLUIR

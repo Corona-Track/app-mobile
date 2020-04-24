@@ -74,17 +74,16 @@ export const SignIn = (email, password) => {
             errorMessage = 'Email inválido!';
             break;
           case 'auth/user-disabled':
-            errorMessage = 'Seu usuário está desativado!';
+            errorMessage = 'Usuário desativado!';
             break;
           case 'auth/user-not-found':
-            errorMessage = 'Não existe este usuário!';
+            errorMessage = 'Usuário não encontrado!';
             break;
           case 'auth/wrong-password':
-            errorMessage = 'E-mail e/ou senha errados!';
+            errorMessage = 'E-mail e/ou senha incorretos!';
             break;
           default:
         }
-
         reject(new Error(errorMessage));
       });
   });

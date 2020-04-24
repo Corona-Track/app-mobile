@@ -128,7 +128,6 @@ export default class HomePage extends Component {
                     }),
                   }}>
                   <View style={{ height: 300, marginHorizontal: 40 }}>
-                    {/* <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" /> */}
                     {this.renderOptionsList(currentUser, context)}
                     <VersionDetails />
                   </View>
@@ -298,14 +297,6 @@ const UserDetails = ({ photo, name, aliasName, currentUser, getRiskProfileColor,
     </TouchableOpacity>
   </View>
 );
-
-// const UserPersonalData = ({ age, cpf, rg }) => (
-//   <View style={styles.userPersonalDataContainer}>
-//     <Text numberOfLines={1} style={styles.userPersonalDataText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>{age}</Text>
-//     <Text numberOfLines={1} style={styles.userPersonalDataText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>{cpf}</Text>
-//     <Text numberOfLines={1} style={styles.userPersonalDataText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>{rg}</Text>
-//   </View>
-// );
 
 const MenuItem = ({ icon, name, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.menuItemContainer}>
