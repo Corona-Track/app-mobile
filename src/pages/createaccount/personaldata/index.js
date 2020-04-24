@@ -203,6 +203,10 @@ export default class PersonalDataPage extends Component {
     let {entity} = this.state;
     this.setState({showLoading: true});
 
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
+      entity.birthday = new Date(entity.birthday);
+    }
+
     try {
       const resEmail = await getUserFilter(
         'email',
@@ -233,6 +237,8 @@ export default class PersonalDataPage extends Component {
 
       context.updateUser(entity);
       this.setState({showLoading: false});
+      
+      // console.log(context.user,entity)
       this.props.navigation.navigate('PersonalAddress', {entity: entity});
     } catch (error) {
       Alert.alert(
@@ -291,7 +297,7 @@ export default class PersonalDataPage extends Component {
     this.setState({entity});
   };
   disableButton = () => {
-    if(this.props.navigation.state.params.edit){
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
       return !(
         this.isNameValid() &&
         this.isCpfValid() &&

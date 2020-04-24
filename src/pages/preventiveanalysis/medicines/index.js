@@ -46,6 +46,7 @@ export default class MedicinesPage extends Component {
   };
 
   componentDidMount() {
+<<<<<<< HEAD
     if (this.props.navigation.state.params) {
       let { user } = this.context;
   
@@ -54,6 +55,14 @@ export default class MedicinesPage extends Component {
           entity: user.question
         })
       }
+=======
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit && user.question.medicinesSelected){
+      this.setState({
+        entity: user.question
+      })
+>>>>>>> feature/edituserdata
     }
   }
 

@@ -164,14 +164,14 @@ export default class TookPhotoPage extends Component {
     });
   };
   onLeftButtonPress = () => {
-    if(this.props.navigation.state.params.edit){
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
       this.props.navigation.navigate("Home");
     }else{
       this.props.navigation.pop();
     }
   };
   onRightButtonPress = () => {
-    if(this.props.navigation.state.params.edit){
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
       this.props.navigation.navigate("Home");
     }else{
       this.props.navigation.pop();
