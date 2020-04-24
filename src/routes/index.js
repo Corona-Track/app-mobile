@@ -74,6 +74,41 @@ const ApplicationStackNavigator = createStackNavigator(
   {initialRouteName: 'Home'},
 );
 
+const EditAcountStackNavigator = createStackNavigator(
+  {
+    //Update Account
+    TookPhoto: {screen: TookPhotoPage, params: {edit:true},},
+    PersonalData: {screen: PersonalDataPage, params: {edit:true}},
+    PersonalAddress: {screen: PersonalAddressPage , params: {edit:true}},
+    AlreadyHadCoronavirus: {screen: AlreadyHadCoronavirusPage , params: {edit:true}},
+    AlreadyHadCoronavirusTest: {screen: AlreadyHadCoronavirusTestPage , params: {edit:true}},
+    TestResult: {screen: TestResultPage , params: {edit:true}},
+    SomeoneDiagnosed: {screen: SomeoneDiagnosedPage , params: {edit:true}},
+    SomeoneSuspicious: {screen: SomeoneSuspiciousPage , params: {edit:true}},
+    Comorbidities: {screen: ComorbiditiesPage , params: {edit:true}},
+    FinishUncontaminated: {screen: FinishUncontaminatedPage , params: {edit:true}},
+    FinishContaminated: {screen: FinishContaminatedPage , params: {edit:true}},
+
+    //Preventive Profile
+    Medicines: {screen: MedicinesPage, params: {edit:true}},
+    AlreadyHadFluVaccine: {screen: AlreadyHadFluVaccinePage, params: {edit:true}},
+    WeekLeaveHomeTimes: {screen: WeekLeaveHomeTimesPage, params: {edit:true}},
+    SocialDistance: {screen: SocialDistancePage, params: {edit:true}},
+    ProtectionUsage: {screen: ProtectionUsagePage, params: {edit:true}},
+    TouchingPrecaution: {screen: TouchingPrecautionPage, params: {edit:true}},
+    HomePrecautions: {screen: HomePrecautionsPage, params: {edit:true}},
+    OutsideWork: {screen: OutsideWorkPage, params: {edit:true}},
+    RelativesLeavingHome: {screen: RelativesLeavingHomePage, params: {edit:true}},
+    RelativesHomePrecautions: {screen: RelativesHomePrecautionsPage, params: {edit:true}},
+    FinishRemaining: {screen: FinishRemainingPage, params: {edit:true}},
+    FinishComplete: {screen: FinishCompletePage, params: {edit:true}},
+
+  },
+  {
+    initialRouteName: 'TookPhoto',
+  },
+);
+
 //App external routes
 const AuthenticationStackNavigator = createStackNavigator(
   {
@@ -122,6 +157,7 @@ const RoutesSwitchNavigator = createAppContainer(
       Splash: SplashPage,
       Authentication: AuthenticationStackNavigator,
       Application: ApplicationStackNavigator,
+      EditAccount: EditAcountStackNavigator
     },
     {initialRouteName: 'Splash'},
   ),

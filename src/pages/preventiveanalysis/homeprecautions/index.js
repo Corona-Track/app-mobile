@@ -23,7 +23,7 @@ import {
 } from '../../../components/custombutton';
 import {RadioButtonTripleResizableItem} from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer,UserContext} from '../../../store/user';
 
 export default class HomePrecautionsPage extends Component {
   static navigationOptions = {
@@ -40,6 +40,16 @@ export default class HomePrecautionsPage extends Component {
       containerCleanupAnswer: null,
     },
   };
+
+  componentDidMount() {
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params.edit){
+      this.setState({
+        entity: user.question
+      })
+    }
+  }
 
   render = () => {
     let {entity} = this.state;
@@ -178,6 +188,8 @@ export default class HomePrecautionsPage extends Component {
   };
 }
 
+HomePrecautionsPage.contextType = UserContext;
+
 const IntroText = () => (
   <View style={styles.textContainer}>
     <Text style={[styles.simpleText]}>
@@ -201,7 +213,7 @@ const ShowerText = () => (
         styles.simpleText,
         {fontSize: 15, color: Colors.placeholderTextColor},
       ]}>
-      branços assim que entro em casa
+      braços assim que entro em casa
     </Text>
   </View>
 );

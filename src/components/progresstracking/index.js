@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 0,
         position: "absolute",
-        bottom: 10,
+        bottom: 20,
         left: 0,
         width: "100%",
         alignItems: "center",

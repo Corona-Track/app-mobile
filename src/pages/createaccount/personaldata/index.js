@@ -37,7 +37,7 @@ import {
   isValidCPF,
 } from '../../../services/formvalidatorservice';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer, UserContext} from '../../../store/user';
 
 import {getUserFilter} from '../../../firebase/User';
 
@@ -50,6 +50,19 @@ export default class PersonalDataPage extends Component {
   static propTypes = {
     entity: PropTypes.object,
   };
+
+  componentDidMount() {
+    let {navigation} = this.props;
+    if(navigation.state.params && navigation.state.params.edit){
+      let { user } = this.context;
+  
+      if(typeof user.birthday === "object"){
+        user.birthday = `${user.birthday.toDate()}`;
+      }
+
+      this.setState({ entity: user })
+    }
+  }
 
   state = {
     entity: {
@@ -121,7 +134,7 @@ export default class PersonalDataPage extends Component {
                   minimumDate={minimumDateBirthday}
                   maximumDate={maximumDateBirthday}
                   label="Data de Nascimento"
-                  value={entity.birthday}
+                  value={new Date(entity.birthday)}
                   onPress={this.onPressBirthdayPicker}
                   showDatePicker={showBirthday}
                   onChangeDate={this.onHandleDate}
@@ -155,11 +168,15 @@ export default class PersonalDataPage extends Component {
                   onChangeText={this.onHandleEmail}
                   valid={this.isEmailValid()}
                 />
-                <PasswordTextInput
-                  label="Senha"
-                  value={entity.password}
-                  onChangeText={this.onHandlePassword}
-                />
+                {
+                  !this.props.navigation.state.params.edit && (
+                    <PasswordTextInput
+                      label="Senha"
+                      value={entity.password}
+                      onChangeText={this.onHandlePassword}
+                    />
+                  )
+                }
                 <View style={{paddingVertical: 20}}>
                   <ContinueRequiredButton
                     disabled={this.disableButton()}
@@ -195,7 +212,7 @@ export default class PersonalDataPage extends Component {
 
       const resCpf = await getUserFilter('cpf', '==', entity.cpf);
 
-      if (resEmail && resEmail.length > 0) {
+      if (resEmail && resEmail.length > 0 && !this.props.navigation.state.params.edit) {
         Alert.alert(
           'Aviso',
           'Já existe um usuário com este email',
@@ -204,7 +221,7 @@ export default class PersonalDataPage extends Component {
         );
         return;
       }
-      if (resCpf && resCpf.length > 0) {
+      if (resCpf && resCpf.length > 0 && !this.props.navigation.state.params.edit) {
         Alert.alert(
           'Aviso',
           'Já existe um usuário com este cpf',
@@ -241,7 +258,7 @@ export default class PersonalDataPage extends Component {
   };
   onHandleDate = (event, date) => {
     let {entity} = this.state;
-    entity.birthday = date ?? entity.birthday;
+    entity.birthday = date;
     this.setState({
       entity: entity,
       showBirthday: false,
@@ -274,16 +291,28 @@ export default class PersonalDataPage extends Component {
     this.setState({entity});
   };
   disableButton = () => {
-    return !(
-      this.isNameValid() &&
-      this.isCpfValid() &&
-      this.isBirthdayValid() &&
-      this.isGenreValid() &&
-      this.isPregnancyValid() &&
-      this.isCellphoneValid() &&
-      this.isEmailValid() &&
-      this.isPasswordValid()
-    );
+    if(this.props.navigation.state.params.edit){
+      return !(
+        this.isNameValid() &&
+        this.isCpfValid() &&
+        this.isBirthdayValid() &&
+        this.isGenreValid() &&
+        this.isPregnancyValid() &&
+        this.isCellphoneValid() &&
+        this.isEmailValid() 
+      );
+    }else{
+      return !(
+        this.isNameValid() &&
+        this.isCpfValid() &&
+        this.isBirthdayValid() &&
+        this.isGenreValid() &&
+        this.isPregnancyValid() &&
+        this.isCellphoneValid() &&
+        this.isEmailValid() &&
+        this.isPasswordValid()
+      );
+    }
   };
   isNameValid = () => {
     let {name} = this.state.entity;
@@ -330,6 +359,8 @@ export default class PersonalDataPage extends Component {
     return password ?? false;
   };
 }
+
+PersonalDataPage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>

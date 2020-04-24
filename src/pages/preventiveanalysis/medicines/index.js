@@ -26,7 +26,7 @@ import {
   DoubtButton,
 } from '../../../components/custombutton';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer,UserContext} from '../../../store/user';
 
 export default class MedicinesPage extends Component {
   static navigationOptions = {
@@ -44,6 +44,16 @@ export default class MedicinesPage extends Component {
     },
     expandedMedicines: [],
   };
+
+  componentDidMount() {
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params.edit && user.question.medicinesSelected){
+      this.setState({
+        entity: user.question
+      })
+    }
+  }
 
   render = () => {
     return (
@@ -115,14 +125,20 @@ export default class MedicinesPage extends Component {
     this.props.navigation.pop();
   };
   onRightButtonPress = () => {
-    this.props.navigation.pop();
+    if(this.props.navigation.state.params.edit){
+      this.props.navigation.navigate("Home");
+    }else{
+      this.props.navigation.pop();
+    }
   };
   isChecked = identifier => {
     let {entity} = this.state;
-    let currentMedicinePosition = entity.medicinesSelected.findIndex(
-      selected => selected === identifier,
-    );
-    return currentMedicinePosition > -1;
+    if(entity.medicinesSelected){
+      let currentMedicinePosition = entity.medicinesSelected.findIndex(
+        selected => selected === identifier,
+      );
+      return currentMedicinePosition > -1;
+    }
   };
   onClickCheck = identifier => {
     let {entity, expandedMedicines} = this.state;
@@ -301,6 +317,8 @@ export default class MedicinesPage extends Component {
     this.props.navigation.navigate('AlreadyHadFluVaccine', {entity: entity});
   };
 }
+
+MedicinesPage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>
