@@ -25,7 +25,7 @@ import {ContinueRequiredButton} from '../../../components/custombutton';
 import {SignUp} from '../../../firebase/Auth';
 import {SaveUser, getUser} from '../../../firebase/User';
 
-import {UserConsumer,UserContext} from '../../../store/user';
+import {UserConsumer, UserContext} from '../../../store/user';
 
 export default class ComorbiditiesPage extends Component {
   static navigationOptions = {
@@ -57,17 +57,18 @@ export default class ComorbiditiesPage extends Component {
     showLoading: false,
   };
 
-  componentDidMount(){
+  componentDidMount() {
     let {navigation} = this.props;
-    if(navigation.state.params && navigation.state.params.edit){
-      getUser()
-        .then((doc) => {
-          if(doc.data().question.comorbiditiesSelected){
-            this.setState({ entity: {
-              comorbiditiesSelected : doc.data().question.comorbiditiesSelected
-            }})
-          }
-        });
+    if (navigation.state.params && navigation.state.params.edit) {
+      getUser().then(doc => {
+        if (doc.data().question.comorbiditiesSelected) {
+          this.setState({
+            entity: {
+              comorbiditiesSelected: doc.data().question.comorbiditiesSelected,
+            },
+          });
+        }
+      });
     }
   }
 
@@ -83,9 +84,14 @@ export default class ComorbiditiesPage extends Component {
               backgroundColor={Colors.secondaryColor}
               leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
               centerComponent={
-                <CenterComponent photo={context.user.photo} userName={context.user.name} />
+                <CenterComponent
+                  photo={context.user.photo}
+                  userName={context.user.name}
+                />
               }
-              rightComponent={<RightComponent onPress={this.onRightButtonPress} />}
+              rightComponent={
+                <RightComponent onPress={this.onRightButtonPress} />
+              }
             />
             <ScrollView nestedScrollEnabled={true} style={{width: '100%'}}>
               <IntroText />
@@ -194,7 +200,10 @@ export default class ComorbiditiesPage extends Component {
       const user = {...context.user};
       user.question.comorbiditiesSelected = entity.comorbiditiesSelected;
 
-      if(!this.props.navigation.state.params.edit){
+      if (
+        !this.props.navigation.state.params.edit ||
+        user.providerId === 'facebook.com'
+      ) {
         await SignUp(
           user.email.toLowerCase(),
           user.password,
@@ -204,7 +213,7 @@ export default class ComorbiditiesPage extends Component {
       }
 
       const {password, ...model} = user;
-      
+
       await SaveUser(model);
       this.setState({showLoading: false});
       this.props.navigation.navigate(nextPage, {entity: entity});
