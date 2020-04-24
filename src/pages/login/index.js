@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   StyleSheet,
@@ -6,15 +6,16 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  View
 } from 'react-native';
 
-import {TextInput, Button} from 'react-native-paper';
+import { TextInput, Button } from 'react-native-paper';
 
 // Auth
-import {SignIn} from '../../firebase/Auth';
+import { SignIn } from '../../firebase/Auth';
 
 // Variables
-import {Colors} from '../../themes/variables';
+import { Colors } from '../../themes/variables';
 
 export default class LoginPage extends Component {
   static navigationOptions = {
@@ -30,19 +31,19 @@ export default class LoginPage extends Component {
   };
 
   handleOnEmailChange = email => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.email = email;
-    this.setState({entity});
+    this.setState({ entity });
   };
 
   handleOnPasswordChange = password => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.password = password;
-    this.setState({entity});
+    this.setState({ entity });
   };
 
   isFormDisabled = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return !(entity.email && entity.password);
   };
 
@@ -68,7 +69,7 @@ export default class LoginPage extends Component {
   };
 
   onSignInButtonPress = () => {
-    const {email, password} = this.state.entity;
+    const { email, password } = this.state.entity;
 
     this.setState({
       loading: true,
@@ -104,7 +105,7 @@ export default class LoginPage extends Component {
   };
 
   render = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
 
     return (
       <SafeAreaView style={styles.container}>
@@ -157,7 +158,10 @@ export default class LoginPage extends Component {
           loading={this.state.loading}>
           ENTRAR
         </Button>
-        <Text style={styles.other}>─────────── OU ───────────</Text>
+        <View style={styles.other}>
+          <Text style={styles.otherText}>OU</Text>
+        </View>
+
 
         {/* <Button
           icon="facebook"
@@ -174,7 +178,7 @@ export default class LoginPage extends Component {
           style={styles.signUpButtonContainer}
           contentStyle={styles.signUpButton}
           mode="outlined"
-          color={Colors.buttonPrimaryColor}
+          color={Colors.blue}
           labelStyle={styles.signUpButtonText}
           onPress={this.onSignUpButtonPress}>
           CADASTRE-SE
@@ -190,7 +194,7 @@ export default class LoginPage extends Component {
   };
 }
 
-const TermsButton = ({onPress, label}) => (
+const TermsButton = ({ onPress, label }) => (
   <TouchableOpacity onPress={onPress} style={styles.skipContainer}>
     <Text style={styles.skipButtonText}>
       Ao se cadastrar você aceita os Termos e Condições de Uso
@@ -215,6 +219,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginHorizontal: 20,
     marginTop: 15,
+    fontSize: 14
   },
   signInButtonContainer: {
     width: '100%',
@@ -231,8 +236,24 @@ const styles = StyleSheet.create({
     fontFamily: Colors.fontFamily,
   },
   other: {
-    marginVertical: 30,
+    width: "100%",
+    borderBottomColor: Colors.searchIconColor,
+    borderBottomWidth: 1,
+    height: 20,
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  otherText: {
+    flex: 0,
+    position: "absolute",
+    height: 20,
     color: Colors.searchIconColor,
+    fontFamily: Colors.fontFamily,
+    alignSelf: "center",
+    marginTop: 10,
+    width: 30,
+    textAlign: "center",
+    backgroundColor: Colors.secondaryColor
   },
   facebookButtonText: {
     color: '#235DE3',
