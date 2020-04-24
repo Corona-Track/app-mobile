@@ -54,13 +54,30 @@ export default class PersonalDataPage extends Component {
   componentDidMount() {
     let { navigation } = this.props;
     if (navigation.state.params && navigation.state.params.edit) {
-      let { user } = this.context;
+      let {user} = this.context;
 
-      if (typeof user.birthday === "object") {
+      if (typeof user.birthday === 'object') {
         user.birthday = `${user.birthday.toDate()}`;
       }
 
-      this.setState({ entity: user })
+      this.setState({entity: user});
+    }
+
+    if (this.context.user.providerId === 'facebook.com') {
+      let {name, email} = this.context.user;
+      this.setState({
+        entity: {
+          name: name,
+          cpf: '',
+          birthday: null,
+          genre: '',
+          pregnancy: '',
+          cellphone: '',
+          email: email,
+          password: '',
+        },
+        emailTouched: true,
+      });
     }
   }
 
@@ -168,15 +185,13 @@ export default class PersonalDataPage extends Component {
                   onChangeText={this.onHandleEmail}
                   valid={this.isEmailValid()}
                 />
-                {
-                  !this.props.navigation.state.params.edit && (
-                    <PasswordTextInput
-                      label="Senha"
-                      value={entity.password}
-                      onChangeText={this.onHandlePassword}
-                    />
-                  )
-                }
+                {!this.props.navigation.state.params.edit && (
+                  <PasswordTextInput
+                    label="Senha"
+                    value={entity.password}
+                    onChangeText={this.onHandlePassword}
+                  />
+                )}
                 <View style={{ paddingVertical: 20 }}>
                   <ContinueRequiredButton
                     disabled={this.disableButton()}
@@ -203,7 +218,10 @@ export default class PersonalDataPage extends Component {
     let { entity } = this.state;
     this.setState({ showLoading: true });
 
-    if (this.props.navigation.state.params && this.props.navigation.state.params.edit) {
+    if (
+      this.props.navigation.state.params &&
+      this.props.navigation.state.params.edit
+    ) {
       entity.birthday = new Date(entity.birthday);
     }
 
@@ -216,7 +234,11 @@ export default class PersonalDataPage extends Component {
 
       const resCpf = await getUserFilter('cpf', '==', entity.cpf);
 
-      if (resEmail && resEmail.length > 0 && !this.props.navigation.state.params.edit) {
+      if (
+        resEmail &&
+        resEmail.length > 0 &&
+        !this.props.navigation.state.params.edit
+      ) {
         Alert.alert(
           'Aviso',
           'Já existe um usuário com este email',
@@ -225,7 +247,11 @@ export default class PersonalDataPage extends Component {
         );
         return;
       }
-      if (resCpf && resCpf.length > 0 && !this.props.navigation.state.params.edit) {
+      if (
+        resCpf &&
+        resCpf.length > 0 &&
+        !this.props.navigation.state.params.edit
+      ) {
         Alert.alert(
           'Aviso',
           'Já existe um usuário com este cpf',
@@ -297,7 +323,10 @@ export default class PersonalDataPage extends Component {
     this.setState({ entity });
   };
   disableButton = () => {
-    if (this.props.navigation.state.params && this.props.navigation.state.params.edit) {
+    if (
+      this.props.navigation.state.params &&
+      this.props.navigation.state.params.edit
+    ) {
       return !(
         this.isNameValid() &&
         this.isCpfValid() &&
