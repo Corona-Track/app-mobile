@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   SafeAreaView,
@@ -7,10 +7,10 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import {Header} from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
-import {Colors} from '../../../themes/variables';
+import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import {
   LeftComponent,
@@ -26,7 +26,7 @@ import {
   SubCheckboxItem,
 } from '../../../components/customcheckboxitem';
 
-import {UserConsumer,userContext, UserContext} from '../../../store/user';
+import { UserConsumer, userContext, UserContext } from '../../../store/user';
 
 export default class SocialDistancePage extends Component {
   static navigationOptions = {
@@ -42,13 +42,13 @@ export default class SocialDistancePage extends Component {
       reasonToNotKeepDistanceSelected: [],
     },
     reasonsList: [
-      {identifier: 'Mantenho sempre 2 mestros de distância de outras pessoas'},
-      {identifier: 'Nem sempre mantenho distância porque:'},
+      { identifier: 'Mantenho sempre 2 mestros de distância de outras pessoas' },
+      { identifier: 'Nem sempre mantenho distância porque:' },
     ],
     reasonsToNotKeepDistanceList: [
-      {identifier: 'Esqueço'},
-      {identifier: 'Por causa do meu trabalho'},
-      {identifier: 'Por causa do transporte público (trens e ônibus)'},
+      { identifier: 'Esqueço' },
+      { identifier: 'Por causa do meu trabalho' },
+      { identifier: 'Por causa do transporte público (trens e ônibus)' },
     ],
   };
 
@@ -56,21 +56,22 @@ export default class SocialDistancePage extends Component {
     if (this.props.navigation.state.params) {
       let { user } = this.context;
 
-    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
-      this.setState({
-        entity: user.question
-      })
+      if (this.props.navigation.state.params && this.props.navigation.state.params.edit) {
+        this.setState({
+          entity: user.question
+        })
+      }
     }
   }
 
   render = () => {
-    let {entity, reasonsList, reasonsToNotKeepDistanceList} = this.state;
+    let { entity, reasonsList, reasonsToNotKeepDistanceList } = this.state;
     return (
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
-            <View style={{flex: 0.8, width: '100%'}}>
-              <View style={{width: '100%', paddingHorizontal: 20}}>
+            <View style={{ flex: 0.8, width: '100%' }}>
+              <View style={{ width: '100%', paddingHorizontal: 20 }}>
                 <Header
                   backgroundColor={Colors.secondaryColor}
                   leftComponent={
@@ -92,7 +93,7 @@ export default class SocialDistancePage extends Component {
                 <View style={styles.radioButtonItemContainer}>
                   {reasonsList.map(reason => {
                     return (
-                      <View style={{height: 70, paddingHorizontal: 20}}>
+                      <View style={{ height: 70, paddingHorizontal: 20 }}>
                         <RadioButtonItem
                           identifier={reason.identifier}
                           isChecked={this.isCheckedRadio}
@@ -105,11 +106,11 @@ export default class SocialDistancePage extends Component {
                 {entity &&
                   entity.keepDistance &&
                   entity.keepDistance ===
-                    'Nem sempre mantenho distância porque:' && (
+                  'Nem sempre mantenho distância porque:' && (
                     <View style={styles.radioButtonItemContainer}>
                       {reasonsToNotKeepDistanceList.map(reason => {
                         return (
-                          <View style={{height: 50, marginHorizontal: 50}}>
+                          <View style={{ height: 50, marginHorizontal: 50 }}>
                             <SubCheckboxItem
                               identifier={reason.identifier}
                               isChecked={this.isChecked}
@@ -144,8 +145,8 @@ export default class SocialDistancePage extends Component {
                   label="Responder depois"
                 />
               ) : (
-                <></>
-              )}
+                  <></>
+                )}
             </View>
             <ProgressTracking amount={10} position={4} />
           </SafeAreaView>
@@ -160,52 +161,52 @@ export default class SocialDistancePage extends Component {
     this.props.navigation.pop();
   };
   onContinueButtonClick = context => {
-    let {entity} = this.state;
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('ProtectionUsage', {entity: entity});
+    let { entity } = this.state;
+    context.updateUser({ question: entity });
+    this.props.navigation.navigate('ProtectionUsage', { entity: entity });
   };
   disableButton = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return !entity.keepDistance;
   };
   isCheckedRadio = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return entity.keepDistance && entity.keepDistance === identifier;
   };
   onClickRadio = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.keepDistance = identifier;
     entity.reasonToNotKeepDistanceSelected = [];
-    this.setState({entity});
+    this.setState({ entity });
   };
   onDoubtPress = context => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.reasonToNotKeepDistanceSelected = [];
     entity.keepDistance = null;
     entity.skippedAnswer = true;
-    this.setState({entity});
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('ProtectionUsage', {entity: entity});
+    this.setState({ entity });
+    context.updateUser({ question: entity });
+    this.props.navigation.navigate('ProtectionUsage', { entity: entity });
   };
   isChecked = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     let currentPosition = entity.reasonToNotKeepDistanceSelected.findIndex(
       selected => selected === identifier,
     );
     return currentPosition > -1;
   };
   onClickCheck = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     let currentPosition = entity.reasonToNotKeepDistanceSelected.findIndex(
       selected => selected === identifier,
     );
     if (currentPosition === -1) {
       entity.reasonToNotKeepDistanceSelected.push(identifier);
-      this.setState({entity});
+      this.setState({ entity });
       return;
     }
     entity.reasonToNotKeepDistanceSelected.splice(currentPosition, 1);
-    this.setState({entity});
+    this.setState({ entity });
   };
 }
 
