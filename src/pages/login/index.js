@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     width: 240,
   },
   input: {
-    height: 50,
+    height: 55,
     width: '100%',
     marginHorizontal: 20,
     marginTop: 15,

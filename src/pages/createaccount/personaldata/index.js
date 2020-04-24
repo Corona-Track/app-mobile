@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   SafeAreaView,
@@ -7,19 +7,19 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import {Header} from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-import {Colors} from '../../../themes/variables';
+import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import {
   LeftComponent,
   CenterComponent,
   RightComponent,
 } from '../../../components/customheader';
-import {ContinueRequiredButton} from '../../../components/custombutton';
+import { ContinueRequiredButton } from '../../../components/custombutton';
 import {
   SimpleTextInput,
   PasswordTextInput,
@@ -27,7 +27,7 @@ import {
   SimpleDateTextInput,
   PhoneTextInput,
 } from '../../../components/customtextinput';
-import {CustomDropDown} from '../../../components/customdropdown';
+import { CustomDropDown } from '../../../components/customdropdown';
 import {
   emailValidator,
   cpfValidor,
@@ -37,9 +37,9 @@ import {
   isValidCPF,
 } from '../../../services/formvalidatorservice';
 
-import {UserConsumer, UserContext} from '../../../store/user';
+import { UserConsumer, UserContext } from '../../../store/user';
 
-import {getUserFilter} from '../../../firebase/User';
+import { getUserFilter } from '../../../firebase/User';
 
 export default class PersonalDataPage extends Component {
   static navigationOptions = {
@@ -52,11 +52,11 @@ export default class PersonalDataPage extends Component {
   };
 
   componentDidMount() {
-    let {navigation} = this.props;
-    if(navigation.state.params && navigation.state.params.edit){
+    let { navigation } = this.props;
+    if (navigation.state.params && navigation.state.params.edit) {
       let { user } = this.context;
-  
-      if(typeof user.birthday === "object"){
+
+      if (typeof user.birthday === "object") {
         user.birthday = `${user.birthday.toDate()}`;
       }
 
@@ -76,15 +76,15 @@ export default class PersonalDataPage extends Component {
       password: '',
     },
     genreList: [
-      {key: 'N', text: 'Não informar'},
-      {key: 'M', text: 'Masculino'},
-      {key: 'F', text: 'Feminino'},
+      { key: 'N', text: 'Não informar' },
+      { key: 'M', text: 'Masculino' },
+      { key: 'F', text: 'Feminino' },
     ],
     emailTouched: false,
     cpfTouched: false,
     showPregnancy: false,
     showLoading: false,
-    pregnancyList: [{key: '1', text: 'Sim'}, {key: '0', text: 'Não'}],
+    pregnancyList: [{ key: '1', text: 'Sim' }, { key: '0', text: 'Não' }],
     minimumDateBirthday: new Date(1900, 1, 1),
     maximumDateBirthday: moment(moment().format('DD/MM/YYYY'), 'DD/MM/YYYY')
       .add(-13, 'years')
@@ -104,7 +104,7 @@ export default class PersonalDataPage extends Component {
     return (
       <SafeAreaView style={styles.container}>
         <Spinner visible={showLoading} />
-        <View style={{width: '100%', paddingHorizontal: 20}}>
+        <View style={{ width: '100%', paddingHorizontal: 20 }}>
           <Header
             backgroundColor={Colors.secondaryColor}
             leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
@@ -117,7 +117,7 @@ export default class PersonalDataPage extends Component {
         <UserConsumer>
           {context => (
             <>
-              <ScrollView style={{width: '100%', paddingHorizontal: 20}}>
+              <ScrollView style={{ width: '100%', paddingHorizontal: 20 }}>
                 <IntroText />
                 <SimpleTextInput
                   label="Nome Completo"
@@ -155,8 +155,8 @@ export default class PersonalDataPage extends Component {
                     value={entity.pregnancy}
                   />
                 ) : (
-                  <></>
-                )}
+                    <></>
+                  )}
                 <PhoneTextInput
                   label="Celular"
                   value={entity.cellphone}
@@ -177,7 +177,7 @@ export default class PersonalDataPage extends Component {
                     />
                   )
                 }
-                <View style={{paddingVertical: 20}}>
+                <View style={{ paddingVertical: 20 }}>
                   <ContinueRequiredButton
                     disabled={this.disableButton()}
                     onPress={() => {
@@ -200,10 +200,10 @@ export default class PersonalDataPage extends Component {
     this.props.navigation.pop();
   };
   onContinueButtonClick = async context => {
-    let {entity} = this.state;
-    this.setState({showLoading: true});
+    let { entity } = this.state;
+    this.setState({ showLoading: true });
 
-    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
+    if (this.props.navigation.state.params && this.props.navigation.state.params.edit) {
       entity.birthday = new Date(entity.birthday);
     }
 
@@ -220,8 +220,8 @@ export default class PersonalDataPage extends Component {
         Alert.alert(
           'Aviso',
           'Já existe um usuário com este email',
-          [{text: 'OK', onPress: () => this.setState({showLoading: false})}],
-          {cancelable: false},
+          [{ text: 'OK', onPress: () => this.setState({ showLoading: false }) }],
+          { cancelable: false },
         );
         return;
       }
@@ -229,75 +229,75 @@ export default class PersonalDataPage extends Component {
         Alert.alert(
           'Aviso',
           'Já existe um usuário com este cpf',
-          [{text: 'OK', onPress: () => this.setState({showLoading: false})}],
-          {cancelable: false},
+          [{ text: 'OK', onPress: () => this.setState({ showLoading: false }) }],
+          { cancelable: false },
         );
         return;
       }
 
       context.updateUser(entity);
-      this.setState({showLoading: false});
-      
+      this.setState({ showLoading: false });
+
       // console.log(context.user,entity)
-      this.props.navigation.navigate('PersonalAddress', {entity: entity});
+      this.props.navigation.navigate('PersonalAddress', { entity: entity });
     } catch (error) {
       Alert.alert(
         'Aviso',
         'Ocorreu um erro, tente novamente',
-        [{text: 'OK', onPress: () => this.setState({showLoading: false})}],
-        {cancelable: false},
+        [{ text: 'OK', onPress: () => this.setState({ showLoading: false }) }],
+        { cancelable: false },
       );
     }
   };
   onHandleName = name => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.name = name;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onHandleCPF = cpf => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.cpf = cpf;
-    this.setState({entity, cpfTouched: true});
+    this.setState({ entity, cpfTouched: true });
   };
   onPressBirthdayPicker = () => {
-    this.setState({showBirthday: true});
+    this.setState({ showBirthday: true });
   };
   onHandleDate = (event, date) => {
-    let {entity} = this.state;
-    entity.birthday = date;
+    let { entity } = this.state;
+    entity.birthday = date ?? entity.birthday;
     this.setState({
       entity: entity,
       showBirthday: false,
     });
   };
   onHandleGenre = genre => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.genre = genre;
     entity.pregnancy = null;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onHandlePregnancy = pregnancy => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.pregnancy = pregnancy;
-    this.setState({entity: entity});
+    this.setState({ entity: entity });
   };
   onHandleCellphone = cellphone => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.cellphone = cellphone;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onHandleEmail = email => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.email = email;
-    this.setState({entity, emailTouched: true});
+    this.setState({ entity, emailTouched: true });
   };
   onHandlePassword = password => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.password = password;
-    this.setState({entity});
+    this.setState({ entity });
   };
   disableButton = () => {
-    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
+    if (this.props.navigation.state.params && this.props.navigation.state.params.edit) {
       return !(
         this.isNameValid() &&
         this.isCpfValid() &&
@@ -305,9 +305,9 @@ export default class PersonalDataPage extends Component {
         this.isGenreValid() &&
         this.isPregnancyValid() &&
         this.isCellphoneValid() &&
-        this.isEmailValid() 
+        this.isEmailValid()
       );
-    }else{
+    } else {
       return !(
         this.isNameValid() &&
         this.isCpfValid() &&
@@ -321,26 +321,26 @@ export default class PersonalDataPage extends Component {
     }
   };
   isNameValid = () => {
-    let {name} = this.state.entity;
+    let { name } = this.state.entity;
     return name ?? false;
   };
   isCpfValid = () => {
-    let {cpf} = this.state.entity;
+    let { cpf } = this.state.entity;
     if (!this.state.cpfTouched) {
       return true;
     }
     return cpfValidor(cpf) && isValidCPF(cpf);
   };
   isBirthdayValid = () => {
-    let {birthday} = this.state.entity;
+    let { birthday } = this.state.entity;
     return birthday ?? false;
   };
   isGenreValid = () => {
-    let {genre} = this.state.entity;
+    let { genre } = this.state.entity;
     return genre ?? false;
   };
   isPregnancyValid = () => {
-    let {genre, pregnancy} = this.state.entity;
+    let { genre, pregnancy } = this.state.entity;
     if (!genre) {
       return true;
     }
@@ -350,18 +350,18 @@ export default class PersonalDataPage extends Component {
     return true;
   };
   isCellphoneValid = () => {
-    let {cellphone} = this.state.entity;
+    let { cellphone } = this.state.entity;
     return cellphoneValidator(cellphone) || phoneValidator(cellphone);
   };
   isEmailValid = () => {
-    let {email} = this.state.entity;
+    let { email } = this.state.entity;
     if (!this.state.emailTouched) {
       return true;
     }
     return emailValidator(email);
   };
   isPasswordValid = () => {
-    let {password} = this.state.entity;
+    let { password } = this.state.entity;
     return password ?? false;
   };
 }
