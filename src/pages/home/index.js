@@ -31,7 +31,6 @@ export default class HomePage extends Component {
   static navigationOptions = {
     headerShown: false,
   };
-
   state = {
     showLoading: true,
     currentUser: {},

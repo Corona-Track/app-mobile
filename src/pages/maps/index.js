@@ -10,17 +10,20 @@ import {
   Dimensions,
   PermissionsAndroid,
   Platform,
-  TouchableHighlight,
   TouchableOpacity,
   Alert,
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Spinner from 'react-native-loading-spinner-overlay';
+import auth from '@react-native-firebase/auth';
 
 import { Colors } from '../../themes/variables';
 import cross from '../../assets/images/cross.png';
 import contagionBar from '../../assets/images/contagionBar.png';
 import { getMapElementsByPosition } from '../../services/mapservice';
+import { getUser } from '../../firebase/User';
+import { getCitiesAroundUser, saveUserPosition } from '../../firebase/UsersPosition';
+import { searchNearestCity } from '../../services/userspositionservice';
 
 
 let map = null;
@@ -30,6 +33,7 @@ export default class MapsPage extends Component {
     gestureEnabled: false,
   };
   state = {
+    currentUser: null,
     userLocation: {
       latitude: null,
       longitude: null,
@@ -45,11 +49,25 @@ export default class MapsPage extends Component {
     mapKey: null,
     cornersMarkers: [],
   };
-
   initialize = () => {
-    this.getUserLocation()
-      .catch(this.onGPSErrorMessage);
+    getUser()
+      .then(this.onGetUserDataSuccess)
+      .catch(this.onGetUserDataFailure);
   };
+  onGetUserDataSuccess = doc => {
+    let currentUser = doc.data();
+    this.setState({ currentUser }, () => {
+      this.getUserLocation()
+        .catch(this.onGPSErrorMessage);
+    });
+  };
+  onGetUserDataFailure = error => {
+    if (error)
+      console.log(error);
+    Alert.alert("Aviso!", "Houve um erro buscar seus dados, tente novamente mais tarde.");
+  };
+
+
   render = () => {
     let { mapKey, userLocation, currentLocation, cornersMarkers, showLoading } = this.state;
     return (
@@ -181,7 +199,7 @@ export default class MapsPage extends Component {
         this.setState({
           userLocation: userLocation,
           currentLocation: userLocation
-        });
+        }, () => { this.getUserCity(); });
       },
       error => {
         this.onGPSErrorMessage(error);
@@ -202,6 +220,34 @@ export default class MapsPage extends Component {
   closeMap = () => {
     this.props.navigation.pop();
   };
+  getUserCity = () => {
+    let { userLocation } = this.state;
+    getCitiesAroundUser(userLocation)
+      .then(this.onGetCitiesSuccess)
+      .catch(this.onGetUserDataFailure);
+  };
+  onGetCitiesSuccess = cities => {
+    if (!cities || (cities && cities.length === 0))
+      return;
+    let { userLocation, currentUser, currentLocation } = this.state;
+    let userCity = searchNearestCity(userLocation, cities);
+    if (!userCity)
+      return;
+    const { uid } = auth().currentUser;
+    let { question, contagionRisk } = currentUser;
+    let userPosition = {
+      cityReference: userCity.ibgeid,
+      contagionRisk: contagionRisk ?? 1,
+      contaminated: question.contaminated,
+      latitude: userLocation.latitude,
+      longitude: userLocation.longitude,
+      userId: uid
+    };
+    saveUserPosition(userPosition)
+      .then(() => { this.updateCurrentLocation(currentLocation); })
+      .catch(this.onGetUserDataFailure);
+  };
+
 }
 
 const red = 'rgba(207, 84, 84,0.6)';
