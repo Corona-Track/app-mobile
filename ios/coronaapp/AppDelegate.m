@@ -52,7 +52,7 @@ static void InitializeFlipper(UIApplication *application) {
   [self.window makeKeyAndVisible];
 
   [FIRApp configure];
-  [GMSServices provideAPIKey:@"AIzaSyA1ZrFiKAyzWjRaAzHvb3HIAosgBzJQbHQ"];
+  [GMSServices provideAPIKey:@"AIzaSyCmymy7Haq-D4XBThSNJ5Nn809mJZGRVmY"];
 
   [[FBSDKApplicationDelegate sharedInstance] application:application
     didFinishLaunchingWithOptions:launchOptions];
