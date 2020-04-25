@@ -18,27 +18,31 @@ exports.onUserUpdate = functions.firestore.document('/users/{userId}')
     .onWrite(async (change, context) => {
         const oldUserData = change.before.data()
         const newUserData = change.after.data()
-
-        const isUserDeleted = !newUserData
+        const isUserDeleted = !newUserData && !oldUserData.question
         if (isUserDeleted)
             return null
 
         if (oldUserData) {
-            const isSameAnswer = verifyIsSameAnswer(oldUserData, newUserData)
+            const isSameData = _.isEqual(oldUserData, newUserData);
 
-            if (isSameAnswer) {
+            if (isSameData) {
                 return null
             }
-
         }
+        let userData 
+        if(!newUserData){
+        userData = oldUserData
+        }else{
+            userData = newUserData    
+            }
 
         let symptomData = await getSymptomByUser(context.params.userId)
 
-        const { comorbiditiesSelected } = newUserData.question
+        const { comorbiditiesSelected,contaminated } = userData.question
+        let stillContamined = false
 
 
-
-        const riskProfileQuestionPoints = RiskProfileService.calculateRiskProfileQuestionsPoints(newUserData.question)
+        const riskProfileQuestionPoints = RiskProfileService.calculateRiskProfileQuestionsPoints(userData.question)
 
         let riskProfileSymptonsPoints = 0
         if (symptomData)
@@ -60,7 +64,11 @@ exports.onUserUpdate = functions.firestore.document('/users/{userId}')
             }
         }
 
-        const riskProfile = RiskProfileService.getRisk(contagionRisk, aggravationRisk)
+        if(contaminated) {
+            stillContamined = checkCoronaTest(userData.question)            
+        }
+
+        const riskProfile = RiskProfileService.getRisk(contagionRisk, aggravationRisk,stillContamined)
 
         return change.after.ref.set({
             riskProfile: riskProfile,
@@ -68,6 +76,20 @@ exports.onUserUpdate = functions.firestore.document('/users/{userId}')
             contagionRisk: contagionRisk
         }, { merge: true });
     })
+
+    function checkCoronaTest(questions){
+        const  {testDate,testResult} = questions
+        if(testResult === true){
+            const betweenDays = 14
+            const momentTestDate = moment(testDate.toDate())
+            const howManyDaysFromTest = moment().diff(momentTestDate, 'days')
+
+            if(howManyDaysFromTest<betweenDays){
+                return true
+            }
+        }
+        return false
+    }
 
 
 
@@ -77,33 +99,40 @@ exports.onSymptomsUpdate = functions.firestore.document('/symptoms/{symptomsId}'
         const newSymptomsData = change.after.data()
 
 
-        const isSymptomsDeleted = !newSymptomsData
+        const isSymptomsDeleted = !newSymptomsData && !olSymptomsData.symptons
         if (isSymptomsDeleted)
             return null
 
         if (olSymptomsData) {
-            const isSameSymptonsList = verifyIsSymptonsList(olSymptomsData, newSymptomsData)
+            const isSameData = _.isEqual(olSymptomsData, newSymptomsData);
 
-            if (isSameSymptonsList) {
+            if (isSameData) {
                 return null
             }
         }
 
-        const userRef = firestore.collection('users').doc(newSymptomsData.user_id)
+        let symptomData
+        if(!newSymptomsData){
+            symptomData = olSymptomsData
+        }else{
+            symptomData = newSymptomsData    
+            }
+
+        const userRef = firestore.collection('users').doc(symptomData.user_id)
 
         let getDoc = await userRef.get()
 
         let userData = getDoc.data()
 
-        let symptomData = await getSymptomByUser(newSymptomsData.user_id)
+        let symptomsData = await getSymptomByUser(symptomData.user_id)
 
 
 
-        const { comorbiditiesSelected } = userData
-
+        const { comorbiditiesSelected,contaminated } = userData.question
+        let stillContamined = false
 
         const riskProfileQuestionPoints = RiskProfileService.calculateRiskProfileQuestionsPoints(userData.question)
-        const riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(symptomData)
+        const riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(symptomsData)
         let contagionRisk = RiskProfileService.getContagionRisk(riskProfileQuestionPoints + riskProfileSymptonsPoints)
 
 
@@ -118,8 +147,11 @@ exports.onSymptomsUpdate = functions.firestore.document('/symptoms/{symptomsId}'
                 aggravationRisk = aggravationRiskTypes.HIGH
             }
         }
+        if(contaminated) {
+            stillContamined = checkCoronaTest(userData.question)            
+        }
 
-        const riskProfile = RiskProfileService.getRisk(contagionRisk, aggravationRisk)
+        const riskProfile = RiskProfileService.getRisk(contagionRisk, aggravationRisk,stillContamined)
 
 
         return userRef.set({

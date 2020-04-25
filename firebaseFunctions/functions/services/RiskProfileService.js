@@ -217,11 +217,21 @@ const calculatePointOfSympton = (identifier, start, end) => {
 
 const calculateFrequency = (start, end) => {
     const betweenDays = 14
+    let startFrequencyMoment 
     const momentStart = moment(start)
+    const momentBefore14Days = moment().subtract(betweenDays,'days')
+    if(momentStart.isBefore(momentBefore14Days)){
+        startFrequencyMoment = momentBefore14Days
+    }
+    else{
+        startFrequencyMoment = momentStart
+    }
+
+    
     const momentEnd = moment(end)
 
 
-    const frequency = momentEnd.diff(momentStart, 'days')
+    const frequency = momentEnd.diff(startFrequencyMoment, 'days')
     return frequency
 }
 
@@ -250,7 +260,10 @@ exports.getContagionRisk = (points) => {
     return contagionRiskTypes.HIGH
 }
 
-exports.getRisk = (contagionRisk, aggravationRisk) => {
+exports.getRisk = (contagionRisk, aggravationRisk, stillContamined) => {
+    if(stillContamined)
+    return riskProfileTypes.RED
+
     if (aggravationRisk === aggravationRiskTypes.HIGH)
         return riskProfileTypes.RED
 
