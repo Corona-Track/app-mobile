@@ -153,11 +153,11 @@ export default function RiskProfile(props) {
 
 
     return <SafeAreaView style={styles.page}>
-         <View style={{ width: '100%', marginHorizontal: 20 }}>
-          <Header
-           containerStyle={styles.header}
-            leftComponent={<LeftComponent onPress={onLeftButtonPress} />}
-            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />} />
+        <View style={{ width: '100%', marginHorizontal: 20 }}>
+            <Header
+                containerStyle={styles.header}
+                leftComponent={<LeftComponent onPress={onLeftButtonPress} />}
+                centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />} />
         </View>
         {/* <Header
             containerStyle={styles.header}
@@ -180,7 +180,7 @@ export default function RiskProfile(props) {
                 >AGENDAR TELEORIENTAÇÃO</Button>
 
                 <Button
-                    onPress={() => { navigation.navigate('EditAccount')}}
+                    onPress={() => { navigation.navigate('EditAccount') }}
                     style={styles.scheduleTeleorientationButton}
                     mode="contained"
                     color={'#FFFFFF'}
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     },
     buttonsContainer: {
         width: '100%',
-        paddingHorizontal: 35,
+        paddingHorizontal: 20,
         marginTop: 15
     }
 })
