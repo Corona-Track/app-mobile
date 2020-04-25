@@ -522,6 +522,7 @@ export default class SymptomsTestPage extends Component {
         type: 'test',
         testDate: contextSymptom.symptom.testDate,
         testResult: contextSymptom.symptom.testResult,
+        contaminated: contextSymptom.symptom.contaminated,
       };
 
       await SaveSymptom(model);

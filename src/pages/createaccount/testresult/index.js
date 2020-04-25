@@ -137,7 +137,21 @@ export default class TestResultPage extends Component {
   onContinuePress = context => {
     let {entity} = this.state;
 
-    context.updateUser({question: entity});
+    if(entity.testResult === false){
+      context.updateUser({question: {
+        testResult: entity.testResult,
+        testDate: entity.testDate,
+        alreadyHadCoronavirus: "deny",
+        contaminated: false
+      }});
+    }else if(entity.testDate){
+      context.updateUser({question: {
+        testResult: entity.testResult,
+        testDate: entity.testDate,
+        alreadyHadCoronavirus: "deny",
+        contaminated: true,
+      }});
+    }
 
     this.props.navigation.navigate('Comorbidities', {entity: entity});
   };

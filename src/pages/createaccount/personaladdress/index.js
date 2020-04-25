@@ -146,7 +146,7 @@ export default class PersonalAddressPage extends Component {
   };
   onContinueButtonClick = () => {
     let {entity} = this.state;
-    this.props.navigation.navigate('AlreadyHadCoronavirus', {entity: entity});
+    this.props.navigation.navigate('AlreadyHadCoronavirusTest', {entity: entity});
   };
   onHandleCEP = cep => {
     let {entity} = this.state;

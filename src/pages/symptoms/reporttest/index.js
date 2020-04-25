@@ -79,7 +79,7 @@ const hadCoronavirus = (props, changeCoronaState, contextSymptom) => (
       <ConfirmButton onPress={() => changeCoronaState(contextSymptom)} />
       <DoubtButton
         onPress={() => {
-          console.log('aguardando o resultado');
+          props.navigation.navigate("Home");
         }}
         label="Fiz porém estou aguardando o resultado"
       />
