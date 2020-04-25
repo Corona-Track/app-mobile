@@ -264,7 +264,7 @@ export default class PersonalDataPage extends Component {
   };
   onHandleDate = (event, date) => {
     let {entity} = this.state;
-    entity.birthday = date;
+    entity.birthday = date ?? entity.birthday;
     this.setState({
       entity: entity,
       showBirthday: false,

@@ -89,7 +89,33 @@ export default class AlreadyHadCoronavirusTestPage extends Component {
     entity.alreadyHadCoronavirusTest = answer;
     this.setState({entity});
     context.updateUser({question: entity});
-    this.props.navigation.navigate('TestResult', {entity: entity});
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
+      if(answer === "confirm"){
+        this.props.navigation.navigate('TestResult', {entity: entity});
+      }else{
+        this.props.navigation.navigate('SomeoneDiagnosed', {entity: entity});
+        context.updateUser({question: {
+          alreadyHadCoronavirusTest: answer,
+          alreadyHadCoronavirus: "deny",
+          contaminated: false,
+          testResult: '',
+          testDate: null,
+          someoneDiagnosed: '',
+          someoneSuspicious: '',
+        }});
+      }
+    }else{
+      if(answer === "confirm"){
+        this.props.navigation.navigate('TestResult', {entity: entity});
+      }else{
+        this.props.navigation.navigate('SomeoneDiagnosed', {entity: entity});
+        context.updateUser({question: {
+          alreadyHadCoronavirusTest: answer,
+          alreadyHadCoronavirus: "deny",
+          contaminated: false,
+        }});
+      }
+    }
   };
 }
 
