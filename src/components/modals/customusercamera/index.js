@@ -58,14 +58,6 @@ export const CustomUserCamera = ({ isVisible, onChangePhoto, onCloseCamera }) =>
                         color={"#fff"} />
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={onCloseCamera}
-                    style={styles.buttonCloseCamera}>
-                    <Icon
-                        name="close"
-                        size={32}
-                        color={"#fff"} />
-                </TouchableOpacity>
-                <TouchableOpacity
                     onPress={onTurnCamera}
                     style={styles.buttonOnTurnCamera}>
                     <IconMaterialCommunity
@@ -74,11 +66,17 @@ export const CustomUserCamera = ({ isVisible, onChangePhoto, onCloseCamera }) =>
                         color={"#fff"} />
                 </TouchableOpacity>
             </RNCamera>
+            <TouchableOpacity
+                onPress={onCloseCamera}
+                style={styles.buttonCloseCamera}>
+                <Icon
+                    name="close"
+                    size={32}
+                    color={"#fff"} />
+            </TouchableOpacity>
         </Modal>
     );
 };
-
-
 
 const styles = StyleSheet.create({
     container: {
@@ -114,18 +112,27 @@ const styles = StyleSheet.create({
         flex: 0,
         alignSelf: "center",
         position: "absolute",
-        bottom: 20
+        bottom: 20,
+        backgroundColor: "#000000",
+        padding: 10,
+        borderRadius: 35
     },
     buttonCloseCamera: {
         flex: 0,
         position: "absolute",
-        top: 35,
-        right: 30
+        top: 25,
+        right: 30,
+        backgroundColor: "#000000",
+        padding: 10,
+        borderRadius: 35
     },
     buttonOnTurnCamera: {
         flex: 0,
         position: "absolute",
-        top: 35,
-        left: 30
+        top: 25,
+        left: 30,
+        backgroundColor: "#000000",
+        padding: 10,
+        borderRadius: 35
     }
 });

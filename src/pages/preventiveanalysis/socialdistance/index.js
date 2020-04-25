@@ -26,7 +26,7 @@ import {
   SubCheckboxItem,
 } from '../../../components/customcheckboxitem';
 
-import { UserConsumer, userContext, UserContext } from '../../../store/user';
+import {UserConsumer, UserContext} from '../../../store/user';
 
 export default class SocialDistancePage extends Component {
   static navigationOptions = {
