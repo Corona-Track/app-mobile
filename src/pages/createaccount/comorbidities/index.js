@@ -27,6 +27,8 @@ import {SaveUser, getUser} from '../../../firebase/User';
 
 import {UserConsumer, UserContext} from '../../../store/user';
 
+import riskProfileTypes from '../../../utils/enums/riskProfileTypes'
+
 export default class ComorbiditiesPage extends Component {
   static navigationOptions = {
     headerShown: false,
@@ -186,13 +188,8 @@ export default class ComorbiditiesPage extends Component {
 
   onContinueButtonClick = async context => {
     let {entity} = this.state;
-
-    this.setState({showLoading: true});
-
     let nextPage = 'FinishUncontaminated';
-    if (context.user.question.contaminated) {
-      nextPage = 'FinishContaminated';
-    }
+    this.setState({showLoading: true});
 
     context.updateUser({question: entity});
 
@@ -215,6 +212,15 @@ export default class ComorbiditiesPage extends Component {
       const {password, ...model} = user;
 
       await SaveUser(model);
+      await new Promise(r => setTimeout(r, 1000));
+      const userRef = await getUser();
+      const userData = userRef.data();
+      const {riskProfile} = userData;
+
+      if (riskProfile === riskProfileTypes.RED) {
+        nextPage = 'FinishContaminated';
+      }
+
       this.setState({showLoading: false});
       this.props.navigation.navigate(nextPage, {entity: entity});
     } catch (error) {
