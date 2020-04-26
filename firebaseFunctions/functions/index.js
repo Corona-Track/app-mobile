@@ -199,6 +199,10 @@ const getUsersInsideRange = async region => {
                     if (!(userPosition.latitude >= markerSouthWest.latitude &&
                         userPosition.latitude <= markerNorthWest.latitude))
                         return;
+
+                    if (userPosition.latitude === null || userPosition.longitude === null)
+                        return;
+
                     if (userPosition.contaminated) {
                         usersPositionList.push(userPosition);
                         return;

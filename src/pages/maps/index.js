@@ -154,6 +154,7 @@ export default class MapsPage extends Component {
         markerNorthEast,
         markerSouthEast,
       };
+      console.log("Filter:" + JSON.stringify(filter))
       getMapElementsByPosition(filter)
         .then(response => this.onSuccessGetMapElementsByPosition(response, filter))
         .catch(this.onGPSErrorMessage)
