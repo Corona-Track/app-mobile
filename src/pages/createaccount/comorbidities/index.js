@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   SafeAreaView,
@@ -8,24 +8,24 @@ import {
   Alert,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Header} from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
 
-import {Colors} from '../../../themes/variables';
+import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import {
   LeftComponent,
   CenterComponent,
   RightComponent,
 } from '../../../components/customheader';
-import {CheckboxItem} from '../../../components/customcheckboxitem';
+import { CheckboxItem } from '../../../components/customcheckboxitem';
 //CONTINUE
-import {ContinueRequiredButton} from '../../../components/custombutton';
+import { ContinueRequiredButton } from '../../../components/custombutton';
 
-import {SignUp} from '../../../firebase/Auth';
-import {SaveUser, getUser} from '../../../firebase/User';
+import { SignUp } from '../../../firebase/Auth';
+import { SaveUser, getUser } from '../../../firebase/User';
 
-import {UserConsumer, UserContext} from '../../../store/user';
+import { UserConsumer, UserContext } from '../../../store/user';
 
 import riskProfileTypes from '../../../utils/enums/riskProfileTypes'
 
@@ -42,25 +42,25 @@ export default class ComorbiditiesPage extends Component {
       comorbiditiesSelected: [],
     },
     comorbiditiesList: [
-      {identifier: 'Nenhuma das opções'},
-      {identifier: 'Gravidez de alto risco'},
-      {identifier: 'Diabetes difícil de tratar'},
-      {identifier: 'Doença do coração difícil de tratar'},
-      {identifier: 'Doença do coração de nascimento'},
-      {identifier: 'Histórico de infarto'},
-      {identifier: 'Doença respiratória difícil de tratar'},
-      {identifier: 'Doenças do rim avançada'},
-      {identifier: 'Doenças que atacam sistema imunológico'},
-      {identifier: 'Remédios que atacam sistema imunológico'},
-      {identifier: 'Transplante de órgãos'},
-      {identifier: 'Doenças genéticas'},
-      {identifier: 'Fibrose cística'},
+      { identifier: 'Nenhuma das opções' },
+      { identifier: 'Gravidez de alto risco' },
+      { identifier: 'Diabetes difícil de tratar' },
+      { identifier: 'Doença do coração difícil de tratar' },
+      { identifier: 'Doença do coração de nascimento' },
+      { identifier: 'Histórico de infarto' },
+      { identifier: 'Doença respiratória difícil de tratar' },
+      { identifier: 'Doenças do rim avançada' },
+      { identifier: 'Doenças que atacam sistema imunológico' },
+      { identifier: 'Remédios que atacam sistema imunológico' },
+      { identifier: 'Transplante de órgãos' },
+      { identifier: 'Doenças genéticas' },
+      { identifier: 'Fibrose cística' },
     ],
     showLoading: false,
   };
 
   componentDidMount() {
-    let {navigation} = this.props;
+    let { navigation } = this.props;
     if (navigation.state.params && navigation.state.params.edit) {
       getUser().then(doc => {
         if (doc.data().question.comorbiditiesSelected) {
@@ -75,14 +75,14 @@ export default class ComorbiditiesPage extends Component {
   }
 
   render = () => {
-    let {entity, comorbiditiesList, showLoading} = this.state;
+    let { entity, comorbiditiesList, showLoading } = this.state;
     return (
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
             <Spinner visible={showLoading} />
             <Header
-              containerStyle={{marginHorizontal: 20}}
+              containerStyle={{ marginHorizontal: 20 }}
               backgroundColor={Colors.secondaryColor}
               leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
               centerComponent={
@@ -95,12 +95,12 @@ export default class ComorbiditiesPage extends Component {
                 <RightComponent onPress={this.onRightButtonPress} />
               }
             />
-            <ScrollView nestedScrollEnabled={true} style={{width: '100%'}}>
+            <ScrollView nestedScrollEnabled={true} style={{ width: '100%' }}>
               <IntroText />
               <View style={styles.checkboxItemContainer}>
                 {comorbiditiesList.map(comorbidity => {
                   return (
-                    <View style={{height: 40, paddingHorizontal: 20}}>
+                    <View style={{ height: 40, paddingHorizontal: 20 }}>
                       <CheckboxItem
                         identifier={comorbidity.identifier}
                         isChecked={this.isChecked}
@@ -136,14 +136,14 @@ export default class ComorbiditiesPage extends Component {
     this.props.navigation.pop();
   };
   isChecked = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     let currentComorbidityPosition = entity.comorbiditiesSelected.findIndex(
       selected => selected === identifier,
     );
     return currentComorbidityPosition > -1;
   };
   onClickCheck = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
 
     let noneOfOptionsPosition = entity.comorbiditiesSelected.findIndex(
       selected => selected === 'Nenhuma das opções',
@@ -157,28 +157,28 @@ export default class ComorbiditiesPage extends Component {
     );
     if (currentComorbidityPosition === -1) {
       entity.comorbiditiesSelected.push(identifier);
-      this.setState({entity});
+      this.setState({ entity });
       return;
     }
     entity.comorbiditiesSelected.splice(currentComorbidityPosition, 1);
-    this.setState({entity});
+    this.setState({ entity });
   };
   onClickNoneOfOptions = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     let noneOfOptionsPosition = entity.comorbiditiesSelected.findIndex(
       selected => selected === 'Nenhuma das opções',
     );
     if (noneOfOptionsPosition > -1) {
       entity.comorbiditiesSelected.splice(noneOfOptionsPosition, 1);
-      this.setState({entity});
+      this.setState({ entity });
       return;
     }
     entity.comorbiditiesSelected = [];
     entity.comorbiditiesSelected.push(identifier);
-    this.setState({entity});
+    this.setState({ entity });
   };
   disableButton = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return !(
       entity &&
       entity.comorbiditiesSelected &&
@@ -187,14 +187,14 @@ export default class ComorbiditiesPage extends Component {
   };
 
   onContinueButtonClick = async context => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     let nextPage = 'FinishUncontaminated';
-    this.setState({showLoading: true});
+    this.setState({ showLoading: true });
 
-    context.updateUser({question: entity});
+    context.updateUser({ question: entity });
 
     try {
-      const user = {...context.user};
+      let user = { ...context.user };
       user.question.comorbiditiesSelected = entity.comorbiditiesSelected;
 
       if (
@@ -209,26 +209,30 @@ export default class ComorbiditiesPage extends Component {
         );
       }
 
-      const {password, ...model} = user;
-
+      const { password, ...model } = user;
       await SaveUser(model);
+      console.log("A1");
       await new Promise(r => setTimeout(r, 1000));
+      console.log("A2");
       const userRef = await getUser();
+      console.log("A3");
       const userData = userRef.data();
-      const {riskProfile} = userData;
-
+      const { riskProfile } = userData;
+      console.log("A4");
       if (riskProfile === riskProfileTypes.RED) {
         nextPage = 'FinishContaminated';
       }
-
-      this.setState({showLoading: false});
-      this.props.navigation.navigate(nextPage, {entity: entity});
+      console.log("A5");
+      this.setState({ showLoading: false });
+      this.props.navigation.navigate(nextPage, { entity: entity });
     } catch (error) {
+      if (error)
+        console.log(JSON.stringify(error));
       Alert.alert(
         'Aviso',
         'Ocorreu um erro, tente novamente',
-        [{text: 'OK', onPress: () => this.setState({showLoading: false})}],
-        {cancelable: false},
+        [{ text: 'OK', onPress: () => this.setState({ showLoading: false }) }],
+        { cancelable: false },
       );
     }
   };

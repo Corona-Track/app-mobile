@@ -60,7 +60,7 @@ export default class FinishContaminatedPage extends Component {
                 )}
                 <IntroText userName={context.user.name} />
               </View>
-              <View style={{flex: 0.25, width: '90%'}}>
+              <View style={{flex: 0.25, width: '100%'}}>
                 <ContaminatedAnswerNowButton
                   onPress={() => {
                     this.onAnswerNowButtonPress();
@@ -112,11 +112,11 @@ const IntroText = ({userName}) => {
       <Text style={[styles.simpleText]}>também, como foram seus hábitos</Text>
       <Text style={[styles.simpleText]}>durante a pandemia do Coronavírus</Text>
       <Text style={[styles.simpleText]}>antes de ter contraído a doença.</Text>
-      <Text style={[styles.simpleText]}>Por isso temos algumas</Text>
+      <Text style={[styles.simpleText]}>Por isso, temos mais algumas</Text>
       <Text style={[styles.simpleText]}>perguntas, você se importaria em</Text>
       <Text style={[styles.simpleText]}>responder? Você ajudará outras</Text>
       <Text style={[styles.simpleText]}>
-        pessoas a não contrairem a doença.
+        pessoas a não contraírem a doença.
       </Text>
     </View>
   );

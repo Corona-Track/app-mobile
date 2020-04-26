@@ -58,7 +58,7 @@ export default class FinishUncontaminatedPage extends Component {
                 )}
                 <IntroText userName={context.user.name} />
               </View>
-              <View style={{flex: 0.25, width: '90%'}}>
+              <View style={{flex: 0.25, width: '100%'}}>
                 <UncontaminatedAnswerNowButton
                   onPress={() => {
                     this.onAnswerNowButtonPress();
@@ -109,7 +109,7 @@ const IntroText = ({userName}) => {
       <Text style={[styles.simpleText]}>É muito importante</Text>
       <Text style={[styles.simpleText]}>sabermos, também, como</Text>
       <Text style={[styles.simpleText]}>estão seus hábitos durante</Text>
-      <Text style={[styles.simpleText]}>a pandemia do Coronavírus</Text>
+      <Text style={[styles.simpleText]}>a pandemia do Coronavírus.</Text>
       <Text style={[styles.simpleText]}>Por isso temos mais algumas</Text>
       <Text style={[styles.simpleText]}>perguntas, você se</Text>
       <Text style={[styles.simpleText]}>importaria em responder?</Text>

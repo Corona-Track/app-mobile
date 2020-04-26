@@ -21,25 +21,6 @@ exports.calculateRiskProfileQuestionsPoints = (questions) => {
         relativesShowerAnswer
     } = questions
 
-    // console.log('comorbiditiesSelected:'+comorbiditiesSelected,
-    //     'someoneDiagnosed'+someoneDiagnosed,
-    //     'someoneSuspicious'+someoneSuspicious,
-    //     'alreadyHadCoronavirusTest'+alreadyHadCoronavirusTest,
-    //     'keepDistance'+keepDistance,
-    //     'protectionAnswer'+protectionAnswer,
-    //     'touchingPrecaution'+touchingPrecaution,
-    //     'showerAnswer'+showerAnswer,
-    //     'changeClothesAnswer'+changeClothesAnswer,
-    //     'containerCleanupAnswer'+containerCleanupAnswer,
-    //     'outsideWorkAnswer'+outsideWorkAnswer,
-    //     'relativesLeavingHome'+relativesLeavingHome,
-    //     'relativesChangeClothesAnswer'+relativesChangeClothesAnswer,
-    //     'relativesContainerCleanupAnswer'+relativesContainerCleanupAnswer,
-    //     'relativesShowerAnswer'+relativesShowerAnswer
-    //     )
-
-
-
     let points = 0
     let habitsNotPreventives = 0
 

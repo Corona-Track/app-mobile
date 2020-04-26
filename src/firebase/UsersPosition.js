@@ -13,12 +13,6 @@ export const saveUserPosition = userParams => {
 export const getCitiesAroundUser = async userPosition => {
     return new Promise((resolve, reject) => {
         let precision = 0.5;
-        // console.log("LOMIN: " + (userPosition.longitude - precision));
-        // console.log("USERLO: " + (userPosition.longitude));
-        // console.log("LOMAX: " + (userPosition.longitude + precision));
-        // console.log("LAMIN: " + (userPosition.latitude - precision));
-        // console.log("USERLA: " + userPosition.latitude);
-        // console.log("LAMAX: " + (userPosition.latitude + precision));
         let citiesCollection = firestore().collection('cities');
         let citiesQuery = citiesCollection
             .where('longitude', '>=', (userPosition.longitude - precision))

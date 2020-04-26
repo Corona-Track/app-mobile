@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Circle } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
@@ -13,14 +13,13 @@ import {
   Platform,
   TouchableOpacity,
   Alert,
+  ActivityIndicator
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
-import Spinner from 'react-native-loading-spinner-overlay';
 import auth from '@react-native-firebase/auth';
 
 import { Colors } from '../../themes/variables';
 import cross from '../../assets/images/cross.png';
-import contagionBar from '../../assets/images/contagionBar.png';
 import { getMapElementsByPosition } from '../../services/mapservice';
 import { getUser } from '../../firebase/User';
 import { getCitiesAroundUser, saveUserPosition } from '../../firebase/UsersPosition';
@@ -34,6 +33,7 @@ export default class MapsPage extends Component {
     gestureEnabled: false,
   };
   state = {
+    isMapEnabled: false,
     currentUser: null,
     userLocation: {
       latitude: null,
@@ -63,20 +63,17 @@ export default class MapsPage extends Component {
     });
   };
   onGetUserDataFailure = error => {
-    if (error)
-      console.log(error);
     Alert.alert("Aviso!", "Houve um erro buscar seus dados, tente novamente mais tarde.");
   };
 
 
   render = () => {
-    let { mapKey, userLocation, currentLocation, cornersMarkers, showLoading } = this.state;
+    let { isMapEnabled, userLocation, currentLocation, cornersMarkers } = this.state;
     return (
       <SafeAreaView style={styles.container}>
-        <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-        {Platform.OS === "android" ? <Spinner visible={showLoading} /> : (<></>)}
+        <NavigationEvents overlayColor="rgba(0, 0, 0, 0.80)" onDidFocus={() => this.initialize(this.props)} />
         <MapHeader onPress={this.closeMap} />
-        {userLocation && userLocation.latitude && (
+        {isMapEnabled && userLocation && userLocation.latitude && (
           <MapView
             ref={map => { this.map = map }}
             provider={PROVIDER_GOOGLE}
@@ -90,6 +87,7 @@ export default class MapsPage extends Component {
             {this.renderMarkers(cornersMarkers)}
           </MapView>
         )}
+        {!isMapEnabled && (<ActivityIndicator size="large" />)}
         <MapBottom />
       </SafeAreaView>
     )
@@ -110,11 +108,8 @@ export default class MapsPage extends Component {
     </>)
   };
   updateCurrentLocation = region => {
-    let { showLoading } = this.state;
-    if (showLoading)
-      return;
     this.setState({
-      showLoading: true
+      currentLocation: region,
     }, () => {
       let corners = getCornersBox(region);
       let markerCentral = {
@@ -156,16 +151,15 @@ export default class MapsPage extends Component {
       };
       getMapElementsByPosition(filter)
         .then(response => this.onSuccessGetMapElementsByPosition(response, filter))
-        .catch(this.onGPSErrorMessage)
-        .finally(() => { this.setState({ showLoading: false }); });
+        .catch(this.onGPSErrorMessage);
     });
   };
   onSuccessGetMapElementsByPosition = (response, filter) => {
     let { data } = response;
     this.setState({
-      currentLocation: filter.markerCentral,
       mapKey: Math.floor(Math.random() * 100),
-      cornersMarkers: data
+      cornersMarkers: data,
+      isMapEnabled: true
     });
   };
   getUserLocation = async () => {
@@ -208,9 +202,15 @@ export default class MapsPage extends Component {
     );
   };
   onGPSErrorMessage = error => {
-    this.setState({ showLoading: false });
-    if (error)
-      console.log(error);
+    if (error.message && error.message === "Request failed with status code 429") {
+      Alert.alert(
+        'Aviso!',
+        'Você atingiu o limite de requisições, aguarde alguns minutos e tente novamente!',
+        [{ text: 'OK' }],
+        { cancelable: true },
+      );
+      return;
+    }
     Alert.alert(
       'Aviso!',
       'Falha ao acessar a sua localização, tente novamente mais tarde!',

@@ -26,7 +26,7 @@ import {
   SubCheckboxItem,
 } from '../../../components/customcheckboxitem';
 
-import {UserConsumer, UserContext} from '../../../store/user';
+import { UserConsumer, UserContext } from '../../../store/user';
 
 export default class SocialDistancePage extends Component {
   static navigationOptions = {
@@ -42,7 +42,7 @@ export default class SocialDistancePage extends Component {
       reasonToNotKeepDistanceSelected: [],
     },
     reasonsList: [
-      { identifier: 'Mantenho sempre 2 mestros de distância de outras pessoas' },
+      { identifier: 'Mantenho sempre 2 metros de distância de outras pessoas' },
       { identifier: 'Nem sempre mantenho distância porque:' },
     ],
     reasonsToNotKeepDistanceList: [
@@ -167,7 +167,11 @@ export default class SocialDistancePage extends Component {
   };
   disableButton = () => {
     let { entity } = this.state;
-    return !entity.keepDistance;
+    if (!entity.keepDistance)
+      return true;
+    if (entity.keepDistance === "Nem sempre mantenho distância porque:")
+      return entity.reasonToNotKeepDistanceSelected.length === 0;
+    return false;
   };
   isCheckedRadio = identifier => {
     let { entity } = this.state;

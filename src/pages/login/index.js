@@ -13,13 +13,17 @@ import RNFetchBlob from 'rn-fetch-blob';
 
 import { TextInput, Button } from 'react-native-paper';
 
+import {
+  SimpleTextInput,
+  PasswordTextInput,
+} from '../../components/customtextinput';
 // Auth
-import {SignIn, SignInFacebook} from '../../firebase/Auth';
+import { SignIn, SignInFacebook } from '../../firebase/Auth';
 
 // Variables
 import { Colors } from '../../themes/variables';
 
-import {UserConsumer} from '../../store/user';
+import { UserConsumer } from '../../store/user';
 
 export default class LoginPage extends Component {
   static navigationOptions = {
@@ -158,59 +162,40 @@ export default class LoginPage extends Component {
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
-            <Image
-              style={styles.logo}
-              resizeMode="contain"
-              source={require('../../assets/images/logo.png')}
-              PlaceholderContent={<ActivityIndicator />}
-            />
-            <TextInput
-              label="Email"
-              style={styles.input}
-              value={entity.email}
-              theme={{
-                colors: {
-                  primary: Colors.blue,
-                  placeholder: Colors.placeholderTextColor,
-                },
-              }}
-              maxLength={40}
-              mode="outlined"
-              onChangeText={this.handleOnEmailChange}
-            />
-            <TextInput
-              label="Senha"
-              style={styles.input}
-              value={entity.password}
-              theme={{
-                colors: {
-                  primary: Colors.blue,
-                  placeholder: Colors.placeholderTextColor,
-                },
-              }}
-              secureTextEntry={true}
-              maxLength={40}
-              mode="outlined"
-              onChangeText={this.handleOnPasswordChange}
-            />
-            {this.state.error !== '' && (
-              <Text style={styles.textError}>{this.state.error}</Text>
-            )}
-            <Button
-              style={styles.signInButtonContainer}
-              contentStyle={styles.signInButton}
-              mode="contained"
-              disabled={this.isFormDisabled()}
-              color={Colors.blue}
-              labelStyle={styles.signInButtonText}
-              onPress={this.onSignInButtonPress}
-              loading={this.state.loading}>
-              ENTRAR
+            <View style={styles.innerContainer}>
+              <Image
+                style={styles.logo}
+                resizeMode="contain"
+                source={require('../../assets/images/logo.png')}
+                PlaceholderContent={<ActivityIndicator />} />
+              <View style={{ width: "100%" }}>
+                <SimpleTextInput
+                  label="E-mail"
+                  value={entity.email.toLowerCase()}
+                  onChangeText={this.handleOnEmailChange} />
+              </View>
+              <View style={{ width: "100%" }}>
+                <PasswordTextInput
+                  label="Senha"
+                  value={entity.password}
+                  onChangeText={this.handleOnPasswordChange} />
+              </View>
+              {this.state.error !== '' && (<Text style={styles.textError}>{this.state.error}</Text>)}
+              <Button
+                style={styles.signInButtonContainer}
+                contentStyle={styles.signInButton}
+                mode="contained"
+                disabled={this.isFormDisabled()}
+                color={Colors.blue}
+                labelStyle={styles.signInButtonText}
+                onPress={this.onSignInButtonPress}
+                loading={this.state.loading}>
+                ENTRAR
             </Button>
-        <View style={styles.other}>
-          <Text style={styles.otherText}>OU</Text>
-        </View>
-            <Button
+              <View style={styles.other}>
+                <Text style={styles.otherText}>OU</Text>
+              </View>
+              {/* <Button
               icon="facebook"
               style={styles.facebookButtonContainer}
               contentStyle={styles.facebookButton}
@@ -220,22 +205,23 @@ export default class LoginPage extends Component {
               uppercase={false}
               onPress={() => this.onFacebookButtonPress(context)}>
               Entrar com Facebook
+            </Button> */}
+              <Button
+                style={styles.signUpButtonContainer}
+                contentStyle={styles.signUpButton}
+                mode="outlined"
+                color={Colors.blue}
+                labelStyle={styles.signUpButtonText}
+                onPress={this.onSignUpButtonPress}>
+                CADASTRE-SE
             </Button>
-            <Button
-              style={styles.signUpButtonContainer}
-              contentStyle={styles.signUpButton}
-              mode="outlined"
-          color={Colors.blue}
-              labelStyle={styles.signUpButtonText}
-              onPress={this.onSignUpButtonPress}>
-              CADASTRE-SE
-            </Button>
-            <TermsButton
-              onPress={() => {
-                this.props.navigation.navigate('Terms');
-              }}
-              label="Ao se cadastrar você aceita os Termos e Condições de Uso."
-            />
+              <TermsButton
+                onPress={() => {
+                  this.props.navigation.navigate('Terms');
+                }}
+                label="Ao se cadastrar você aceita os Termos e Condições de Uso."
+              />
+            </View>
           </SafeAreaView>
         )}
       </UserConsumer>
@@ -255,9 +241,15 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.secondaryColor,
+    backgroundColor: Colors.primaryTextColor,
     height: '100%',
-    marginHorizontal: 20,
+    //marginHorizontal: 20,
+  },
+  innerContainer:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '90%', 
+    height: '100%'
   },
   logo: {
     height: 180,
@@ -302,7 +294,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: 30,
     textAlign: "center",
-    backgroundColor: Colors.secondaryColor
+    backgroundColor: Colors.primaryTextColor
   },
   facebookButtonText: {
     color: '#235DE3',

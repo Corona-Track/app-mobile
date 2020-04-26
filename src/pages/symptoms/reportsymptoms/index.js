@@ -239,7 +239,7 @@ export default class ReportSymptomsPage extends Component {
             {contextSymptom => (
               <SafeAreaView style={styles.container}>
                 <Spinner visible={showLoading} />
-                <View style={{width: '100%', paddingHorizontal: 20}}>
+                <View style={{width: '100%', marginHorizontal: 20}}>
                   <Header
                     backgroundColor={Colors.secondaryColor}
                     leftComponent={

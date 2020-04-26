@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   SafeAreaView,
@@ -9,9 +9,9 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import {Header} from 'react-native-elements';
-import {Button} from 'react-native-paper';
-import {Colors} from '../../../themes/variables';
+import { Header } from 'react-native-elements';
+import { Button } from 'react-native-paper';
+import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import {
   LeftComponent,
@@ -19,22 +19,22 @@ import {
   RightComponent,
 } from '../../../components/customheader';
 import PropTypes from 'prop-types';
-import {ContinueRequiredButton} from '../../../components/custombutton';
+import { ContinueRequiredButton } from '../../../components/custombutton';
 import {
   SimpleTextInput,
   CEPTextInput,
   SimpleNumericTextInput,
 } from '../../../components/customtextinput';
-import {NavigationEvents} from 'react-navigation';
+import { NavigationEvents } from 'react-navigation';
 import Geolocation from 'react-native-geolocation-service';
-import {getAddressDataByZipCode} from '../../../services/zipcodeservice';
+import { getAddressDataByZipCode } from '../../../services/zipcodeservice';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {
   cepValidator,
   getFirstName,
 } from '../../../services/formvalidatorservice';
 
-import {UserConsumer, UserContext} from '../../../store/user';
+import { UserConsumer, UserContext } from '../../../store/user';
 
 export default class PersonalAddressPage extends Component {
   static navigationOptions = {
@@ -62,22 +62,22 @@ export default class PersonalAddressPage extends Component {
   };
 
   componentDidMount() {
-    let {navigation} = this.props;
-    if(navigation.state.params && navigation.state.params.edit){
+    let { navigation } = this.props;
+    if (navigation.state.params && navigation.state.params.edit) {
       let { user } = this.context;
-    
+
       this.setState({ entity: user.address })
     }
   }
 
   render = () => {
-    let {entity, showLoading} = this.state;
+    let { entity, showLoading } = this.state;
     return (
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
             <Spinner visible={showLoading} />
-            <View style={{width: '100%', paddingHorizontal: 20}}>
+            <View style={{ width: '100%', paddingHorizontal: 20 }}>
               <Header
                 backgroundColor={Colors.secondaryColor}
                 leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
@@ -89,7 +89,7 @@ export default class PersonalAddressPage extends Component {
                 }
               />
             </View>
-            <ScrollView style={{width: '100%', paddingHorizontal: 20}}>
+            <ScrollView style={{ width: '100%', paddingHorizontal: 20 }}>
               <IntroText userName={entity.name} />
               {/* <GPSButton onGPSButtonPress={this.onGPSButtonPress} /> */}
               <CEPTextInput
@@ -122,11 +122,11 @@ export default class PersonalAddressPage extends Component {
                 value={entity.number}
                 onChangeText={this.onHandleNumber}
               />
-              <View style={{paddingVertical: 20}}>
+              <View style={{ paddingVertical: 20 }}>
                 <ContinueRequiredButton
                   disabled={this.disableButton()}
                   onPress={() => {
-                    this.context.updateUser({address: this.state.entity});
+                    this.context.updateUser({ address: this.state.entity });
                     this.onContinueButtonClick();
                   }}
                 />
@@ -145,41 +145,41 @@ export default class PersonalAddressPage extends Component {
     this.props.navigation.pop();
   };
   onContinueButtonClick = () => {
-    let {entity} = this.state;
-    this.props.navigation.navigate('AlreadyHadCoronavirusTest', {entity: entity});
+    let { entity } = this.state;
+    this.props.navigation.navigate('AlreadyHadCoronavirusTest', { entity: entity });
   };
   onHandleCEP = cep => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.cep = cep;
-    this.setState({entity});
+    this.setState({ entity });
     if (cepValidator(cep)) {
       this.getAddressDataFromZipCode(cep);
     }
   };
   onHandleStreet = street => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.street = street;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onHandleNumber = number => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.number = number;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onHandleNeighborhood = neighborhood => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.neighborhood = neighborhood;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onHandleCity = city => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.city = city;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onHandleUF = uf => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.uf = uf;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onGPSButtonPress = async () => {
     if (Platform.OS === 'ios') {
@@ -204,22 +204,22 @@ export default class PersonalAddressPage extends Component {
     }
   };
   onGPSErrorMessage = () => {
-    this.setState({hasPermissionLocation: false});
+    this.setState({ hasPermissionLocation: false });
     Alert.alert(
       'Aviso!',
       'Falha ao acessar a sua localização, tente novamente mais tarde!',
-      [{text: 'OK'}],
-      {cancelable: false},
+      [{ text: 'OK' }],
+      { cancelable: false },
     );
   };
   getLocation = () => {
-    this.setState({hasPermissionLocation: true});
+    this.setState({ hasPermissionLocation: true });
     Geolocation.getCurrentPosition(
       position => {
-        let {entity} = this.state;
+        let { entity } = this.state;
         entity.latitude = position.coords.latitude;
         entity.longitude = position.coords.longitude;
-        this.setState({entity});
+        this.setState({ entity });
       },
       error => {
         this.onGPSErrorMessage();
@@ -234,28 +234,28 @@ export default class PersonalAddressPage extends Component {
       .finally(this.hideLoading);
   };
   onGetAddressDataSuccess = response => {
-    let {data} = response;
-    let {entity} = this.state;
+    let { data } = response;
+    let { entity } = this.state;
     entity.street = data.logradouro;
     entity.neighborhood = data.bairro;
     entity.city = data.localidade;
     entity.uf = data.uf;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onGetAddressDataFailure = () => {
     Alert.alert(
       'Aviso!',
       'Falha buscar dados do endereço, tente novamente mais tarde!',
-      [{text: 'OK'}],
-      {cancelable: false},
+      [{ text: 'OK' }],
+      { cancelable: false },
     );
   };
   //Loading
   showLoading = () => {
-    this.setState({showLoading: true});
+    this.setState({ showLoading: true });
   };
   hideLoading = () => {
-    this.setState({showLoading: false});
+    this.setState({ showLoading: false });
   };
   disableButton = () => {
     return !(
@@ -270,47 +270,48 @@ export default class PersonalAddressPage extends Component {
     // this.isLongitudeValid()
   };
   isCepValid = () => {
-    let {cep} = this.state.entity;
+    let { cep } = this.state.entity;
     return cepValidator(cep);
   };
   isStreetValid = () => {
-    let {street} = this.state.entity;
+    let { street } = this.state.entity;
     return street ?? false;
   };
   isNeighborhoodValid = () => {
-    let {neighborhood} = this.state.entity;
+    let { neighborhood } = this.state.entity;
     return neighborhood ?? false;
   };
   isCityValid = () => {
-    let {city} = this.state.entity;
+    let { city } = this.state.entity;
     return city ?? false;
   };
   isUfValid = () => {
-    let {uf} = this.state.entity;
+    let { uf } = this.state.entity;
     return uf ?? false;
   };
   isNumberValid = () => {
-    let {number} = this.state.entity;
+    let { number } = this.state.entity;
     return number ?? false;
   };
   isLatitudeValid = () => {
-    let {latitude} = this.state.entity;
+    let { latitude } = this.state.entity;
     return latitude ?? false;
   };
   isLongitudeValid = () => {
-    let {longitude} = this.state.entity;
+    let { longitude } = this.state.entity;
     return longitude ?? false;
   };
 }
 
 PersonalAddressPage.contextType = UserContext;
 
-const IntroText = ({userName}) => {
+const IntroText = ({ userName }) => {
   return (
     <View style={styles.textContainer}>
       <Text style={[styles.simpleText]}>
         <Text style={styles.boldText}>
-          Muito bem, {getFirstName(userName)}!
+          {/* Muito bem, {getFirstName(userName)}! */}
+          Muito bem!
         </Text>
       </Text>
       <Text style={[styles.simpleText]}>Agora nos diga, por favor,</Text>
@@ -319,7 +320,7 @@ const IntroText = ({userName}) => {
   );
 };
 
-const GPSButton = ({onGPSButtonPress}) => (
+const GPSButton = ({ onGPSButtonPress }) => (
   <Button
     icon="crosshairs-gps"
     style={styles.GPSButtonContainer}

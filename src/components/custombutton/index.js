@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
-import {Colors} from '../../themes/variables';
-import {Button} from 'react-native-paper';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Colors } from '../../themes/variables';
+import { Button } from 'react-native-paper';
 
-export const ContinueButton = ({onPress}) => (
+export const ContinueButton = ({ onPress }) => (
   <View style={styles.buttonContainer}>
     <Button
       style={styles.continueButtonContainer}
@@ -17,7 +17,7 @@ export const ContinueButton = ({onPress}) => (
   </View>
 );
 
-export const ContinueRequiredButton = ({disabled, onPress}) => (
+export const ContinueRequiredButton = ({ disabled, onPress }) => (
   <View style={styles.buttonContainer}>
     <Button
       disabled={disabled}
@@ -32,7 +32,7 @@ export const ContinueRequiredButton = ({disabled, onPress}) => (
   </View>
 );
 
-export const ConfirmButton = ({onPress}) => (
+export const ConfirmButton = ({ onPress }) => (
   <View style={styles.questionButtonContainer}>
     <Button
       style={styles.confirmButtonContainer}
@@ -46,7 +46,7 @@ export const ConfirmButton = ({onPress}) => (
   </View>
 );
 
-export const DenyButton = ({onPress}) => (
+export const DenyButton = ({ onPress }) => (
   <View style={styles.questionButtonContainer}>
     <Button
       style={styles.denyButtonContainer}
@@ -60,7 +60,7 @@ export const DenyButton = ({onPress}) => (
   </View>
 );
 
-export const UncontaminatedAnswerNowButton = ({onPress}) => (
+export const UncontaminatedAnswerNowButton = ({ onPress }) => (
   <View style={styles.uncontaminatedButtonContainer}>
     <Button
       style={styles.uncontaminatedAnswerButtonContainer}
@@ -74,7 +74,7 @@ export const UncontaminatedAnswerNowButton = ({onPress}) => (
   </View>
 );
 
-export const UncontaminatedAnswerLaterButton = ({onPress}) => (
+export const UncontaminatedAnswerLaterButton = ({ onPress }) => (
   <View style={styles.uncontaminatedButtonContainer}>
     <Button
       style={styles.uncontaminatedAnswerButtonContainer}
@@ -88,7 +88,7 @@ export const UncontaminatedAnswerLaterButton = ({onPress}) => (
   </View>
 );
 
-export const ContaminatedAnswerLaterButton = ({onPress}) => (
+export const ContaminatedAnswerLaterButton = ({ onPress }) => (
   <View style={styles.uncontaminatedButtonContainer}>
     <Button
       style={styles.uncontaminatedAnswerButtonContainer}
@@ -102,7 +102,7 @@ export const ContaminatedAnswerLaterButton = ({onPress}) => (
   </View>
 );
 
-export const ContaminatedAnswerNowButton = ({onPress}) => (
+export const ContaminatedAnswerNowButton = ({ onPress }) => (
   <View style={styles.uncontaminatedButtonContainer}>
     <Button
       style={styles.contaminatedAnswerButtonContainer}
@@ -116,7 +116,7 @@ export const ContaminatedAnswerNowButton = ({onPress}) => (
   </View>
 );
 
-export const DoubtButton = ({onPress, label}) => (
+export const DoubtButton = ({ onPress, label }) => (
   <TouchableOpacity onPress={onPress} style={styles.skipContainer}>
     <Button
       mode="text"
@@ -128,7 +128,7 @@ export const DoubtButton = ({onPress, label}) => (
   </TouchableOpacity>
 );
 
-export const DisclaimerButton = ({onPress}) => (
+export const DisclaimerButton = ({ onPress }) => (
   <View style={styles.disclaimerButtonContainer}>
     <Button
       style={styles.disclaimerButtonContainer}
@@ -142,13 +142,13 @@ export const DisclaimerButton = ({onPress}) => (
   </View>
 );
 
-export const FinishRemainingButton = ({onPress}) => (
+export const FinishRemainingButton = ({ onPress }) => (
   <View style={styles.finishRemainingButtonContainer}>
     <Button
       style={styles.finishRemainingAnswerButtonContainer}
       contentStyle={styles.continueButton}
       mode="contained"
-      color={Colors.blue}
+      color={Colors.primaryTextColor}
       labelStyle={styles.finishRemainingButtonText}
       onPress={onPress}>
       SAIR
@@ -156,14 +156,14 @@ export const FinishRemainingButton = ({onPress}) => (
   </View>
 );
 
-export const FinishCompleteButton = ({onPress}) => (
+export const FinishCompleteButton = ({ onPress }) => (
   <View style={styles.buttonContainer}>
     <Button
-      style={styles.continueButtonContainer}
+      style={styles.finishButtonContainer}
       contentStyle={styles.continueButton}
       mode="contained"
       color={Colors.greenLight}
-      labelStyle={styles.continueButtonText}
+      labelStyle={styles.finishButtonText}
       onPress={onPress}>
       CONCLUIR
     </Button>
@@ -178,6 +178,11 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 50,
   },
+  finishButtonContainer: {
+    width: '100%',
+    borderRadius: 50,
+    backgroundColor: Colors.primaryTextColor
+  },
   continueButton: {
     height: 50,
     width: '100%',
@@ -185,6 +190,11 @@ const styles = StyleSheet.create({
   },
   continueButtonText: {
     color: Colors.primaryTextColor,
+    fontWeight: '600',
+    fontFamily: Colors.fontFamily,
+  },
+  finishButtonText: {
+    color: Colors.greenLight,
     fontWeight: '600',
     fontFamily: Colors.fontFamily,
   },
@@ -205,7 +215,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   confirmButtonText: {
-    color: Colors.primaryTextColor,
+    color: Colors.secondaryColor,
     fontFamily: Colors.fontFamily,
     fontWeight: 'bold',
   },
@@ -293,7 +303,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 50,
     borderColor: Colors.blue,
-    borderWidth: 1,
+    // borderWidth: 1,
   },
 
   finishRemainingButtonContainer: {

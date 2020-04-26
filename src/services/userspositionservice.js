@@ -8,9 +8,10 @@ export const searchNearestCity = (userPosition, cities) => {
         });
         if (first) {
             nearestCity = city;
+            first = false;
             return;
         }
-        if (city.distance < nearestCity.distance)
+        if (city.distance.meters < nearestCity.distance.meters)
             nearestCity = city;
     });
     return nearestCity;
