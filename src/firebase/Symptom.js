@@ -43,7 +43,6 @@ export const SaveSymptom = model => {
       .collection(KEYS.TABLE_SYMPTOM)
       .add(model)
       .then(res => {
-        console.log('SaveSymptom', res);
         resolve(res);
       })
       .catch(error => {

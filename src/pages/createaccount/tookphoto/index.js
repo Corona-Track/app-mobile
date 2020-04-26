@@ -36,8 +36,7 @@ export default class TookPhotoPage extends Component {
     if(navigation.state.params && navigation.state.params.edit){
       getUser()
         .then(this.onGetUserDataSuccess)
-        .catch(this.onGetUserDataFailure)
-        .finally(this.onGetUserDataFinally);
+        .catch(this.onGetUserDataFailure);
     }
     this.setState({
       photo: navigation.getParam('photo', ''),
@@ -191,10 +190,6 @@ export default class TookPhotoPage extends Component {
 
   onGetUserDataFailure = () => {
     Alert.alert("Aviso!", "Houve um erro buscar seus dados, tente novamente mais tarde.");
-  };
-
-  onGetUserDataFinally = () => {
-    // console.log("finally",this.context)
   };
 }
 

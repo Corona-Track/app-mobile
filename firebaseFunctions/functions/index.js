@@ -100,7 +100,6 @@ exports.onSymptomsUpdate = functions.firestore.document('/symptoms/{symptomsId}'
         } else {
             const riskProfileQuestionPoints = RiskProfileService.calculateRiskProfileQuestionsPoints(userData.question)
             const riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(newSymptomsData.symptons, newSymptomsData.hasSymptoms)
-            console.log(riskProfileSymptonsPoints)
             riskProfile = RiskProfileService.getRisk(riskProfileQuestionPoints + riskProfileSymptonsPoints)
         }
 

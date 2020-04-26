@@ -54,17 +54,13 @@ export default class PersonalDataPage extends Component {
   componentDidMount() {
     let { navigation } = this.props;
     if (navigation.state.params && navigation.state.params.edit) {
-      let {user} = this.context;
-
-      if (typeof user.birthday === 'object') {
-        user.birthday = `${user.birthday.toDate()}`;
-      }
-
-      this.setState({entity: user});
+      let { user } = this.context;
+      user.birthday = user.birthday ? new Date(user.birthday.seconds * 1000) : null;
+      this.setState({ entity: user });
     }
 
     if (this.context.user.providerId === 'facebook.com') {
-      let {name, email} = this.context.user;
+      let { name, email } = this.context.user;
       this.setState({
         entity: {
           name: name,
@@ -76,7 +72,6 @@ export default class PersonalDataPage extends Component {
           email: email,
           password: '',
         },
-        emailTouched: true,
       });
     }
   }
@@ -97,7 +92,6 @@ export default class PersonalDataPage extends Component {
       { key: 'M', text: 'Masculino' },
       { key: 'F', text: 'Feminino' },
     ],
-    emailTouched: false,
     cpfTouched: false,
     showPregnancy: false,
     showLoading: false,
@@ -151,7 +145,7 @@ export default class PersonalDataPage extends Component {
                   minimumDate={minimumDateBirthday}
                   maximumDate={maximumDateBirthday}
                   label="Data de Nascimento"
-                  value={new Date(entity.birthday)}
+                  value={entity.birthday ?? null}
                   onPress={this.onPressBirthdayPicker}
                   showDatePicker={showBirthday}
                   onChangeDate={this.onHandleDate}
@@ -181,9 +175,9 @@ export default class PersonalDataPage extends Component {
                 />
                 <SimpleTextInput
                   label="E-mail"
-                  value={entity.email.toLowerCase()}
+                  value={entity.email}
                   onChangeText={this.onHandleEmail}
-                  valid={this.isEmailValid()}
+                  valid={!entity.email ? true : (this.isEmailValid())}
                 />
                 {!this.props.navigation.state.params.edit && (
                   <PasswordTextInput
@@ -218,12 +212,12 @@ export default class PersonalDataPage extends Component {
     let { entity } = this.state;
     this.setState({ showLoading: true });
 
-    if (
-      this.props.navigation.state.params &&
-      this.props.navigation.state.params.edit
-    ) {
-      entity.birthday = new Date(entity.birthday);
-    }
+    // if (
+    //   this.props.navigation.state.params &&
+    //   this.props.navigation.state.params.edit
+    // ) {
+    //   entity.birthday = new Date(entity.birthday);
+    // }
 
     try {
       const resEmail = await getUserFilter(
@@ -264,7 +258,6 @@ export default class PersonalDataPage extends Component {
       context.updateUser(entity);
       this.setState({ showLoading: false });
 
-      // console.log(context.user,entity)
       this.props.navigation.navigate('PersonalAddress', { entity: entity });
     } catch (error) {
       Alert.alert(
@@ -289,7 +282,7 @@ export default class PersonalDataPage extends Component {
     this.setState({ showBirthday: true });
   };
   onHandleDate = (event, date) => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.birthday = date ?? entity.birthday;
     this.setState({
       entity: entity,
@@ -314,8 +307,8 @@ export default class PersonalDataPage extends Component {
   };
   onHandleEmail = email => {
     let { entity } = this.state;
-    entity.email = email;
-    this.setState({ entity, emailTouched: true });
+    entity.email = email.toLowerCase();
+    this.setState({ entity });
   };
   onHandlePassword = password => {
     let { entity } = this.state;
@@ -384,9 +377,6 @@ export default class PersonalDataPage extends Component {
   };
   isEmailValid = () => {
     let { email } = this.state.entity;
-    if (!this.state.emailTouched) {
-      return true;
-    }
     return emailValidator(email);
   };
   isPasswordValid = () => {

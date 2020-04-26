@@ -78,8 +78,7 @@ const IntroText = ({userName}) => {
       </Text>
       <Text style={[styles.simpleText]}>Você concluiu 100%</Text>
       <Text style={[styles.simpleText]}>do seu cadastro, e isso</Text>
-      <Text style={[styles.simpleText]}>nos ajudará a informá-la e</Text>
-      <Text style={[styles.simpleText]}>a seus usuários vinculados</Text>
+      <Text style={[styles.simpleText]}>nos ajudará a informá-la</Text>
       <Text style={[styles.simpleText]}>sobre sua segurança.</Text>
     </View>
   );

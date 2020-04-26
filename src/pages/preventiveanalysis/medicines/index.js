@@ -129,7 +129,6 @@ export default class MedicinesPage extends Component {
   };
   isChecked = identifier => {
     let {entity} = this.state;
-    console.log(entity, identifier);
     if(entity.medicinesSelected){
       let currentMedicinePosition = entity.medicinesSelected.findIndex(
         selected => selected === identifier,

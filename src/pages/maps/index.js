@@ -63,8 +63,6 @@ export default class MapsPage extends Component {
     });
   };
   onGetUserDataFailure = error => {
-    if (error)
-      console.log(error);
     Alert.alert("Aviso!", "Houve um erro buscar seus dados, tente novamente mais tarde.");
   };
 
@@ -204,8 +202,6 @@ export default class MapsPage extends Component {
     );
   };
   onGPSErrorMessage = error => {
-    if (error)
-      console.log(JSON.stringify(error));
     if (error.message && error.message === "Request failed with status code 429") {
       Alert.alert(
         'Aviso!',

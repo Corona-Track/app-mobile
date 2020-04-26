@@ -224,7 +224,6 @@ export default class ComorbiditiesPage extends Component {
       this.setState({ showLoading: false });
       this.props.navigation.navigate(nextPage, { entity: entity });
     } catch (error) {
-      console.log(JSON.stringify(error));
       Alert.alert(
         'Aviso',
         'Ocorreu um erro, tente novamente',

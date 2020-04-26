@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 50,
     borderColor: Colors.blue,
-    borderWidth: 1,
+    // borderWidth: 1,
   },
 
   finishRemainingButtonContainer: {

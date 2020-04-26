@@ -50,7 +50,6 @@ export const signOut = () => {
     auth()
       .signOut()
       .then(res => {
-        console.log(res);
         resolve();
       })
       .catch(error => {
