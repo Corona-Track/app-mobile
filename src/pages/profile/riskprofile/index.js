@@ -175,7 +175,7 @@ export default function RiskProfile(props) {
                     onPress={() => { navigation.navigate('Orientation') }}
                     style={styles.scheduleTeleorientationButton}
                     mode="contained"
-                    color={'#FFFFFF'}
+                    color={Colors.primaryTextColor}
                     labelStyle={styles.scheduleTeleorientationText}
                 >AGENDAR TELEORIENTAÇÃO</Button>
 
@@ -183,7 +183,7 @@ export default function RiskProfile(props) {
                     onPress={() => { navigation.navigate('EditAccount') }}
                     style={styles.scheduleTeleorientationButton}
                     mode="contained"
-                    color={'#FFFFFF'}
+                    color={Colors.primaryTextColor}
                     labelStyle={styles.scheduleTeleorientationText}
                 >EDITAR DADOS</Button>
 
@@ -206,7 +206,7 @@ export default function RiskProfile(props) {
 const styles = StyleSheet.create({
     page: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: Colors.primaryTextColor,
     },
     container: {
         flex: 1,
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     },
     header: {
         borderBottomWidth: 0,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: Colors.primaryTextColor,
     },
     label: {
         fontSize: 16,

@@ -109,7 +109,7 @@ const IntroText = ({userName}) => {
       <Text style={[styles.simpleText]}>É muito importante</Text>
       <Text style={[styles.simpleText]}>sabermos, também, como</Text>
       <Text style={[styles.simpleText]}>estão seus hábitos durante</Text>
-      <Text style={[styles.simpleText]}>a pandemia do Coronavírus</Text>
+      <Text style={[styles.simpleText]}>a pandemia do Coronavírus.</Text>
       <Text style={[styles.simpleText]}>Por isso temos mais algumas</Text>
       <Text style={[styles.simpleText]}>perguntas, você se</Text>
       <Text style={[styles.simpleText]}>importaria em responder?</Text>

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   SafeAreaView,
@@ -8,13 +8,13 @@ import {
   Dimensions,
   Image,
 } from 'react-native';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-import {NavigationActions, StackActions} from 'react-navigation';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { NavigationActions, StackActions } from 'react-navigation';
 
 import DisclaimerProgressTracking from '../../components/disclaimerprogresstracking';
-import {Colors} from '../../themes/variables';
-import {DisclaimerButton} from '../../components/custombutton';
-const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
+import { Colors } from '../../themes/variables';
+import { DisclaimerButton } from '../../components/custombutton';
+const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 export default class DisclaimerPage extends Component {
   static navigationOptions = {
@@ -27,7 +27,7 @@ export default class DisclaimerPage extends Component {
     activeIndex: 0,
   };
 
-  renderItem = ({item}) => {
+  renderItem = ({ item }) => {
     if (item === 'first') {
       return <FirstDisclaimerText />;
     }
@@ -46,25 +46,25 @@ export default class DisclaimerPage extends Component {
   goToLogin = () => {
     const resetAction = StackActions.reset({
       index: 0,
-      actions: [NavigationActions.navigate({routeName: 'Login'})],
+      actions: [NavigationActions.navigate({ routeName: 'Login' })],
     });
     this.props.navigation.dispatch(resetAction);
   };
 
   render = () => {
-    let {carouselItems, activeIndex} = this.state;
+    let { carouselItems, activeIndex } = this.state;
     return (
       <SafeAreaView
-        style={{backgroundColor: Colors.primaryTextColor, height: '100%'}}>
+        style={{ backgroundColor: Colors.primaryTextColor, height: '100%' }}>
         <Carousel
           data={carouselItems}
           renderItem={this.renderItem}
           sliderWidth={viewportWidth}
           itemWidth={viewportWidth}
-          slideStyle={{width: viewportWidth}}
+          slideStyle={{ width: viewportWidth }}
           inactiveSlideOpacity={1}
           inactiveSlideScale={1}
-          onSnapToItem={index => this.setState({activeIndex: index})}
+          onSnapToItem={index => this.setState({ activeIndex: index })}
         />
         <Pagination
           containerStyle={{
@@ -90,12 +90,12 @@ const FirstDisclaimerText = () => {
     <ScrollView style={styles.firstContent}>
       <View style={styles.scrollViewTextContainer}>
         <Text style={[styles.simpleText]}>
-          <Text style={[styles.boldText, {fontSize: 22}]}>
+          <Text style={[styles.boldText, { fontSize: 22 }]}>
             Olá! Seja bem-vindo
           </Text>
         </Text>
-        <Text style={[styles.simpleText, {marginBottom: 30}]}>
-          <Text style={[styles.boldText, {fontSize: 22}]}>ao Corona Track</Text>
+        <Text style={[styles.simpleText, { marginBottom: 30 }]}>
+          <Text style={[styles.boldText, { fontSize: 22 }]}>ao Corona Track</Text>
         </Text>
 
         <Text style={[styles.simpleText]}>Nosso aplicativo tem a</Text>
@@ -111,14 +111,14 @@ const FirstDisclaimerText = () => {
         <Text style={[styles.simpleText]}>estimar certos riscos seus</Text>
         <Text style={[styles.simpleText]}>associados ao coronavírus.</Text>
 
-        <Text style={[styles.simpleText, {marginTop: 30}]}>
+        <Text style={[styles.simpleText, { marginTop: 30 }]}>
           <Text style={[styles.boldText]}>Contamos com sua</Text>
         </Text>
         <Text style={[styles.simpleText]}>
-          <Text style={[styles.boldText]}>colaboração </Text>para que
+          <Text style={[styles.boldText]}>colaboração </Text>para que juntos
         </Text>
-        <Text style={[styles.simpleText]}>juntos tornemos o ambiente</Text>
-        <Text style={[styles.simpleText]}>mais seguro a todos.</Text>
+        <Text style={[styles.simpleText]}>tornemos o ambiente mais</Text>
+        <Text style={[styles.simpleText]}>seguro a todos.</Text>
       </View>
     </ScrollView>
   );
@@ -126,52 +126,55 @@ const FirstDisclaimerText = () => {
 
 const SecondDisclaimerText = () => {
   return (
-    <View style={styles.textContainer}>
-      <Image
-        style={styles.pagesImage}
-        source={require('../../assets/images/pages.png')}
-      />
-      <Text style={[styles.simpleText]}>Ao concordar em</Text>
-      <Text style={[styles.simpleText]}>compartilhar conosco seus</Text>
-      <Text style={[styles.simpleText]}>dados, estimaremos tanto o</Text>
-      <Text style={[styles.simpleText]}>seu risco de contágio por</Text>
-      <Text style={[styles.simpleText]}>coronavírus quanto o seu</Text>
-      <Text style={[styles.simpleText]}>risco de ser internado caso</Text>
-      <Text style={[styles.simpleText]}>seja contaminado.</Text>
+    <ScrollView style={styles.firstContent}>
+      <View style={styles.scrollViewTextContainer}>
+        <Image
+          style={styles.pagesImage}
+          source={require('../../assets/images/pages.png')}
+        />
+        <Text style={[styles.simpleText]}>Ao concordar em</Text>
+        <Text style={[styles.simpleText]}>compartilhar conosco seus</Text>
+        <Text style={[styles.simpleText]}>dados, estimaremos tanto o</Text>
+        <Text style={[styles.simpleText]}>seu risco de contágio por</Text>
+        <Text style={[styles.simpleText]}>coronavírus quanto o seu</Text>
+        <Text style={[styles.simpleText]}>risco de ser internado caso</Text>
+        <Text style={[styles.simpleText]}>seja contaminado.</Text>
 
-      <Text style={[styles.simpleText, {marginTop: 20}]}>Com esses dados,</Text>
-      <Text style={[styles.simpleText]}>classificaremos seu perfil</Text>
-      <Text style={[styles.simpleText]}>em Verde, Amarelo ou</Text>
-      <Text style={[styles.simpleText]}>
-        Vermelho <Text style={[styles.boldText]}>para lhe ajudar</Text>
+        <Text style={[styles.simpleText, { marginTop: 20 }]}>Com esses dados,</Text>
+        <Text style={[styles.simpleText]}>classificaremos seu perfil</Text>
+        <Text style={[styles.simpleText]}>em Verde, Amarelo ou</Text>
+        <Text style={[styles.simpleText]}>
+          Vermelho <Text style={[styles.boldText]}>para lhe ajudar</Text>
+        </Text>
+        <Text style={[styles.simpleText]}>
+          <Text style={[styles.boldText]}>nas decisões</Text> de como e
       </Text>
-      <Text style={[styles.simpleText]}>
-        <Text style={[styles.boldText]}>nas decisões</Text> de como e
-      </Text>
-      <Text style={[styles.simpleText]}>quando sair de casa.</Text>
-    </View>
+        <Text style={[styles.simpleText]}>quando sair de casa.</Text>
+      </View>
+    </ScrollView>
   );
 };
 
 const ThirdDisclaimerText = () => {
   return (
-    <View style={styles.textContainer}>
-      <Text style={[styles.simpleText]}>Nosso aplicativo funciona</Text>
-      <Text style={[styles.simpleText]}>com base em modelos</Text>
-      <Text style={[styles.simpleText]}>matemáticos e não tem a</Text>
-      <Text style={[styles.simpleText]}>intenção de substituir uma</Text>
-      <Text style={[styles.simpleText]}>consulta média ou de</Text>
-      <Text style={[styles.simpleText]}>contrariar as recomendações</Text>
-      <Text style={[styles.simpleText]}>do governo de sua região.</Text>
+    <ScrollView style={styles.firstContent}>
+      <View style={styles.scrollViewTextContainer}>
+        <Text style={[styles.simpleText]}>Nosso aplicativo funciona com</Text>
+        <Text style={[styles.simpleText]}>base em modelos matemáticos</Text>
+        <Text style={[styles.simpleText]}>e não tem a intenção de</Text>
+        <Text style={[styles.simpleText]}>substituir uma consulta</Text>
+        <Text style={[styles.simpleText]}>médica ou de contrariar as</Text>
+        <Text style={[styles.simpleText]}>recomendações do governo </Text>
+        <Text style={[styles.simpleText]}>de sua região.</Text>
 
-      <Text style={[styles.simpleText, {marginTop: 20}]}>
-        <Text style={[styles.boldText]}>Esteja atento</Text> às
+        <Text style={[styles.simpleText, { marginTop: 20 }]}>
+          <Text style={[styles.boldText]}>Esteja atento</Text> às
       </Text>
-      <Text style={[styles.simpleText]}>recomendações do Ministério</Text>
-      <Text style={[styles.simpleText]}>da Saúde para a sua região</Text>
-      <Text style={[styles.simpleText]}>e as recomendações da</Text>
-      <Text style={[styles.simpleText]}>Organização Mundial da Saúde.</Text>
-      <View style={{flexDirection: 'row', marginTop: 40}}>
+        <Text style={[styles.simpleText]}>recomendações do Ministério</Text>
+        <Text style={[styles.simpleText]}>da Saúde para a sua região</Text>
+        <Text style={[styles.simpleText]}>e as recomendações da</Text>
+        <Text style={[styles.simpleText]}>Organização Mundial da Saúde.</Text>
+        {/* <View style={{flexDirection: 'row', marginTop: 40}}>
         <Image
           style={styles.susImage}
           source={require('../../assets/images/sus.png')}
@@ -180,43 +183,46 @@ const ThirdDisclaimerText = () => {
           style={styles.whoImage}
           source={require('../../assets/images/who.png')}
         />
+      </View> */}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
-const FourthDisclaimerText = ({onPress}) => {
+const FourthDisclaimerText = ({ onPress }) => {
   return (
-    <View style={styles.textContainer}>
-      <Image
-        style={styles.hospitalImage}
-        source={require('../../assets/images/hospital.png')}
-      />
-      <Text style={[styles.simpleText]}>Caso deseje ou precise de</Text>
-      <Text style={[styles.simpleText]}>uma consulta médica, você</Text>
-      <Text style={[styles.simpleText]}>pode usar nossa plataforma</Text>
-      <Text style={[styles.simpleText]}>para se conectar com a</Text>
-      <Text style={[styles.simpleText]}>Aliança Médica, podendo</Text>
-      <Text style={[styles.simpleText]}>assim tirar suas dúvidas com</Text>
-      <Text style={[styles.simpleText]}>um médico.</Text>
+    <ScrollView style={styles.firstContent}>
+      <View style={styles.scrollViewTextContainer}>
+        <Image
+          style={styles.hospitalImage}
+          source={require('../../assets/images/hospital.png')}
+        />
+        <Text style={[styles.simpleText]}>Caso deseje ou precise de</Text>
+        <Text style={[styles.simpleText]}>uma orientação médica, você</Text>
+        <Text style={[styles.simpleText]}>pode usar nossa plataforma</Text>
+        <Text style={[styles.simpleText]}>para se conectar com a</Text>
+        <Text style={[styles.simpleText]}>Aliança Médica, podendo</Text>
+        <Text style={[styles.simpleText]}>assim tirar suas dúvidas com</Text>
+        <Text style={[styles.simpleText]}>um médico.</Text>
 
-      <Text style={[styles.simpleText, {marginTop: 20}]}>
-        Caso sinta algo que julgue
+        <Text style={[styles.simpleText, { marginTop: 20 }]}>
+          Caso sinta algo que julgue
       </Text>
-      <Text style={[styles.simpleText]}>ser uma urgência, por favor</Text>
-      <Text style={[styles.simpleText]}>
-        <Text style={[styles.boldText]}>encaminhe-se para o posto</Text>
-      </Text>
-      <Text style={[styles.simpleText]}>
-        <Text style={[styles.boldText]}>de saúde ou pronto-socorro</Text>
-      </Text>
-      <Text style={[styles.simpleText]}>
-        <Text style={[styles.boldText]}>mas próximo.</Text>
-      </Text>
-      <View style={{paddingHorizontal: 20, width: '100%', marginTop: 20}}>
-        <DisclaimerButton onPress={() => onPress()} />
+        <Text style={[styles.simpleText]}>ser uma urgência, por favor</Text>
+        <Text style={[styles.simpleText]}>
+          <Text style={[styles.boldText]}>encaminhe-se para o posto</Text>
+        </Text>
+        <Text style={[styles.simpleText]}>
+          <Text style={[styles.boldText]}>de saúde ou pronto-socorro</Text>
+        </Text>
+        <Text style={[styles.simpleText]}>
+          <Text style={[styles.boldText]}>mas próximo.</Text>
+        </Text>
+        <View style={{ paddingHorizontal: 20, width: '100%', marginTop: 20 }}>
+          <DisclaimerButton onPress={() => onPress()} />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

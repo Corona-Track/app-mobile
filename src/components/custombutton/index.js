@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   confirmButtonText: {
-    color: Colors.primaryTextColor,
+    color: Colors.secondaryColor,
     fontFamily: Colors.fontFamily,
     fontWeight: 'bold',
   },

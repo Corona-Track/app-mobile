@@ -42,7 +42,7 @@ export default class SocialDistancePage extends Component {
       reasonToNotKeepDistanceSelected: [],
     },
     reasonsList: [
-      { identifier: 'Mantenho sempre 2 mestros de distância de outras pessoas' },
+      { identifier: 'Mantenho sempre 2 metros de distância de outras pessoas' },
       { identifier: 'Nem sempre mantenho distância porque:' },
     ],
     reasonsToNotKeepDistanceList: [

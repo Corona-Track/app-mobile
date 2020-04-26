@@ -367,13 +367,13 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 60,
-    borderColor: '#FFFFFF',
+    borderColor: Colors.primaryTextColor,
     borderWidth: 2,
   },
   userDetailsInnerContainer: {
     borderWidth: 4,
     borderRadius: 100,
-    borderColor: '#FFFFFF',
+    borderColor: Colors.primaryTextColor,
   },
   riskContainer: {
     borderWidth: 15,
@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     fontFamily: Colors.fontFamily,
-    color: '#FFFFFF',
+    color: Colors.primaryTextColor,
   },
   userPersonalDataText: {
     fontFamily: Colors.fontFamily,
@@ -425,7 +425,7 @@ const styles = StyleSheet.create({
   },
   versionText: {
     fontFamily: Colors.fontFamily,
-    color: '#FFFFFF',
+    color: Colors.primaryTextColor,
   },
   cardText: {
     textAlign: 'center',
