@@ -73,7 +73,7 @@ export default class MapsPage extends Component {
     let { mapKey, userLocation, currentLocation, cornersMarkers, showLoading } = this.state;
     return (
       <SafeAreaView style={styles.container}>
-        <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
+        <NavigationEvents overlayColor="rgba(0, 0, 0, 0.80)" onDidFocus={() => this.initialize(this.props)} />
         {Platform.OS === "android" ? <Spinner visible={showLoading} /> : (<></>)}
         <MapHeader onPress={this.closeMap} />
         {userLocation && userLocation.latitude && (
@@ -154,7 +154,7 @@ export default class MapsPage extends Component {
         markerNorthEast,
         markerSouthEast,
       };
-      console.log("Filter:" + JSON.stringify(filter))
+      console.log("Filter:" + JSON.stringify(filter));
       getMapElementsByPosition(filter)
         .then(response => this.onSuccessGetMapElementsByPosition(response, filter))
         .catch(this.onGPSErrorMessage)
@@ -163,7 +163,7 @@ export default class MapsPage extends Component {
   };
   onSuccessGetMapElementsByPosition = (response, filter) => {
     let { data } = response;
-    console.log(JSON.stringify(data));
+    console.log("Data: " + JSON.stringify(data));
 
     this.setState({
       currentLocation: filter.markerCentral,
