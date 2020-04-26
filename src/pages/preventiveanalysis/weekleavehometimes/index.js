@@ -234,10 +234,10 @@ const CustomSlider = ({ value, onValueChange }) => {
         <Text
           style={[
             styles.sliderSimpleText,
-            { flex: 0, position: 'absolute', left: 3 },
+            { flex: 0, position: 'absolute', left: 0 },
           ]}>
           {' '}
-          1
+          0
         </Text>
         <View style={styles.underlineThumb}>
           <Text style={styles.centerValue}>{value}</Text>
