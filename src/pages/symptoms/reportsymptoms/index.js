@@ -620,6 +620,7 @@ export default class ReportSymptomsPage extends Component {
         }
       } else {
         symptons = symptonsSelected.map(item => {
+          if (item.end === '') {item.end = new Date();}
           return {
             identifier: item.identifier,
             start: item.start,
