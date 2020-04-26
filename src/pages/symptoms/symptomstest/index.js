@@ -215,6 +215,12 @@ export default class SymptomsTestPage extends Component {
                       }>
                       <View style={styles.checkboxItemContainer}>
                         {entity.symptonsList.map((symptons, idx) => {
+                           if (
+                            symptons.identifier === 'Não tive sintomas' &&
+                            entity.showSymptons === true
+                          ) {
+                            return null;
+                          }
                           return (
                             <View
                               key={idx}
@@ -237,62 +243,11 @@ export default class SymptomsTestPage extends Component {
                                   }
                                 }}
                               />
-                              {symptons.check2 && (
-                                <View style={styles.dateContainer}>
-                                  <Text
-                                    style={{
-                                      marginTop: 10,
-                                      textAlign: 'center',
-                                      fontSize: 18,
-                                      fontWeight: '500',
-                                      color: '#828282',
-                                    }}>
-                                    Desde Quando?
-                                  </Text>
-                                  <CalendarPicker
-                                    minDate={moment().subtract(14, 'days')}
-                                    maxDate={new Date()}
-                                    startFromMonday={true}
-                                    allowRangeSelection={true}
-                                    selectedDayTextColor={'white'}
-                                    weekdays={[
-                                      'S',
-                                      'T',
-                                      'Q',
-                                      'Q',
-                                      'S',
-                                      'S',
-                                      'D',
-                                    ]}
-                                    months={[
-                                      'Janeiro',
-                                      'Fevereiro',
-                                      'Março',
-                                      'Abril',
-                                      'Maio',
-                                      'Junho',
-                                      'Julho',
-                                      'Agosto',
-                                      'Setembro',
-                                      'Outubro',
-                                      'Novembro',
-                                      'Dezembro',
-                                    ]}
-                                    previousTitle="Anterior"
-                                    nextTitle="Proximo"
-                                    todayBackgroundColor={'#eee'}
-                                    todayTextStyle={{ color: '#828282' }}
-                                    selectedDayColor={Colors.blue}
-                                    onDateChange={(date, type) =>
-                                      this.onHandleDate(date, type, symptons)
-                                    }
-                                    textStyle={{
-                                      color: '#828282',
-                                    }}
-                                    selectedStartDate={symptons.start}
-                                    selectedEndDate={symptons.end}
-                                  />
-                                </View>
+                              {symptons.check2 && (<DateContainer
+                                  symptons={symptons}
+                                  showSymptons={entity.showSymptons}
+                                  onHandleDate={this.onHandleDate}
+                                />
                               )}
                             </View>
                           );
@@ -335,6 +290,7 @@ export default class SymptomsTestPage extends Component {
     if (type === 'END_DATE') {
       symptons.end = date._d;
     } else {
+      this.fixEndAndStartDate(symptons);
       symptons.start = date._d;
     }
 
@@ -355,6 +311,11 @@ export default class SymptomsTestPage extends Component {
       symptonsList: newArr,
     });
   };
+  fixEndAndStartDate(obj) {
+    if (obj.end && obj.start) {
+      obj.end = '';
+    }
+  }
 
   onPressCheckBox = value => {
     let { entity } = this.state;
@@ -369,7 +330,7 @@ export default class SymptomsTestPage extends Component {
   onClickCheck = (identifier, kind) => {
     let { entity } = this.state;
     let noneOfOptionsPosition = entity.symptonsSelected.findIndex(
-      selected => selected === 'Não tive sintomas',
+      selected => selected.identifier === 'Não tive sintomas',
     );
     if (noneOfOptionsPosition > -1) {
       entity.symptonsSelected = [];
@@ -443,6 +404,7 @@ export default class SymptomsTestPage extends Component {
       entity.hasSaturation = false;
       this.setState({ entity });
     } else {
+      entity.symptonsSelected = [];
       entity.symptonsList.map(item => {
         if (item.identifier === 'Não tive sintomas') {
           item.identifier = item.identifier;
@@ -479,6 +441,10 @@ export default class SymptomsTestPage extends Component {
           isValid = false;
           break;
         }
+        if (item.start && entity.showSymptons) {
+          isValid = false;
+          break;
+        }
         if (item.start && item.end) {
           isValid = false;
           break;
@@ -489,12 +455,15 @@ export default class SymptomsTestPage extends Component {
   };
   symptonsButtonPress = async contextSymptom => {
     this.setState({ showLoading: true });
+
     try {
       let symptons;
       let { symptonsSelected } = this.state.entity;
+
       if (symptonsSelected && symptonsSelected.length > 1) {
         symptons = symptonsSelected.map(item => {
           if (item.identifier !== 'Não tive sintomas') {
+            if (item.end === '') {item.end = new Date();}
             return {
               identifier: item.identifier,
               start: item.start,
@@ -507,6 +476,7 @@ export default class SymptomsTestPage extends Component {
         }
       } else {
         symptons = symptonsSelected.map(item => {
+          if (item.end === '') {item.end = new Date();}
           return {
             identifier: item.identifier,
             start: item.start,
@@ -538,6 +508,104 @@ export default class SymptomsTestPage extends Component {
       );
     }
   };
+}
+
+function DateContainer({symptons, showSymptons, onHandleDate}) {
+  if (showSymptons) {
+    return (
+      <View style={styles.dateContainer}>
+        <Text
+          style={{
+            marginTop: 10,
+            textAlign: 'center',
+            fontSize: 18,
+            fontWeight: '500',
+            color: '#828282',
+          }}>
+          Desde Quando?
+        </Text>
+        <CalendarPicker
+          maxDate={new Date()}
+          allowRangeSelection={false}
+          selectedDayTextColor={'white'}
+          weekdays={['S', 'T', 'Q', 'Q', 'S', 'S', 'D']}
+          months={[
+            'Janeiro',
+            'Fevereiro',
+            'Março',
+            'Abril',
+            'Maio',
+            'Junho',
+            'Julho',
+            'Agosto',
+            'Setembro',
+            'Outubro',
+            'Novembro',
+            'Dezembro',
+          ]}
+          previousTitle="Anterior"
+          nextTitle="Proximo"
+          todayBackgroundColor={'#eee'}
+          todayTextStyle={{color: '#828282'}}
+          selectedDayColor={Colors.blue}
+          onDateChange={(date, type) => onHandleDate(date, type, symptons)}
+          textStyle={{
+            color: '#828282',
+          }}
+          selectedStartDate={symptons.start}
+          selectedEndDate={symptons.end}
+        />
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.dateContainer}>
+      <Text
+        style={{
+          marginTop: 10,
+          textAlign: 'center',
+          fontSize: 18,
+          fontWeight: '500',
+          color: '#828282',
+        }}>
+        Indique o início e fim:
+      </Text>
+      <CalendarPicker
+        minDate={moment().subtract(14, 'days')}
+        maxDate={new Date()}
+        allowRangeSelection={true}
+        selectedDayTextColor={'white'}
+        weekdays={['S', 'T', 'Q', 'Q', 'S', 'S', 'D']}
+        months={[
+          'Janeiro',
+          'Fevereiro',
+          'Março',
+          'Abril',
+          'Maio',
+          'Junho',
+          'Julho',
+          'Agosto',
+          'Setembro',
+          'Outubro',
+          'Novembro',
+          'Dezembro',
+        ]}
+        previousTitle="Anterior"
+        nextTitle="Proximo"
+        todayBackgroundColor={'#eee'}
+        todayTextStyle={{color: '#828282'}}
+        selectedDayColor={Colors.blue}
+        onDateChange={(date, type) => onHandleDate(date, type, symptons)}
+        textStyle={{
+          color: '#828282',
+        }}
+        selectedStartDate={symptons.start}
+        selectedEndDate={symptons.end}
+        allowBackwardRangeSelect={true}
+      />
+    </View>
+  );
 }
 
 const IntroText = () => (
