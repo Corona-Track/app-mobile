@@ -227,7 +227,7 @@ const getAllCities = async region => {
                     allCities.push(cityPosition);
                     if (cityPosition.latitude >= markerSouthWest.latitude &&
                         cityPosition.latitude <= markerNorthWest.latitude &&
-                        cityPosition.longitude <= markerNorthWest.longitude &&
+                        cityPosition.longitude >= markerNorthWest.longitude &&
                         cityPosition.longitude <= markerNorthEast.longitude)
                         citiesInsideRange.push(cityPosition);
                 });

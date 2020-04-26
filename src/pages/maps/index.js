@@ -162,6 +162,8 @@ export default class MapsPage extends Component {
   };
   onSuccessGetMapElementsByPosition = (response, filter) => {
     let { data } = response;
+    console.log(JSON.stringify(data));
+
     this.setState({
       currentLocation: filter.markerCentral,
       mapKey: Math.floor(Math.random() * 100),
