@@ -194,7 +194,7 @@ export default class ComorbiditiesPage extends Component {
     context.updateUser({ question: entity });
 
     try {
-      const user = { ...context.user };
+      let user = { ...context.user };
       user.question.comorbiditiesSelected = entity.comorbiditiesSelected;
 
       if (
@@ -210,20 +210,24 @@ export default class ComorbiditiesPage extends Component {
       }
 
       const { password, ...model } = user;
-
       await SaveUser(model);
+      console.log("A1");
       await new Promise(r => setTimeout(r, 1000));
+      console.log("A2");
       const userRef = await getUser();
+      console.log("A3");
       const userData = userRef.data();
       const { riskProfile } = userData;
-
+      console.log("A4");
       if (riskProfile === riskProfileTypes.RED) {
         nextPage = 'FinishContaminated';
       }
-
+      console.log("A5");
       this.setState({ showLoading: false });
       this.props.navigation.navigate(nextPage, { entity: entity });
     } catch (error) {
+      if (error)
+        console.log(JSON.stringify(error));
       Alert.alert(
         'Aviso',
         'Ocorreu um erro, tente novamente',

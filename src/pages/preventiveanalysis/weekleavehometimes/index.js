@@ -35,7 +35,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
   };
   state = {
     entity: {
-      daysAWeek: 1,
+      daysAWeek: 0,
       reasonToLeaveHome: null,
     },
     reasonsList: [
@@ -198,8 +198,8 @@ const IntroText = () => (
 
 const SecondaryText = () => (
   <View style={[styles.textContainer, { paddingTop: 20 }]}>
-    <Text style={[styles.simpleText]}>Principal motivo</Text>
-    <Text style={[styles.simpleText]}>para sair de casa:</Text>
+    <Text style={[styles.simpleText]}>Principal motivo quando</Text>
+    <Text style={[styles.simpleText]}>saio de casa:</Text>
   </View>
 );
 
@@ -222,7 +222,7 @@ const CustomSlider = ({ value, onValueChange }) => {
         value={value}
         onValueChange={onValueChange}
         step={1}
-        minimumValue={1}
+        minimumValue={0}
         maximumValue={7}
         minimumTrackTintColor={Colors.blue}
         maximumTrackTintColor={Colors.searchIconColor}

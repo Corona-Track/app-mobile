@@ -92,8 +92,8 @@ export default class RelativesLeavingHomePage extends Component {
                     <RadioButtonTripleResizableItem
                       value={entity.howManyRelatives}
                       onPressCheckbox={this.onChangeHowManyRelatives}
-                      firstTitle={'Uma'}
-                      secondTitle={'Duas'}
+                      firstTitle={'Nenhuma'}
+                      secondTitle={'Uma ou Duas'}
                       thirdTitle={'Três ou mais'}
                     />
                   </View>
@@ -102,8 +102,8 @@ export default class RelativesLeavingHomePage extends Component {
                     <RadioButtonTripleResizableItem
                       value={entity.relativesLeavingTimes}
                       onPressCheckbox={this.onChangeRelativesLeavingTimes}
-                      firstTitle={'Uma'}
-                      secondTitle={'Duas'}
+                      firstTitle={'Nenhuma'}
+                      secondTitle={'Uma ou Duas'}
                       thirdTitle={'Três ou mais'}
                     />
                   </View>

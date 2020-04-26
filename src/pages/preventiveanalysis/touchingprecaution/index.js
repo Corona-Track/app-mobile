@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   SafeAreaView,
@@ -7,10 +7,10 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import {Header} from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
-import {Colors} from '../../../themes/variables';
+import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import {
   LeftComponent,
@@ -26,7 +26,7 @@ import {
   CheckboxItem,
 } from '../../../components/customcheckboxitem';
 
-import {UserConsumer,UserContext} from '../../../store/user';
+import { UserConsumer, UserContext } from '../../../store/user';
 
 export default class TouchingPrecautionPage extends Component {
   static navigationOptions = {
@@ -41,17 +41,17 @@ export default class TouchingPrecautionPage extends Component {
       touchingPrecaution: null,
     },
     contaminationList: [
-      {identifier: 'Uso luva ou papel descartável para não contaminar as mãos'},
-      {identifier: 'Contamino as mãos e limpo em seguida com álcool gel'},
-      {identifier: 'Contamino as mãos e fico inquieto enquanto não as lavo'},
-      {identifier: 'Contamino as mãos e limpo quando posso'},
+      { identifier: 'Uso luva ou papel descartável para não contaminar as mãos' },
+      { identifier: 'Contamino as mãos e limpo em seguida com álcool gel' },
+      { identifier: 'Contamino as mãos e fico incomodado enquanto não as lavo' },
+      { identifier: 'Contamino as mãos e limpo quando posso' },
     ],
   };
 
   componentDidMount() {
     let { user } = this.context;
 
-    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
+    if (this.props.navigation.state.params && this.props.navigation.state.params.edit) {
       this.setState({
         entity: user.question
       })
@@ -59,13 +59,13 @@ export default class TouchingPrecautionPage extends Component {
   }
 
   render = () => {
-    let {entity, contaminationList} = this.state;
+    let { entity, contaminationList } = this.state;
     return (
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
-            <View style={{flex: 0.8, width: '100%'}}>
-              <View style={{width: '100%', paddingHorizontal: 20}}>
+            <View style={{ flex: 0.8, width: '100%' }}>
+              <View style={{ width: '100%', paddingHorizontal: 20 }}>
                 <Header
                   backgroundColor={Colors.secondaryColor}
                   leftComponent={
@@ -87,7 +87,7 @@ export default class TouchingPrecautionPage extends Component {
                 <View style={styles.radioButtonItemContainer}>
                   {contaminationList.map(situation => {
                     return (
-                      <View style={{height: 70}}>
+                      <View style={{ height: 70 }}>
                         <RadioButtonItem
                           identifier={situation.identifier}
                           isChecked={this.isChecked}
@@ -121,8 +121,8 @@ export default class TouchingPrecautionPage extends Component {
                   label="Responder depois"
                 />
               ) : (
-                <></>
-              )}
+                  <></>
+                )}
             </View>
             <ProgressTracking amount={10} position={6} />
           </SafeAreaView>
@@ -137,30 +137,30 @@ export default class TouchingPrecautionPage extends Component {
     this.props.navigation.pop();
   };
   onContinueButtonClick = context => {
-    let {entity} = this.state;
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('HomePrecautions', {entity: entity});
+    let { entity } = this.state;
+    context.updateUser({ question: entity });
+    this.props.navigation.navigate('HomePrecautions', { entity: entity });
   };
 
   disableButton = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return !(entity.touchingPrecaution && entity.touchingPrecaution.length > 0);
   };
   onClickRadio = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.touchingPrecaution = identifier;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onDoubtPress = context => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.touchingPrecaution = null;
     entity.skippedAnswer = true;
-    this.setState({entity});
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('HomePrecautions', {entity: entity});
+    this.setState({ entity });
+    context.updateUser({ question: entity });
+    this.props.navigation.navigate('HomePrecautions', { entity: entity });
   };
   isChecked = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return entity.touchingPrecaution === identifier;
   };
 }

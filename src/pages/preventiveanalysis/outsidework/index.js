@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   SafeAreaView,
@@ -7,10 +7,10 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import {Header} from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
-import {Colors} from '../../../themes/variables';
+import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import {
   LeftComponent,
@@ -21,9 +21,9 @@ import {
   ContinueRequiredButton,
   DoubtButton,
 } from '../../../components/custombutton';
-import {RadioButtonItem} from '../../../components/customcheckboxitem';
+import { RadioButtonItem } from '../../../components/customcheckboxitem';
 
-import {UserConsumer,UserContext} from '../../../store/user';
+import { UserConsumer, UserContext } from '../../../store/user';
 
 export default class OutsideWorkPage extends Component {
   static navigationOptions = {
@@ -42,29 +42,29 @@ export default class OutsideWorkPage extends Component {
         identifier:
           'Em um ambiente fechado com mais pessoas, como clínica, escritório, loja ou motorista de aplicativo',
       },
-      {identifier: 'Em galpões com pé direito duplo com poucas pessoas'},
-      {identifier: 'Ao ar livre'},
+      { identifier: 'Em galpões com pé direito duplo com poucas pessoas' },
+      { identifier: 'Não trabalho fora de casa' },
     ],
   };
 
   componentDidMount() {
     let { user } = this.context;
 
-    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
+    if (this.props.navigation.state.params && this.props.navigation.state.params.edit) {
       this.setState({
         entity: user.question
       })
     }
-  } 
+  }
 
   render = () => {
-    let {entity, outsideWorkList} = this.state;
+    let { entity, outsideWorkList } = this.state;
     return (
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
-            <View style={{flex: 0.75, width: '100%'}}>
-              <View style={{width: '100%', paddingHorizontal: 20}}>
+            <View style={{ flex: 0.75, width: '100%' }}>
+              <View style={{ width: '100%', paddingHorizontal: 20 }}>
                 <Header
                   backgroundColor={Colors.secondaryColor}
                   leftComponent={
@@ -132,8 +132,8 @@ export default class OutsideWorkPage extends Component {
                   label="Responder depois"
                 />
               ) : (
-                <></>
-              )}
+                  <></>
+                )}
             </View>
             <ProgressTracking amount={10} position={8} />
           </SafeAreaView>
@@ -148,30 +148,30 @@ export default class OutsideWorkPage extends Component {
     this.props.navigation.pop();
   };
   onContinueButtonClick = context => {
-    let {entity} = this.state;
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('RelativesLeavingHome', {entity: entity});
+    let { entity } = this.state;
+    context.updateUser({ question: entity });
+    this.props.navigation.navigate('RelativesLeavingHome', { entity: entity });
   };
 
   disableButton = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return !entity.outsideWorkAnswer;
   };
   onClickRadio = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.outsideWorkAnswer = identifier;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onDoubtPress = context => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.outsideWorkAnswer = null;
     entity.skippedAnswer = true;
-    this.setState({entity});
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('RelativesLeavingHome', {entity: entity});
+    this.setState({ entity });
+    context.updateUser({ question: entity });
+    this.props.navigation.navigate('RelativesLeavingHome', { entity: entity });
   };
   isChecked = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return entity.outsideWorkAnswer === identifier;
   };
 }

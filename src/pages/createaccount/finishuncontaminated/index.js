@@ -58,7 +58,7 @@ export default class FinishUncontaminatedPage extends Component {
                 )}
                 <IntroText userName={context.user.name} />
               </View>
-              <View style={{flex: 0.25, width: '90%'}}>
+              <View style={{flex: 0.25, width: '100%'}}>
                 <UncontaminatedAnswerNowButton
                   onPress={() => {
                     this.onAnswerNowButtonPress();

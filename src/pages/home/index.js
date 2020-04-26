@@ -10,7 +10,7 @@ import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import { getUser } from '../../firebase/User';
 import moment from 'moment';
 
-import {UserConsumer} from '../../store/user';
+import { UserConsumer } from '../../store/user';
 
 import { Colors } from '../../themes/variables';
 import { signOut } from '../../firebase/Auth';
@@ -173,7 +173,7 @@ export default class HomePage extends Component {
         <MenuItem onPress={() => this.navigateScreen("Orientation")} icon="monitor" name="TELEORIENTAÇÃO" />
         <MenuItem icon="account" onPress={() => this.navigateScreen("PublicUtility")} name="UTILIDADE PÚBLICA" />
         {/* <MenuItem icon="settings" name="CONFIGURAÇÕES" /> */}
-        <MenuItem onPress={() => {this.setSignOut(context)}} icon="logout" name="SAIR" />
+        <MenuItem onPress={() => { this.setSignOut(context) }} icon="logout" name="SAIR" />
       </View>
     );
   };
@@ -206,7 +206,7 @@ export default class HomePage extends Component {
             <Image style={styles.imageContainer}
               source={require('../../assets/images/qrcode.png')}
             />
-            <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>{currentUserPerfilColor}</Text></Text>
+            <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText, { color: this.getRiskProfileColor(currentUser.riskProfile) }}>{currentUserPerfilColor}</Text></Text>
             {/* <ProfileButton onPress={() => { alert() }} /> */}
           </Animated.View>
         </PanGestureHandler>

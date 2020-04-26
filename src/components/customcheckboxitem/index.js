@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
   resizebleCheckboxText: {
     fontFamily: Colors.fontFamily,
     fontWeight: 'normal',
-    fontSize: 14,
+    fontSize: 12,
     color: Colors.placeholderTextColor,
   },
 });

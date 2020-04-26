@@ -60,7 +60,7 @@ export default class FinishContaminatedPage extends Component {
                 )}
                 <IntroText userName={context.user.name} />
               </View>
-              <View style={{flex: 0.25, width: '90%'}}>
+              <View style={{flex: 0.25, width: '100%'}}>
                 <ContaminatedAnswerNowButton
                   onPress={() => {
                     this.onAnswerNowButtonPress();
