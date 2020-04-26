@@ -455,7 +455,7 @@ export default class ReportSymptomsPage extends Component {
   onClickCheck = (identifier, kind) => {
     let {entity} = this.state;
     let noneOfOptionsPosition = entity.symptonsSelected.findIndex(
-      selected => selected === 'Não tive sintomas',
+      selected => selected.identifier === 'Não tive sintomas',
     );
     if (noneOfOptionsPosition > -1) {
       entity.symptonsSelected = [];
@@ -531,6 +531,7 @@ export default class ReportSymptomsPage extends Component {
       this.checkBreath();
       this.setState({entity});
     } else {
+      entity.symptonsSelected = [];
       entity.symptonsList.map(item => {
         if (item.identifier === 'Não tive sintomas') {
           item.identifier = item.identifier;
@@ -576,6 +577,10 @@ export default class ReportSymptomsPage extends Component {
     if (entity.symptonsSelected.length > 0) {
       for (const item of entity.symptonsSelected) {
         if (item.identifier === 'Não tive sintomas') {
+          isValid = false;
+          break;
+        }
+        if (item.start && entity.showSymptons){
           isValid = false;
           break;
         }
