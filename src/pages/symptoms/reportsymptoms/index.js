@@ -275,6 +275,12 @@ export default class ReportSymptomsPage extends Component {
                       }>
                       <View style={styles.checkboxItemContainer}>
                         {entity.symptonsList.map((symptons, idx) => {
+                          if (
+                            symptons.identifier === 'Não tive sintomas' &&
+                            entity.showSymptons === true
+                          ) {
+                            return null;
+                          }
                           return (
                             <View
                               key={idx}
@@ -378,7 +384,7 @@ export default class ReportSymptomsPage extends Component {
 
   fixEndAndStartDate(obj) {
     if (obj.end && obj.start) {
-      obj.end = ''
+      obj.end = '';
     }
   }
 
@@ -580,7 +586,7 @@ export default class ReportSymptomsPage extends Component {
           isValid = false;
           break;
         }
-        if (item.start && entity.showSymptons){
+        if (item.start && entity.showSymptons) {
           isValid = false;
           break;
         }
@@ -601,7 +607,7 @@ export default class ReportSymptomsPage extends Component {
       if (symptonsSelected && symptonsSelected.length > 1) {
         symptons = symptonsSelected.map(item => {
           if (item.identifier !== 'Não tive sintomas') {
-            if (item.end === '') item.end = new Date();
+            if (item.end === '') {item.end = new Date();}
             return {
               identifier: item.identifier,
               start: item.start,
