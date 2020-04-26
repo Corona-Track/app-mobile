@@ -199,6 +199,10 @@ const getUsersInsideRange = async region => {
                     if (!(userPosition.latitude >= markerSouthWest.latitude &&
                         userPosition.latitude <= markerNorthWest.latitude))
                         return;
+
+                    if (userPosition.latitude === null || userPosition.longitude === null)
+                        return;
+
                     if (userPosition.contaminated) {
                         usersPositionList.push(userPosition);
                         return;
@@ -227,7 +231,7 @@ const getAllCities = async region => {
                     allCities.push(cityPosition);
                     if (cityPosition.latitude >= markerSouthWest.latitude &&
                         cityPosition.latitude <= markerNorthWest.latitude &&
-                        cityPosition.longitude <= markerNorthWest.longitude &&
+                        cityPosition.longitude >= markerNorthWest.longitude &&
                         cityPosition.longitude <= markerNorthEast.longitude)
                         citiesInsideRange.push(cityPosition);
                 });

@@ -19,8 +19,7 @@ exports.calculateSquares = squaresToCalculate => {
         //Every 5 suspects - 1 infected
         let suspiciousConverted = Math.floor(suspiciousAmount / 5);
         contaminatedAmount = contaminatedAmount + suspiciousConverted;
-        //No contaminated user - do not show
-        if (contaminatedAmount === 0)
+        if (contaminatedAmount === 0 && currentSquare.cities.length === 0)
             continue;
         //Circles rule
         let { meters } = currentSquare.internalCircleDiameter;
@@ -30,10 +29,19 @@ exports.calculateSquares = squaresToCalculate => {
         //Cities rule
         let cityBasalDensity = 0;
         let citiesArea = 0;
-        currentSquare.cities.forEach(city => {
-            citiesArea += city.area;
-            cityBasalDensity += (city.basalDensity * city.area);
-        });
+
+        if (currentSquare.userCities.length === 0) {
+            currentSquare.cities.forEach(city => {
+                citiesArea += city.area;
+                cityBasalDensity += (city.basalDensity * city.area);
+            });
+        } else {
+            currentSquare.userCities.forEach(city => {
+                citiesArea += city.area;
+                cityBasalDensity += (city.basalDensity * city.area);
+            });
+        }
+
         let weightedAverage = (cityBasalDensity / citiesArea);
 
         let densityResultant = estimatedDensity + weightedAverage;
@@ -179,12 +187,13 @@ const processSquares = squaresToProcess => {
         }
         let currentSquare = squaresInProcessing[0];
         let currentSquareUsers = currentSquare.users;
+        let currentSquareCities = currentSquare.cities;
         squaresToCalculte.push(currentSquare);
         //Removing first
         squaresInProcessing.splice(0, 1);
         let squaresUserRemoving = [...squaresInProcessing];
         //Removing users from first square removed
-        squaresInProcessing = removeUsersFromSquares(currentSquareUsers, squaresUserRemoving);
+        squaresInProcessing = removeUsersFromSquares(currentSquareUsers, currentSquareCities, squaresUserRemoving);
         //Removing empty square users
         squaresInProcessing = removeEmptyUsersSquares(squaresInProcessing);
         //Reorder to process
@@ -193,10 +202,11 @@ const processSquares = squaresToProcess => {
     return squaresToCalculte;
 };
 
-const removeUsersFromSquares = (usersOfRemovedSquare, squares) => {
+const removeUsersFromSquares = (usersOfRemovedSquare, currentSquareCities, squares) => {
     let squaresToReplace = [];
     for (var i = 0; i < squares.length; i++) {
         let usersAfterRemoving = [];
+        let citiesAfterRemoving = [];
         let currentSquare = squares[i];
         currentSquare.users.forEach(squareUser => {
             let userPosition = usersOfRemovedSquare.findIndex(user => { return user.userId === squareUser.userId });
@@ -204,13 +214,23 @@ const removeUsersFromSquares = (usersOfRemovedSquare, squares) => {
                 usersAfterRemoving.push(squareUser);
         });
         currentSquare.users = usersAfterRemoving;
+
+        currentSquare.cities.forEach(squareCity => {
+            let cityPosition = currentSquareCities.findIndex(city => { return city.ibgeid === squareCity.ibgeid });
+            if (cityPosition === -1)
+                citiesAfterRemoving.push(squareCity);
+        });
+        currentSquare.cities = citiesAfterRemoving;
+
         squaresToReplace.push(currentSquare);
     }
     return squaresToReplace;
 };
 
 const removeEmptyUsersSquares = gridsSquares => {
-    let notEmptySquares = gridsSquares.filter(square => square.users.length > 0);
+    let notEmptySquares = gridsSquares.filter(square => {
+        return (square.users.length > 0 || (square.users.length === 0 && square.cities.length > 0))
+    });
     if (!notEmptySquares || (notEmptySquares && notEmptySquares.length === 0))
         return [];
     return notEmptySquares;
@@ -299,6 +319,7 @@ const generateLine = ({
             },
             central: null,
             users: [],
+            userCities: [],
             cities: []
         };
         //NorthWest
@@ -331,6 +352,7 @@ const generateLine = ({
         let contentInside = verifyContentInsideSquare(square, convertedUsers, citiesContent.insideRange);
         square.users = contentInside.users;
         square.cities = contentInside.cities;
+        square.userCities = contentInside.userCities;
         currentPosition.longitude += squareSide;
         squares.push(square);
     }
@@ -353,7 +375,8 @@ const calculateDistanceBetweenToPoints = (firstPosition, secondPosition) => {
 const verifyContentInsideSquare = (square, convertedUsers, citiesInsideRange) => {
     let content = {
         users: [],
-        cities: []
+        cities: [],
+        userCities: []
     };
 
     if (!convertedUsers || (convertedUsers && convertedUsers.length === 0))
@@ -390,9 +413,9 @@ const verifyContentInsideSquare = (square, convertedUsers, citiesInsideRange) =>
         return content;
 
     content.users.forEach(user => {
-        let cityPosition = content.cities.findIndex(city => city.ibgeid === user.city.ibgeid);
+        let cityPosition = content.userCities.findIndex(city => city.ibgeid === user.city.ibgeid);
         if (cityPosition === -1)
-            content.cities.push(user.city);
+            content.userCities.push(user.city);
     });
     return content;
 };
