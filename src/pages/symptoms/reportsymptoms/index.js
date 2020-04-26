@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,24 +8,24 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import { Header } from 'react-native-elements';
+import {Header} from 'react-native-elements';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import CalendarPicker from 'react-native-calendar-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Colors } from '../../../themes/variables';
+import {Colors} from '../../../themes/variables';
 
-import { LeftComponent, CenterComponent } from '../../../components/customheader';
+import {LeftComponent, CenterComponent} from '../../../components/customheader';
 import CustomHiddenView from '../../../components/customhiddenview';
-import { ContinueRequiredButton } from '../../../components/custombutton';
+import {ContinueRequiredButton} from '../../../components/custombutton';
 import {
   CheckboxItemWithExpand,
   RadioButtonYesOrNoItem,
 } from '../../../components/customcheckboxitem';
 
-import { SymptomConsumer, SymptomContext } from '../../../store/symptom';
-import { UserConsumer } from '../../../store/user';
-import { SaveSymptom, UpdateSymptom } from '../../../firebase/Symptom';
+import {SymptomConsumer, SymptomContext} from '../../../store/symptom';
+import {UserConsumer} from '../../../store/user';
+import {SaveSymptom, UpdateSymptom} from '../../../firebase/Symptom';
 
 export default class ReportSymptomsPage extends Component {
   static navigationOptions = {
@@ -77,7 +77,7 @@ export default class ReportSymptomsPage extends Component {
           start: '',
           end: '',
         },
-        { identifier: 'Febre', check: false, check2: false, start: '', end: '' },
+        {identifier: 'Febre', check: false, check2: false, start: '', end: ''},
         {
           identifier: 'Falta de apetite',
           check: false,
@@ -106,7 +106,7 @@ export default class ReportSymptomsPage extends Component {
           start: '',
           end: '',
         },
-        { identifier: 'Tosse', check: false, check2: false, start: '', end: '' },
+        {identifier: 'Tosse', check: false, check2: false, start: '', end: ''},
         {
           identifier: 'Dor de Garganta',
           check: false,
@@ -114,7 +114,7 @@ export default class ReportSymptomsPage extends Component {
           start: '',
           end: '',
         },
-        { identifier: 'Fadiga', check: false, check2: false, start: '', end: '' },
+        {identifier: 'Fadiga', check: false, check2: false, start: '', end: ''},
         {
           identifier: 'Dor no Corpo',
           check: false,
@@ -174,7 +174,7 @@ export default class ReportSymptomsPage extends Component {
       ],
     },
     breathConditionList: [
-      { identifier: 'Leve: falta de ar ao fazer algum tipo de esforço físico' },
+      {identifier: 'Leve: falta de ar ao fazer algum tipo de esforço físico'},
       {
         identifier:
           'Moderada: não conseguir completar frases sem precisar respirar no meio',
@@ -194,7 +194,7 @@ export default class ReportSymptomsPage extends Component {
   };
 
   componentWillMount() {
-    const { symptom } = this.context;
+    const {symptom} = this.context;
     let symptonsList = this.state.entity.symptonsList;
     if (symptom.symptons && symptom.symptons.length > 0) {
       let selected = symptom.symptons.map(item => {
@@ -230,7 +230,7 @@ export default class ReportSymptomsPage extends Component {
   }
 
   render = () => {
-    let { entity, showLoading } = this.state;
+    let {entity, showLoading} = this.state;
 
     return (
       <UserConsumer>
@@ -239,11 +239,19 @@ export default class ReportSymptomsPage extends Component {
             {contextSymptom => (
               <SafeAreaView style={styles.container}>
                 <Spinner visible={showLoading} />
-                <View style={{ width: '100%', marginHorizontal: 20 }}>
+                <View style={{width: '100%', marginHorizontal: 20}}>
                   <Header
                     backgroundColor={Colors.secondaryColor}
-                    leftComponent={<LeftComponent onPress={this.onLeftButtonPress} />}
-                    centerComponent={<CenterComponent photo={context.user.photo} userName={context.user.name} />} />
+                    leftComponent={
+                      <LeftComponent onPress={this.onLeftButtonPress} />
+                    }
+                    centerComponent={
+                      <CenterComponent
+                        photo={context.user.photo}
+                        userName={context.user.name}
+                      />
+                    }
+                  />
                 </View>
                 <IntroText />
                 <ScrollView>
@@ -258,8 +266,8 @@ export default class ReportSymptomsPage extends Component {
                   {entity.showSymptons ? (
                     <WhatFelling />
                   ) : (
-                      entity.showSymptons === false && <HaveSymptoms />
-                    )}
+                    entity.showSymptons === false && <HaveSymptoms />
+                  )}
                   <View style={styles.bottom}>
                     <CustomHiddenView
                       show={
@@ -270,7 +278,7 @@ export default class ReportSymptomsPage extends Component {
                           return (
                             <View
                               key={idx}
-                              style={{ minHeight: 40, height: 'auto' }}>
+                              style={{minHeight: 40, height: 'auto'}}>
                               <CheckboxItemWithExpand
                                 identifier={symptons.identifier}
                                 isChecked={symptons.check}
@@ -291,60 +299,11 @@ export default class ReportSymptomsPage extends Component {
                                 isExpanded={symptons.check2}
                               />
                               {symptons.check2 && (
-                                <View style={styles.dateContainer}>
-                                  <Text
-                                    style={{
-                                      marginTop: 10,
-                                      textAlign: 'center',
-                                      fontSize: 18,
-                                      fontWeight: '500',
-                                      color: '#828282',
-                                    }}>
-                                    Desde Quando?
-                                  </Text>
-                                  <CalendarPicker
-                                    minDate={moment().subtract(14, 'days')}
-                                    maxDate={new Date()}
-                                    allowRangeSelection={true}
-                                    selectedDayTextColor={'white'}
-                                    weekdays={[
-                                      'S',
-                                      'T',
-                                      'Q',
-                                      'Q',
-                                      'S',
-                                      'S',
-                                      'D',
-                                    ]}
-                                    months={[
-                                      'Janeiro',
-                                      'Fevereiro',
-                                      'Março',
-                                      'Abril',
-                                      'Maio',
-                                      'Junho',
-                                      'Julho',
-                                      'Agosto',
-                                      'Setembro',
-                                      'Outubro',
-                                      'Novembro',
-                                      'Dezembro',
-                                    ]}
-                                    previousTitle="Anterior"
-                                    nextTitle="Proximo"
-                                    todayBackgroundColor={'#eee'}
-                                    todayTextStyle={{ color: '#828282' }}
-                                    selectedDayColor={Colors.blue}
-                                    onDateChange={(date, type) =>
-                                      this.onHandleDate(date, type, symptons)
-                                    }
-                                    textStyle={{
-                                      color: '#828282',
-                                    }}
-                                    selectedStartDate={symptons.start}
-                                    selectedEndDate={symptons.end}
-                                  />
-                                </View>
+                                <DateContainer
+                                  symptons={symptons}
+                                  showSymptons={entity.showSymptons}
+                                  onHandleDate={this.onHandleDate}
+                                />
                               )}
                             </View>
                           );
@@ -363,17 +322,17 @@ export default class ReportSymptomsPage extends Component {
                     />
                   </View>
                 ) : (
-                    entity.showSymptons === false && (
-                      <View style={styles.wrapButton}>
-                        <ContinueRequiredButton
-                          onPress={() => {
-                            this.symptonsButtonPress(contextSymptom);
-                          }}
-                          disabled={this.isSymptonsBtnDisabled()}
-                        />
-                      </View>
-                    )
-                  )}
+                  entity.showSymptons === false && (
+                    <View style={styles.wrapButton}>
+                      <ContinueRequiredButton
+                        onPress={() => {
+                          this.symptonsButtonPress(contextSymptom);
+                        }}
+                        disabled={this.isSymptonsBtnDisabled()}
+                      />
+                    </View>
+                  )
+                )}
               </SafeAreaView>
             )}
           </SymptomConsumer>
@@ -383,24 +342,24 @@ export default class ReportSymptomsPage extends Component {
   };
 
   isCheckedBreath = identifier => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     return entity.shortBreathAnswer === identifier;
   };
   onClickRadioBreath = identifier => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     entity.shortBreathAnswer = identifier;
-    this.setState({ entity });
+    this.setState({entity});
   };
   onHandleDate = (date, type, symptons) => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     if (type === 'END_DATE') {
       symptons.end = date._d;
     } else {
+      this.fixEndAndStartDate(symptons);
       symptons.start = date._d;
     }
 
     let obj = symptons;
-
     let indexSyntom = this.state.entity.symptonsSelected.findIndex(
       item => item.identifier === obj.identifier,
     );
@@ -417,28 +376,34 @@ export default class ReportSymptomsPage extends Component {
     });
   };
 
+  fixEndAndStartDate(obj) {
+    if (obj.end && obj.start) {
+      obj.end = ''
+    }
+  }
+
   onPressDatePicker = () => {
-    this.setState({ showDatePicker: true });
+    this.setState({showDatePicker: true});
   };
 
   onPressCheckBox = value => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     entity.showSymptons = value;
-    this.setState({ entity });
+    this.setState({entity});
     if (!entity.showSymptons) {
-      this.setState({ continueNoSymptons: true });
+      this.setState({continueNoSymptons: true});
     } else {
-      this.setState({ continueNoSymptons: false });
+      this.setState({continueNoSymptons: false});
     }
   };
   onChangeAirBreathAnswer = value => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     entity.shortBreathAnswer = value;
-    this.setState({ entity });
+    this.setState({entity});
   };
 
   checkBreath = () => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     let shortBreathPosition = entity.symptonsSelected.findIndex(
       selected => selected === 'Falta de Ar',
     );
@@ -450,22 +415,22 @@ export default class ReportSymptomsPage extends Component {
     } else {
       entity.shortBreath = false;
     }
-    this.setState({ entity });
+    this.setState({entity});
   };
 
   onPressCheckBoxOximeter = value => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     entity.hasOximeter = value;
     this.checkBreath();
-    this.setState({ entity });
+    this.setState({entity});
   };
   onPressCheckBoxSaturation = value => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     entity.hasSaturation = value;
-    this.setState({ entity });
+    this.setState({entity});
   };
   onChangeSelected = () => {
-    data => this.setState({ data });
+    data => this.setState({data});
     let val = this.state.data.find(e => e.selected === true);
     if (val.value === 'NO') {
       this.ShowHideComponent(false);
@@ -478,17 +443,17 @@ export default class ReportSymptomsPage extends Component {
     this.props.navigation.navigate('Home');
   };
 
-  onPressRadioBtn = data => this.setState({ data });
+  onPressRadioBtn = data => this.setState({data});
   ShowHideComponent = val => {
     if (val === true) {
-      this.setState({ showSymptons: true });
+      this.setState({showSymptons: true});
     } else {
-      this.setState({ showSymptons: false });
+      this.setState({showSymptons: false});
     }
   };
 
   onClickCheck = (identifier, kind) => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     let noneOfOptionsPosition = entity.symptonsSelected.findIndex(
       selected => selected === 'Não tive sintomas',
     );
@@ -516,7 +481,7 @@ export default class ReportSymptomsPage extends Component {
       }
       identifier.check2 = true;
       this.checkBreath();
-      this.setState({ entity });
+      this.setState({entity});
       return;
     }
 
@@ -537,10 +502,10 @@ export default class ReportSymptomsPage extends Component {
       entity.hasSaturation = false;
     }
 
-    this.setState({ entity });
+    this.setState({entity});
   };
   onClickNoneOfOptions = identifier => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     if (!identifier.check) {
       entity.symptonsList.map(item => {
         if (item.identifier !== 'Não tive sintomas') {
@@ -564,7 +529,7 @@ export default class ReportSymptomsPage extends Component {
       entity.hasOximeter = false;
       entity.hasSaturation = false;
       this.checkBreath();
-      this.setState({ entity });
+      this.setState({entity});
     } else {
       entity.symptonsList.map(item => {
         if (item.identifier === 'Não tive sintomas') {
@@ -576,7 +541,7 @@ export default class ReportSymptomsPage extends Component {
         }
         return item;
       });
-      this.setState({ entity });
+      this.setState({entity});
     }
 
     return;
@@ -586,7 +551,7 @@ export default class ReportSymptomsPage extends Component {
     return true;
   };
   isChecked = identifier => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     let currentSymptonsPosition = entity.symptonsSelected.find(
       selected => selected.identifier === identifier,
     );
@@ -606,7 +571,7 @@ export default class ReportSymptomsPage extends Component {
   };
 
   isSymptonsBtnDisabled = () => {
-    let { entity } = this.state;
+    let {entity} = this.state;
     let isValid = true;
     if (entity.symptonsSelected.length > 0) {
       for (const item of entity.symptonsSelected) {
@@ -620,16 +585,18 @@ export default class ReportSymptomsPage extends Component {
         }
       }
     }
+
     return isValid;
   };
   symptonsButtonPress = async contextSymptom => {
-    this.setState({ showLoading: true });
+    this.setState({showLoading: true});
     try {
       let symptons;
-      let { symptonsSelected } = this.state.entity;
+      let {symptonsSelected} = this.state.entity;
       if (symptonsSelected && symptonsSelected.length > 1) {
         symptons = symptonsSelected.map(item => {
           if (item.identifier !== 'Não tive sintomas') {
+            if (item.end === '') item.end = new Date();
             return {
               identifier: item.identifier,
               start: item.start,
@@ -664,14 +631,14 @@ export default class ReportSymptomsPage extends Component {
         await SaveSymptom(model);
       }
 
-      this.setState({ showLoading: false });
+      this.setState({showLoading: false});
       this.props.navigation.navigate('Home');
     } catch (error) {
       Alert.alert(
         'Aviso',
         'Ocorreu um erro, tente novamente',
-        [{ text: 'OK', onPress: () => this.setState({ showLoading: false }) }],
-        { cancelable: false },
+        [{text: 'OK', onPress: () => this.setState({showLoading: false})}],
+        {cancelable: false},
       );
     }
   };
@@ -679,8 +646,106 @@ export default class ReportSymptomsPage extends Component {
 
 ReportSymptomsPage.contextType = SymptomContext;
 
+function DateContainer({symptons, showSymptons, onHandleDate}) {
+  if (showSymptons) {
+    return (
+      <View style={styles.dateContainer}>
+        <Text
+          style={{
+            marginTop: 10,
+            textAlign: 'center',
+            fontSize: 18,
+            fontWeight: '500',
+            color: '#828282',
+          }}>
+          Desde Quando?
+        </Text>
+        <CalendarPicker
+          maxDate={new Date()}
+          allowRangeSelection={false}
+          selectedDayTextColor={'white'}
+          weekdays={['S', 'T', 'Q', 'Q', 'S', 'S', 'D']}
+          months={[
+            'Janeiro',
+            'Fevereiro',
+            'Março',
+            'Abril',
+            'Maio',
+            'Junho',
+            'Julho',
+            'Agosto',
+            'Setembro',
+            'Outubro',
+            'Novembro',
+            'Dezembro',
+          ]}
+          previousTitle="Anterior"
+          nextTitle="Proximo"
+          todayBackgroundColor={'#eee'}
+          todayTextStyle={{color: '#828282'}}
+          selectedDayColor={Colors.blue}
+          onDateChange={(date, type) => onHandleDate(date, type, symptons)}
+          textStyle={{
+            color: '#828282',
+          }}
+          selectedStartDate={symptons.start}
+          selectedEndDate={symptons.end}
+        />
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.dateContainer}>
+      <Text
+        style={{
+          marginTop: 10,
+          textAlign: 'center',
+          fontSize: 18,
+          fontWeight: '500',
+          color: '#828282',
+        }}>
+        Indique o início e fim:
+      </Text>
+      <CalendarPicker
+        minDate={moment().subtract(14, 'days')}
+        maxDate={new Date()}
+        allowRangeSelection={true}
+        selectedDayTextColor={'white'}
+        weekdays={['S', 'T', 'Q', 'Q', 'S', 'S', 'D']}
+        months={[
+          'Janeiro',
+          'Fevereiro',
+          'Março',
+          'Abril',
+          'Maio',
+          'Junho',
+          'Julho',
+          'Agosto',
+          'Setembro',
+          'Outubro',
+          'Novembro',
+          'Dezembro',
+        ]}
+        previousTitle="Anterior"
+        nextTitle="Proximo"
+        todayBackgroundColor={'#eee'}
+        todayTextStyle={{color: '#828282'}}
+        selectedDayColor={Colors.blue}
+        onDateChange={(date, type) => onHandleDate(date, type, symptons)}
+        textStyle={{
+          color: '#828282',
+        }}
+        selectedStartDate={symptons.start}
+        selectedEndDate={symptons.end}
+        allowBackwardRangeSelect={true}
+      />
+    </View>
+  );
+}
+
 const IntroText = () => (
-  <View style={{ marginTop: 20 }}>
+  <View style={{marginTop: 20}}>
     <View style={styles.textContainer}>
       <View style={styles.centerText}>
         <Text style={styles.simpleText}>
@@ -695,7 +760,8 @@ const IntroText = () => (
 const WhatFelling = () => (
   <View style={styles.textContainer}>
     <View style={styles.centerText}>
-      <Text style={styles.simpleText}><Text style={styles.boldText}>O que você está</Text>
+      <Text style={styles.simpleText}>
+        <Text style={styles.boldText}>O que você está</Text>
       </Text>
       <Text style={styles.simpleText}>sentindo no momento?</Text>
     </View>
