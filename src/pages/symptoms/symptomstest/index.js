@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,24 +8,24 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import {Header} from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import Spinner from 'react-native-loading-spinner-overlay';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import CalendarPicker from 'react-native-calendar-picker';
-import {Colors} from '../../../themes/variables';
+import { Colors } from '../../../themes/variables';
 
-import {LeftComponent, CenterComponent} from '../../../components/customheader';
+import { LeftComponent, CenterComponent } from '../../../components/customheader';
 import CustomHiddenView from '../../../components/customhiddenview';
-import {ContinueRequiredButton} from '../../../components/custombutton';
+import { ContinueRequiredButton } from '../../../components/custombutton';
 import {
   CheckboxItemWithExpand,
   RadioButtonYesOrNoItem,
 } from '../../../components/customcheckboxitem';
 
-import {SymptomConsumer} from '../../../store/symptom';
-import {UserConsumer} from '../../../store/user';
-import {SaveSymptom} from '../../../firebase/Symptom';
+import { SymptomConsumer } from '../../../store/symptom';
+import { UserConsumer } from '../../../store/user';
+import { SaveSymptom } from '../../../firebase/Symptom';
 
 export default class SymptomsTestPage extends Component {
   static navigationOptions = {
@@ -63,7 +63,7 @@ export default class SymptomsTestPage extends Component {
           start: '',
           end: '',
         },
-        {identifier: 'Febre', check: false, check2: false, start: '', end: ''},
+        { identifier: 'Febre', check: false, check2: false, start: '', end: '' },
         {
           identifier: 'Falta de apetite',
           check: false,
@@ -92,7 +92,7 @@ export default class SymptomsTestPage extends Component {
           start: '',
           end: '',
         },
-        {identifier: 'Tosse', check: false, check2: false, start: '', end: ''},
+        { identifier: 'Tosse', check: false, check2: false, start: '', end: '' },
         {
           identifier: 'Dor de Garganta',
           check: false,
@@ -100,7 +100,7 @@ export default class SymptomsTestPage extends Component {
           start: '',
           end: '',
         },
-        {identifier: 'Fadiga', check: false, check2: false, start: '', end: ''},
+        { identifier: 'Fadiga', check: false, check2: false, start: '', end: '' },
         {
           identifier: 'Dor no Corpo',
           check: false,
@@ -171,7 +171,7 @@ export default class SymptomsTestPage extends Component {
   };
 
   render = () => {
-    let {entity, showLoading} = this.state;
+    let { entity, showLoading } = this.state;
     return (
       <UserConsumer>
         {context => (
@@ -179,7 +179,7 @@ export default class SymptomsTestPage extends Component {
             {contextSymptom => (
               <SafeAreaView style={styles.container}>
                 <Spinner visible={showLoading} />
-                <View style={{width: '100%', paddingHorizontal: 20}}>
+                <View style={{ width: '100%', paddingHorizontal: 20 }}>
                   <Header
                     backgroundColor={Colors.secondaryColor}
                     leftComponent={
@@ -206,8 +206,8 @@ export default class SymptomsTestPage extends Component {
                   {entity.showSymptons === true ? (
                     <WhatFelling />
                   ) : (
-                    entity.showSymptons === false && <HaveSymptoms />
-                  )}
+                      entity.showSymptons === false && <HaveSymptoms />
+                    )}
                   <View style={styles.bottom}>
                     <CustomHiddenView
                       show={
@@ -218,7 +218,7 @@ export default class SymptomsTestPage extends Component {
                           return (
                             <View
                               key={idx}
-                              style={{minHeight: 40, height: 'auto'}}>
+                              style={{ minHeight: 40, height: 'auto' }}>
                               <CheckboxItemWithExpand
                                 identifier={symptons.identifier}
                                 isChecked={symptons.check}
@@ -281,7 +281,7 @@ export default class SymptomsTestPage extends Component {
                                     previousTitle="Anterior"
                                     nextTitle="Proximo"
                                     todayBackgroundColor={'#eee'}
-                                    todayTextStyle={{color: '#828282'}}
+                                    todayTextStyle={{ color: '#828282' }}
                                     selectedDayColor={Colors.blue}
                                     onDateChange={(date, type) =>
                                       this.onHandleDate(date, type, symptons)
@@ -311,17 +311,17 @@ export default class SymptomsTestPage extends Component {
                     />
                   </View>
                 ) : (
-                  entity.showSymptons === false && (
-                    <View style={styles.wrapButton}>
-                      <ContinueRequiredButton
-                        onPress={() => {
-                          this.symptonsButtonPress(contextSymptom);
-                        }}
-                        disabled={this.isSymptonsBtnDisabled()}
-                      />
-                    </View>
-                  )
-                )}
+                    entity.showSymptons === false && (
+                      <View style={styles.wrapButton}>
+                        <ContinueRequiredButton
+                          onPress={() => {
+                            this.symptonsButtonPress(contextSymptom);
+                          }}
+                          disabled={this.isSymptonsBtnDisabled()}
+                        />
+                      </View>
+                    )
+                  )}
               </SafeAreaView>
             )}
           </SymptomConsumer>
@@ -331,7 +331,7 @@ export default class SymptomsTestPage extends Component {
   };
 
   onHandleDate = (date, type, symptons) => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     if (type === 'END_DATE') {
       symptons.end = date._d;
     } else {
@@ -357,17 +357,17 @@ export default class SymptomsTestPage extends Component {
   };
 
   onPressCheckBox = value => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.showSymptons = value;
-    this.setState({entity});
+    this.setState({ entity });
     if (!entity.showSymptons) {
-      this.setState({continueNoSymptons: true});
+      this.setState({ continueNoSymptons: true });
     } else {
-      this.setState({continueNoSymptons: false});
+      this.setState({ continueNoSymptons: false });
     }
   };
   onClickCheck = (identifier, kind) => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     let noneOfOptionsPosition = entity.symptonsSelected.findIndex(
       selected => selected === 'Não tive sintomas',
     );
@@ -394,7 +394,7 @@ export default class SymptomsTestPage extends Component {
         identifier.check = true;
       }
       identifier.check2 = true;
-      this.setState({entity});
+      this.setState({ entity });
       return;
     }
 
@@ -415,10 +415,10 @@ export default class SymptomsTestPage extends Component {
       entity.hasSaturation = false;
     }
 
-    this.setState({entity});
+    this.setState({ entity });
   };
   onClickNoneOfOptions = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     if (!identifier.check) {
       entity.symptonsList.map(item => {
         if (item.identifier !== 'Não tive sintomas') {
@@ -441,7 +441,7 @@ export default class SymptomsTestPage extends Component {
       entity.hasSymptons = false;
       entity.hasOximeter = false;
       entity.hasSaturation = false;
-      this.setState({entity});
+      this.setState({ entity });
     } else {
       entity.symptonsList.map(item => {
         if (item.identifier === 'Não tive sintomas') {
@@ -453,14 +453,14 @@ export default class SymptomsTestPage extends Component {
         }
         return item;
       });
-      this.setState({entity});
+      this.setState({ entity });
     }
 
     return;
   };
 
   isChecked = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     let currentSymptonsPosition = entity.symptonsSelected.findIndex(
       selected => selected.identifier === identifier,
     );
@@ -471,7 +471,7 @@ export default class SymptomsTestPage extends Component {
   };
 
   isSymptonsBtnDisabled = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     let isValid = true;
     if (entity.symptonsSelected.length > 0) {
       for (const item of entity.symptonsSelected) {
@@ -488,10 +488,10 @@ export default class SymptomsTestPage extends Component {
     return isValid;
   };
   symptonsButtonPress = async contextSymptom => {
-    this.setState({showLoading: true});
+    this.setState({ showLoading: true });
     try {
       let symptons;
-      let {symptonsSelected} = this.state.entity;
+      let { symptonsSelected } = this.state.entity;
       if (symptonsSelected && symptonsSelected.length > 1) {
         symptons = symptonsSelected.map(item => {
           if (item.identifier !== 'Não tive sintomas') {
@@ -527,21 +527,21 @@ export default class SymptomsTestPage extends Component {
 
       await SaveSymptom(model);
 
-      this.setState({showLoading: false});
+      this.setState({ showLoading: false });
       this.props.navigation.navigate('Home');
     } catch (error) {
       Alert.alert(
         'Aviso',
         'Ocorreu um erro, tente novamente',
-        [{text: 'OK', onPress: () => this.setState({showLoading: false})}],
-        {cancelable: false},
+        [{ text: 'OK', onPress: () => this.setState({ showLoading: false }) }],
+        { cancelable: false },
       );
     }
   };
 }
 
 const IntroText = () => (
-  <View style={{marginTop: 20}}>
+  <View style={{ marginTop: 20 }}>
     <View style={styles.textContainer}>
       <View style={styles.centerText}>
         <Text style={styles.simpleText}>
@@ -556,8 +556,7 @@ const IntroText = () => (
 const WhatFelling = () => (
   <View style={styles.textContainer}>
     <View style={styles.centerText}>
-      <Text style={styles.boldText}>
-        O que <Text style={styles.simpleText}>você está</Text>
+    <Text style={styles.simpleText}><Text style={styles.boldText}>O que você está</Text>
       </Text>
       <Text style={styles.simpleText}>sentindo no momento?</Text>
     </View>

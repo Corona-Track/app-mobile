@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 10
   },
   wrap: {
     flexDirection: 'column',
@@ -195,8 +196,8 @@ const styles = StyleSheet.create({
     marginBottom: 70,
   },
   circle: {
-    height: 120,
-    width: 120,
+    height: 100,
+    width: 100,
     borderWidth: 2,
     borderColor: Colors.blue,
     borderRadius: 200,

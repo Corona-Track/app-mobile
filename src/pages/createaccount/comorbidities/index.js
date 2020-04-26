@@ -42,7 +42,6 @@ export default class ComorbiditiesPage extends Component {
       comorbiditiesSelected: [],
     },
     comorbiditiesList: [
-      { identifier: 'Nenhuma das opções' },
       { identifier: 'Gravidez de alto risco' },
       { identifier: 'Diabetes difícil de tratar' },
       { identifier: 'Doença do coração difícil de tratar' },
@@ -55,6 +54,7 @@ export default class ComorbiditiesPage extends Component {
       { identifier: 'Transplante de órgãos' },
       { identifier: 'Doenças genéticas' },
       { identifier: 'Fibrose cística' },
+      { identifier: 'Nenhuma das opções' }
     ],
     showLoading: false,
   };
@@ -211,18 +211,13 @@ export default class ComorbiditiesPage extends Component {
 
       const { password, ...model } = user;
       await SaveUser(model);
-      console.log("A1");
       await new Promise(r => setTimeout(r, 1000));
-      console.log("A2");
       const userRef = await getUser();
-      console.log("A3");
       const userData = userRef.data();
       const { riskProfile } = userData;
-      console.log("A4");
       if (riskProfile === riskProfileTypes.RED) {
         nextPage = 'FinishContaminated';
       }
-      console.log("A5");
       this.setState({ showLoading: false });
       this.props.navigation.navigate(nextPage, { entity: entity });
     } catch (error) {
