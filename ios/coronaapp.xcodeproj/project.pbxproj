@@ -73,7 +73,7 @@
 		10A08B65CF9F4FB790280157 /* Prompt-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Prompt-ExtraBold.ttf"; path = "../src/assets/fonts/Prompt-ExtraBold.ttf"; sourceTree = "<group>"; };
 		121A69E9849D45D7BE690A0E /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		12B6610543A44AF7876E9F3E /* Prompt-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Prompt-Regular.ttf"; path = "../src/assets/fonts/Prompt-Regular.ttf"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* coronaapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = coronaapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* CoronaTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoronaTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = coronaapp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = coronaapp/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -249,7 +249,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* coronaapp.app */,
+				13B07F961A680F5B00A75B9A /* CoronaTrack.app */,
 				00E356EE1AD99517003FC87E /* coronaappTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* coronaapp-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* coronaapp-tvOSTests.xctest */,
@@ -340,7 +340,7 @@
 			);
 			name = coronaapp;
 			productName = coronaapp;
-			productReference = 13B07F961A680F5B00A75B9A /* coronaapp.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* CoronaTrack.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* coronaapp-tvOS */ = {
@@ -898,7 +898,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.coronaapp;
-				PRODUCT_NAME = coronaapp;
+				PRODUCT_NAME = CoronaTrack;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -929,7 +929,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.coronaapp;
-				PRODUCT_NAME = coronaapp;
+				PRODUCT_NAME = CoronaTrack;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
