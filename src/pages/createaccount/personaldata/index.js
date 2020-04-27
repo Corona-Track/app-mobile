@@ -223,7 +223,7 @@ export default class PersonalDataPage extends Component {
       const resEmail = await getUserFilter(
         'email',
         '==',
-        entity.email.toLowerCase(),
+        entity.email,
       );
 
       const resCpf = await getUserFilter('cpf', '==', entity.cpf);
@@ -307,7 +307,7 @@ export default class PersonalDataPage extends Component {
   };
   onHandleEmail = email => {
     let { entity } = this.state;
-    entity.email = email.toLowerCase();
+    entity.email = email;
     this.setState({ entity });
   };
   onHandlePassword = password => {
