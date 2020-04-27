@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">coronaapp</string>
+    <string name="app_name">CoronaTrack</string>
     <string name="facebook_app_id">1134033996962033</string>
     <string name="fb_login_protocol_scheme">fb1134033996962033</string>
 </resources>
