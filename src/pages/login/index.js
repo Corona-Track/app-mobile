@@ -171,7 +171,7 @@ export default class LoginPage extends Component {
               <View style={{ width: "100%" }}>
                 <SimpleTextInput
                   label="E-mail"
-                  value={entity.email.toLowerCase()}
+                  value={entity.email}
                   onChangeText={this.handleOnEmailChange} />
               </View>
               <View style={{ width: "100%" }}>
