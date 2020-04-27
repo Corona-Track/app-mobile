@@ -3,6 +3,7 @@ import {
   View,
   SafeAreaView,
   StyleSheet,
+  ScrollView,
   Text,
   TouchableOpacity,
   Platform,
@@ -39,10 +40,9 @@ export default class FinishContaminatedPage extends Component {
         }} />
         <UserConsumer>
           {context => (
-            <>
+            <ScrollView style={{ width: "100%" }}>
               <View
                 style={{
-                  flex: 0.75,
                   justifyContent: 'center',
                   flexDirection: 'column',
                   width: '100%',
@@ -56,13 +56,10 @@ export default class FinishContaminatedPage extends Component {
                       overlayContainerStyle={styles.avatarContainerIcon}
                       source={{ uri: context.user.photo }}
                     />
-                  </View>
-                ) : (
-                    <></>
-                  )}
+                  </View>) : (<></>)}
                 <IntroText userName={context.user.name} />
               </View>
-              <View style={{ flex: 0.25, width: '100%' }}>
+              <View style={{ marginTop: 40, marginHorizontal: 20 }}>
                 <ContaminatedAnswerNowButton
                   onPress={() => {
                     this.onAnswerNowButtonPress();
@@ -74,7 +71,7 @@ export default class FinishContaminatedPage extends Component {
                   }}
                 />
               </View>
-            </>
+            </ScrollView>
           )}
         </UserConsumer>
       </SafeAreaView>
@@ -140,7 +137,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: Colors.redRiskProfile,
     height: '100%',
-    paddingHorizontal: 20,
     paddingBottom: 15,
   },
   textContainer: {
