@@ -45,7 +45,7 @@ export default function ScheduleOrientation(props) {
                 centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />} />
         </View>
         <WebView
-            source={{ uri: 'https://auth.aliancamedica.org/cadastro?source=coronatrack' }}
+            source={{ uri: 'https://coronatrackbrasil.com.br/alianca-medica/' }}
             style={{ flex: 1, marginTop: 10 }} />
     </SafeAreaView>
 }
