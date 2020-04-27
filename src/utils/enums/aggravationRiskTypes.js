@@ -7,7 +7,7 @@ const aggravationRiskTypes = {
     HIGH: {
         id:2,
         risk: 'ALTO',
-        text: 'Há uma chance real de você apresentar sintomas que necessitem de internação hospitalar. Como há vários casos de óbitos com pessoas nesta faixa de risco, recomendamos que siga as orientações do Ministério da Saúde e tome todas as precauções possíveis para não contrair o COVID-19.',
+        text: 'Há chance de você apresentar sintomas que necessitem de internação hospitalar. As condições relatadas requerem atenção especial caso você contraia COVID 19. Estas condições aumentam muito a chance de complicações, sendo assim, recomendamos que fique em casa durante todo o período de pandemia e siga à risca as orientações do Ministério da Saúde.',
     },
 };
 

@@ -47,7 +47,6 @@ export default class MapsPage extends Component {
       longitudeDelta: 0.05,
       latitudeDelta: 0.05,
     },
-    mapKey: null,
     cornersMarkers: [],
   };
   initialize = () => {
@@ -98,12 +97,13 @@ export default class MapsPage extends Component {
     return (<>
       {cornersMarkers.map((item, idx) => {
         return (<Circle
-          key={idx}
+          key={Math.random()}
           center={item.central}
           radius={(item.internalCircleDiameter.meters / 2)}
           strokeWidth={1}
-          fillColor={item.circleColor === "red" ? red : yellow}
-          strokeColor={item.circleColor === "red" ? red : yellow} />)
+          fillColor={item.parsedColor}
+          strokeColor={item.parsedColor}
+        />)
       })}
     </>)
   };
@@ -156,8 +156,10 @@ export default class MapsPage extends Component {
   };
   onSuccessGetMapElementsByPosition = (response, filter) => {
     let { data } = response;
+    data.forEach(item => {
+      item.parsedColor = item.circleColor === "red" ? red : yellow
+    });
     this.setState({
-      mapKey: Math.floor(Math.random() * 100),
       cornersMarkers: data,
       isMapEnabled: true
     });

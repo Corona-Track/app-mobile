@@ -215,9 +215,8 @@ export default class ComorbiditiesPage extends Component {
       const userRef = await getUser();
       const userData = userRef.data();
       const { riskProfile } = userData;
-      if (riskProfile === riskProfileTypes.RED) {
+      if (user.question.contaminated)
         nextPage = 'FinishContaminated';
-      }
       this.setState({ showLoading: false });
       this.props.navigation.navigate(nextPage, { entity: entity });
     } catch (error) {
