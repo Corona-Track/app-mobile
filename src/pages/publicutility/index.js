@@ -45,7 +45,7 @@ export default function PublicUtilityPage(props) {
                 centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />} />
         </View>
         <WebView
-            source={{ uri: 'https://coronavirus.saude.gov.br/' }}
+            source={{ uri: 'https://coronatrackbrasil.com.br/utilidade-publica/' }}
             style={{ flex: 1, marginTop: 10 }} />
     </SafeAreaView>
 }
