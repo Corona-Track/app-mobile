@@ -1,4 +1,4 @@
-package com.coronaapp;
+package br.com.coronatrackbrasil;
 
 import androidx.multidex.MultiDexApplication;
 import android.content.Context;
