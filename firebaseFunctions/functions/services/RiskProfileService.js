@@ -12,6 +12,7 @@ exports.calculateRiskProfileQuestionsPoints = (questions) => {
         someoneSuspicious,
         alreadyHadCoronavirusTest,
         hadFluVaccine,
+        daysAWeek,
         keepDistance,
         protectionAnswer,
         touchingPrecaution,
@@ -20,6 +21,8 @@ exports.calculateRiskProfileQuestionsPoints = (questions) => {
         containerCleanupAnswer,
         outsideWorkAnswer,
         relativesLeavingHome,
+        relativesLeavingTimes,
+        howManyRelatives,
         relativesChangeClothesAnswer,
         relativesContainerCleanupAnswer,
         relativesShowerAnswer
@@ -47,6 +50,9 @@ exports.calculateRiskProfileQuestionsPoints = (questions) => {
     if (hadFluVaccine === false)
         habitsNotPreventives += 1
 
+    if (daysAWeek)
+        habitsNotPreventives += calculatePoints(daysAWeek, 7, 1, 0)
+
 
     if (keepDistance === "Nem sempre mantenho distância porque:")
         habitsNotPreventives += 1
@@ -59,31 +65,62 @@ exports.calculateRiskProfileQuestionsPoints = (questions) => {
         habitsNotPreventives += 1
 
 
-    if (showerAnswer === "Nunca" || showerAnswer === "Às vezes")
+    if (showerAnswer === "Nunca") {
         habitsNotPreventives += 1
+    } else if (showerAnswer === "Às vezes") {
+        habitsNotPreventives += 0.5
+    }
 
-    if (changeClothesAnswer === "Nunca" || changeClothesAnswer === "Às vezes")
-        habitsNotPreventives += 1
 
-    if (containerCleanupAnswer === "Nunca" || containerCleanupAnswer === "Às vezes")
+    if (changeClothesAnswer === "Nunca") {
         habitsNotPreventives += 1
+    } else if (changeClothesAnswer === "Às vezes") {
+        habitsNotPreventives += 0.5
+    }
+
+    if (containerCleanupAnswer === "Nunca") {
+        habitsNotPreventives += 1
+    } else if (containerCleanupAnswer === "Às vezes") {
+        habitsNotPreventives += 0.5
+    }
 
     if (outsideWorkAnswer === "Em um ambiente fechado com mais pessoas, como clínica, escritório, loja ou motorista de aplicativo")
         habitsNotPreventives += 1
 
-
-    if (relativesLeavingHome === true) {
-        if (relativesShowerAnswer === "Nunca" || relativesShowerAnswer === "Às vezes")
-            habitsNotPreventives += 1
-
-        if (relativesChangeClothesAnswer === "Nunca" || relativesChangeClothesAnswer === "Às vezes")
-            habitsNotPreventives += 1
-
-        if (relativesContainerCleanupAnswer === "Nunca" || relativesContainerCleanupAnswer === "Às vezes")
-            habitsNotPreventives += 1
-
+    if (relativesShowerAnswer === "Nunca") {
+        habitsNotPreventives += 1
+    } else if (relativesShowerAnswer === "Às vezes") {
+        habitsNotPreventives += 0.5
     }
 
+    if (relativesChangeClothesAnswer === "Nunca") {
+        habitsNotPreventives += 1
+    } else if (relativesChangeClothesAnswer === "Às vezes") {
+        habitsNotPreventives += 0.5
+    }
+
+    if (relativesContainerCleanupAnswer === "Nunca") {
+        habitsNotPreventives += 1
+    } else if (relativesContainerCleanupAnswer === "Às vezes") {
+        habitsNotPreventives += 0.5
+    }
+
+
+    if (relativesLeavingHome === true) {
+        if (relativesLeavingTimes === "Três ou mais") {
+            habitsNotPreventives += 1
+        } else if (relativesLeavingTimes === "Uma ou Duas") {
+            habitsNotPreventives += 0.5
+        }
+        if (howManyRelatives === "Três ou mais") {
+            habitsNotPreventives += 1
+        } else if (howManyRelatives === "Uma ou Duas") {
+            habitsNotPreventives += 0.5
+        }
+
+
+
+    }
 
 
     const habitsNotPreventivesPoints = calculatePoints(habitsNotPreventives, 8, 10, 1)
@@ -92,7 +129,7 @@ exports.calculateRiskProfileQuestionsPoints = (questions) => {
 
 
 
-    return points
+    return Math.round(points)
 }
 
 
@@ -107,26 +144,26 @@ exports.calculateRiskProfileSymptonsPoints = (symptonsRegisters) => {
         const registerWithLessThanMaxDays = moment().diff(symptonsList.created_at.toDate(), 'days') < maxDays
 
         if (registerWithLessThanMaxDays) {
-            if(symptonsList.symptons.length>1){
-            symptonsList.symptons.forEach(symptom => {
+            if (symptonsList.symptons.length > 0) {
+                symptonsList.symptons.forEach(symptom => {
 
-                if (!userSymptons[symptom.identifier])
-                    userSymptons[symptom.identifier] = { start: moment(), end: moment() }
+                    if (!userSymptons[symptom.identifier])
+                        userSymptons[symptom.identifier] = { start: moment(), end: moment() }
 
-
-                if (symptom.start) {               
-                    if (userSymptons[symptom.identifier].start.isSameOrAfter(symptom.start.toDate())) {
-                        userSymptons[symptom.identifier].start = moment(symptom.start.toDate())
+                        
+                    if (symptom.start) {
+                        if (userSymptons[symptom.identifier].start.isSameOrAfter(symptom.start.toDate())) {
+                            userSymptons[symptom.identifier].start = moment(symptom.start.toDate())
+                        }
                     }
-                }
 
-                if (symptom.end) {
-                    if (userSymptons[symptom.identifier].end.isSameOrBefore(symptom.end.toDate())) {
-                        userSymptons[symptom.identifier].end = moment(symptom.end.toDate())
+                    if (symptom.end) {
+                        if (userSymptons[symptom.identifier].end.isSameOrBefore(symptom.end.toDate())) {
+                            userSymptons[symptom.identifier].end = moment(symptom.end.toDate())
+                        }
                     }
-                }
-            })
-        }
+                })
+            }
         }
     });
 
@@ -137,7 +174,7 @@ exports.calculateRiskProfileSymptonsPoints = (symptonsRegisters) => {
         }
     }
 
-    return points
+    return Math.round(points)
 }
 
 
@@ -217,17 +254,17 @@ const calculatePointOfSympton = (identifier, start, end) => {
 
 const calculateFrequency = (start, end) => {
     const betweenDays = 14
-    let startFrequencyMoment 
+    let startFrequencyMoment
     const momentStart = moment(start)
-    const momentBefore14Days = moment().subtract(betweenDays,'days')
-    if(momentStart.isBefore(momentBefore14Days)){
+    const momentBefore14Days = moment().subtract(betweenDays, 'days')
+    if (momentStart.isBefore(momentBefore14Days)) {
         startFrequencyMoment = momentBefore14Days
     }
-    else{
+    else {
         startFrequencyMoment = momentStart
     }
 
-    
+
     const momentEnd = moment(end)
 
 
@@ -245,7 +282,7 @@ const calculatePoints = (value, valueToMax, max, min) => {
     if (value > max)
         return max
 
-    const points = Math.round(min + ((max - min) / (valueToMax - 1) * (value - 1)))
+    const points = min + ((max - min) / (valueToMax - 1) * (value - 1))
 
     return points
 }
@@ -260,10 +297,7 @@ exports.getContagionRisk = (points) => {
     return contagionRiskTypes.HIGH
 }
 
-exports.getRisk = (contagionRisk, aggravationRisk, stillContamined) => {
-    if(stillContamined)
-    return riskProfileTypes.RED
-
+exports.getRisk = (contagionRisk, aggravationRisk) => { 
     if (aggravationRisk === aggravationRiskTypes.HIGH)
         return riskProfileTypes.RED
 
