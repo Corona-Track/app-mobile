@@ -20,7 +20,7 @@ export default class ProgressTracking extends Component {
         let { amount, position } = this.props;
         var circles = [];
         for (let i = 1; i <= amount; i++)
-            circles.push(<View style={[styles.circle, { backgroundColor: position === i ? "#EA5B2D" : "#F9CEC0" }]} key={i} />)
+            circles.push(<View style={[styles.circle, { backgroundColor: position === i ? Colors.blue : "rgba(0, 88, 244, 0.3);" }]} key={i} />)
         return circles;
     };
 }

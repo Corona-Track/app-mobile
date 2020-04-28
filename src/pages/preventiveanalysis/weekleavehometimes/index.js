@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   SafeAreaView,
@@ -7,10 +7,10 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import {Header, Slider} from 'react-native-elements';
+import { Header, Slider } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
-import {Colors} from '../../../themes/variables';
+import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import {
   LeftComponent,
@@ -21,9 +21,9 @@ import {
   ContinueRequiredButton,
   DoubtButton,
 } from '../../../components/custombutton';
-import {RadioButtonItem} from '../../../components/customcheckboxitem';
+import { RadioButtonItem } from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import { UserConsumer, UserContext } from '../../../store/user';
 
 export default class WeekLeaveHomeTimesPage extends Component {
   static navigationOptions = {
@@ -35,24 +35,36 @@ export default class WeekLeaveHomeTimesPage extends Component {
   };
   state = {
     entity: {
-      daysAWeek: 1,
+      daysAWeek: 0,
       reasonToLeaveHome: null,
     },
     reasonsList: [
-      {identifier: 'Trabalhar'},
-      {identifier: 'Comprar remédios ou alimentos'},
-      {identifier: 'Outros motivos'},
+      { identifier: 'Trabalhar' },
+      { identifier: 'Comprar remédios ou alimentos' },
+      { identifier: 'Outros motivos' },
     ],
   };
 
+  componentDidMount() {
+    if (this.props.navigation.state.params) {
+      let { user } = this.context;
+
+      if (this.props.navigation.state.params && this.props.navigation.state.params.edit) {
+        this.setState({
+          entity: user.question
+        })
+      }
+    }
+  }
+
   render = () => {
-    let {entity, reasonsList} = this.state;
+    let { entity, reasonsList } = this.state;
     return (
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
-            <View style={{flex: 0.8, width: '100%'}}>
-              <View style={{width: '100%', paddingHorizontal: 20}}>
+            <View style={{ flex: 0.8, width: '100%' }}>
+              <View style={{ width: '100%', paddingHorizontal: 20 }}>
                 <Header
                   backgroundColor={Colors.secondaryColor}
                   leftComponent={
@@ -111,7 +123,7 @@ export default class WeekLeaveHomeTimesPage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
-              {!entity.contaminated ? (
+              {!context.user.question.contaminated ? (
                 <DoubtButton
                   onPress={() => {
                     this.onDoubtPress(context);
@@ -119,8 +131,8 @@ export default class WeekLeaveHomeTimesPage extends Component {
                   label="Responder depois"
                 />
               ) : (
-                <></>
-              )}
+                  <></>
+                )}
             </View>
             <ProgressTracking amount={10} position={3} />
           </SafeAreaView>
@@ -129,9 +141,9 @@ export default class WeekLeaveHomeTimesPage extends Component {
     );
   };
   onHandleDaysAWeek = daysAWeek => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.daysAWeek = daysAWeek;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onLeftButtonPress = () => {
     this.props.navigation.pop();
@@ -140,38 +152,40 @@ export default class WeekLeaveHomeTimesPage extends Component {
     this.props.navigation.pop();
   };
   onContinueButtonClick = context => {
-    let {entity} = this.state;
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('SocialDistance', {entity: entity});
+    let { entity } = this.state;
+    context.updateUser({ question: entity });
+    this.props.navigation.navigate('SocialDistance', { entity: entity });
   };
   disableButton = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return !entity.reasonToLeaveHome;
   };
   onChangeSlider = value => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.daysAWeek = value;
-    this.setState({entity});
+    this.setState({ entity });
   };
   isChecked = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return entity.reasonToLeaveHome && entity.reasonToLeaveHome === identifier;
   };
   onClickCheck = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.reasonToLeaveHome = identifier;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onDoubtPress = context => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.daysAWeek = null;
     entity.reasonToLeaveHome = null;
     entity.skippedAnswer = true;
-    this.setState({entity});
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('SocialDistance', {entity: entity});
+    this.setState({ entity });
+    context.updateUser({ question: entity });
+    this.props.navigation.navigate('SocialDistance', { entity: entity });
   };
 }
+
+WeekLeaveHomeTimesPage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>
@@ -183,34 +197,34 @@ const IntroText = () => (
 );
 
 const SecondaryText = () => (
-  <View style={[styles.textContainer, {paddingTop: 20}]}>
-    <Text style={[styles.simpleText]}>Principal motivo</Text>
-    <Text style={[styles.simpleText]}>para sair de casa:</Text>
+  <View style={[styles.textContainer, { paddingTop: 20 }]}>
+    <Text style={[styles.simpleText]}>Principal motivo quando</Text>
+    <Text style={[styles.simpleText]}>saio de casa:</Text>
   </View>
 );
 
 const SliderText = () => (
-  <View style={[styles.textContainer, {paddingTop: 20}]}>
+  <View style={[styles.textContainer, { paddingTop: 20 }]}>
     <Text
       style={[
         styles.simpleText,
-        {fontSize: 16, color: Colors.placeholderTextColor},
+        { fontSize: 16, color: Colors.placeholderTextColor },
       ]}>
       Número de dias da semana:
     </Text>
   </View>
 );
 
-const CustomSlider = ({value, onValueChange}) => {
+const CustomSlider = ({ value, onValueChange }) => {
   return (
-    <View style={{paddingHorizontal: 40, height: 50, flexDirection: 'column'}}>
+    <View style={{ paddingHorizontal: 40, height: 50, flexDirection: 'column' }}>
       <Slider
         value={value}
         onValueChange={onValueChange}
         step={1}
-        minimumValue={1}
+        minimumValue={0}
         maximumValue={7}
-        minimumTrackTintColor={Colors.navigatorIconColor}
+        minimumTrackTintColor={Colors.blue}
         maximumTrackTintColor={Colors.searchIconColor}
         animationType="spring"
         thumbTintColor={Colors.secondaryColor}
@@ -220,10 +234,10 @@ const CustomSlider = ({value, onValueChange}) => {
         <Text
           style={[
             styles.sliderSimpleText,
-            {flex: 0, position: 'absolute', left: 3},
+            { flex: 0, position: 'absolute', left: 0 },
           ]}>
           {' '}
-          1
+          0
         </Text>
         <View style={styles.underlineThumb}>
           <Text style={styles.centerValue}>{value}</Text>
@@ -231,7 +245,7 @@ const CustomSlider = ({value, onValueChange}) => {
         <Text
           style={[
             styles.sliderSimpleText,
-            {flex: 0, position: 'absolute', right: 7},
+            { flex: 0, position: 'absolute', right: 7 },
           ]}>
           {' '}
           7
@@ -314,7 +328,7 @@ const styles = StyleSheet.create({
   },
   customThumbStyle: {
     borderWidth: 6,
-    borderColor: Colors.navigatorIconColor,
+    borderColor: Colors.blue,
     width: 25,
     height: 25,
     borderRadius: 12,
@@ -322,7 +336,7 @@ const styles = StyleSheet.create({
   underlineThumb: {
     width: 35,
     height: 25,
-    backgroundColor: Colors.navigatorIconColor,
+    backgroundColor: Colors.blue,
     borderRadius: 5,
   },
   detailsLineContainer: {

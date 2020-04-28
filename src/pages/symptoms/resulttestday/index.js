@@ -122,6 +122,7 @@ export default class ResultTestDay extends Component {
     this.props.contextSymptom.updateSymptom({
       testDate: entity.testDate,
       testResult: entity.testResult,
+      contaminated: entity.testResult
     });
     this.props.navigation.navigation.navigate('SymptomsTest', {
       testDate: entity.testDate,

@@ -23,9 +23,9 @@ import {
   RadioButtonYesOrNoItem,
 } from '../../../components/customcheckboxitem';
 
-import {SymptomConsumer} from '../../../store/symptom';
+import {SymptomConsumer, SymptomContext} from '../../../store/symptom';
 import {UserConsumer} from '../../../store/user';
-import {SaveSymptom} from '../../../firebase/Symptom';
+import {SaveSymptom, UpdateSymptom} from '../../../firebase/Symptom';
 
 export default class ReportSymptomsPage extends Component {
   static navigationOptions = {
@@ -36,6 +36,7 @@ export default class ReportSymptomsPage extends Component {
     entity: PropTypes.object,
   };
   state = {
+    id: null,
     entity: {
       symptonsSelected: [],
       hasSymptonsList: [],
@@ -48,26 +49,128 @@ export default class ReportSymptomsPage extends Component {
       shortBreath: null,
       shortBreathAnswer: null,
       symptonsList: [
-        {identifier: 'Não tive sintomas', check: false, start: '', end: ''},
-        {identifier: 'Falta de Ar', check: false, start: '', end: ''},
-        {identifier: 'Tonturas', check: false, start: '', end: ''},
-        {identifier: 'Desmaio', check: false, start: '', end: ''},
-        {identifier: 'Febre', check: false, start: '', end: ''},
-        {identifier: 'Falta de apetite', check: false, start: '', end: ''},
-        {identifier: 'Produção de catarro', check: false, start: '', end: ''},
-        {identifier: 'Confusão', check: false, start: '', end: ''},
-        {identifier: 'Cansaço', check: false, start: '', end: ''},
-        {identifier: 'Tosse', check: false, start: '', end: ''},
-        {identifier: 'Dor de Garganta', check: false, start: '', end: ''},
-        {identifier: 'Fadiga', check: false, start: '', end: ''},
-        {identifier: 'Dor no Corpo', check: false, start: '', end: ''},
-        {identifier: 'Dor de Cabeça', check: false, start: '', end: ''},
-        {identifier: 'Dor no Peito', check: false, start: '', end: ''},
-        {identifier: 'Tosse com sangue', check: false, start: '', end: ''},
-        {identifier: 'Náusea ou vômito', check: false, start: '', end: ''},
-        {identifier: 'Dor de barriga', check: false, start: '', end: ''},
-        {identifier: 'Diarréia', check: false, start: '', end: ''},
-        {identifier: 'Olhos vermelhos', check: false, start: '', end: ''},
+        {
+          identifier: 'Não tive sintomas',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Falta de Ar',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Tonturas',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Desmaio',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {identifier: 'Febre', check: false, check2: false, start: '', end: ''},
+        {
+          identifier: 'Falta de apetite',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Produção de catarro',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Confusão',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Cansaço',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {identifier: 'Tosse', check: false, check2: false, start: '', end: ''},
+        {
+          identifier: 'Dor de Garganta',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {identifier: 'Fadiga', check: false, check2: false, start: '', end: ''},
+        {
+          identifier: 'Dor no Corpo',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Dor de Cabeça',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Dor no Peito',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Tosse com sangue',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Náusea ou vômito',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Dor de barriga',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Diarréia',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
+        {
+          identifier: 'Olhos vermelhos',
+          check: false,
+          check2: false,
+          start: '',
+          end: '',
+        },
       ],
     },
     breathConditionList: [
@@ -90,6 +193,42 @@ export default class ReportSymptomsPage extends Component {
     showLoading: false,
   };
 
+  componentWillMount() {
+    const {symptom} = this.context;
+    let symptonsList = this.state.entity.symptonsList;
+    if (symptom.symptons && symptom.symptons.length > 0) {
+      let selected = symptom.symptons.map(item => {
+        for (let sym of symptonsList) {
+          if (item.identifier === sym.identifier) {
+            sym.identifier = item.identifier;
+            sym.start = item.start ? item.start.toDate() : '';
+            sym.end = item.end ? item.end.toDate() : '';
+            sym.check = true;
+            sym.check2 = false;
+          }
+        }
+
+        return {
+          identifier: item.identifier,
+          start: item.start ? item.start.toDate() : '',
+          end: item.end ? item.end.toDate() : '',
+        };
+      });
+
+      let entity = {
+        ...this.state.entity,
+        showSymptons: symptom.hasSymptoms,
+        symptonsSelected: selected,
+        symptonsList: symptonsList,
+      };
+
+      this.setState({
+        entity,
+        id: symptom.id,
+      });
+    }
+  }
+
   render = () => {
     let {entity, showLoading} = this.state;
 
@@ -100,7 +239,7 @@ export default class ReportSymptomsPage extends Component {
             {contextSymptom => (
               <SafeAreaView style={styles.container}>
                 <Spinner visible={showLoading} />
-                <View style={{width: '100%', paddingHorizontal: 20}}>
+                <View style={{width: '100%', marginHorizontal: 20}}>
                   <Header
                     backgroundColor={Colors.secondaryColor}
                     leftComponent={
@@ -124,7 +263,7 @@ export default class ReportSymptomsPage extends Component {
                       />
                     </View>
                   </View>
-                  {entity.showSymptons === true ? (
+                  {entity.showSymptons ? (
                     <WhatFelling />
                   ) : (
                     entity.showSymptons === false && <HaveSymptoms />
@@ -136,89 +275,41 @@ export default class ReportSymptomsPage extends Component {
                       }>
                       <View style={styles.checkboxItemContainer}>
                         {entity.symptonsList.map((symptons, idx) => {
+                          if (
+                            symptons.identifier === 'Não tive sintomas' &&
+                            entity.showSymptons === true
+                          ) {
+                            return null;
+                          }
                           return (
                             <View
                               key={idx}
                               style={{minHeight: 40, height: 'auto'}}>
                               <CheckboxItemWithExpand
                                 identifier={symptons.identifier}
-                                isChecked={this.isChecked}
+                                isChecked={symptons.check}
                                 onClickCheck={() =>
                                   symptons.identifier === 'Não tive sintomas'
                                     ? this.onClickNoneOfOptions(symptons)
-                                    : this.onClickCheck(symptons)
+                                    : this.onClickCheck(symptons, 'box')
                                 }
                                 onPressExpand={() => {
-                                  symptons.check = !symptons.check;
-
-                                  let newArr = entity.symptonsList;
-
-                                  newArr[newArr.length - 1].check = false;
-
                                   if (
-                                    symptons.identifier !== 'Não tive sintomas'
+                                    symptons.identifier === 'Não tive sintomas'
                                   ) {
-                                    this.setState({
-                                      symptonsList: newArr,
-                                    });
+                                    this.onClickNoneOfOptions(symptons);
+                                  } else {
+                                    this.onClickCheck(symptons, 'arrow');
                                   }
                                 }}
+                                isExpanded={symptons.check2}
                               />
-                              {symptons.check && (
-                                <View style={styles.dateContainer}>
-                                  <Text
-                                    style={{
-                                      marginTop: 10,
-                                      textAlign: 'center',
-                                      fontSize: 18,
-                                      fontWeight: '500',
-                                      color: '#828282',
-                                    }}>
-                                    Desde Quando?
-                                  </Text>
-                                  <CalendarPicker
-                                    minDate={moment().subtract(14, 'days')}
-                                    maxDate={new Date()}
-                                    allowRangeSelection={true}
-                                    selectedDayTextColor={'white'}
-                                    weekdays={[
-                                      'S',
-                                      'T',
-                                      'Q',
-                                      'Q',
-                                      'S',
-                                      'S',
-                                      'D',
-                                    ]}
-                                    months={[
-                                      'Janeiro',
-                                      'Fevereiro',
-                                      'Março',
-                                      'Abril',
-                                      'Maio',
-                                      'Junho',
-                                      'Julho',
-                                      'Agosto',
-                                      'Setembro',
-                                      'Outubro',
-                                      'Novembro',
-                                      'Dezembro',
-                                    ]}
-                                    previousTitle="Anterior"
-                                    nextTitle="Proximo"
-                                    todayBackgroundColor={'#eee'}
-                                    todayTextStyle={{color: '#828282'}}
-                                    selectedDayColor={Colors.navigatorIconColor}
-                                    onDateChange={(date, type) =>
-                                      this.onHandleDate(date, type, symptons)
-                                    }
-                                    textStyle={{
-                                      color: '#828282',
-                                    }}
-                                    selectedStartDate={symptons.start}
-                                    selectedEndDate={symptons.end}
-                                  />
-                                </View>
+                              {symptons.check2 && (
+                                <DateContainer
+                                  symptons={symptons}
+                                  showSymptons={entity.showSymptons}
+                                  onHandleDate={this.onHandleDate}
+                                />
                               )}
                             </View>
                           );
@@ -270,11 +361,11 @@ export default class ReportSymptomsPage extends Component {
     if (type === 'END_DATE') {
       symptons.end = date._d;
     } else {
+      this.fixEndAndStartDate(symptons);
       symptons.start = date._d;
     }
 
     let obj = symptons;
-
     let indexSyntom = this.state.entity.symptonsSelected.findIndex(
       item => item.identifier === obj.identifier,
     );
@@ -290,6 +381,12 @@ export default class ReportSymptomsPage extends Component {
       symptonsList: newArr,
     });
   };
+
+  fixEndAndStartDate(obj) {
+    if (obj.end && obj.start) {
+      obj.end = '';
+    }
+  }
 
   onPressDatePicker = () => {
     this.setState({showDatePicker: true});
@@ -340,10 +437,10 @@ export default class ReportSymptomsPage extends Component {
   };
   onChangeSelected = () => {
     data => this.setState({data});
-    let val = this.state.data.find(e => e.selected == true);
-    if (val.value == 'NO') {
+    let val = this.state.data.find(e => e.selected === true);
+    if (val.value === 'NO') {
       this.ShowHideComponent(false);
-    } else if (val.value == 'YES') {
+    } else if (val.value === 'YES') {
       //Show hidden area
       this.ShowHideComponent(true);
     }
@@ -361,62 +458,100 @@ export default class ReportSymptomsPage extends Component {
     }
   };
 
-  onClickCheck = identifier => {
+  onClickCheck = (identifier, kind) => {
     let {entity} = this.state;
     let noneOfOptionsPosition = entity.symptonsSelected.findIndex(
-      selected => selected === 'Não tive sintomas',
+      selected => selected.identifier === 'Não tive sintomas',
     );
     if (noneOfOptionsPosition > -1) {
-      entity.symptonsSelected.splice(noneOfOptionsPosition, 1);
-      entity.hasSymptons = false;
-      entity.hasOximeter = false;
-      entity.hasSaturation = false;
-      this.checkBreath();
-      this.setState({entity});
+      entity.symptonsSelected = [];
     }
+    entity.symptonsList.map(item => {
+      if (item.identifier === 'Não tive sintomas') {
+        item.identifier = item.identifier;
+        item.start = '';
+        item.end = '';
+        item.check = false;
+        item.check2 = false;
+      }
+      return item;
+    });
 
     let currentSymptonsPosition = entity.symptonsSelected.findIndex(
       selected => selected.identifier === identifier.identifier,
     );
     if (currentSymptonsPosition === -1) {
       entity.symptonsSelected.push(identifier);
-      identifier.check = true;
+      if (!identifier.check) {
+        identifier.check = true;
+      }
+      identifier.check2 = true;
       this.checkBreath();
       this.setState({entity});
       return;
     }
-    entity.symptonsSelected.splice(currentSymptonsPosition, 1);
 
-    if (!(entity.symptonsSelected.length > 0)) {
+    if (kind === 'box') {
       identifier.check = false;
+      identifier.check2 = false;
       identifier.start = '';
       identifier.end = '';
       entity.hasSymptons = false;
       entity.hasOximeter = false;
       entity.hasSaturation = false;
-      this.checkBreath();
+      entity.symptonsSelected.splice(currentSymptonsPosition, 1);
+    } else {
+      identifier.check = true;
+      identifier.check2 = !identifier.check2;
+      entity.hasSymptons = false;
+      entity.hasOximeter = false;
+      entity.hasSaturation = false;
     }
+
     this.setState({entity});
   };
   onClickNoneOfOptions = identifier => {
     let {entity} = this.state;
-    let noneOfOptionsPosition = entity.symptonsSelected.findIndex(
-      selected => selected.identifier === 'Não tive sintomas',
-    );
-    if (noneOfOptionsPosition > -1) {
-      entity.symptonsSelected.splice(noneOfOptionsPosition, 1);
+    if (!identifier.check) {
+      entity.symptonsList.map(item => {
+        if (item.identifier !== 'Não tive sintomas') {
+          item.identifier = item.identifier;
+          item.start = '';
+          item.end = '';
+          item.check = false;
+          item.check2 = false;
+        } else {
+          item.identifier = item.identifier;
+          item.start = '';
+          item.end = '';
+          item.check = true;
+          item.check2 = false;
+        }
+        return item;
+      });
+      entity.symptonsSelected = [];
+      entity.symptonsSelected.push(identifier);
       entity.hasSymptons = false;
       entity.hasOximeter = false;
       entity.hasSaturation = false;
+      this.checkBreath();
       this.setState({entity});
-      return;
+    } else {
+      entity.symptonsSelected = [];
+      entity.symptonsList.map(item => {
+        if (item.identifier === 'Não tive sintomas') {
+          item.identifier = item.identifier;
+          item.start = '';
+          item.end = '';
+          item.check = false;
+          item.check2 = false;
+        }
+        return item;
+      });
+      this.setState({entity});
     }
-    entity.symptonsSelected = [];
-    entity.symptonsSelected.push(identifier);
-    entity.hasSymptons = false;
-    entity.hasOximeter = false;
-    entity.hasSaturation = false;
-    this.setState({entity});
+
+    return;
   };
 
   isCheckedTrue = identifier => {
@@ -424,10 +559,14 @@ export default class ReportSymptomsPage extends Component {
   };
   isChecked = identifier => {
     let {entity} = this.state;
-    let currentSymptonsPosition = entity.symptonsSelected.findIndex(
+    let currentSymptonsPosition = entity.symptonsSelected.find(
       selected => selected.identifier === identifier,
     );
-    return currentSymptonsPosition > -1;
+    if (!currentSymptonsPosition) {
+      return false;
+    } else {
+      return currentSymptonsPosition.check;
+    }
   };
   onLeftButtonPress = () => {
     this.props.navigation.pop();
@@ -440,23 +579,69 @@ export default class ReportSymptomsPage extends Component {
 
   isSymptonsBtnDisabled = () => {
     let {entity} = this.state;
-    return !(entity.symptonsSelected.length > 0);
+    let isValid = true;
+    if (entity.symptonsSelected.length > 0) {
+      for (const item of entity.symptonsSelected) {
+        if (item.identifier === 'Não tive sintomas') {
+          isValid = false;
+          break;
+        }
+        if (item.start && entity.showSymptons) {
+          isValid = false;
+          break;
+        }
+        if (item.start && item.end) {
+          isValid = false;
+          break;
+        }
+      }
+    }
+
+    return isValid;
   };
   symptonsButtonPress = async contextSymptom => {
     this.setState({showLoading: true});
     try {
-      const symptonsSelected = this.state.entity.symptonsSelected.map(item => {
-        return {identifier: item.identifier, start: item.start, end: item.end};
-      });
+      let symptons;
+      let {symptonsSelected} = this.state.entity;
+      if (symptonsSelected && symptonsSelected.length > 1) {
+        symptons = symptonsSelected.map(item => {
+          if (item.identifier !== 'Não tive sintomas') {
+            if (item.end === '') {item.end = new Date();}
+            return {
+              identifier: item.identifier,
+              start: item.start,
+              end: item.end,
+            };
+          }
+        });
+        if (symptons[0] === null || symptons[0] === undefined) {
+          symptons.shift();
+        }
+      } else {
+        symptons = symptonsSelected.map(item => {
+          if (item.end === '') {item.end = new Date();}
+          return {
+            identifier: item.identifier,
+            start: item.start,
+            end: item.end,
+          };
+        });
+      }
 
       const model = {
         created_at: moment().toDate(),
         hasSymptoms: this.state.entity.showSymptons,
-        symptons: symptonsSelected,
+        symptons: symptons,
         type: contextSymptom.symptom.type,
       };
 
-      await SaveSymptom(model);
+      if (this.state.id) {
+        model.id = this.state.id;
+        await UpdateSymptom(model);
+      } else {
+        await SaveSymptom(model);
+      }
 
       this.setState({showLoading: false});
       this.props.navigation.navigate('Home');
@@ -470,6 +655,107 @@ export default class ReportSymptomsPage extends Component {
     }
   };
 }
+
+ReportSymptomsPage.contextType = SymptomContext;
+
+function DateContainer({symptons, showSymptons, onHandleDate}) {
+  if (showSymptons) {
+    return (
+      <View style={styles.dateContainer}>
+        <Text
+          style={{
+            marginTop: 10,
+            textAlign: 'center',
+            fontSize: 18,
+            fontWeight: '500',
+            color: '#828282',
+          }}>
+          Desde Quando?
+        </Text>
+        <CalendarPicker
+          maxDate={new Date()}
+          allowRangeSelection={false}
+          selectedDayTextColor={'white'}
+          weekdays={['S', 'T', 'Q', 'Q', 'S', 'S', 'D']}
+          months={[
+            'Janeiro',
+            'Fevereiro',
+            'Março',
+            'Abril',
+            'Maio',
+            'Junho',
+            'Julho',
+            'Agosto',
+            'Setembro',
+            'Outubro',
+            'Novembro',
+            'Dezembro',
+          ]}
+          previousTitle="Anterior"
+          nextTitle="Proximo"
+          todayBackgroundColor={'#eee'}
+          todayTextStyle={{color: '#828282'}}
+          selectedDayColor={Colors.blue}
+          onDateChange={(date, type) => onHandleDate(date, type, symptons)}
+          textStyle={{
+            color: '#828282',
+          }}
+          selectedStartDate={symptons.start}
+          selectedEndDate={symptons.end}
+        />
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.dateContainer}>
+      <Text
+        style={{
+          marginTop: 10,
+          textAlign: 'center',
+          fontSize: 18,
+          fontWeight: '500',
+          color: '#828282',
+        }}>
+        Indique o início e fim:
+      </Text>
+      <CalendarPicker
+        minDate={moment().subtract(14, 'days')}
+        maxDate={new Date()}
+        allowRangeSelection={true}
+        selectedDayTextColor={'white'}
+        weekdays={['S', 'T', 'Q', 'Q', 'S', 'S', 'D']}
+        months={[
+          'Janeiro',
+          'Fevereiro',
+          'Março',
+          'Abril',
+          'Maio',
+          'Junho',
+          'Julho',
+          'Agosto',
+          'Setembro',
+          'Outubro',
+          'Novembro',
+          'Dezembro',
+        ]}
+        previousTitle="Anterior"
+        nextTitle="Proximo"
+        todayBackgroundColor={'#eee'}
+        todayTextStyle={{color: '#828282'}}
+        selectedDayColor={Colors.blue}
+        onDateChange={(date, type) => onHandleDate(date, type, symptons)}
+        textStyle={{
+          color: '#828282',
+        }}
+        selectedStartDate={symptons.start}
+        selectedEndDate={symptons.end}
+        allowBackwardRangeSelect={true}
+      />
+    </View>
+  );
+}
+
 const IntroText = () => (
   <View style={{marginTop: 20}}>
     <View style={styles.textContainer}>
@@ -486,8 +772,8 @@ const IntroText = () => (
 const WhatFelling = () => (
   <View style={styles.textContainer}>
     <View style={styles.centerText}>
-      <Text style={styles.boldText}>
-        O que <Text style={styles.simpleText}>você está</Text>
+      <Text style={styles.simpleText}>
+        <Text style={styles.boldText}>O que você está</Text>
       </Text>
       <Text style={styles.simpleText}>sentindo no momento?</Text>
     </View>

@@ -53,7 +53,7 @@ export default class FinishRemainingPage extends Component {
               )}
               <IntroText userName={context.user.name} />
               <View style={{margin: 20, padding: 20}}>
-                <ProgressBar progress={0.75} color={'#FFF'} />
+                <ProgressBar progress={0.75} color={Colors.greenLight} />
                 <Text
                   style={[
                     styles.simpleText,
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.buttonPrimaryColor,
+    backgroundColor: Colors.blue,
     height: '100%',
     paddingHorizontal: 20,
     paddingBottom: 15,
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   simpleText: {
     fontFamily: Colors.fontFamily,
     fontSize: 18,
-    color: Colors.secondaryColor,
+    color: Colors.primaryTextColor,
   },
   boldText: {
     fontWeight: 'bold',

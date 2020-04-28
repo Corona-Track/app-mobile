@@ -1,24 +1,29 @@
 import React, { Component } from 'react';
 import {
-  View,
   Text,
   StyleSheet,
   ActivityIndicator,
   SafeAreaView,
-  ScrollView,
   Image,
-  Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from 'react-native';
 
-import { TextInput, Button } from 'react-native-paper';
-import { SwitchActions } from 'react-navigation';
+import RNFetchBlob from 'rn-fetch-blob';
 
+import { TextInput, Button } from 'react-native-paper';
+
+import {
+  SimpleTextInput,
+  PasswordTextInput,
+} from '../../components/customtextinput';
 // Auth
-import { SignIn } from '../../firebase/Auth';
+import { SignIn, SignInFacebook } from '../../firebase/Auth';
 
 // Variables
 import { Colors } from '../../themes/variables';
+
+import { UserConsumer } from '../../store/user';
 
 export default class LoginPage extends Component {
   static navigationOptions = {
@@ -50,25 +55,68 @@ export default class LoginPage extends Component {
     return !(entity.email && entity.password);
   };
 
-  onFacebookButtonPress = async () => {
-    /**
-     * Esse cara tem que verificar se todos os dados foram preenchido para depois deixar ele passar pra hora direto,
-     * Como Não temos a arquitetura toda definida para que eu possa consultar deixei passando direto e ja cadastrando no firebase
-     **/
-    // await signInFacebook()
-    //   .then(() => {
-    //     this.setState({
-    //       error: '',
-    //     });
-    //     this.props.navigation.dispatch(
-    //       SwitchActions.jumpTo({routeName: 'Application'}),
-    //     );
-    //   })
-    //   .catch(error => {
-    //     this.setState({
-    //       error: error.message,
-    //     });
-    //   });
+  onFacebookButtonPress = async context => {
+    try {
+      const res = await SignInFacebook();
+      if (!res.additionalUserInfo.isNewUser) {
+        this.setState({
+          loading: false,
+          error: '',
+        });
+        this.props.navigation.navigate('Application');
+        return;
+      }
+
+      if (res.additionalUserInfo.profile) {
+        if (res.additionalUserInfo.profile.picture.data) {
+          RNFetchBlob.fetch(
+            'GET',
+            res.additionalUserInfo.profile.picture.data.url,
+          )
+            .then(resBlob => {
+              let status = resBlob.info().status;
+
+              if (status === 200) {
+                let base64Str = resBlob.base64();
+                context.updateUser({
+                  name: res.additionalUserInfo.profile.name,
+                  email: res.additionalUserInfo.profile.email,
+                  photo: `data:image/png;base64,${base64Str}`,
+                  providerId: res.additionalUserInfo.providerId,
+                });
+
+                this.setState({
+                  loading: false,
+                  error: '',
+                });
+
+                this.props.navigation.navigate('TookPhoto', {
+                  photo: `data:image/png;base64,${base64Str}`,
+                });
+              } else {
+                this.setState({
+                  loading: false,
+                  error: '',
+                });
+
+                this.props.navigation.navigate('TakePhoto');
+              }
+            })
+            .catch((errorMessage, statusCode) => {
+              this.setState({
+                loading: false,
+                error: '',
+              });
+
+              this.props.navigation.navigate('TakePhoto');
+            });
+        }
+      }
+    } catch (error) {
+      this.setState({
+        error: error.message,
+      });
+    }
   };
 
   onSignInButtonPress = () => {
@@ -111,87 +159,81 @@ export default class LoginPage extends Component {
     let { entity } = this.state;
 
     return (
-      <SafeAreaView style={styles.container}>
-        <Image
-          style={styles.logo}
-          resizeMode="contain"
-          source={require('../../assets/images/logo.png')}
-          PlaceholderContent={<ActivityIndicator />}
-        />
-        <TextInput
-          label="Email"
-          style={styles.input}
-          value={entity.email}
-          theme={{
-            colors: {
-              primary: Colors.inputPrimaryColor,
-              placeholder: Colors.placeholderTextColor,
-            },
-          }}
-          maxLength={40}
-          mode="outlined"
-          onChangeText={this.handleOnEmailChange}
-        />
-        <TextInput
-          label="Senha"
-          style={styles.input}
-          value={entity.password}
-          theme={{
-            colors: {
-              primary: Colors.inputPrimaryColor,
-              placeholder: Colors.placeholderTextColor,
-            },
-          }}
-          secureTextEntry={true}
-          maxLength={40}
-          mode="outlined"
-          onChangeText={this.handleOnPasswordChange}
-        />
-        {this.state.error !== '' && (
-          <Text style={styles.textError}>{this.state.error}</Text>
+      <UserConsumer>
+        {context => (
+          <SafeAreaView style={styles.container}>
+            <View style={styles.innerContainer}>
+              <Image
+                style={styles.logo}
+                resizeMode="contain"
+                source={require('../../assets/images/logo.png')}
+                PlaceholderContent={<ActivityIndicator />} />
+              <View style={{ width: "100%" }}>
+                <SimpleTextInput
+                  label="E-mail"
+                  value={entity.email}
+                  onChangeText={this.handleOnEmailChange} />
+              </View>
+              <View style={{ width: "100%" }}>
+                <PasswordTextInput
+                  label="Senha"
+                  value={entity.password}
+                  onChangeText={this.handleOnPasswordChange} />
+              </View>
+              {this.state.error !== '' && (<Text style={styles.textError}>{this.state.error}</Text>)}
+              <Button
+                style={styles.signInButtonContainer}
+                contentStyle={styles.signInButton}
+                mode="contained"
+                disabled={this.isFormDisabled()}
+                color={Colors.blue}
+                labelStyle={styles.signInButtonText}
+                onPress={this.onSignInButtonPress}
+                loading={this.state.loading}>
+                ENTRAR
+            </Button>
+              <View style={styles.other}>
+                <Text style={styles.otherText}>OU</Text>
+              </View>
+              {/* <Button
+              icon="facebook"
+              style={styles.facebookButtonContainer}
+              contentStyle={styles.facebookButton}
+              mode="outlined"
+              color={'#2F80ED'}
+              labelStyle={styles.facebookButtonText}
+              uppercase={false}
+              onPress={() => this.onFacebookButtonPress(context)}>
+              Entrar com Facebook
+            </Button> */}
+              <Button
+                style={styles.signUpButtonContainer}
+                contentStyle={styles.signUpButton}
+                mode="outlined"
+                color={Colors.blue}
+                labelStyle={styles.signUpButtonText}
+                onPress={this.onSignUpButtonPress}>
+                CADASTRE-SE
+            </Button>
+              <TermsButton
+                onPress={() => {
+                  this.props.navigation.navigate('Terms');
+                }}
+                label="Ao se cadastrar você aceita os Termos e Condições de Uso."
+              />
+            </View>
+          </SafeAreaView>
         )}
-        <Button
-          style={styles.signInButtonContainer}
-          contentStyle={styles.signInButton}
-          mode="contained"
-          disabled={this.isFormDisabled()}
-          color={Colors.buttonPrimaryColor}
-          labelStyle={styles.signInButtonText}
-          onPress={this.onSignInButtonPress}
-          loading={this.state.loading}>
-          ENTRAR
-        </Button>
-        <Text style={styles.other}>─────────── OU ───────────</Text>
-
-        {/* <Button
-          icon="facebook"
-          style={styles.facebookButtonContainer}
-          contentStyle={styles.facebookButton}
-          mode="outlined"
-          color={'#2F80ED'}
-          labelStyle={styles.facebookButtonText}
-          uppercase={false}
-          onPress={this.onFacebookButtonPress}>
-          Entrar com Facebook
-        </Button> */}
-        <Button
-          style={styles.signUpButtonContainer}
-          contentStyle={styles.signUpButton}
-          mode="outlined"
-          color={Colors.buttonPrimaryColor}
-          labelStyle={styles.signUpButtonText}
-          onPress={this.onSignUpButtonPress}>
-          CADASTRE-SE
-        </Button>
-        <TermsButton onPress={() => { this.props.navigation.navigate('Terms'); }} label="Ao se cadastrar você aceita os Termos e Condições de Uso." />
-      </SafeAreaView>
+      </UserConsumer>
     );
   };
 }
 
 const TermsButton = ({ onPress, label }) => (
   <TouchableOpacity onPress={onPress} style={styles.skipContainer}>
-    <Text style={styles.skipButtonText}>Ao se cadastrar você aceita os Termos e Condições de Uso</Text>
+    <Text style={styles.skipButtonText}>
+      Ao se cadastrar você aceita os Termos e Condições de Uso
+    </Text>
   </TouchableOpacity>
 );
 
@@ -199,19 +241,26 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.secondaryColor,
+    backgroundColor: Colors.primaryTextColor,
     height: '100%',
-    marginHorizontal: 20,
+    //marginHorizontal: 20,
+  },
+  innerContainer:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '90%', 
+    height: '100%'
   },
   logo: {
-    height: 150,
-    width: 210,
+    height: 180,
+    width: 240,
   },
   input: {
-    height: 50,
+    height: 55,
     width: '100%',
     marginHorizontal: 20,
     marginTop: 15,
+    fontSize: 14
   },
   signInButtonContainer: {
     width: '100%',
@@ -228,8 +277,24 @@ const styles = StyleSheet.create({
     fontFamily: Colors.fontFamily,
   },
   other: {
-    marginVertical: 30,
-    color: Colors.placeholderTextColor,
+    width: "100%",
+    borderBottomColor: Colors.searchIconColor,
+    borderBottomWidth: 1,
+    height: 20,
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  otherText: {
+    flex: 0,
+    position: "absolute",
+    height: 20,
+    color: Colors.searchIconColor,
+    fontFamily: Colors.fontFamily,
+    alignSelf: "center",
+    marginTop: 10,
+    width: 30,
+    textAlign: "center",
+    backgroundColor: Colors.primaryTextColor
   },
   facebookButtonText: {
     color: '#235DE3',
@@ -251,7 +316,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 5,
     borderRadius: 50,
-    borderColor: Colors.buttonPrimaryColor,
+    borderColor: Colors.blue,
     borderWidth: 1,
   },
   signUpButton: {
@@ -260,7 +325,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   signUpButtonText: {
-    color: Colors.buttonPrimaryColor,
+    color: Colors.blue,
     fontFamily: Colors.fontFamily,
   },
   textError: {
@@ -272,7 +337,7 @@ const styles = StyleSheet.create({
   skipButtonText: {
     fontFamily: Colors.fontFamily,
     color: Colors.placeholderTextColor,
-textAlign: "center"
+    textAlign: 'center',
   },
   skipContainer: {
     marginTop: 5,

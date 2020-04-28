@@ -10,6 +10,8 @@ import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import { getUser } from '../../firebase/User';
 import moment from 'moment';
 
+import { UserConsumer } from '../../store/user';
+
 import { Colors } from '../../themes/variables';
 import { signOut } from '../../firebase/Auth';
 import riskProfileTypes from '../../utils/enums/riskProfileTypes';
@@ -23,7 +25,7 @@ const animatedEvent = Animated.event(
       },
     },
   ],
-  {useNativeDriver: true},
+  { useNativeDriver: true },
 );
 let offset = 0;
 
@@ -31,15 +33,15 @@ export default class HomePage extends Component {
   static navigationOptions = {
     headerShown: false,
   };
-
   state = {
     showLoading: true,
     currentUser: {},
     chevronIcon: "chevron-down"
   };
-  setSignOut = () => {
+  setSignOut = (context) => {
     signOut()
       .then(() => {
+        context.updateUser({});
         this.props.navigation.navigate('Login');
       })
       .catch(error => {
@@ -91,47 +93,50 @@ export default class HomePage extends Component {
   render = () => {
     let { showLoading, currentUser, chevronIcon } = this.state;
     return (
-      <SafeAreaView style={styles.container}>
-        <Spinner visible={showLoading} />
-        <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
-        <ImageBackground
-          source={require('../../assets/images/homebackground.png')}
-          resizeMethod="auto"
-          style={styles.backgroundImageStyle}
-        />
-        <View>
-          <MapButton onPress={this.onMapButtonPress} />
-          <HeartButton onPress={() => this.navigateScreen("Symptoms")} />
-        </View>
-        <View style={{marginTop: 50}}>
-          <UserDetails
-            chevronIcon={chevronIcon}
-            onPressAvatar={() => this.openProfileDetails(currentUser)}
-            onPress={this.executeCardAnimation}
-            currentUser={currentUser}
-            getRiskProfileColor={this.getRiskProfileColor}
-            photo={currentUser.photo}
-            name={currentUser.name}
-            aliasName={this.getFirstLetterName(currentUser.name)} />
-          {this.renderCard(currentUser)}
-          <View>
-            <Animated.ScrollView
-              style={{
-                height: 300,
-                opacity: translateY.interpolate({
-                  inputRange: [0, 200],
-                  outputRange: [0, 1],
-                }),
-              }}>
-              <View style={{height: 300, marginHorizontal: 40}}>
-                {/* <UserPersonalData age="21" cpf="123.132.123-00" rg="21.211.222-7" /> */}
-                {this.renderOptionsList(currentUser)}
-                <VersionDetails />
+      <UserConsumer>
+        {context => (
+          <SafeAreaView style={styles.container}>
+            <Spinner visible={showLoading} />
+            <NavigationEvents onDidFocus={() => this.initialize(this.props)} />
+            <ImageBackground
+              source={require('../../assets/images/homebackground.png')}
+              resizeMethod="auto"
+              style={styles.backgroundImageStyle}
+            />
+            <View>
+              <MapButton onPress={this.onMapButtonPress} />
+              <HeartButton onPress={() => this.navigateScreen("Symptoms")} />
+            </View>
+            <View style={{ marginTop: 50 }}>
+              <UserDetails
+                chevronIcon={chevronIcon}
+                onPressAvatar={() => this.openProfileDetails(currentUser)}
+                onPress={this.executeCardAnimation}
+                currentUser={currentUser}
+                getRiskProfileColor={this.getRiskProfileColor}
+                photo={currentUser.photo}
+                name={currentUser.name}
+                aliasName={this.getFirstLetterName(currentUser.name)} />
+              {this.renderCard(currentUser)}
+              <View>
+                <Animated.ScrollView
+                  style={{
+                    height: 300,
+                    opacity: translateY.interpolate({
+                      inputRange: [0, 200],
+                      outputRange: [0, 1],
+                    }),
+                  }}>
+                  <View style={{ height: 300, marginHorizontal: 40 }}>
+                    {this.renderOptionsList(currentUser, context)}
+                    <VersionDetails />
+                  </View>
+                </Animated.ScrollView>
               </View>
-            </Animated.ScrollView>
-          </View>
-        </View>
-      </SafeAreaView>
+            </View>
+          </SafeAreaView>
+        )}
+      </UserConsumer>
     );
   };
   getFirstLetterName = name => {
@@ -158,15 +163,17 @@ export default class HomePage extends Component {
         return Colors.greenRiskProfile
     }
   }
-  renderOptionsList = (currentUser) => {
+  renderOptionsList = (currentUser, context) => {
     return (
       <View style={{ width: "100%" }}>
-        <MenuItem icon="account" name="INFORMAÇÕES DO PERFIL" onPress={() => this.navigateScreen('RiskProfile',{ riskProfile: currentUser.riskProfile })} />
+        <MenuItem icon="account" name="INFORMAÇÕES DO PERFIL" onPress={() => this.navigateScreen('RiskProfile',
+          { riskProfile: currentUser.riskProfile, aggravationRisk: currentUser.aggravationRisk, contagionRisk: currentUser.contagionRisk })}
+        />
         <MenuItem onPress={() => this.navigateScreen("Symptoms")} icon="heart-pulse" name="MINHA SAÚDE" />
         <MenuItem onPress={() => this.navigateScreen("Orientation")} icon="monitor" name="TELEORIENTAÇÃO" />
         <MenuItem icon="account" onPress={() => this.navigateScreen("PublicUtility")} name="UTILIDADE PÚBLICA" />
         {/* <MenuItem icon="settings" name="CONFIGURAÇÕES" /> */}
-        <MenuItem onPress={this.setSignOut} icon="logout" name="SAIR" />
+        <MenuItem onPress={() => { this.setSignOut(context) }} icon="logout" name="SAIR" />
       </View>
     );
   };
@@ -199,7 +206,7 @@ export default class HomePage extends Component {
             <Image style={styles.imageContainer}
               source={require('../../assets/images/qrcode.png')}
             />
-            <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText}>{currentUserPerfilColor}</Text></Text>
+            <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText, { color: this.getRiskProfileColor(currentUser.riskProfile) }}>{currentUserPerfilColor}</Text></Text>
             {/* <ProfileButton onPress={() => { alert() }} /> */}
           </Animated.View>
         </PanGestureHandler>
@@ -208,7 +215,7 @@ export default class HomePage extends Component {
   };
   onHandlerStateChange = event => {
     if (event.nativeEvent.oldState === State.ACTIVE) {
-      const {translationY} = event.nativeEvent;
+      const { translationY } = event.nativeEvent;
       let opened = false;
       offset += translationY;
       if (translationY >= 100) {
@@ -251,27 +258,27 @@ export default class HomePage extends Component {
       this.setState({ chevronIcon: offset === 250 ? "chevron-up" : "chevron-down" });
     });
   };
-  navigateScreen = (screen,params) => {
-    this.props.navigation.navigate(screen,params);
+  navigateScreen = (screen, params) => {
+    this.props.navigation.navigate(screen, params);
   };
   openProfileDetails = (currentUser) => {
-    this.props.navigation.navigate("RiskProfile", { riskProfile: currentUser.riskProfile });
+    this.props.navigation.navigate("RiskProfile", { riskProfile: currentUser.riskProfile, aggravationRisk: currentUser.aggravationRisk, contagionRisk: currentUser.contagionRisk });
   };
 };
 
-const MapButton = ({onPress}) => (
+const MapButton = ({ onPress }) => (
   <TouchableOpacity style={styles.mapButton} onPress={onPress}>
     <Icon name="map-marker-outline" size={40} color={Colors.secondaryColor} />
   </TouchableOpacity>
 );
 
-const HeartButton = ({onPress}) => (
+const HeartButton = ({ onPress }) => (
   <TouchableOpacity style={styles.heartButton} onPress={onPress}>
     <Icon name="heart-pulse" size={40} color={Colors.secondaryColor} />
   </TouchableOpacity>
 );
 
-const UserDetails = ({ photo, name, aliasName, currentUser,getRiskProfileColor, onPress, onPressAvatar, chevronIcon }) => (
+const UserDetails = ({ photo, name, aliasName, currentUser, getRiskProfileColor, onPress, onPressAvatar, chevronIcon }) => (
   <View style={styles.userDetailsContainer}>
     <TouchableOpacity onPress={() => onPressAvatar()} style={styles.userDetailsInnerContainer}>
       <View style={[styles.riskContainer, { borderColor: getRiskProfileColor(currentUser.riskProfile) }]}>
@@ -291,15 +298,7 @@ const UserDetails = ({ photo, name, aliasName, currentUser,getRiskProfileColor, 
   </View>
 );
 
-// const UserPersonalData = ({ age, cpf, rg }) => (
-//   <View style={styles.userPersonalDataContainer}>
-//     <Text numberOfLines={1} style={styles.userPersonalDataText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>{age}</Text>
-//     <Text numberOfLines={1} style={styles.userPersonalDataText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>{cpf}</Text>
-//     <Text numberOfLines={1} style={styles.userPersonalDataText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>{rg}</Text>
-//   </View>
-// );
-
-const MenuItem = ({icon, name, onPress}) => (
+const MenuItem = ({ icon, name, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.menuItemContainer}>
     <View style={styles.menuItemFirstColumn}>
       <Icon name={icon} size={32} color={Colors.secondaryColor} />
@@ -368,13 +367,13 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 60,
-    borderColor: '#FFFFFF',
+    borderColor: Colors.primaryTextColor,
     borderWidth: 2,
   },
   userDetailsInnerContainer: {
     borderWidth: 4,
     borderRadius: 100,
-    borderColor: '#FFFFFF',
+    borderColor: Colors.primaryTextColor,
   },
   riskContainer: {
     borderWidth: 15,
@@ -407,7 +406,7 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     fontFamily: Colors.fontFamily,
-    color: '#FFFFFF',
+    color: Colors.primaryTextColor,
   },
   userPersonalDataText: {
     fontFamily: Colors.fontFamily,
@@ -426,7 +425,7 @@ const styles = StyleSheet.create({
   },
   versionText: {
     fontFamily: Colors.fontFamily,
-    color: '#FFFFFF',
+    color: Colors.primaryTextColor,
   },
   cardText: {
     textAlign: 'center',

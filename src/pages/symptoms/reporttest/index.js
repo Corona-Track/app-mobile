@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import {LeftComponent, CenterComponent} from '../../../components/customheader';
-import {Header} from 'react-native-elements';
-import {Colors} from '../../../themes/variables';
+import React, { useState } from 'react';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { LeftComponent, CenterComponent } from '../../../components/customheader';
+import { Header } from 'react-native-elements';
+import { Colors } from '../../../themes/variables';
 
 import {
   ConfirmButton,
@@ -10,20 +10,20 @@ import {
   DoubtButton,
 } from '../../../components/custombutton';
 import virus from '../../../assets/images/virus.png';
-import {ImageIcon} from '../../../components/customimageicon';
+import { ImageIcon } from '../../../components/customimageicon';
 
 import ResultTestDay from '../resulttestday';
 
-import {SymptomConsumer} from '../../../store/symptom';
-import {UserConsumer} from '../../../store/user';
+import { SymptomConsumer } from '../../../store/symptom';
+import { UserConsumer } from '../../../store/user';
 
 const ReportTestPage = props => {
   const [hadTest, setHadTest] = useState(false);
 
-  const changeCoronaState = async contextSymptom => {
+  const changeCoronaState = async (contextSymptom) => {
     setHadTest(true);
 
-    contextSymptom.updateSymptom({hasTest: hadTest});
+    contextSymptom.updateSymptom({ hasTest: hadTest });
   };
 
   return (
@@ -32,7 +32,7 @@ const ReportTestPage = props => {
         <SymptomConsumer>
           {contextSymptom => (
             <SafeAreaView style={styles.container}>
-              <View style={{paddingHorizontal: 20}}>
+              <View style={{ width: "100%", marginHorizontal: 20 }}>
                 <Header
                   backgroundColor={Colors.secondaryColor}
                   leftComponent={
@@ -49,13 +49,13 @@ const ReportTestPage = props => {
               {hadTest === false ? (
                 hadCoronavirus(props, changeCoronaState, contextSymptom)
               ) : (
-                <ResultTestDay
-                  contextUser={context}
-                  contextSymptom={contextSymptom}
-                  hadTest={hadTest}
-                  navigation={props}
-                />
-              )}
+                  <ResultTestDay
+                    contextUser={context}
+                    contextSymptom={contextSymptom}
+                    hadTest={hadTest}
+                    navigation={props}
+                  />
+                )}
             </SafeAreaView>
           )}
         </SymptomConsumer>
@@ -67,19 +67,19 @@ const ReportTestPage = props => {
 export default ReportTestPage;
 
 const hadCoronavirus = (props, changeCoronaState, contextSymptom) => (
-  <View style={{flex: 1, alignItems: 'center'}}>
-    <View style={{flex: 0.6, justifyContent: 'center'}}>
+  <View style={{ flex: 1, alignItems: 'center' }}>
+    <View style={{ flex: 0.6, justifyContent: 'center' }}>
       <IntroText />
       <View style={styles.avatarContainer}>
         <ImageIcon source={virus} />
       </View>
     </View>
-    <View style={{flex: 0.4, width: '100%', paddingHorizontal: 20}}>
+    <View style={{ flex: 0.4, width: '100%', paddingHorizontal: 20 }}>
       <DenyButton onPress={() => props.navigation.navigate('Home')} />
       <ConfirmButton onPress={() => changeCoronaState(contextSymptom)} />
       <DoubtButton
         onPress={() => {
-          console.log('aguardando o resultado');
+          props.navigation.navigate("Home");
         }}
         label="Fiz porém estou aguardando o resultado"
       />

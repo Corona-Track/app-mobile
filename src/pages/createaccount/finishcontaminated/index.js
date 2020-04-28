@@ -1,13 +1,14 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   SafeAreaView,
   StyleSheet,
+  ScrollView,
   Text,
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import {Avatar} from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PropTypes from 'prop-types';
 import {
@@ -16,14 +17,14 @@ import {
   NavigationActions,
 } from 'react-navigation';
 
-import {Colors} from '../../../themes/variables';
+import { Colors } from '../../../themes/variables';
 import {
   ContaminatedAnswerNowButton,
   ContaminatedAnswerLaterButton,
 } from '../../../components/custombutton';
-import {getFirstName} from '../../../services/formvalidatorservice';
+import { getFirstName } from '../../../services/formvalidatorservice';
 
-import {UserConsumer} from '../../../store/user';
+import { UserConsumer } from '../../../store/user';
 
 export default class FinishContaminatedPage extends Component {
   static navigationOptions = {
@@ -34,13 +35,14 @@ export default class FinishContaminatedPage extends Component {
   render = () => {
     return (
       <SafeAreaView style={styles.container}>
-        <CloseButton onPress={() => {}} />
+        <CloseButton onPress={() => {
+          this.props.navigation.navigate('Application');
+        }} />
         <UserConsumer>
           {context => (
-            <>
+            <ScrollView style={{ width: "100%" }}>
               <View
                 style={{
-                  flex: 0.75,
                   justifyContent: 'center',
                   flexDirection: 'column',
                   width: '100%',
@@ -52,15 +54,12 @@ export default class FinishContaminatedPage extends Component {
                       size={125}
                       rounded
                       overlayContainerStyle={styles.avatarContainerIcon}
-                      source={{uri: context.user.photo}}
+                      source={{ uri: context.user.photo }}
                     />
-                  </View>
-                ) : (
-                  <></>
-                )}
+                  </View>) : (<></>)}
                 <IntroText userName={context.user.name} />
               </View>
-              <View style={{flex: 0.25, width: '90%'}}>
+              <View style={{ marginTop: 40, marginHorizontal: 20 }}>
                 <ContaminatedAnswerNowButton
                   onPress={() => {
                     this.onAnswerNowButtonPress();
@@ -72,7 +71,7 @@ export default class FinishContaminatedPage extends Component {
                   }}
                 />
               </View>
-            </>
+            </ScrollView>
           )}
         </UserConsumer>
       </SafeAreaView>
@@ -100,11 +99,11 @@ export default class FinishContaminatedPage extends Component {
   };
 }
 
-const IntroText = ({userName}) => {
+const IntroText = ({ userName }) => {
   return (
     <View style={styles.textContainer}>
-      <Text style={[styles.simpleText, {marginVertical: 20}]}>
-        <Text style={[styles.boldText, {fontSize: 28}]}>
+      <Text style={[styles.simpleText, { marginVertical: 20 }]}>
+        <Text style={[styles.boldText, { fontSize: 28 }]}>
           Excelente, {getFirstName(userName)}
         </Text>
       </Text>
@@ -112,17 +111,17 @@ const IntroText = ({userName}) => {
       <Text style={[styles.simpleText]}>também, como foram seus hábitos</Text>
       <Text style={[styles.simpleText]}>durante a pandemia do Coronavírus</Text>
       <Text style={[styles.simpleText]}>antes de ter contraído a doença.</Text>
-      <Text style={[styles.simpleText]}>Por isso temos algumas</Text>
+      <Text style={[styles.simpleText]}>Por isso, temos mais algumas</Text>
       <Text style={[styles.simpleText]}>perguntas, você se importaria em</Text>
       <Text style={[styles.simpleText]}>responder? Você ajudará outras</Text>
       <Text style={[styles.simpleText]}>
-        pessoas a não contrairem a doença.
+        pessoas a não contraírem a doença.
       </Text>
     </View>
   );
 };
 
-const CloseButton = ({onPress}) => {
+const CloseButton = ({ onPress }) => {
   return (
     <TouchableOpacity style={styles.rightComponent} onPress={onPress}>
       <Icon name="close" size={32} color={Colors.secondaryColor} />
@@ -136,9 +135,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.contaminatedColor,
+    backgroundColor: Colors.redRiskProfile,
     height: '100%',
-    paddingHorizontal: 20,
     paddingBottom: 15,
   },
   textContainer: {

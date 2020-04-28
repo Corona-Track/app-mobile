@@ -26,7 +26,7 @@ import {
   DoubtButton,
 } from '../../../components/custombutton';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer,UserContext} from '../../../store/user';
 
 export default class MedicinesPage extends Component {
   static navigationOptions = {
@@ -44,6 +44,16 @@ export default class MedicinesPage extends Component {
     },
     expandedMedicines: [],
   };
+
+  componentDidMount() {
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit && user.question.medicinesSelected){
+      this.setState({
+        entity: user.question
+      })
+    }
+  }
 
   render = () => {
     return (
@@ -94,7 +104,7 @@ export default class MedicinesPage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
-              {!context.user.contaminated ? (
+              {!context.user.question.contaminated ? (
                 <DoubtButton
                   onPress={() => {
                     this.onDoubtPress(context);
@@ -115,14 +125,18 @@ export default class MedicinesPage extends Component {
     this.props.navigation.pop();
   };
   onRightButtonPress = () => {
-    this.props.navigation.pop();
+    this.props.navigation.navigate("Home");
   };
   isChecked = identifier => {
     let {entity} = this.state;
-    let currentMedicinePosition = entity.medicinesSelected.findIndex(
-      selected => selected === identifier,
-    );
-    return currentMedicinePosition > -1;
+    if(entity.medicinesSelected){
+      let currentMedicinePosition = entity.medicinesSelected.findIndex(
+        selected => selected === identifier,
+      );
+      return currentMedicinePosition > -1;
+    }
+
+    return false;
   };
   onClickCheck = identifier => {
     let {entity, expandedMedicines} = this.state;
@@ -212,7 +226,7 @@ export default class MedicinesPage extends Component {
       <View style={{paddingVertical: 5}}>
         <CheckboxItemWithExpand
           identifier={identifier}
-          isChecked={this.isChecked}
+          isChecked={() => this.isChecked(identifier)}
           onClickCheck={this.onClickCheck}
           onPressExpand={this.onPressExpand}
           isExpanded={isExpanded}
@@ -302,6 +316,8 @@ export default class MedicinesPage extends Component {
   };
 }
 
+MedicinesPage.contextType = UserContext;
+
 const IntroText = () => (
   <View style={styles.textContainer}>
     <Text style={[styles.simpleText]}>Você toma algum(ns) dos</Text>
@@ -376,7 +392,7 @@ const FrequencyRadioButtonItem = ({
         title={frequency}
         checkedIcon="dot-circle-o"
         uncheckedIcon="circle-o"
-        checkedColor={Colors.navigatorIconColor}
+        checkedColor={Colors.blue}
         checked={checked}
         onPress={() => onClickCheck(frequency, identifier)}
       />

@@ -26,7 +26,7 @@ import {
   RadioButtonYesOrNoItem,
 } from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import {UserConsumer,UserContext} from '../../../store/user';
 
 export default class RelativesLeavingHomePage extends Component {
   static navigationOptions = {
@@ -43,6 +43,16 @@ export default class RelativesLeavingHomePage extends Component {
       relativesLeavingTimes: null,
     },
   };
+
+  componentDidMount() {
+    let { user } = this.context;
+
+    if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
+      this.setState({
+        entity: user.question
+      })
+    }
+  } 
 
   render = () => {
     let {entity} = this.state;
@@ -82,8 +92,8 @@ export default class RelativesLeavingHomePage extends Component {
                     <RadioButtonTripleResizableItem
                       value={entity.howManyRelatives}
                       onPressCheckbox={this.onChangeHowManyRelatives}
-                      firstTitle={'Uma'}
-                      secondTitle={'Duas'}
+                      firstTitle={'Nenhuma'}
+                      secondTitle={'Uma ou Duas'}
                       thirdTitle={'Três ou mais'}
                     />
                   </View>
@@ -92,8 +102,8 @@ export default class RelativesLeavingHomePage extends Component {
                     <RadioButtonTripleResizableItem
                       value={entity.relativesLeavingTimes}
                       onPressCheckbox={this.onChangeRelativesLeavingTimes}
-                      firstTitle={'Uma'}
-                      secondTitle={'Duas'}
+                      firstTitle={'Nenhuma'}
+                      secondTitle={'Uma ou Duas'}
                       thirdTitle={'Três ou mais'}
                     />
                   </View>
@@ -114,7 +124,7 @@ export default class RelativesLeavingHomePage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
-              {!entity.contaminated ? (
+              {!context.user.question.contaminated ? (
                 <DoubtButton
                   onPress={() => {
                     this.onDoubtPress(context);
@@ -180,6 +190,8 @@ export default class RelativesLeavingHomePage extends Component {
     });
   };
 }
+
+RelativesLeavingHomePage.contextType = UserContext;
 
 const PeopleOutsideHome = () => (
   <View style={[styles.textContainer, {marginTop: 20}]}>

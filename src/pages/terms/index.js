@@ -45,7 +45,7 @@ export default function TermsPage(props) {
                 centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />} />
         </View>
         <WebView
-            source={{ uri: 'https://coronatrack.com.br/politica-de-privacidade-v1/' }}
+            source={{ uri: 'https://coronatrackbrasil.com.br/politica-de-privacidade-v1/' }}
             style={{ flex: 1, marginTop: 10 }} />
     </SafeAreaView>
 }

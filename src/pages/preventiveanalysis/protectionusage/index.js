@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   SafeAreaView,
@@ -7,10 +7,10 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import {Header} from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
-import {Colors} from '../../../themes/variables';
+import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import {
   LeftComponent,
@@ -26,7 +26,7 @@ import {
   CheckboxItem,
 } from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import { UserConsumer, UserContext } from '../../../store/user';
 
 export default class ProtectionUsagePage extends Component {
   static navigationOptions = {
@@ -41,25 +41,35 @@ export default class ProtectionUsagePage extends Component {
       protectionAnswer: [],
     },
     situationsList: [
+      { identifier: 'Uso sempre máscara (cirúrgica ou caseira):' },
       {
         identifier:
           'Uso sempre proteção de rosto (garrafa PET ou algo parecido)',
-      },
-      {identifier: 'Uso sempre máscara (cirúrgica ou caseira):'},
+      }
     ],
     negativeSituationsList: [
-      {identifier: 'Não constumo usar nenhum tipo de proteção ao sair de casa'},
+      { identifier: 'Não constumo usar nenhum tipo de proteção ao sair de casa' },
     ],
   };
 
+  componentDidMount() {
+    let { user } = this.context;
+
+    if (this.props.navigation.state.params.edit && user.question.protectionAnswer) {
+      this.setState({
+        entity: user.question
+      })
+    }
+  }
+
   render = () => {
-    let {entity, situationsList, negativeSituationsList} = this.state;
+    let { entity, situationsList, negativeSituationsList } = this.state;
     return (
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
-            <View style={{flex: 0.75, width: '100%'}}>
-              <View style={{width: '100%', paddingHorizontal: 20}}>
+            <View style={{ flex: 0.75, width: '100%' }}>
+              <View style={{ width: '100%', paddingHorizontal: 20 }}>
                 <Header
                   backgroundColor={Colors.secondaryColor}
                   leftComponent={
@@ -130,7 +140,7 @@ export default class ProtectionUsagePage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
-              {!entity.contaminated ? (
+              {!context.user.question.contaminated ? (
                 <DoubtButton
                   onPress={() => {
                     this.onDoubtPress(context);
@@ -138,8 +148,8 @@ export default class ProtectionUsagePage extends Component {
                   label="Responder depois"
                 />
               ) : (
-                <></>
-              )}
+                  <></>
+                )}
             </View>
             <ProgressTracking amount={10} position={5} />
           </SafeAreaView>
@@ -154,38 +164,38 @@ export default class ProtectionUsagePage extends Component {
     this.props.navigation.pop();
   };
   onContinueButtonClick = context => {
-    let {entity} = this.state;
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('TouchingPrecaution', {entity: entity});
+    let { entity } = this.state;
+    context.updateUser({ question: entity });
+    this.props.navigation.navigate('TouchingPrecaution', { entity: entity });
   };
 
   disableButton = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return !(entity.protectionAnswer && entity.protectionAnswer.length > 0);
   };
   onClickRadio = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.protectionAnswer = [];
     entity.protectionAnswer.push(identifier);
-    this.setState({entity});
+    this.setState({ entity });
   };
   onDoubtPress = context => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.protectionAnswer = [];
     entity.skippedAnswer = true;
-    this.setState({entity});
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('TouchingPrecaution', {entity: entity});
+    this.setState({ entity });
+    context.updateUser({ question: entity });
+    this.props.navigation.navigate('TouchingPrecaution', { entity: entity });
   };
   isChecked = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     let currentPosition = entity.protectionAnswer.findIndex(
       selected => selected === identifier,
     );
     return currentPosition > -1;
   };
   onClickCheck = identifier => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     let currentPositionRadio = entity.protectionAnswer.findIndex(
       selected =>
         selected ===
@@ -200,13 +210,15 @@ export default class ProtectionUsagePage extends Component {
     );
     if (currentPosition === -1) {
       entity.protectionAnswer.push(identifier);
-      this.setState({entity});
+      this.setState({ entity });
       return;
     }
     entity.protectionAnswer.splice(currentPosition, 1);
-    this.setState({entity});
+    this.setState({ entity });
   };
 }
+
+ProtectionUsagePage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>

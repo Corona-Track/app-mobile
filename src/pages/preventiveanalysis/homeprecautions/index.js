@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   SafeAreaView,
@@ -7,10 +7,10 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import {Header} from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import PropTypes from 'prop-types';
 
-import {Colors} from '../../../themes/variables';
+import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import {
   LeftComponent,
@@ -21,9 +21,9 @@ import {
   ContinueRequiredButton,
   DoubtButton,
 } from '../../../components/custombutton';
-import {RadioButtonTripleResizableItem} from '../../../components/customcheckboxitem';
+import { RadioButtonTripleResizableItem } from '../../../components/customcheckboxitem';
 
-import {UserConsumer} from '../../../store/user';
+import { UserConsumer, UserContext } from '../../../store/user';
 
 export default class HomePrecautionsPage extends Component {
   static navigationOptions = {
@@ -41,14 +41,24 @@ export default class HomePrecautionsPage extends Component {
     },
   };
 
+  componentDidMount() {
+    let { user } = this.context;
+
+    if (this.props.navigation.state.params && this.props.navigation.state.params.edit) {
+      this.setState({
+        entity: user.question
+      })
+    }
+  }
+
   render = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return (
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
-            <View style={{flex: 0.8, width: '100%'}}>
-              <View style={{width: '100%', paddingHorizontal: 20}}>
+            <View style={{ flex: 0.8, width: '100%' }}>
+              <View style={{ width: '100%', paddingHorizontal: 20 }}>
                 <Header
                   backgroundColor={Colors.secondaryColor}
                   leftComponent={
@@ -69,7 +79,7 @@ export default class HomePrecautionsPage extends Component {
                 <IntroText />
                 <View style={styles.radioButtonItemContainer}>
                   <ShowerText />
-                  <View style={{height: 50}}>
+                  <View style={{ height: 50 }}>
                     <RadioButtonTripleResizableItem
                       value={entity.showerAnswer}
                       onPressCheckbox={this.onChangeShowerAnswer}
@@ -79,7 +89,7 @@ export default class HomePrecautionsPage extends Component {
                     />
                   </View>
                   <ChangeClothesText />
-                  <View style={{height: 50}}>
+                  <View style={{ height: 50 }}>
                     <RadioButtonTripleResizableItem
                       value={entity.changeClothesAnswer}
                       onPressCheckbox={this.onChangeClothesAnswer}
@@ -89,7 +99,7 @@ export default class HomePrecautionsPage extends Component {
                     />
                   </View>
                   <ContainerCleanupText />
-                  <View style={{height: 50}}>
+                  <View style={{ height: 50 }}>
                     <RadioButtonTripleResizableItem
                       value={entity.containerCleanupAnswer}
                       onPressCheckbox={this.onChangeCleanupAnswer}
@@ -115,7 +125,7 @@ export default class HomePrecautionsPage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
-              {!entity.contaminated ? (
+              {!context.user.question.contaminated ? (
                 <DoubtButton
                   onPress={() => {
                     this.onDoubtPress(context);
@@ -123,8 +133,8 @@ export default class HomePrecautionsPage extends Component {
                   label="Responder depois"
                 />
               ) : (
-                <></>
-              )}
+                  <></>
+                )}
             </View>
             <ProgressTracking amount={10} position={7} />
           </SafeAreaView>
@@ -139,12 +149,12 @@ export default class HomePrecautionsPage extends Component {
     this.props.navigation.pop();
   };
   onContinueButtonClick = context => {
-    let {entity} = this.state;
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('OutsideWork', {entity: entity});
+    let { entity } = this.state;
+    context.updateUser({ question: entity });
+    this.props.navigation.navigate('OutsideWork', { entity: entity });
   };
   disableButton = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return !(
       entity.showerAnswer &&
       entity.changeClothesAnswer &&
@@ -152,73 +162,74 @@ export default class HomePrecautionsPage extends Component {
     );
   };
   onDoubtPress = context => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.showerAnswer = null;
     entity.changeClothesAnswer = null;
     entity.containerCleanupAnswer = null;
     entity.skippedAnswer = true;
-    this.setState({entity});
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('OutsideWork', {entity: entity});
+    this.setState({ entity });
+    context.updateUser({ question: entity });
+    this.props.navigation.navigate('OutsideWork', { entity: entity });
   };
   onChangeShowerAnswer = value => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.showerAnswer = value;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onChangeClothesAnswer = value => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.changeClothesAnswer = value;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onChangeCleanupAnswer = value => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.containerCleanupAnswer = value;
-    this.setState({entity});
+    this.setState({ entity });
   };
 }
+
+HomePrecautionsPage.contextType = UserContext;
 
 const IntroText = () => (
   <View style={styles.textContainer}>
     <Text style={[styles.simpleText]}>
-      <Text style={styles.boldText}>Cuidados ao entrar em casa</Text>
+      <Text style={styles.boldText}>Cuidados ao voltar para casa:</Text>
     </Text>
-    <Text style={[styles.simpleText]}>para proteger outros moradores</Text>
   </View>
 );
 
 const ShowerText = () => (
-  <View style={[styles.textContainer, {marginTop: 20}]}>
+  <View style={[styles.textContainer, { marginTop: 20 }]}>
     <Text
       style={[
         styles.simpleText,
-        {fontSize: 15, color: Colors.placeholderTextColor},
+        { fontSize: 15, color: Colors.placeholderTextColor },
       ]}>
       Tomo banho ou lavo mãos e
     </Text>
     <Text
       style={[
         styles.simpleText,
-        {fontSize: 15, color: Colors.placeholderTextColor},
+        { fontSize: 15, color: Colors.placeholderTextColor },
       ]}>
-      branços assim que entro em casa
+      braços assim que entro em casa
     </Text>
   </View>
 );
 
 const ChangeClothesText = () => (
-  <View style={[styles.textContainer, {marginTop: 20}]}>
+  <View style={[styles.textContainer, { marginTop: 20 }]}>
     <Text
       style={[
         styles.simpleText,
-        {fontSize: 15, color: Colors.placeholderTextColor},
+        { fontSize: 15, color: Colors.placeholderTextColor },
       ]}>
       Troco a roupa e guardo-as
     </Text>
     <Text
       style={[
         styles.simpleText,
-        {fontSize: 15, color: Colors.placeholderTextColor},
+        { fontSize: 15, color: Colors.placeholderTextColor },
       ]}>
       em local separado
     </Text>
@@ -226,20 +237,27 @@ const ChangeClothesText = () => (
 );
 
 const ContainerCleanupText = () => (
-  <View style={[styles.textContainer, {marginTop: 20}]}>
+  <View style={[styles.textContainer, { marginTop: 20 }]}>
     <Text
       style={[
         styles.simpleText,
-        {fontSize: 15, color: Colors.placeholderTextColor},
+        { fontSize: 15, color: Colors.placeholderTextColor },
       ]}>
-      Quando trago vasilhames, limpo-os
+      Quando trago compras, limpo
     </Text>
     <Text
       style={[
         styles.simpleText,
-        {fontSize: 15, color: Colors.placeholderTextColor},
+        { fontSize: 15, color: Colors.placeholderTextColor },
       ]}>
-      com água sanitária ousimilar
+      os produtos com água
+    </Text>
+    <Text
+      style={[
+        styles.simpleText,
+        { fontSize: 15, color: Colors.placeholderTextColor },
+      ]}>
+      sanitária ou álcool em gel
     </Text>
   </View>
 );

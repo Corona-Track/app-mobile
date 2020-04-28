@@ -42,10 +42,19 @@ export default function RiskProfile(props) {
     })
 
     let riskProfileId = parseInt(navigation.getParam('riskProfile', 1))
+    let contagionRiskId = parseInt(navigation.getParam('contagionRisk', 1))
+
+    let aggravationRiskId = parseInt(navigation.getParam('aggravationRisk', 1))
+
+    // alert('riskProfileId:'+riskProfileId+'aggravationRiskId:'+ aggravationRiskId+ 'contagionRiskId:'+ contagionRiskId)
+
+
 
     useEffect(() => {
         getUserData()
         getRiskInfo(riskProfileId)
+        getContagionRiskId(contagionRiskId)
+        getAggravationRiskId(aggravationRiskId)
     }, [])
 
     onLeftButtonPress = () => {
@@ -75,33 +84,60 @@ export default function RiskProfile(props) {
                     label: 'VERDE',
                     color: Colors.greenRiskProfile
                 })
-                setContagionRisk(contagionRiskTypes.LOW)
-                setAggravationRisk(aggravationRiskTypes.LOW)
+                return
             }
-                break;
 
             case riskProfileTypes.YELLOW: {
                 setRiskProfile({
                     label: 'AMARELO',
                     color: Colors.yellowRiskProfile
                 })
-                setContagionRisk(contagionRiskTypes.LOW)
-                setAggravationRisk(aggravationRiskTypes.MEDIUM)
+                return
             }
-                break;
 
             case riskProfileTypes.RED: {
                 setRiskProfile({
                     label: 'VERMELHO',
                     color: Colors.redRiskProfile
                 })
-                setContagionRisk(contagionRiskTypes.MEDIUM)
-                setAggravationRisk(aggravationRiskTypes.HIGH)
+                return
             }
-                break;
         }
+    }
 
+    function getContagionRiskId(contagionRiskId) {
+        switch (contagionRiskId) {
+            case contagionRiskTypes.LOW.id: {
+                setContagionRisk(contagionRiskTypes.LOW)
+                return
+            }
 
+            case contagionRiskTypes.MEDIUM.id: {
+                setContagionRisk(contagionRiskTypes.MEDIUM)
+                return
+            }
+
+            case contagionRiskTypes.HIGH.id: {
+                setContagionRisk(contagionRiskTypes.HIGH)
+                return
+            }
+
+        }
+    }
+
+    function getAggravationRiskId(aggravationRiskId) {
+        switch (aggravationRiskId) {
+            case aggravationRiskTypes.LOW.id: {
+                setAggravationRisk(aggravationRiskTypes.LOW)
+                return
+            }
+
+            case aggravationRiskTypes.HIGH.id: {
+                setAggravationRisk(aggravationRiskTypes.HIGH)
+                return
+            }
+
+        }
     }
 
     function Title() {
@@ -116,14 +152,12 @@ export default function RiskProfile(props) {
     }
 
 
-
-
     return <SafeAreaView style={styles.page}>
-         <View style={{ width: '100%', marginHorizontal: 20 }}>
-          <Header
-           containerStyle={styles.header}
-            leftComponent={<LeftComponent onPress={onLeftButtonPress} />}
-            centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />} />
+        <View style={{ width: '100%', marginHorizontal: 20 }}>
+            <Header
+                containerStyle={styles.header}
+                leftComponent={<LeftComponent onPress={onLeftButtonPress} />}
+                centerComponent={<CenterComponent photo={entity.photo} userName={entity.name} />} />
         </View>
         {/* <Header
             containerStyle={styles.header}
@@ -141,15 +175,23 @@ export default function RiskProfile(props) {
                     onPress={() => { navigation.navigate('Orientation') }}
                     style={styles.scheduleTeleorientationButton}
                     mode="contained"
-                    color={'#FFFFFF'}
+                    color={Colors.primaryTextColor}
                     labelStyle={styles.scheduleTeleorientationText}
                 >AGENDAR TELEORIENTAÇÃO</Button>
+
+                {/* <Button
+                    onPress={() => { navigation.navigate('EditAccount') }}
+                    style={styles.scheduleTeleorientationButton}
+                    mode="contained"
+                    color={Colors.primaryTextColor}
+                    labelStyle={styles.scheduleTeleorientationText}
+                >EDITAR DADOS</Button> */}
 
                 <Button
                     onPress={() => { navigation.pop(); }}
                     style={styles.backToStarButton}
                     mode="contained"
-                    color={Colors.buttonPrimaryColor}
+                    color={Colors.blue}
                     labelStyle={styles.backToStarText}
                 >VOLTAR PARA O INÍCIO</Button>
             </View>
@@ -164,7 +206,7 @@ export default function RiskProfile(props) {
 const styles = StyleSheet.create({
     page: {
         flex: 1,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: Colors.primaryTextColor,
     },
     container: {
         flex: 1,
@@ -176,7 +218,7 @@ const styles = StyleSheet.create({
     },
     header: {
         borderBottomWidth: 0,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: Colors.primaryTextColor,
     },
     label: {
         fontSize: 16,
@@ -192,16 +234,16 @@ const styles = StyleSheet.create({
     },
     scheduleTeleorientationButton: {
         width: '100%',
-        marginTop: 35,
+        marginTop: 20,
         borderRadius: 50,
         height: 52,
         justifyContent: 'center',
-        borderColor: Colors.buttonPrimaryColor,
+        borderColor: Colors.blue,
         borderWidth: 1,
 
     },
     scheduleTeleorientationText: {
-        color: Colors.buttonPrimaryColor,
+        color: Colors.blue,
         fontFamily: Colors.fontFamily,
     },
     backToStarButton: {
@@ -217,6 +259,7 @@ const styles = StyleSheet.create({
     },
     buttonsContainer: {
         width: '100%',
-        paddingHorizontal: 35
+        paddingHorizontal: 20,
+        marginTop: 15
     }
 })

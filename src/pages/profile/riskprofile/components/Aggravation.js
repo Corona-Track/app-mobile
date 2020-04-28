@@ -8,7 +8,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 // styles
 import { Colors } from '../../../../themes/variables';
 
-const aboutAggravation = "Ultilizamos como base os protocolos do ministerio da saude (MS) de COVID 19. Caso apresente alguma das comorbidades que nescessitam de acompnhamento em atençao especializada segundo o MS classificamos como um perfil de risco."
+const aboutAggravation = "Utilizamos como base os protocolos do ministerio da saude (MS) de COVID 19. Caso apresente alguma das comorbidades que nescessitam de acompnhamento em atençao especializada segundo o MS classificamos como um perfil de risco."
 const referencesAggravation = "1. Protocolo de Manejo Cínico do Coronavírus (COVID-19) na Atenção Primária à Saúde | Versão 7"
 export default function Aggravation(props) {
 

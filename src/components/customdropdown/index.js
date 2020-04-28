@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 50,
         justifyContent: "center",
-        backgroundColor: Colors.navigatorIconColor,
+        backgroundColor: Colors.blue,
     },
     headerText: {
         fontFamily: Colors.fontFamily,

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-const SymptomContext = React.createContext({});
+export const SymptomContext = React.createContext({});
 
 export const SymptomConsumer = SymptomContext.Consumer;
 

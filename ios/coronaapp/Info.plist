@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>coronaapp</string>
+	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -20,8 +20,28 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb1134033996962033</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>FacebookAppID</key>
+	<string>1134033996962033</string>
+	<key>FacebookDisplayName</key>
+	<string>coronaapp</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -39,12 +59,12 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>User image storage</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Use the location to get information about events</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Use the location to know what events are related to you</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Use the location to show on the map</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Use the location to get information about events</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
