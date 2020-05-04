@@ -55,7 +55,7 @@ export default class PersonalDataPage extends Component {
     let { navigation } = this.props;
     if (navigation.state.params && navigation.state.params.edit) {
       let { user } = this.context;
-      user.birthday = user.birthday ? new Date(user.birthday.seconds * 1000) : null;
+      user.birthday = user.birthday.toDate() ? new Date(user.birthday.seconds * 1000) : null;
       this.setState({ entity: user });
     }
 
