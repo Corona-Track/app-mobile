@@ -22,4 +22,5 @@ export const Colors = {
   blue: '#0058F4',
   greenLight: '#00FA9D',
   blackLight: '#333333',
+  inputColor: '#292929'
 };
