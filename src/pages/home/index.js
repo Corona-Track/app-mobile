@@ -172,7 +172,6 @@ export default class HomePage extends Component {
         <MenuItem onPress={() => this.navigateScreen("Symptoms")} icon="heart-pulse" name="MINHA SAÚDE" />
         <MenuItem onPress={() => this.navigateScreen("Orientation")} icon="monitor" name="TELEORIENTAÇÃO" />
         <MenuItem icon="account" onPress={() => this.navigateScreen("PublicUtility")} name="UTILIDADE PÚBLICA" />
-        <MenuItem icon="account" onPress={() => this.navigateScreen("EditAccount")} name="CADASTRO" />
         {/* <MenuItem icon="settings" name="CONFIGURAÇÕES" /> */}
         <MenuItem onPress={() => { this.setSignOut(context) }} icon="logout" name="SAIR" />
       </View>

@@ -179,13 +179,13 @@ export default function RiskProfile(props) {
                     labelStyle={styles.scheduleTeleorientationText}
                 >AGENDAR TELEORIENTAÇÃO</Button>
 
-                {/* <Button
+                <Button
                     onPress={() => { navigation.navigate('EditAccount') }}
                     style={styles.scheduleTeleorientationButton}
                     mode="contained"
                     color={Colors.primaryTextColor}
                     labelStyle={styles.scheduleTeleorientationText}
-                >EDITAR DADOS</Button> */}
+                >EDITAR DADOS</Button>
 
                 <Button
                     onPress={() => { navigation.pop(); }}
