@@ -162,7 +162,7 @@ export default class RelativesHomePrecautionsPage extends Component {
     this.props.navigation.pop();
   };
  
-  onDoubtPress = context => {
+  onDoubtPress = async context => {
     let {entity} = this.state;
     entity.relativesShowerAnswer = null;
     entity.relativesChangeClothesAnswer = null;
@@ -170,7 +170,10 @@ export default class RelativesHomePrecautionsPage extends Component {
     // entity.skippedAnswer = true;
     this.setState({entity});
     context.updateUser({question: entity});  
-    this.props.navigation.navigate('FinishRemaining', {entity: entity});
+    let nextRoute = 'FinishRemaining';
+
+
+    await this.updateUser(context, entity, nextRoute);
   };
   onContinueButtonClick = async context => {
     let {entity} = this.state;
@@ -183,6 +186,10 @@ export default class RelativesHomePrecautionsPage extends Component {
     }
     context.updateUser({question: entity}); 
 
+    await this.updateUser(context, entity, nextRoute);
+  };
+
+  async updateUser(context, entity, nextRoute) {
     try {
       let user = context.user;
       user.question.relativesShowerAnswer = entity.relativesShowerAnswer;
@@ -202,7 +209,7 @@ export default class RelativesHomePrecautionsPage extends Component {
         {cancelable: false},
       );
     }
-  };
+  }
   disableButton = () => {
     let {entity} = this.state;
     return !(
