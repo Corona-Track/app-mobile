@@ -156,9 +156,6 @@ export default class HomePage extends Component {
         return Colors.yellowRiskProfile
       case riskProfileTypes.RED:
         return Colors.redRiskProfile
-
-
-
       default:
         return Colors.greenRiskProfile
     }
