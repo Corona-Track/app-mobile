@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     buttonCloseCamera: {
         flex: 0,
         position: "absolute",
-        top: 25,
+        top: 50,
         right: 30,
         backgroundColor: "#000000",
         padding: 10,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     buttonOnTurnCamera: {
         flex: 0,
         position: "absolute",
-        top: 25,
+        top: 50,
         left: 30,
         backgroundColor: "#000000",
         padding: 10,
