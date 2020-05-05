@@ -54,7 +54,7 @@ export default class RelativesHomePrecautionsPage extends Component {
 
     if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
       this.setState({
-        entity: user
+        entity: user.question
       })
     }
   }
@@ -161,7 +161,7 @@ export default class RelativesHomePrecautionsPage extends Component {
   onRightButtonPress = () => {
     this.props.navigation.pop();
   };
-
+ 
   onDoubtPress = context => {
     let {entity} = this.state;
     entity.relativesShowerAnswer = null;
@@ -169,7 +169,7 @@ export default class RelativesHomePrecautionsPage extends Component {
     entity.relativesContainerCleanupAnswer = null;
     // entity.skippedAnswer = true;
     this.setState({entity});
-    context.updateUser({question: entity});
+    context.updateUser({question: entity});  
     this.props.navigation.navigate('FinishRemaining', {entity: entity});
   };
   onContinueButtonClick = async context => {
@@ -181,13 +181,13 @@ export default class RelativesHomePrecautionsPage extends Component {
     if (entity.skippedAnswer) {
       nextRoute = 'FinishRemaining';
     }
-    context.updateUser({question: entity});
+    context.updateUser({question: entity}); 
 
     try {
       let user = context.user;
-      user.relativesShowerAnswer = entity.relativesShowerAnswer;
-      user.relativesChangeClothesAnswer = entity.relativesChangeClothesAnswer;
-      user.relativesContainerCleanupAnswer =
+      user.question.relativesShowerAnswer = entity.relativesShowerAnswer;
+      user.question.relativesChangeClothesAnswer = entity.relativesChangeClothesAnswer;
+      user.question.relativesContainerCleanupAnswer =
         entity.relativesContainerCleanupAnswer;
 
       const {password, ...model} = user;
