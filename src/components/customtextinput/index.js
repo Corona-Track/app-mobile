@@ -202,6 +202,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: '100%',
     fontFamily: Colors.fontFamily,
+    color: Colors.inputColor
   },
   inputContainer: {
     fontFamily: Colors.fontFamily,
@@ -232,6 +233,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 15,
     fontFamily: Colors.fontFamily,
+    color: Colors.inputColor
   },
   inputDropDownContainer: {
     fontFamily: Colors.fontFamily,

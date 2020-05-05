@@ -97,6 +97,7 @@ export default class MapsPage extends Component {
     return (<>
       {cornersMarkers.map((item, idx) => {
         return (<Circle
+          zIndex={9999}
           key={Math.random()}
           center={item.central}
           radius={(item.internalCircleDiameter.meters / 2)}
