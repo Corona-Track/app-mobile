@@ -62,7 +62,7 @@ export default class MapsPage extends Component {
     });
   };
   onGetUserDataFailure = error => {
-    Alert.alert("Aviso!", "Houve um erro buscar seus dados, tente novamente mais tarde.");
+    Alert.alert("Aviso!", "Falha ao acessar sua localização: " + JSON.stringify(error));
   };
 
 

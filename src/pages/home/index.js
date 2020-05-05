@@ -163,19 +163,19 @@ export default class HomePage extends Component {
   getRiskProfileText = riskProfile => {
     if (riskProfile === riskProfileTypes.YELLOW) {
       return (<View>
-        <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você foi classificado como <Text numberOfLines={1} style={styles.boldText, { color: Colors.yellowRiskProfile }}>AMARELO</Text></Text>
+        <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você foi classificado como <Text numberOfLines={1} style={styles.boldText, { color: Colors.yellowRiskProfile }}>AMARELO.</Text></Text>
         <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Recomendamos que saia somente para</Text>
         <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>acessar serviços essenciais.</Text>
       </View>);
     };
     if (riskProfile === riskProfileTypes.RED) {
       return (<View>
-        <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você foi classificado como <Text numberOfLines={1} style={styles.boldText, { color: Colors.redRiskProfile }}>VERMELHO</Text></Text>
+        <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você foi classificado como <Text numberOfLines={1} style={styles.boldText, { color: Colors.redRiskProfile }}>VERMELHO.</Text></Text>
         <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Recomendamos que não saia de casa.</Text>
       </View>);
     }
     return (<View>
-      <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você foi classificado como <Text numberOfLines={1} style={styles.boldText, { color: Colors.greenRiskProfile }}>VERDE</Text></Text>
+      <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você foi classificado como <Text numberOfLines={1} style={styles.boldText, { color: Colors.greenRiskProfile }}>VERDE.</Text></Text>
       <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Recomendamos que saia somente</Text>
       <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>para o que julgar necessário.</Text>
     </View>);
