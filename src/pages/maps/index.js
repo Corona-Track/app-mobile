@@ -62,7 +62,7 @@ export default class MapsPage extends Component {
     });
   };
   onGetUserDataFailure = error => {
-    Alert.alert("Aviso!", "Houve um erro buscar seus dados, tente novamente mais tarde.");
+    Alert.alert("Aviso!", "Não foi possível acessar a sua localização, verifique as configurações do seu dispositivo e tente novamente.");
   };
 
 
@@ -97,6 +97,7 @@ export default class MapsPage extends Component {
     return (<>
       {cornersMarkers.map((item, idx) => {
         return (<Circle
+          zIndex={9999}
           key={Math.random()}
           center={item.central}
           radius={(item.internalCircleDiameter.meters / 2)}
@@ -200,7 +201,8 @@ export default class MapsPage extends Component {
       },
       error => {
         this.onGPSErrorMessage(error);
-      }
+      },
+      { timeout: 10000, maximumAge: 10000 }
     );
   };
   onGPSErrorMessage = error => {
@@ -213,12 +215,7 @@ export default class MapsPage extends Component {
       );
       return;
     }
-    Alert.alert(
-      'Aviso!',
-      'Falha ao acessar a sua localização, tente novamente mais tarde!',
-      [{ text: 'OK' }],
-      { cancelable: false },
-    );
+    Alert.alert("Aviso!", "Não foi possível acessar a sua localização, verifique as configurações do seu dispositivo e tente novamente.");
   };
   closeMap = () => {
     this.props.navigation.pop();

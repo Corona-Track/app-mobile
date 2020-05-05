@@ -161,12 +161,29 @@ export default class HomePage extends Component {
         return Colors.yellowRiskProfile
       case riskProfileTypes.RED:
         return Colors.redRiskProfile
-
-
-
       default:
         return Colors.greenRiskProfile
     }
+  };
+  getRiskProfileText = riskProfile => {
+    if (riskProfile === riskProfileTypes.YELLOW) {
+      return (<View>
+        <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você foi classificado como <Text numberOfLines={1} style={styles.boldText, { color: Colors.yellowRiskProfile }}>AMARELO.</Text></Text>
+        <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Recomendamos que saia somente para</Text>
+        <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>acessar serviços essenciais.</Text>
+      </View>);
+    };
+    if (riskProfile === riskProfileTypes.RED) {
+      return (<View>
+        <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você foi classificado como <Text numberOfLines={1} style={styles.boldText, { color: Colors.redRiskProfile }}>VERMELHO.</Text></Text>
+        <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Recomendamos que não saia de casa.</Text>
+      </View>);
+    }
+    return (<View>
+      <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você foi classificado como <Text numberOfLines={1} style={styles.boldText, { color: Colors.greenRiskProfile }}>VERDE.</Text></Text>
+      <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Recomendamos que saia somente</Text>
+      <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>para o que julgar necessário.</Text>
+    </View>);
   }
   renderOptionsList = (currentUser, context) => {
     return (
@@ -206,13 +223,11 @@ export default class HomePage extends Component {
             <View>
               <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>Idade: </Text>{currentUser.age}</Text>
               <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>CPF: </Text>{currentUser.cpf}</Text>
-              {/* <Text numberOfLines={1} style={styles.cardText}><Text numberOfLines={1} style={styles.boldText}>RG: </Text>01.234.567-89</Text> */}
             </View>
             <Image style={styles.imageContainer}
               source={require('../../assets/images/qrcode.png')}
             />
-            <Text numberOfLines={1} style={[styles.cardText, { fontSize: 15 }]}>Você é perfil <Text numberOfLines={1} style={styles.boldText, {color: this.getRiskProfileColor(currentUser.riskProfile) }}>{currentUserPerfilColor}</Text></Text>
-          {/* <ProfileButton onPress={() => { alert() }} /> */}
+            {this.getRiskProfileText(currentUser.riskProfile)}
           </Animated.View>
         </PanGestureHandler>
       </View >

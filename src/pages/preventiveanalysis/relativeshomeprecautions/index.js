@@ -54,7 +54,7 @@ export default class RelativesHomePrecautionsPage extends Component {
 
     if(this.props.navigation.state.params && this.props.navigation.state.params.edit){
       this.setState({
-        entity: user
+        entity: user.question
       })
     }
   }
@@ -161,16 +161,19 @@ export default class RelativesHomePrecautionsPage extends Component {
   onRightButtonPress = () => {
     this.props.navigation.pop();
   };
-
-  onDoubtPress = context => {
+ 
+  onDoubtPress = async context => {
     let {entity} = this.state;
     entity.relativesShowerAnswer = null;
     entity.relativesChangeClothesAnswer = null;
     entity.relativesContainerCleanupAnswer = null;
     // entity.skippedAnswer = true;
     this.setState({entity});
-    context.updateUser({question: entity});
-    this.props.navigation.navigate('FinishRemaining', {entity: entity});
+    context.updateUser({question: entity});  
+    let nextRoute = 'FinishRemaining';
+
+
+    await this.updateUser(context, entity, nextRoute);
   };
   onContinueButtonClick = async context => {
     let {entity} = this.state;
@@ -181,13 +184,17 @@ export default class RelativesHomePrecautionsPage extends Component {
     if (entity.skippedAnswer) {
       nextRoute = 'FinishRemaining';
     }
-    context.updateUser({question: entity});
+    context.updateUser({question: entity}); 
 
+    await this.updateUser(context, entity, nextRoute);
+  };
+
+  async updateUser(context, entity, nextRoute) {
     try {
       let user = context.user;
-      user.relativesShowerAnswer = entity.relativesShowerAnswer;
-      user.relativesChangeClothesAnswer = entity.relativesChangeClothesAnswer;
-      user.relativesContainerCleanupAnswer =
+      user.question.relativesShowerAnswer = entity.relativesShowerAnswer;
+      user.question.relativesChangeClothesAnswer = entity.relativesChangeClothesAnswer;
+      user.question.relativesContainerCleanupAnswer =
         entity.relativesContainerCleanupAnswer;
 
       const {password, ...model} = user;
@@ -202,7 +209,7 @@ export default class RelativesHomePrecautionsPage extends Component {
         {cancelable: false},
       );
     }
-  };
+  }
   disableButton = () => {
     let {entity} = this.state;
     return !(
