@@ -62,7 +62,7 @@ export default class MapsPage extends Component {
     });
   };
   onGetUserDataFailure = error => {
-    Alert.alert("Aviso!", "onGetUserData Falha ao acessar sua localização: " + JSON.stringify(error));
+    Alert.alert("Aviso!", "Não foi possível acessar a sua localização, verifique as configurações do seu dispositivo e tente novamente.");
   };
 
 
@@ -215,7 +215,7 @@ export default class MapsPage extends Component {
       );
       return;
     }
-    Alert.alert("Aviso!", "onGPSError Falha ao acessar sua localização: " + JSON.stringify(error));
+    Alert.alert("Aviso!", "Não foi possível acessar a sua localização, verifique as configurações do seu dispositivo e tente novamente.");
   };
   closeMap = () => {
     this.props.navigation.pop();
