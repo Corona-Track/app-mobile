@@ -23,9 +23,9 @@ import {
   RadioButtonYesOrNoItem,
 } from '../../../components/customcheckboxitem';
 
-import { SymptomConsumer } from '../../../store/symptom';
+import { SymptomConsumer,SymptomContext } from '../../../store/symptom';
 import { UserConsumer } from '../../../store/user';
-import { SaveSymptom } from '../../../firebase/Symptom';
+import { UpdateSymptom,SaveSymptom } from '../../../firebase/Symptom';
 
 export default class SymptomsTestPage extends Component {
   static navigationOptions = {
@@ -36,6 +36,7 @@ export default class SymptomsTestPage extends Component {
     entity: PropTypes.object,
   };
   state = {
+    id: null,
     entity: {
       symptonsSelected: [],
       showSymptons: null,
@@ -169,6 +170,42 @@ export default class SymptomsTestPage extends Component {
     continueNoSymptons: false,
     showLoading: false,
   };
+
+  componentWillMount() {
+    const {symptom} = this.context;
+    let symptonsList = this.state.entity.symptonsList;
+    if (symptom.symptons && symptom.symptons.length > 0) {
+      let selected = symptom.symptons.map(item => {
+        for (let sym of symptonsList) {
+          if (item.identifier === sym.identifier) {
+            sym.identifier = item.identifier;
+            sym.start = item.start ? item.start.toDate() : '';
+            sym.end = item.end ? item.end.toDate() : '';
+            sym.check = true;
+            sym.check2 = false;
+          }
+        }
+
+        return {
+          identifier: item.identifier,
+          start: item.start ? item.start.toDate() : '',
+          end: item.end ? item.end.toDate() : '',
+        };
+      });
+
+      let entity = {
+        ...this.state.entity,
+        showSymptons: symptom.hasSymptoms,
+        symptonsSelected: selected,
+        symptonsList: symptonsList,
+      };
+
+      this.setState({
+        entity,
+        id: symptom.id,
+      });
+    }
+  }
 
   render = () => {
     let { entity, showLoading } = this.state;
@@ -495,7 +532,12 @@ export default class SymptomsTestPage extends Component {
         contaminated: contextSymptom.symptom.contaminated,
       };
 
-      await SaveSymptom(model);
+      if (this.state.id) {
+        model.id = this.state.id;
+        await UpdateSymptom(model);
+      } else {
+        await SaveSymptom(model);
+      }
 
       this.setState({ showLoading: false });
       this.props.navigation.navigate('Home');
@@ -607,6 +649,8 @@ function DateContainer({symptons, showSymptons, onHandleDate}) {
     </View>
   );
 }
+
+SymptomsTestPage.contextType = SymptomContext;
 
 const IntroText = () => (
   <View style={{ marginTop: 20 }}>
