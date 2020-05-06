@@ -3,13 +3,14 @@ import auth from '@react-native-firebase/auth';
 import moment from 'moment';
 import KEYS from './Constant';
 
-export const GetSymptomByUser = () => {
+export const GetSymptomByUser = (type) => {
   return new Promise((resolve, reject) => {
-    const {uid} = auth().currentUser;
+    const { uid } = auth().currentUser;
 
     firestore()
       .collection(KEYS.TABLE_SYMPTOM)
       .where('user_id', '==', uid)
+      .where('type', '==', type)
       .get()
       .then(res => {
         if (!res.empty) {
@@ -35,7 +36,7 @@ export const GetSymptomByUser = () => {
 
 export const SaveSymptom = model => {
   return new Promise((resolve, reject) => {
-    const {uid} = auth().currentUser;
+    const { uid } = auth().currentUser;
 
     model.user_id = uid;
 
@@ -53,7 +54,7 @@ export const SaveSymptom = model => {
 
 export const UpdateSymptom = model => {
   return new Promise((resolve, reject) => {
-    const {uid} = auth().currentUser;
+    const { uid } = auth().currentUser;
     const id = model.id;
     model.user_id = uid;
 
