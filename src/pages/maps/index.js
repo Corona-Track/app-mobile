@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MapView, { PROVIDER_GOOGLE, Circle } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Circle, Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
@@ -25,6 +25,8 @@ import { getUser } from '../../firebase/User';
 import { getCitiesAroundUser, saveUserPosition } from '../../firebase/UsersPosition';
 import { searchNearestCity } from '../../services/userspositionservice';
 
+const circleWidth = Dimensions.get('window').width / 6;
+const circleDiameter = Math.sqrt(Math.pow(circleWidth, 2) + Math.pow(circleWidth, 2)) + 12
 
 let map = null;
 export default class MapsPage extends Component {
@@ -96,15 +98,26 @@ export default class MapsPage extends Component {
       return (<></>);
     return (<>
       {cornersMarkers.map((item, idx) => {
-        return (<Circle
-          zIndex={9999}
-          key={Math.random()}
-          center={item.central}
-          radius={(item.internalCircleDiameter.meters / 2)}
-          strokeWidth={1}
-          fillColor={item.parsedColor}
-          strokeColor={item.parsedColor}
-        />)
+        if (Platform.OS === 'ios') {
+          return (
+            <Marker
+              key={Math.random()}
+              coordinate={item.central}
+              anchor={{ x: 0.5, y: 0.5 }}>
+              {item.circleColor === "red" && <Image style={styles.imageCircle} source={require('../../assets/images/red.png')} />}
+              {item.circleColor === "yellow" && <Image style={styles.imageCircle} source={require('../../assets/images/yellow.png')} />}
+            </Marker>);
+        }
+        return (
+          <Circle
+            key={Math.random()}
+            center={item.central}
+            radius={(item.internalCircleDiameter.meters / 2)}
+            strokeWidth={1}
+            fillColor={item.parsedColor}
+            strokeColor="transparent"
+          />
+        );
       })}
     </>)
   };
@@ -353,5 +366,11 @@ const styles = StyleSheet.create({
   closeButtonHeader: {
     position: 'absolute',
     right: 20
+  },
+  imageCircle: {
+    height: circleDiameter,
+    width: circleDiameter,
+    opacity: 0.6,
+    borderRadius: circleDiameter
   }
 });
