@@ -53,6 +53,15 @@ export const SaveUser = model => {
   });
 };
 
+export const userListener = (onGetUser, onGetUserError) => {
+  const { uid } = auth().currentUser;
+  return firestore()
+    .collection(KEYS.TABLE_USER)
+    .doc(uid)
+    .onSnapshot(onGetUser, onGetUserError)
+
+};
+
 export const UpdatePhoto = photo => {
   return new Promise((resolve, reject) => {
     const {uid} = auth().currentUser;
