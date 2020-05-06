@@ -40,63 +40,14 @@ exports.onUserUpdate = functions.firestore.document('/users/{userId}')
 
         let symptomData = await getSymptomByUser(context.params.userId)
 
-        const { comorbiditiesSelected, contaminated } = userData.question
-        let stillContamined = false
+        const userRef = change.after.ref
 
-
-        const riskProfileQuestionPoints = RiskProfileService.calculateRiskProfileQuestionsPoints(userData.question)
-
-        let riskProfileSymptonsPoints = 0
-        if (symptomData)
-            riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(symptomData)
-
-
-        let contagionRiskPoints = riskProfileQuestionPoints + riskProfileSymptonsPoints
-
-        if (contaminated) {
-            stillContamined = checkCoronaTest(userData.question)
-            if (stillContamined && riskProfileSymptonsPoints > 0) {
-                contagionRiskPoints = 149
-            }
-        }
-        let contagionRisk = RiskProfileService.getContagionRisk(contagionRiskPoints)
-
-        let aggravationRisk = aggravationRiskTypes.LOW
-
-        if (comorbiditiesSelected) {
-            if (comorbiditiesSelected.length > 1) {
-                aggravationRisk = aggravationRiskTypes.HIGH
-            }
-
-            if (!comorbiditiesSelected.includes("Nenhuma das opções")) {
-                aggravationRisk = aggravationRiskTypes.HIGH
-            }
-        }
-
-
-
-        const riskProfile = RiskProfileService.getRisk(contagionRisk, aggravationRisk)
-
-        return change.after.ref.set({
-            riskProfile: riskProfile,
-            aggravationRisk: aggravationRisk,
-            contagionRisk: contagionRisk
-        }, { merge: true });
+        return changeRiskProfile(userData, symptomData, userRef)
     })
 
-function checkCoronaTest(questions) {
-    const { testDate, testResult } = questions
-    if (testResult === true) {
-        const betweenDays = 20
-        const momentTestDate = moment(testDate.toDate())
-        const howManyDaysFromTest = moment().diff(momentTestDate, 'days')
 
-        if (howManyDaysFromTest < betweenDays) {
-            return true
-        }
-    }
-    return false
-}
+
+
 
 
 
@@ -134,48 +85,7 @@ exports.onSymptomsUpdate = functions.firestore.document('/symptoms/{symptomsId}'
         let symptomsData = await getSymptomByUser(symptomData.user_id)
 
 
-
-        const { comorbiditiesSelected, contaminated } = userData.question
-        let stillContamined = false
-
-        const riskProfileQuestionPoints = RiskProfileService.calculateRiskProfileQuestionsPoints(userData.question)
-        const riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(symptomsData)
-
-
-        let contagionRiskPoints = riskProfileQuestionPoints + riskProfileSymptonsPoints
-
-        if (contaminated) {
-            stillContamined = checkCoronaTest(userData.question)
-            if (stillContamined && riskProfileSymptonsPoints > 0) {
-                contagionRiskPoints = 149
-            }
-        }
-
-        let contagionRisk = RiskProfileService.getContagionRisk(contagionRiskPoints)
-
-
-
-        let aggravationRisk = aggravationRiskTypes.LOW
-
-        if (comorbiditiesSelected) {
-            if (comorbiditiesSelected.length > 1) {
-                aggravationRisk = aggravationRiskTypes.HIGH
-            }
-
-            if (!comorbiditiesSelected.includes("Nenhuma das opções")) {
-                aggravationRisk = aggravationRiskTypes.HIGH
-            }
-        }
-
-
-        const riskProfile = RiskProfileService.getRisk(contagionRisk, aggravationRisk)
-
-
-        return userRef.set({
-            riskProfile: riskProfile,
-            aggravationRisk: aggravationRisk,
-            contagionRisk: contagionRisk
-        }, { merge: true });
+        return changeRiskProfile(userData, symptomsData, userRef)
 
     })
 
@@ -205,6 +115,68 @@ const getSymptomByUser = (userId) => {
             });
     });
 };
+
+function changeRiskProfile(userData, symptomData, userRef) {
+    const { comorbiditiesSelected, contaminated } = userData.question
+    let stillContamined = false
+
+
+    const riskProfileQuestionPoints = RiskProfileService.calculateRiskProfileQuestionsPoints(userData.question)
+
+    let riskProfileSymptonsPoints = 0
+    if (symptomData)
+        riskProfileSymptonsPoints = RiskProfileService.calculateRiskProfileSymptonsPoints(symptomData)
+
+
+    let contagionRiskPoints = riskProfileQuestionPoints + riskProfileSymptonsPoints
+
+    if (contaminated) {
+        stillContamined = checkCoronaTest(userData.question)
+
+        if (stillContamined && riskProfileSymptonsPoints > 0) {
+            contagionRiskPoints = 149
+        }
+    }
+
+    let contagionRisk = RiskProfileService.getContagionRisk(contagionRiskPoints)
+
+    let aggravationRisk = aggravationRiskTypes.LOW
+
+    if (comorbiditiesSelected) {
+        if (comorbiditiesSelected.length > 1) {
+            aggravationRisk = aggravationRiskTypes.HIGH
+        }
+
+        if (!comorbiditiesSelected.includes("Nenhuma das opções")) {
+            aggravationRisk = aggravationRiskTypes.HIGH
+        }
+    }
+
+
+
+    const riskProfile = RiskProfileService.getRisk(contagionRisk, aggravationRisk)
+
+    return userRef.set({
+        riskProfile: riskProfile,
+        aggravationRisk: aggravationRisk,
+        contagionRisk: contagionRisk
+    }, { merge: true });
+}
+
+
+function checkCoronaTest(questions) {
+    const { testDate } = questions
+    const betweenDays = 20
+    const momentTestDate = moment(testDate.toDate())
+    const howManyDaysFromTest = moment().diff(momentTestDate, 'days')
+
+    if (howManyDaysFromTest < betweenDays) {
+        return true
+    }
+
+    return false
+}
+
 
 exports.getMapElementsByPosition = functions.https.onRequest(async (req, res) => {
     try {
