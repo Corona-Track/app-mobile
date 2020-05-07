@@ -112,8 +112,9 @@ export default class TestResultPage extends Component {
                 flex: 0.25,
                 width: '100%',
                 paddingHorizontal: 20,
-                paddingVertical: 20,
+                paddingBottom:10,
                 justifyContent: 'flex-end',
+                marginBottom:30
               }}>
               <ContinueRequiredButton
                 onPress={() => {
@@ -121,8 +122,10 @@ export default class TestResultPage extends Component {
                 }}
                 disabled={this.disableButton()}
               />
+
             </View>
             <ProgressTracking amount={7} position={4} />
+
           </SafeAreaView>
         )}
       </UserConsumer>
