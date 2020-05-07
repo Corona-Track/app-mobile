@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: Colors.secondaryColor,
     height: '100%',
-    marginHorizontal: 20,
   },
   logo: {
     height: 150,

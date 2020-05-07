@@ -166,8 +166,6 @@ const styles = StyleSheet.create({
     marginBottom: 70,
   },
   circle: {
-    height: 100,
-    width: 100,
     borderWidth: 2,
     borderColor: Colors.blue,
     borderRadius: 200,
@@ -175,14 +173,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   virus: {
-    height: 70,
-    width: 70,
-    resizeMode: "center"
+    height: 90,
+    width: 90,
+    margin: 20
   },
   stethoscope: {
-    width: 70,
-    height: 70,
-    resizeMode: "center"
+    height: 90,
+    width: 90,
+    margin: 20
   },
   reportText: {
     marginTop: 10,
