@@ -39,49 +39,19 @@ const SymptomPage = props => {
     setLoading(true);
     try {
       context.updateUser(user);
-      contextSymptom.updateSymptom({ type });
-      const result = await GetSymptomByUser();
+      const result = await GetSymptomByUser(type);
+      let hasTodaysSymptons = false
       if (result && result.length > 0) {
-        if (result.length > 1) {
-          if (
-            ((moment(result[0].created_at.toDate()).isSame(moment(), 'day') &&
-              result[0].type === 'test') ||
-              (moment(result[1].created_at.toDate()).isSame(moment(), 'day') &&
-                result[1].type === 'test')) &&
-            type === 'test'
-          ) {
-            Alert.alert(
-              'Aviso',
-              'Você já possui um registro hoje',
-              [{ text: 'OK', onPress: () => setLoading(false) }],
-              { cancelable: false },
-            );
-            return;
-          }
-
-          if (result[0].type !== 'test') {
-            if (moment(result[0].created_at.toDate()).isSame(moment(), 'day'))
-              contextSymptom.updateSymptom({ ...result[0] });
-          } else {
-            if (moment(result[1].created_at.toDate()).isSame(moment(), 'day'))
-              contextSymptom.updateSymptom({ ...result[1] });
-          }
-        } else if (result.length === 1) {
-          if (
-            moment(result[0].created_at.toDate()).isSame(moment(), 'day') &&
-            result[0].type === 'test' &&
-            type === 'test'
-          ) {
-            Alert.alert(
-              'Aviso',
-              'Você já possui um registro hoje',
-              [{ text: 'OK', onPress: () => setLoading(false) }],
-              { cancelable: false },
-            );
-            return;
-          }
-        }
+        hasTodaysSymptons = moment(result[0].created_at.toDate()).isSame(moment(), 'day')
       }
+      if (hasTodaysSymptons) {
+        contextSymptom.updateSymptom({ ...result[0] })
+
+      }
+      else {
+        contextSymptom.updateSymptom({ type }, true);
+      }
+
       setLoading(false);
       props.navigation.push(route);
     } catch (error) {

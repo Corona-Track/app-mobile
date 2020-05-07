@@ -1,21 +1,21 @@
-import React, {Component} from 'react';
-import {View, SafeAreaView, StyleSheet, Text} from 'react-native';
-import {Header} from 'react-native-elements';
-import {NavigationEvents} from 'react-navigation';
+import React, { Component } from 'react';
+import { View, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { Header } from 'react-native-elements';
+import { NavigationEvents } from 'react-navigation';
 import PropTypes from 'prop-types';
 
-import {Colors} from '../../../themes/variables';
+import { Colors } from '../../../themes/variables';
 import ProgressTracking from '../../../components/progresstracking';
 import {
   LeftComponent,
   CenterComponent,
   RightComponent,
 } from '../../../components/customheader';
-import {ContinueRequiredButton} from '../../../components/custombutton';
-import {RadioButtonYesOrNoItem} from '../../../components/customcheckboxitem';
-import {SimpleCenterDateTextInput} from '../../../components/customtextinput';
+import { ContinueRequiredButton } from '../../../components/custombutton';
+import { RadioButtonYesOrNoItem } from '../../../components/customcheckboxitem';
+import { SimpleCenterDateTextInput } from '../../../components/customtextinput';
 
-import {UserConsumer,UserContext} from '../../../store/user';
+import { UserConsumer, UserContext } from '../../../store/user';
 
 export default class TestResultPage extends Component {
   static navigationOptions = {
@@ -36,22 +36,22 @@ export default class TestResultPage extends Component {
   };
 
   componentDidMount() {
-    let {navigation} = this.props;
-    if(navigation.state.params && navigation.state.params.edit){
+    let { navigation } = this.props;
+    if (navigation.state.params && navigation.state.params.edit) {
       let { user } = this.context;
-    
+
       this.setState({ entity: user.question })
     }
   }
 
   render = () => {
-    let {entity, showTestDate} = this.state;
+    let { entity, showTestDate } = this.state;
     return (
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
-            <View style={{flex: 0.75, width: '100%'}}>
-              <View style={{width: '100%', paddingHorizontal: 25}}>
+            <View style={{ flex: 0.75, width: '100%' }}>
+              <View style={{ width: '100%', paddingHorizontal: 25 }}>
                 <Header
                   backgroundColor={Colors.secondaryColor}
                   leftComponent={
@@ -69,7 +69,7 @@ export default class TestResultPage extends Component {
                 />
               </View>
               <IntroText />
-              <View style={{alignSelf: 'center', height: 70}}>
+              <View style={{ alignSelf: 'center', height: 70 }}>
                 <RadioButtonYesOrNoItem
                   value={entity.testResult}
                   onPressCheckbox={this.onPressCheckbox}
@@ -97,15 +97,15 @@ export default class TestResultPage extends Component {
                   </Text>
                   <SimpleCenterDateTextInput
                     label="Selecione"
-                    value={entity.testDate}
+                    value={this.getDateValue(entity)}
                     onPress={this.onPressTestDatePicker}
                     showDatePicker={showTestDate}
                     onChangeDate={this.onHandleDate}
                   />
                 </View>
               ) : (
-                <></>
-              )}
+                  <></>
+                )}
             </View>
             <View
               style={{
@@ -128,6 +128,15 @@ export default class TestResultPage extends Component {
       </UserConsumer>
     );
   };
+  getDateValue(entity) {
+    if (entity.testDate) {
+      if (entity.testDate.toDate) {
+        return entity.testDate.toDate()
+      }
+      return entity.testDate
+    }
+    return null;
+  }
   onLeftButtonPress = () => {
     this.props.navigation.pop();
   };
@@ -135,37 +144,41 @@ export default class TestResultPage extends Component {
     this.props.navigation.pop();
   };
   onContinuePress = context => {
-    let {entity} = this.state;
+    let { entity } = this.state;
 
-    if(entity.testResult === false){
-      context.updateUser({question: {
-        testResult: entity.testResult,
-        testDate: entity.testDate,
-        alreadyHadCoronavirus: "deny",
-        contaminated: false
-      }});
-    }else if(entity.testDate){
-      context.updateUser({question: {
-        testResult: entity.testResult,
-        testDate: entity.testDate,
-        alreadyHadCoronavirus: "deny",
-        contaminated: true,
-      }});
+    if (entity.testResult === false) {
+      context.updateUser({
+        question: {
+          testResult: entity.testResult,
+          testDate: entity.testDate,
+          alreadyHadCoronavirus: "deny",
+          contaminated: false
+        }
+      });
+    } else if (entity.testDate) {
+      context.updateUser({
+        question: {
+          testResult: entity.testResult,
+          testDate: entity.testDate,
+          alreadyHadCoronavirus: "deny",
+          contaminated: true,
+        }
+      });
     }
 
-    this.props.navigation.navigate('Comorbidities', {entity: entity});
+    this.props.navigation.navigate('Comorbidities', { entity: entity });
   };
   onPressCheckbox = value => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.testResult = value;
     entity.testDate = null;
-    this.setState({entity});
+    this.setState({ entity });
   };
   onPressTestDatePicker = () => {
-    this.setState({showTestDate: true});
+    this.setState({ showTestDate: true });
   };
   onHandleDate = (event, date) => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     entity.testDate = date ?? entity.testDate;
     this.setState({
       entity: entity,
@@ -173,7 +186,7 @@ export default class TestResultPage extends Component {
     });
   };
   disableButton = () => {
-    let {entity} = this.state;
+    let { entity } = this.state;
     return !(
       (entity.testResult === true && entity.testDate) ||
       entity.testResult === false

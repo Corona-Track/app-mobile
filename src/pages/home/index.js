@@ -7,7 +7,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Avatar } from 'react-native-elements';
 import { Button } from 'react-native-paper';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
-import { getUser } from '../../firebase/User';
+import { userListener } from '../../firebase/User';
 import moment from 'moment';
 
 import { UserConsumer } from '../../store/user';
@@ -36,8 +36,16 @@ export default class HomePage extends Component {
   state = {
     showLoading: true,
     currentUser: {},
-    chevronIcon: "chevron-down"
+    chevronIcon: "chevron-down",
+    userListenerUnsub: undefined
   };
+  componentDidMount() {
+    this.state.userListenerUnsub = userListener(this.onGetUserDataSuccess, this.onGetUserDataFailure)
+  }
+  componentWillUnmount() {
+    if (this.state.userListenerUnsub)
+      this.state.userListenerUnsub()
+  }
   setSignOut = (context) => {
     signOut()
       .then(() => {
@@ -49,10 +57,7 @@ export default class HomePage extends Component {
       });
   };
   initialize = () => {
-    getUser()
-      .then(this.onGetUserDataSuccess)
-      .catch(this.onGetUserDataFailure)
-      .finally(this.onGetUserDataFinally);
+    this.onGetUserDataFinally()
   };
 
   onGetUserDataSuccess = doc => {
@@ -225,7 +230,7 @@ export default class HomePage extends Component {
             {this.getRiskProfileText(currentUser.riskProfile)}
           </Animated.View>
         </PanGestureHandler>
-      </View>
+      </View >
     );
   };
   onHandlerStateChange = event => {

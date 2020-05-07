@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 export const SymptomContext = React.createContext({});
 
@@ -14,18 +14,31 @@ export class SymptomProvider extends Component {
       <SymptomContext.Provider
         value={{
           symptom: this.state.symptom,
-          updateSymptom: newValue => {
-            this.setState(
-              {
-                symptom: {
-                  ...this.state.symptom,
-                  ...newValue,
+          updateSymptom: (newValue, cleanState) => {
+            if (cleanState) {
+              this.setState(
+                {
+                  symptom: {
+                    ...newValue,
+                  },
                 },
-              },
-              () => {
-                console.log('SymptomContext: ', this.state.symptom);
-              },
-            );
+                () => {
+                  // console.log('SymptomContext: ', this.state.symptom);
+                },
+              );
+            } else {
+              this.setState(
+                {
+                  symptom: {
+                    ...this.state.symptom,
+                    ...newValue,
+                  },
+                },
+                () => {
+                  // console.log('SymptomContext: ', this.state.symptom);
+                },
+              );
+            }
           },
         }}>
         {this.props.children}

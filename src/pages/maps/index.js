@@ -215,7 +215,7 @@ export default class MapsPage extends Component {
       error => {
         this.onGPSErrorMessage(error);
       },
-      { timeout: 10000, maximumAge: 10000 }
+      { timeout: 10000 }
     );
   };
   onGPSErrorMessage = error => {
