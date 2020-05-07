@@ -29,11 +29,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 0,
         position: "absolute",
-        bottom: 10,
+        bottom: 0,
         left: 0,
         width: "100%",
         alignItems: "center",
-        paddingTop: 10,
+        paddingVertical: 10,
         backgroundColor: Colors.secondaryColor
     },
     background: {
