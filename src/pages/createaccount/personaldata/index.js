@@ -55,7 +55,7 @@ export default class PersonalDataPage extends Component {
     let { navigation } = this.props;
     if (navigation.state.params && navigation.state.params.edit) {
       let { user } = this.context;
-      user.birthday = user.birthday.toDate() ? new Date(user.birthday.seconds * 1000) : null;
+      user.birthday = this.getBirthdayDate(user.birthday)
       this.setState({ entity: user });
     }
 
@@ -128,7 +128,7 @@ export default class PersonalDataPage extends Component {
         <UserConsumer>
           {context => (
             <>
-              <ScrollView style={{ width: '100%', paddingHorizontal: 20 }}>
+              <ScrollView style={{ width: '100%', paddingHorizontal: 20 }} contentInset={{bottom:50}}>
                 <IntroText />
                 <SimpleTextInput
                   label="Nome Completo"
@@ -173,18 +173,21 @@ export default class PersonalDataPage extends Component {
                   value={entity.cellphone}
                   onChangeText={this.onHandleCellphone}
                 />
+                {!this.props.navigation.state.params.edit && (
+                  <>
                 <SimpleTextInput
                   label="E-mail"
                   value={entity.email}
                   onChangeText={this.onHandleEmail}
                   valid={!entity.email ? true : (this.isEmailValid())}
                 />
-                {!this.props.navigation.state.params.edit && (
+               
                   <PasswordTextInput
                     label="Senha"
                     value={entity.password}
                     onChangeText={this.onHandlePassword}
                   />
+                  </>
                 )}
                 <View style={{ paddingVertical: 20 }}>
                   <ContinueRequiredButton
@@ -268,6 +271,15 @@ export default class PersonalDataPage extends Component {
       );
     }
   };
+  getBirthdayDate = (birthdayDate) => {
+    if (birthdayDate) {
+      if (birthdayDate.toDate)
+        return birthdayDate.toDate()
+
+      return birthdayDate
+    }
+    return null
+  }
   onHandleName = name => {
     let { entity } = this.state;
     entity.name = name;
