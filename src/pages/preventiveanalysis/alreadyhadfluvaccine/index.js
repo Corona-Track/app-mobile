@@ -81,7 +81,8 @@ export default class AlreadyHadFluVaccinePage extends Component {
                 width: '100%',
                 paddingHorizontal: 20,
                 justifyContent: 'flex-end',
-                paddingVertical: 20,
+                paddingBottom: 10,
+                marginBottom: 30,
               }}>
               <ContinueRequiredButton
                 onPress={() => {
