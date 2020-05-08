@@ -63,7 +63,7 @@ export default class OutsideWorkPage extends Component {
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
-            <View style={{ flex: 0.75, width: '100%' }}>
+            <View style={{ flex: 1, width: '100%' }}>
               <View style={{ width: '100%', paddingHorizontal: 20 }}>
                 <Header
                   backgroundColor={Colors.secondaryColor}
@@ -108,15 +108,13 @@ export default class OutsideWorkPage extends Component {
                     );
                   })}
                 </View>
-              </ScrollView>
-            </View>
-            <View
+                <View
               style={{
-                flex: 0.25,
                 width: '100%',
                 paddingHorizontal: 20,
                 justifyContent: 'flex-end',
-                paddingBottom: 20,
+                paddingVertical: 20,
+                marginBottom: 30,
               }}>
               <ContinueRequiredButton
                 onPress={() => {
@@ -135,6 +133,9 @@ export default class OutsideWorkPage extends Component {
                   <></>
                 )}
             </View>
+              </ScrollView>
+            </View>
+         
             <ProgressTracking amount={10} position={8} />
           </SafeAreaView>
         )}
@@ -192,7 +193,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: Colors.secondaryColor,
     height: '100%',
     paddingBottom: 15,
