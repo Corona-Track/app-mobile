@@ -95,7 +95,6 @@ export default class OutsideWorkPage extends Component {
                     return (
                       <View
                         style={{
-                          height: customHeight,
                           marginTop: 15,
                           paddingHorizontal: 10,
                         }}>
