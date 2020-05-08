@@ -254,7 +254,7 @@ export default class ReportSymptomsPage extends Component {
                   />
                 </View>
                 <IntroText />
-                <ScrollView>
+                <ScrollView style={{width:'100%'}}>
                   <View style={styles.middle}>
                     <View style={styles.RadioButtonMiddle}>
                       <RadioButtonYesOrNoItem
@@ -317,8 +317,8 @@ export default class ReportSymptomsPage extends Component {
                       </View>
                     </CustomHiddenView>
                   </View>
-                </ScrollView>
-                {entity.showSymptons === true ? (
+
+                  {entity.showSymptons === true ? (
                   <View style={styles.wrapButton}>
                     <ContinueRequiredButton
                       onPress={() => {
@@ -339,6 +339,8 @@ export default class ReportSymptomsPage extends Component {
                     </View>
                   )
                 )}
+                </ScrollView>
+                
               </SafeAreaView>
             )}
           </SymptomConsumer>
@@ -932,6 +934,7 @@ const styles = StyleSheet.create({
   },
   wrapButton: {
     paddingHorizontal: 25,
+    marginBottom:50,
     paddingTop: 10,
     width: Dimensions.get('window').width,
   },
