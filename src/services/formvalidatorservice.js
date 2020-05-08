@@ -24,7 +24,7 @@ export const cellphoneValidator = cellphone => {
 };
 
 export const passwodValidator = (password)=> {
-  const expression = /^(?=.*?[0-9])(?=.*?[a-z])(?=.*[A-Z]).{6,20}$/;
+  const expression = /(?=.*[}{,.^@?~=+\-_\/*\-+.\|])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}/;
   return expression.test(String(password));
 }
 

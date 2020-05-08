@@ -220,8 +220,8 @@ export default class PersonalDataPage extends Component {
     if(notValidPassword){
       Alert.alert(
         'Aviso',
-        'Senha deve ter, no mínimo 6 caracteres, incluir números, letras maiúsculas e minúsculas',
-        [{ text: 'OK', onPress: () => this.setState({ showLoading: false }) }],
+        'Senha deve ter, no mínimo 6 caracteres, incluir números, letras maiúsculas,minúsculas e um caractere especial ',
+       [{ text: 'OK', onPress: () => this.setState({ showLoading: false }) }],
         { cancelable: false },
       );
       return;
