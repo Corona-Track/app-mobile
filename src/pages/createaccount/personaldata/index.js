@@ -175,18 +175,21 @@ export default class PersonalDataPage extends Component {
                   onChangeText={this.onHandleCellphone}
                 />
                 {!this.props.navigation.state.params.edit && (
+                  <>
                   <SimpleTextInput
                     label="E-mail"
                     value={entity.email}
                     onChangeText={this.onHandleEmail}
                     valid={!entity.email ? true : (this.isEmailValid())}
                   />
-                )}
+                
                 <PasswordTextInput
                   label="Senha"
                   value={entity.password}
                   onChangeText={this.onHandlePassword}
                 />
+                </>
+                )}
                 <View style={{ paddingVertical: 20 }}>
                   <ContinueRequiredButton
                     disabled={this.disableButton()}
@@ -221,9 +224,10 @@ export default class PersonalDataPage extends Component {
       Alert.alert(
         'Aviso',
         'Senha deve ter, no mínimo 6 caracteres, incluir números, letras maiúsculas,minúsculas e um caractere especial ',
-       [{ text: 'OK', onPress: () => this.setState({ showLoading: false }) }],
+        [{ text: 'OK'}],
         { cancelable: false },
       );
+      this.setState({ showLoading: false })
       return;
     }
 
