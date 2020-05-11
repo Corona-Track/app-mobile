@@ -57,7 +57,7 @@ export default class HomePrecautionsPage extends Component {
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
-            <View style={{ flex: 0.8, width: '100%' }}>
+            <View style={{ flex: 1, width: '100%' }}>
               <View style={{ width: '100%', paddingHorizontal: 20 }}>
                 <Header
                   backgroundColor={Colors.secondaryColor}
@@ -109,15 +109,13 @@ export default class HomePrecautionsPage extends Component {
                     />
                   </View>
                 </View>
-              </ScrollView>
-            </View>
-            <View
+                <View
               style={{
-                flex: 0.2,
                 width: '100%',
                 paddingHorizontal: 20,
                 justifyContent: 'flex-end',
-                paddingBottom: 20,
+                paddingVertical: 10,
+                marginBottom: 30,
               }}>
               <ContinueRequiredButton
                 onPress={() => {
@@ -136,6 +134,9 @@ export default class HomePrecautionsPage extends Component {
                   <></>
                 )}
             </View>
+              </ScrollView>
+            </View>
+      
             <ProgressTracking amount={10} position={7} />
           </SafeAreaView>
         )}
@@ -267,7 +268,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: Colors.secondaryColor,
     height: '100%',
     paddingBottom: 15,

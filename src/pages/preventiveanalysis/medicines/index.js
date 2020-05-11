@@ -73,7 +73,6 @@ export default class MedicinesPage extends Component {
                 <RightComponent onPress={this.onRightButtonPress} />
               }
             />
-            <View style={{flex: 0.75, width: '100%'}}>
               <ScrollView nestedScrollEnabled={true} style={{width: '100%'}}>
                 <IntroText />
                 <View style={styles.checkboxItemContainer}>
@@ -88,15 +87,14 @@ export default class MedicinesPage extends Component {
                   {this.renderCheckboxExpand('Analgésico')}
                   {this.renderCheckboxExpand('Corticoide')}
                 </View>
-              </ScrollView>
-            </View>
-            <View
+                <View
               style={{
-                flex: 0.25,
                 width: '100%',
                 paddingHorizontal: 20,
                 justifyContent: 'flex-end',
-                paddingBottom: 20,
+                paddingBottom: 10,
+                marginBottom: 30,
+
               }}>
               <ContinueRequiredButton
                 onPress={() => {
@@ -115,6 +113,8 @@ export default class MedicinesPage extends Component {
                 <></>
               )}
             </View>
+              </ScrollView>
+         
             <ProgressTracking amount={10} position={1} />
           </SafeAreaView>
         )}
@@ -405,7 +405,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: Colors.secondaryColor,
     height: '100%',
     paddingBottom: 15,

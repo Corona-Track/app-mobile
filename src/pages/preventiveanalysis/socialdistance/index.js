@@ -70,7 +70,7 @@ export default class SocialDistancePage extends Component {
       <UserConsumer>
         {context => (
           <SafeAreaView style={styles.container}>
-            <View style={{ flex: 0.8, width: '100%' }}>
+            <View style={{  width: '100%' }}>
               <View style={{ width: '100%', paddingHorizontal: 20 }}>
                 <Header
                   backgroundColor={Colors.secondaryColor}
@@ -93,7 +93,7 @@ export default class SocialDistancePage extends Component {
                 <View style={styles.radioButtonItemContainer}>
                   {reasonsList.map(reason => {
                     return (
-                      <View style={{ height: 70, paddingHorizontal: 20 }}>
+                      <View style={{ paddingHorizontal: 20 }}>
                         <RadioButtonItem
                           identifier={reason.identifier}
                           isChecked={this.isCheckedRadio}
@@ -110,7 +110,7 @@ export default class SocialDistancePage extends Component {
                     <View style={styles.radioButtonItemContainer}>
                       {reasonsToNotKeepDistanceList.map(reason => {
                         return (
-                          <View style={{ height: 50, marginHorizontal: 50 }}>
+                          <View style={{  marginHorizontal: 50 }}>
                             <SubCheckboxItem
                               identifier={reason.identifier}
                               isChecked={this.isChecked}
@@ -121,15 +121,13 @@ export default class SocialDistancePage extends Component {
                       })}
                     </View>
                   )}
-              </ScrollView>
-            </View>
-            <View
+                    <View
               style={{
-                flex: 0.2,
                 width: '100%',
                 paddingHorizontal: 20,
                 justifyContent: 'flex-end',
-                paddingBottom: 20,
+                paddingVertical: 10,
+                marginBottom: 30,
               }}>
               <ContinueRequiredButton
                 onPress={() => {
@@ -148,6 +146,9 @@ export default class SocialDistancePage extends Component {
                   <></>
                 )}
             </View>
+              </ScrollView>
+            </View>
+          
             <ProgressTracking amount={10} position={4} />
           </SafeAreaView>
         )}
@@ -232,7 +233,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: Colors.secondaryColor,
     height: '100%',
     paddingBottom: 15,
