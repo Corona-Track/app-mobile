@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
   skipButtonText: {
     fontFamily: Colors.fontFamily,
     fontWeight: '300',
+    width:'100%'
   },
   skipContainer: {
     marginTop: 5,

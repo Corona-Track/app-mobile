@@ -23,6 +23,11 @@ export const cellphoneValidator = cellphone => {
   return expression.test(String(cellphone).toLowerCase());
 };
 
+export const passwodValidator = (password)=> {
+  const expression = /(?=.*[}{,.^@?~=+\-_\/*\-+.\|])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}/;
+  return expression.test(String(password));
+}
+
 export const isValidCPF = number => {
   number = number
     .split('.')

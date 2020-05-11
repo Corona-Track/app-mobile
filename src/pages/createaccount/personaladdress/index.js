@@ -89,7 +89,7 @@ export default class PersonalAddressPage extends Component {
                 }
               />
             </View>
-            <ScrollView style={{ width: '100%', paddingHorizontal: 20 }}>
+            <ScrollView style={{ width: '100%', paddingHorizontal: 20 }} contentInset={{bottom:50}}>
               <IntroText userName={entity.name} />
               {/* <GPSButton onGPSButtonPress={this.onGPSButtonPress} /> */}
               <CEPTextInput

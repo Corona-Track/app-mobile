@@ -35,6 +35,7 @@ import {
   phoneValidator,
   cellphoneValidator,
   isValidCPF,
+  passwodValidator,
 } from '../../../services/formvalidatorservice';
 
 import { UserConsumer, UserContext } from '../../../store/user';
@@ -55,7 +56,7 @@ export default class PersonalDataPage extends Component {
     let { navigation } = this.props;
     if (navigation.state.params && navigation.state.params.edit) {
       let { user } = this.context;
-      user.birthday = user.birthday.toDate() ? new Date(user.birthday.seconds * 1000) : null;
+      user.birthday = this.getBirthdayDate(user.birthday)
       this.setState({ entity: user });
     }
 
@@ -128,7 +129,7 @@ export default class PersonalDataPage extends Component {
         <UserConsumer>
           {context => (
             <>
-              <ScrollView style={{ width: '100%', paddingHorizontal: 20 }}>
+              <ScrollView style={{ width: '100%', paddingHorizontal: 20 }} contentInset={{bottom:50}}>
                 <IntroText />
                 <SimpleTextInput
                   label="Nome Completo"
@@ -173,18 +174,21 @@ export default class PersonalDataPage extends Component {
                   value={entity.cellphone}
                   onChangeText={this.onHandleCellphone}
                 />
-                <SimpleTextInput
-                  label="E-mail"
-                  value={entity.email}
-                  onChangeText={this.onHandleEmail}
-                  valid={!entity.email ? true : (this.isEmailValid())}
-                />
                 {!this.props.navigation.state.params.edit && (
-                  <PasswordTextInput
-                    label="Senha"
-                    value={entity.password}
-                    onChangeText={this.onHandlePassword}
+                  <>
+                  <SimpleTextInput
+                    label="E-mail"
+                    value={entity.email}
+                    onChangeText={this.onHandleEmail}
+                    valid={!entity.email ? true : (this.isEmailValid())}
                   />
+                
+                <PasswordTextInput
+                  label="Senha"
+                  value={entity.password}
+                  onChangeText={this.onHandlePassword}
+                />
+                </>
                 )}
                 <View style={{ paddingVertical: 20 }}>
                   <ContinueRequiredButton
@@ -208,9 +212,24 @@ export default class PersonalDataPage extends Component {
   onRightButtonPress = () => {
     this.props.navigation.pop();
   };
+  validPassword = (password) =>{
+    return passwodValidator(password)
+  }
   onContinueButtonClick = async context => {
     let { entity } = this.state;
     this.setState({ showLoading: true });
+
+    const notValidPassword =!this.validPassword(entity.password)
+    if(notValidPassword){
+      Alert.alert(
+        'Aviso',
+        'Senha deve ter, no mínimo 6 caracteres, incluir números, letras maiúsculas,minúsculas e um caractere especial ',
+        [{ text: 'OK'}],
+        { cancelable: false },
+      );
+      this.setState({ showLoading: false })
+      return;
+    }
 
     // if (
     //   this.props.navigation.state.params &&
@@ -268,6 +287,15 @@ export default class PersonalDataPage extends Component {
       );
     }
   };
+  getBirthdayDate = (birthdayDate) => {
+    if (birthdayDate) {
+      if (birthdayDate.toDate)
+        return birthdayDate.toDate()
+
+      return birthdayDate
+    }
+    return null
+  }
   onHandleName = name => {
     let { entity } = this.state;
     entity.name = name;

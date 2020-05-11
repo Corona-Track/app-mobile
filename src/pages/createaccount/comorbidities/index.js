@@ -95,12 +95,12 @@ export default class ComorbiditiesPage extends Component {
                 <RightComponent onPress={this.onRightButtonPress} />
               }
             />
-            <ScrollView nestedScrollEnabled={true} style={{ width: '100%' }}>
+            <ScrollView nestedScrollEnabled={true} style={{ width: '100%' }} contentInset={{bottom:50}}>
               <IntroText />
               <View style={styles.checkboxItemContainer}>
                 {comorbiditiesList.map(comorbidity => {
                   return (
-                    <View style={{ height: 40, paddingHorizontal: 20 }}>
+                    <View style={{  paddingHorizontal: 20 }}>
                       <CheckboxItem
                         identifier={comorbidity.identifier}
                         isChecked={this.isChecked}
